@@ -82,7 +82,7 @@
     <main>
         <div class="InfoNor">
             <p><strong>Sanitaire :</strong> {{ $sousadmin->nomHop }}</p>
-            <p><strong>Ville/Commune de Naissance :</strong> Abobo</p>
+            <p><strong>Ville/Commune de Naissance :</strong> {{ $naissHop->commune }}</p>
             <p><strong>Date et Heure de Déclaration :</strong> {{ $naissHop->created_at }}</p>
             <p><strong>Numéro de Déclaration :</strong> {{ $naissHop->codeCMN }}</p>
         </div>

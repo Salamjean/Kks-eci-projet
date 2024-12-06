@@ -14,6 +14,7 @@ class Doctor extends Authenticatable
         'email',
         'password',
         'nomHop',
+        'commune',
         'profile_picture',
     ];
 

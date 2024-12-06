@@ -68,13 +68,16 @@ class DoctorController extends Controller
     
     public function handleRegister(Request $request)
     {
+
         // Validation des données
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:doctors,email',
             'password' => 'required|min:8',
             'nomHop'=>'required',
+            'commune' => 'required',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validation de l'image
+            
         ], [
             'name.required' => 'Le nom est obligatoire.',
             'email.required' => 'L\'adresse e-mail est obligatoire.',
@@ -86,6 +89,7 @@ class DoctorController extends Controller
             'profile_picture.mimes' => 'Les formats d\'image autorisés sont jpeg, png, jpg, gif, svg.',
             'profile_picture.max' => 'L\'image ne doit pas dépasser 2 Mo.',
             'nomHop.required' => 'Le nom de l\'hôpital est obligatoire.',
+            'commune.required' => 'La commune est obligatoire.',
         ]);
         
         try {
@@ -101,6 +105,7 @@ class DoctorController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
+                'commune' => $request->commune,
                 'nomHop'=> $request->nomHop,
                 'profile_picture' => $profilePicturePath, // Sauvegarde du chemin de l'image
             ]);
@@ -145,7 +150,7 @@ class DoctorController extends Controller
             // Récupérer le docteur connecté
             $doctor = Auth::guard('doctor')->user(); // Assurez-vous que le docteur est authentifié via `auth`
     
-            if (!$doctor || !$doctor->nomHop) {
+            if (!$doctor || !$doctor->nomHop || !$doctor->commune) {
                 return redirect()->back()->withErrors(['error' => 'Impossible de récupérer le nom de l\'hôpital.']);
             }
     
@@ -159,6 +164,7 @@ class DoctorController extends Controller
             $sousadmin->contact = $request->contact;
             $sousadmin->profile_picture = $request->profile_picture;
             $sousadmin->nomHop = $doctor->nomHop; // Associe le même nomHop que le docteur
+            $sousadmin->commune = $doctor->commune; // Associe la commune du docteur
             $sousadmin->save();
     
             // Envoi de l'e-mail de vérification

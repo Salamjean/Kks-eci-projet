@@ -84,6 +84,7 @@ class NaissHopController extends Controller
         'CNI_Pere' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
         'NomEnf' => 'required',
         'DateNaissance' => 'required|date',
+        'commune' => 'required',
         'sexe'=>'required',
     ], [
         'NomM.required' => 'Le nom de la mère est obligatoire',
@@ -101,6 +102,7 @@ class NaissHopController extends Controller
         'NomEnf.required' => 'Le nom de l\'enfant est obligatoire',
         'DateNaissance.required' => 'La date de naissance est obligatoire',
         'sexe.required' => 'Le sexe est obligatoire',
+        'commune.required' => 'La commune est obligatoire',
     ]);
 
     // Gérer les fichiers
@@ -123,6 +125,7 @@ class NaissHopController extends Controller
         'contP' => $validatedData['contP'],
         'CNI_Pere' => $uploadedFiles['CNI_Pere'] ?? null,
         'NomEnf' => $validatedData['NomEnf'],
+        'commune' => $validatedData['commune'],
         'DateNaissance' => $validatedData['DateNaissance'],
         'sexe' => $validatedData['sexe'],
     ]);

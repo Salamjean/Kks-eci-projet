@@ -18,6 +18,7 @@ class NaissHop extends Model
         'contP',
         'CNI_Pere',
         'NomEnf',
+        'commune',
         'DateNaissance',
         'codeDM',
         'codeCMN',

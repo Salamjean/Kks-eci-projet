@@ -38,19 +38,19 @@
             </td>
         </tr>
         <tr>
-            <th>Nom du Père</th>
+            <th>Nom de l'accompagnateur</th>
             <td>{{ $naisshop->NomP }}</td>
         </tr>
         <tr>
-            <th>Prénom du Père</th>
+            <th>Prénom de l'accompagnateur</th>
             <td>{{ $naisshop->PrP }}</td>
         </tr>
         <tr>
-            <th>Contact du Père</th>
+            <th>Contact de l'accompagnateur</th>
             <td>{{ $naisshop->contP }}</td>
         </tr>
         <tr>
-            <th>Identité du Père (CNI)</th>
+            <th>Identité de l'accompagnateur (CNI)</th>
             <td>
                 @if ($naisshop->CNI_Pere)
                     <img src="{{ asset('storage/' . $naisshop->CNI_Pere) }}" 
@@ -64,8 +64,12 @@
             </td>
         </tr>
         <tr>
-            <th>Nom de l'Enfant</th>
+            <th>Hôpital de Naissance</th>
             <td>{{ $naisshop->NomEnf }}</td>
+        </tr>
+        <tr>
+            <th>Commune de Naissance</th>
+            <td>{{ $naisshop->commune }}</td>
         </tr>
         <tr>
             <th>Date de Naissance</th>

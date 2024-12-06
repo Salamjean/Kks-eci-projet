@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('CNI_Pere')->nullable();
             // les informations de l'enfant
             $table->string('NomEnf');
+            $table->string('commune');
             $table->string('DateNaissance');
             $table->string('sexe');
             $table->string('codeDM')->default('rien')->unique();

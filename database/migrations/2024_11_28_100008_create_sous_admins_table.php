@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('contact');
             $table->string('profile_picture')->nullable();
             $table->string('nomHop')->nullable();
+            $table->string('commune');
             $table->timestamps();
         });
     }

@@ -28,6 +28,7 @@
                   <tr style="font-size: 12px">
                       <th>N° CMN</th>
                       <th>Hôpital</th>
+                      <th>Commune</th>
                       <th>Nom de la mère</th>
                       <th>Nom de l'accompagnateur</th>
                       <th>Date de naissance du né</th>
@@ -41,6 +42,7 @@
                 <tr style="font-size: 12px">
                     <td>{{ $naisshop->codeCMN }}</td>
                     <td>{{ $naisshop->NomEnf }}</td>
+                    <td>{{ $naisshop->commune }}</td>
                     <td>{{ $naisshop->NomM .' '.$naisshop->PrM }}</td>
                     <td>{{ $naisshop->NomP. ' '.$naisshop->PrP }}</td>
                     <td>{{ $naisshop->DateNaissance }}</td>
