@@ -176,6 +176,14 @@
       background: #009efb;
       color: white;
     }
+    select.text-center {
+    text-align: center;
+    text-align-last: center; /* Centrer aussi l'élément sélectionné */
+    width: 100%; /* Ajuste la largeur si nécessaire */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    } 
   </style>
 </head>
 <body>
@@ -240,8 +248,12 @@
     <fieldset >
       <h2 class="fs-title">Informations du nouveau-né</h2>
       <h3 class="fs-subtitle">Complétez les informations du bébé</h3>
-      <input type="text" class="text-center" name="NomEnf" style="background-color:#f0ecec; font-wei"  value="{{ Auth::guard('doctor')->user()->nomHop }}" readonly/>
+      <input type="text" class="text-center" name="NomEnf" style="background-color:#f0ecec; font-wei"  value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
       <input type="date" class="text-center" name="DateNaissance" placeholder="Entrez la date de naissance" value="{{ $naisshop->DateNaissance }}"  />
+      <select class="text-center" name="sexe" >
+        <option value="masculin" {{ $naisshop->sexe == 'masculin' ? 'selected' : '' }}>Masculin</option>
+        <option value="feminin" {{ $naisshop->sexe == 'feminin' ? 'selected' : '' }}>Féminin</option>
+      </select>
       <input type="button"  class="previous action-button" value="Retour" />
       <input type="submit" class="next action-button" style="width:130px" value="Mettre à jour" />
     </fieldset>

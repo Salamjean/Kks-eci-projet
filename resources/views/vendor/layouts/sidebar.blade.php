@@ -24,7 +24,7 @@
       <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header">Naissance</h6>
-          <a class="collapse-item" href="#">Déclaration-Naissance</a>
+          <a class="collapse-item" href="{{ route('naissHop.mairieindex') }}">Déclaration-Naissance</a>
           <a class="collapse-item" href="{{ route('naissance.index') }}">Extrait-Naissance</a>
         </div>
       </div>

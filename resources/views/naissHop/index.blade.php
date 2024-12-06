@@ -162,13 +162,6 @@
     </style>
 </head>
 <body>
-    @if(session('success'))
-    <div class="alert alert-success">
-        {{ session('success') }}
-        <p>Code DM : {{ session('codeDM') }}</p>
-        <p>Code CMN : {{ session('codeCMN') }}</p>
-    </div>
-@endif
     <div class="row" style="width:100%; justify-content:center">
         <div class="row" style="width:100%; justify-content:center">
             @if (Session::get('success1')) <!-- Pour la suppression -->
@@ -226,6 +219,7 @@
             <table id="patients-table" class="display">
                 <thead style="text-align: center">
                     <tr>
+                        <th>N° CMN</th>
                         <th>Nom de la mère</th>
                         <th>Nom de l'accompagnateur</th>
                         <th>Hôpital</th>
@@ -236,6 +230,7 @@
                 <tbody>
                     @forelse ($naisshops as $naisshop)
                     <tr>
+                        <td>{{ $naisshop->codeCMN }}</td>
                         <td>{{ $naisshop->NomM . ' ' . $naisshop->PrM }}</td>
                         <td>{{ $naisshop->NomP . ' ' . $naisshop->PrP }}</td>
                         <td>{{ $naisshop->NomEnf . ' ' . $naisshop->preEnf }}</td>
@@ -252,7 +247,7 @@
                         <td>
                             <button class="eye">
                                 <a href="{{ route('naissHop.download', $naisshop->id) }}" style="color: #009efb">
-                                    <i class="fas fa-download" style="color: blue"></i> Télécharger le PDF
+                                    <i class="fas fa-download" style="color: blue"></i> PDF
                                 </a>
                             </button>
                         </td>

@@ -25,7 +25,7 @@
           <div class="table-responsive p-3">
             <table class="table align-items-center table-flush" id="dataTable">
               <thead class="bg-navbar text-white">
-                  <tr>
+                  <tr style="font-size: 12px">
                       <th>Hôpital</th>
                       <th>Nom Du Nouveau Né</th>
                       <th>Date De Naissance</th>
@@ -38,7 +38,7 @@
               
               <tbody>
                 @forelse ($naissances as $naissance)
-                <tr>
+                <tr style="font-size: 12px">
                     <td>{{ $naissance->nomHopital }}</td>
                     <td>{{ $naissance->nomDefunt }}</td>
                     <td>{{ $naissance->dateNaiss }}</td>
@@ -118,7 +118,7 @@
           <div class="table-responsive p-3">
             <table class="table text-center align-items-center table-flush" id="dataTable">
               <thead class="bg-navbar text-white">
-                  <tr>
+                  <tr style="font-size: 12px">
                       <th>Pièce Du Parent</th>
                       <th>Certificat De Déclaration</th>
                   </tr>
@@ -126,7 +126,7 @@
               
               <tbody>
                 @forelse ($naissancesD as $naissanceD)
-                <tr>
+                <tr style="font-size: 12px">
                     <td>{{ $naissanceD->name }}</td>
                     <td>{{ $naissanceD->number }}</td>
                 </tr>

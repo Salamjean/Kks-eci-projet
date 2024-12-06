@@ -183,7 +183,7 @@
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
+    } 
   </style>
 </head>
 <body>
@@ -247,7 +247,7 @@
     <fieldset >
       <h2 class="fs-title">Informations du nouveau-né</h2>
       <h3 class="fs-subtitle">Complétez les informations du bébé</h3>
-      <input type="text" class="text-center" name="NomEnf" style="background-color:#f0ecec; font-wei"  value="{{ Auth::guard('doctor')->user()->nomHop }}" readonly/>
+      <input type="text" class="text-center" name="NomEnf" style="background-color:#f0ecec; font-wei"  value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
       <label style="position: relative; right: 30 px;">Entrez la date de naissance</label>
       <input type="date" class="text-center" name="DateNaissance" />
       <select class="text-center" name="sexe">

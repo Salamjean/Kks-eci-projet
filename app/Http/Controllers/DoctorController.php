@@ -12,6 +12,7 @@ use App\Notifications\SendEmailToDoctorAfterRegistrationNotification;
 use Exception;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use PhpParser\Node\Stmt\TryCatch;
@@ -138,8 +139,17 @@ class DoctorController extends Controller
         }
     }
 
-     public function store(SousAdminRequest $request){
+    public function store(SousAdminRequest $request)
+    {
         try {
+            // Récupérer le docteur connecté
+            $doctor = Auth::guard('doctor')->user(); // Assurez-vous que le docteur est authentifié via `auth`
+    
+            if (!$doctor || !$doctor->nomHop) {
+                return redirect()->back()->withErrors(['error' => 'Impossible de récupérer le nom de l\'hôpital.']);
+            }
+    
+            // Création du sous-admin
             $sousadmin = new SousAdmin();
             $sousadmin->name = $request->name;
             $sousadmin->prenom = $request->prenom;
@@ -148,36 +158,36 @@ class DoctorController extends Controller
             $sousadmin->password = Hash::make('default');
             $sousadmin->contact = $request->contact;
             $sousadmin->profile_picture = $request->profile_picture;
+            $sousadmin->nomHop = $doctor->nomHop; // Associe le même nomHop que le docteur
             $sousadmin->save();
-
-            //Systeme d'envopie de mail
-
-            //Envoie de mail pour laverification 
-            if($sousadmin){
-               try {
-                ResetCodePassword::where('email', $sousadmin->email)->delete();
-                $code = rand(1000, 4000);
-
-                $data = [
-                    'code' => $code,
-                    'email' => $sousadmin->email,
-                ];
-                ResetCodePassword::create($data);
-                Notification::route('mail', $sousadmin->email)->notify(new SendEmailToDoctorAfterRegistrationNotification($code, $sousadmin->email));
-
-                return redirect()->route('doctor.index')->with('success','Le docteur a été ajouter avec success');
-               } catch (Exception $e) {
-                //dd($e);
-                Throw new Exception('Une erreur est subvenu lors de l\'envoie de mail');
-               }
+    
+            // Envoi de l'e-mail de vérification
+            if ($sousadmin) {
+                try {
+                    ResetCodePassword::where('email', $sousadmin->email)->delete();
+                    $code = rand(1000, 4000);
+    
+                    $data = [
+                        'code' => $code,
+                        'email' => $sousadmin->email,
+                    ];
+    
+                    ResetCodePassword::create($data);
+    
+                    Notification::route('mail', $sousadmin->email)
+                        ->notify(new SendEmailToDoctorAfterRegistrationNotification($code, $sousadmin->email));
+    
+                    return redirect()->route('doctor.index')
+                        ->with('success', 'Le sous-admin a été ajouté avec succès.');
+                } catch (Exception $e) {
+                    throw new Exception('Une erreur est survenue lors de l\'envoi de l\'e-mail.');
+                }
             }
-
-
         } catch (Exception $e) {
-            //dd($e);
-            throw new Exception('Une erreur est subvenu lors de la creation du Docteur');
+            throw new Exception('Une erreur est survenue lors de la création du sous-admin.');
         }
     }
+    
     public function index(){
         $sousadmins = SousAdmin::all();
         return view('doctor/index', compact('sousadmins'));

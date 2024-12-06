@@ -22,6 +22,12 @@ class NaissHopController extends Controller
         $naisshops = NaissHop::all(); // Récupère toutes les déclarations
         return view('naissHop.index', ['naisshops' => $naisshops]);
     }
+    public function mairieindex(){
+        $alerts = Alert::all();
+        $sousadmin = Auth::guard('sous_admin')->user();
+        $naisshops = NaissHop::all(); // Récupère toutes les déclarations
+        return view('naissHop.mairieindex', ['naisshops' => $naisshops], compact('alerts','sousadmin'));
+    }
     public function edit(NaissHop $naisshop){
         return view('naissHop.edit', compact('naisshop'));
     }
@@ -54,6 +60,7 @@ class NaissHopController extends Controller
             $naisshop->CNI_Pere = $request->CNI_Pere;
             $naisshop->NomEnf = $request->NomEnf;
             $naisshop->DateNaissance = $request->DateNaissance;
+            $naisshop->sexe = $request->sexe;
             $naisshop->update();
 
             return redirect()->route('naissHop.index')->with('success','Vos informations ont été mises à jour avec succès.');
@@ -132,10 +139,10 @@ class NaissHopController extends Controller
     ]);
 
     // Récupérer les informations du sous-admin (modifiez selon votre logique)
-    $sousadmin = SousAdmin::all(); // 
+    $sousadmin = Auth::guard('sous_admin')->user(); // 
    
     // Générer le PDF
-    $pdf = PDF::loadView('naissHop.pdf', compact('naissHop', 'codeDM', 'codeCMN', 'sousadminNom'));
+    $pdf = PDF::loadView('naissHop.pdf', compact('naissHop', 'codeDM', 'codeCMN','sousadmin'));
 
     // Sauvegarder le PDF dans le dossier public
     $pdfFileName = "declaration_{$naissHop->id}.pdf";
@@ -176,13 +183,15 @@ public function download($id)
     // Récupérer l'objet NaissHop
     $naissHop = NaissHop::findOrFail($id);
 
-    // Récupérer le nom et le prénom du sous-admin connecté
+    // Récupérer les informations du sous-admin connecté
+    $sousadmin = Auth::guard('sous_admin')->user(); // Supposons que le sous-admin est connecté via `auth`
 
-    $sousadminNom = Auth::guard('sous_admin')->user()->name . ' ' .Auth::guard('sous_admin')->user()->prenom ?? 'Nom introuvable'; // Assurez-vous que le champ `name` contient le nom complet
-    $NomHop = Auth::guard('doctor')->user()->nomHop ?? 'Nom introuvable'; // Assurez-vous que le champ `name` contient le nom complet
+    if (!$sousadmin) {
+        return back()->withErrors(['error' => 'Sous-admin non authentifié.']);
+    }
 
-    // Générer le PDF
-    $pdf = PDF::loadView('naissHop.pdf', compact('naissHop', 'sousadminNom','NomHop'));
+    // Générer le PDF avec les données
+    $pdf = PDF::loadView('naissHop.pdf', compact('naissHop', 'sousadmin'));
 
     // Retourner le PDF pour téléchargement direct
     return $pdf->download("declaration_{$naissHop->id}.pdf");

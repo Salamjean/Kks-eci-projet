@@ -56,20 +56,15 @@
                 <div class="table-responsive p-3">
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
-                            <tr class="text-center">
+                            <tr class="text-center" style="font-size: 12px">
                                 <th>Pièce d'Identité</th>
                                 <th>Extrait de Mariage</th>
                             </tr>
                         </thead>
-                        <tfoot class="thead-light">
-                            <tr class="text-center">
-                                <th>Pièce d'Identité</th>
-                                <th>Extrait de Mariage</th>
-                            </tr>
                         </tfoot>
                         <tbody>
                             @forelse ($mariagesAvecFichiersSeulement as $mariage)
-                            <tr>
+                            <tr style="font-size: 12px">
                                 <td class="text-center">
                                     <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 
                                          alt="Pièce d'identité" 
@@ -113,7 +108,7 @@
                 <div class="table-responsive p-3">
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
-                            <tr class="text-center">
+                            <tr class="text-center" style="font-size: 12px">
                                 <th>Nom de l'Époux</th>
                                 <th>Prénom de l'Époux</th>
                                 <th>Date de Naissance</th>
@@ -122,19 +117,9 @@
                                 <th>Extrait de Mariage</th>
                             </tr>
                         </thead>
-                        <tfoot class="thead-light">
-                            <tr>
-                                <th>Nom de l'Époux</th>
-                                <th>Prénom de l'Époux</th>
-                                <th>Date de Naissance</th>
-                                <th>Lieu de Naissance</th>
-                                <th>Pièce d'Identité</th>
-                                <th>Extrait de Mariage</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
                             @forelse ($mariagesComplets as $mariage)
-                            <tr class="text-center">
+                            <tr class="text-center" style="font-size: 12px">
                                 <td>{{ $mariage->nomEpoux }}</td>
                                 <td>{{ $mariage->prenomEpoux }}</td>
                                 <td>{{ $mariage->dateNaissanceEpoux }}</td>

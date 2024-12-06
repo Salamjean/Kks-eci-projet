@@ -53,7 +53,7 @@
                 <div class="table-responsive p-3">
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
-                            <tr>
+                            <tr style="font-size: 12px">
                                 <th>Hôpital</th>
                                 <th>Date de Décès</th>
                                 <th>Nom du Défunt</th>
@@ -66,7 +66,7 @@
                         </thead>
                         <tbody>
                             @forelse ($deces as $deces)
-                            <tr>
+                            <tr style="font-size: 12px">
                                 <td>{{ $deces->nomHopital }}</td>
                                 <td>{{ $deces->dateDces }}</td>
                                 <td>{{ $deces->nomDefunt }}</td>
