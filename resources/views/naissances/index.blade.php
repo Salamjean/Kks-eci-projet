@@ -47,7 +47,7 @@
                         <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
                              alt="Pièce du parent" 
                              width="100" 
-                             height="100"
+                             height=auto
                              data-bs-toggle="modal" 
                              data-bs-target="#imageModal" 
                              onclick="showImage(this)" 
@@ -57,7 +57,7 @@
                         <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" 
                              alt="Certificat de déclaration" 
                              width="100" 
-                             height="100"
+                             height=auto
                              data-bs-toggle="modal" 
                              data-bs-target="#imageModal" 
                              onclick="showImage(this)" 
@@ -68,7 +68,7 @@
                           <img src="{{ asset('storage/' . $naissance->acteMariage) }}" 
                                alt="Acte de mariage" 
                                width="100" 
-                               height="100"
+                               height=auto
                                data-bs-toggle="modal" 
                                data-bs-target="#imageModal" 
                                onclick="showImage(this)" 
