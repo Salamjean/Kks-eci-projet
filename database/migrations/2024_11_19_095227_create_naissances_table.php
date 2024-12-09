@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('cdnaiss',255);
             $table->string('acteMariage',255)->nullable();
             $table->string('commune')->nullable()->after('id');
-            $table->string('etat')->default('en cours'); // État par défaut
+            $table->string('etat')->default('en attente'); // État par défaut
             $table->timestamps();
         });
     }

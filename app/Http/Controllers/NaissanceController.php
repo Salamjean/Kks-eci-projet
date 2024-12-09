@@ -84,6 +84,7 @@ class NaissanceController extends Controller
     
         // Associer la commune (via le champ `commune`)
         $naissance->commune = $userCommune;
+        $naissance->etat = 'En entente';
     
         $naissance->save();
         Alert::create([
@@ -92,7 +93,7 @@ class NaissanceController extends Controller
         ]);
     
         // Redirection avec un message de succès
-        return redirect()->route('dashboard')->with('success', 'Votre demande a été traitée avec succès.');
+        return redirect()->back()->with('success', 'Votre demande a été traitée avec succès.');
     }
 
     public function show($id)

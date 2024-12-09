@@ -89,6 +89,8 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::post('/register', [VendorController::class, 'handleRegister'])->name('vendor.handleRegister');
         Route::get('/login', [VendorController::class, 'login'])->name('vendor.login');
         Route::post('/login', [VendorController::class, 'handleLogin'])->name('vendor.handleLogin');
+        Route::get('/naissance/{id}/edit', [VendorController::class, 'edit'])->name('naissances.edit');
+        Route::post('/naissance/{id}/update-etat', [VendorController::class, 'updateEtat'])->name('naissances.updateEtat');
 
     });
 

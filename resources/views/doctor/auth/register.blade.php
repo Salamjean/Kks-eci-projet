@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
-    <title>Inscription d'un Docteur</title>
+    <title>Inscription-Super-Docteur</title>
 </head>
 <style>
     body{
@@ -160,7 +160,7 @@
 <body>
 
     <form class="form" method="POST" action="{{ route('handleRegister') }}" enctype="multipart/form-data">
-        <h2 style="text-align: center">Inscription d'un Docteur</h2>
+        <h2 style="text-align: center; color:white">Inscription un Super Docteur</h2>
         
         @if (Session::get('success'))
         <div style="background-color:lightgreen; text-align:center ">

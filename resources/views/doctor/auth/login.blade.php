@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <title>Document</title>
+    <title>Connexion-Super-Docteur</title>
 </head>
 <style>
     body{
@@ -163,7 +163,7 @@
    
     
     <form class="form" method="POST" action="{{ route('handleLogin') }}">
-        <h2 style="text-align: center; color:white">Connexion d'un Docteur</h2>
+        <h2 style="text-align: center; color:white">Super Docteur Connexion</h2>
         
         @method('post')
         @csrf

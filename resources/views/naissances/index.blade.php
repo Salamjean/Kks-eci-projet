@@ -33,6 +33,7 @@
                       <th>Pièce Du Parent</th>
                       <th>Certificat De Déclaration</th>
                       <th>Acte De Mariage</th>
+                      <th>Action</th>
                   </tr>
               </thead>
               
@@ -78,6 +79,9 @@
                           </span>
                       </div>
                   </td>
+                  <td>
+                    <a href="{{ route('naissances.edit', $naissance->id) }}" class="btn btn-warning btn-sm">Mettre à jour l'état</a>
+                </td>
                 </tr>
                 @empty
                 <tr>

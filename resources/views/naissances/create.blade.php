@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Demande d'extrait de Naissance</title>
     <style>
         
@@ -339,11 +340,50 @@
     </style>
 </head>
 <body>
+    @if (Session::get('success1')) <!-- Pour la suppression -->
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Suppression réussie',
+            text: '{{ Session::get('success1') }}',
+            timer: 3000,
+            showConfirmButton: false,
+            background: '#ffcccc', // Couleur de fond personnalisée
+            color: '#b30000' // Texte rouge foncé
+        });
+    </script>
+    @endif
 
+    @if (Session::get('success')) <!-- Pour la modification -->
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Action réussie',
+                text: '{{ Session::get('success') }}',
+                timer: 3000,
+                showConfirmButton: true,
+                background: '#ccffcc', // Couleur de fond personnalisée
+                color: '#006600' // Texte vert foncé
+            });
+        </script>
+    @endif
+
+    @if (Session::get('error')) <!-- Pour une erreur générale -->
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Erreur',
+                text: '{{ Session::get('error') }}',
+                timer: 3000,
+                showConfirmButton: false,
+                background: '#f86750', // Couleur de fond rouge vif
+                color: '#ffffff' // Texte blanc
+            });
+        </script>
+    @endif
     <form class="conteneurInfo" enctype="multipart/form-data" id="declarationForm" method="post" action="{{ route('naissance.store') }}">
         @csrf
         @method('POST')
-        <div><a href="{{ route('dashboard') }}">Accueil</a>
         <p style="text-align: center">@error('acteMariage')
             <span style="color: #e82724">{{ $message }}</span>
         @enderror</p>
@@ -366,23 +406,23 @@
 
         <div class="hidden" id="infoDefunt">
             <div class="hop"><label for="nomHopital">Hôpital</label>
-                <input type="text" id="nomHopital" class="readonly-input"  name="nomHopital">
+                <input type="text" id="nomHopital" class="readonly-input"  name="nomHopital" readonly>
             </div>
             
             <div class="NomDfnt">
                 <label for="nomDefunt">Nom de la mère</label>
-                <input type="text" id="nomDefunt" class="readonly-input"  name="nomDefunt">
+                <input type="text" id="nomDefunt" class="readonly-input"  name="nomDefunt" readonly>
 
             </div>
 
             
             <div class="dateNais">
                 <label for="dateNaiss">Nom de l'accompagnateur</label>
-                <input type="text" id="dateNaiss" class="readonly-input"  name="dateNaiss">
+                <input type="text" id="dateNaiss" class="readonly-input"  name="dateNaiss" readonly>
             </div>
             <div class="lieuNais">
                 <label for="lieuNaiss">Date de Naissance du Né</label>
-                <input type="text" id="lieuNaiss" class="readonly-input"  name="lieuNaiss">
+                <input type="text" id="lieuNaiss" class="readonly-input"  name="lieuNaiss" readonly>
 
             </div>
             
@@ -505,6 +545,70 @@
             modal.style.display = "none";
             modal.style.opacity = "1";
         }
+        document.addEventListener('DOMContentLoaded', () => {
+        const idParDefaut = 'conteneur-txt'; // ID du conteneur par défaut
+        const boutons = [
+            { boutonId: 'demamde0', contenuId: 'DnewNais' },
+            { boutonId: 'demamde1', contenuId: 'Dnaissance' },
+            { boutonId: 'demamde2', contenuId: 'Ddeces' },
+            { boutonId: 'demamde3', contenuId: 'Dmariage' },
+        ];
+    
+        // Fonction pour masquer tout le contenu
+        function masquerToutContenu() {
+            boutons.forEach(({ contenuId }) => {
+                const contenu = document.getElementById(contenuId);
+                if (contenu) contenu.style.display = 'none';  // Masque le contenu
+            });
+            const conteneurParDefaut = document.getElementById(idParDefaut);
+            if (conteneurParDefaut) conteneurParDefaut.style.display = 'none'; // Masque le conteneur par défaut
+        }
+    
+        // Fonction pour afficher un contenu spécifique
+        function afficherContenu(contenuId) {
+            masquerToutContenu();
+            const contenu = document.getElementById(contenuId);
+            if (contenu) contenu.style.display = 'block';  // Affiche le contenu sélectionné
+        }
+    
+        // Ajouter l'événement de clic à chaque bouton pour afficher le contenu
+        boutons.forEach(({ boutonId, contenuId }) => {
+            const bouton = document.getElementById(boutonId);
+            if (bouton) {
+                bouton.addEventListener('click', (event) => {
+                    event.preventDefault();  // Empêche le comportement par défaut du lien
+                    afficherContenu(contenuId); // Affiche le contenu associé
+                });
+            }
+        });
+    
+        // Affiche le conteneur par défaut au chargement de la page
+        afficherContenu(idParDefaut);
+    });
+
+            document.addEventListener("DOMContentLoaded", function() {
+        @if (Session::get('success'))
+            showMessage('{{ Session::get('success') }}', 'lightgreen');
+        @endif
+        @if (Session::get('success1'))
+            showMessage('{{ Session::get('success1') }}', 'lightred');
+        @endif
+
+        @if (Session::get('error'))
+            showMessage('{{ Session::get('error') }}', '#f86750');
+        @endif
+    });
+
+    function showMessage(message, backgroundColor) {
+        const popup = document.getElementById('popup-message');
+        popup.textContent = message;
+        popup.style.backgroundColor = backgroundColor;
+        popup.style.display = 'block';
+
+        setTimeout(() => {
+            popup.style.display = 'none';
+        }, 3000); // Masquer après 3 secondes
+    }
     </script>
     
 </body>

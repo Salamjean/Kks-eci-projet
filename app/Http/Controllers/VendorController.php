@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alert;
+use App\Models\Naissance;
 use App\Models\Vendor;
 use Exception;
 use Illuminate\Http\Request;
@@ -84,5 +86,34 @@ class VendorController extends Controller
             dd($e);
         }
     }
+
+
+    public function edit($id)
+{
+    $alerts = Alert::all();
+    $naissance = Naissance::findOrFail($id);
+
+    // Les états possibles à afficher dans le formulaire
+    $etats = ['en attente', 'accepté', 'refusé'];
+
+    return view('naissances.edit', compact('naissance', 'etats','alerts'));
+}
+    public function updateEtat(Request $request, $id)
+{
+    $naissance = Naissance::findOrFail($id);
+    
+    // Validation de l'état (si nécessaire)
+    $request->validate([
+        'etat' => 'required|string|in:en attente,accepté,refusé', // Ajouter les états possibles
+    ]);
+
+    // Mise à jour de l'état
+    $naissance->etat = $request->etat;
+    $naissance->save();
+    
+    return redirect()->route('naissance.index')->with('success', 'L\'état de la demande a été mis à jour.');
+}
+
+
 
 }

@@ -149,6 +149,13 @@
     <div class="form-container sign-in-container">
       <form method="POST" action="{{ route('login') }}">
         @csrf
+
+        @error('email')
+        <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
+        @enderror
+        @error('password')
+        <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
+        @enderror
         <h1>Se connecter</h1>
         <input type="email" name="email" placeholder="Email" required />
         <input type="password" name="password" placeholder="Mot de passe" required />
@@ -172,9 +179,6 @@
       </div>
     </div>
   </div>
-  <footer>
-    <p>© 2024 Votre Application. Tous droits réservés.</p>
-  </footer>
   <script>
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
