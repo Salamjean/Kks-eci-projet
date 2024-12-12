@@ -18,10 +18,11 @@ return new class extends Migration
             $table->string('dateNaiss');
             $table->string('lieuNaiss');
             $table->string('identiteDeclarant', 255);
-            $table->string('cdnaiss',255);
-            $table->string('acteMariage',255)->nullable();
+            $table->string('cdnaiss', 255);
+            $table->string('acteMariage', 255)->nullable();
             $table->string('commune')->nullable()->after('id');
             $table->string('etat')->default('en attente'); // État par défaut
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Ajout de user_id
             $table->timestamps();
         });
     }

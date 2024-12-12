@@ -37,10 +37,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
 
-
-
-// Routes pour les naissances
-
+Route::get('/dashboard/{id}', [DashboardController::class, 'show'])->name('user.dashboard');
 
 
 // Routes liées au profil de l'utilisateur
@@ -54,11 +51,11 @@ Route::middleware('auth:web')->group(function () {
 
 
 // Routes administratives
-Route::prefix('admin')->middleware('auth:admin')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('admin.profile.destroy');
-});
+    Route::prefix('admin')->middleware('auth:admin')->group(function () {
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('admin.profile.edit');
+        Route::patch('/profile', [ProfileController::class, 'update'])->name('admin.profile.update');
+        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('admin.profile.destroy');
+    });
 
     //Les routes du Docteur
 
@@ -75,22 +72,35 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::post('/login', [DoctorController::class, 'handleLogin'])->name('handleLogin');
     
     });
-   
-
 
     //Les routes de l'administrator (Mairie)
     Route::middleware('auth:vendor')->prefix('vendors/dashboard')->group(function(){
-        Route::get('/',[VendorDashboard::class, 'index'])->name('vendor.dashboard');
-        Route::get('/logout',[VendorDashboard::class, 'logout'])->name('vendor.logout');
+        Route::get('/', [VendorDashboard::class, 'index'])->name('vendor.dashboard');
+        Route::get('/logout', [VendorDashboard::class, 'logout'])->name('vendor.logout');
     });
-    //Authentication de l'Administrador (Mairie)
+    
+    // Routes pour l'authentification
     Route::prefix('vendors/')->group(function () {
         Route::get('/register', [VendorController::class, 'register'])->name('vendor.register');
         Route::post('/register', [VendorController::class, 'handleRegister'])->name('vendor.handleRegister');
         Route::get('/login', [VendorController::class, 'login'])->name('vendor.login');
         Route::post('/login', [VendorController::class, 'handleLogin'])->name('vendor.handleLogin');
+
+        //edit de l'etat de naissance
         Route::get('/naissance/{id}/edit', [VendorController::class, 'edit'])->name('naissances.edit');
         Route::post('/naissance/{id}/update-etat', [VendorController::class, 'updateEtat'])->name('naissances.updateEtat');
+
+        //edit de l'etat de naissance grand
+        Route::get('/naissanced/{id}/edit', [VendorController::class, 'edit1'])->name('naissanced.edit');
+        Route::post('/naissanced/{id}/update-etat', [VendorController::class, 'updateEtat1'])->name('naissanced.updateEtat');
+
+        //edit de l'etat de décès 
+        Route::get('/deces/{id}/edit', [VendorController::class, 'edit2'])->name('deces.edit');
+        Route::post('/deces/{id}/update-etat', [VendorController::class, 'updateEtat2'])->name('deces.updateEtat');
+
+        //edit de l'etat de mariage 
+        Route::get('/mariage/{id}/edit', [VendorController::class, 'edit3'])->name('mariage.edit');
+        Route::post('/mariage/{id}/update-etat', [VendorController::class, 'updateEtat3'])->name('mariage.updateEtat');
 
     });
 
@@ -132,6 +142,7 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::get('/create', [NaissanceController::class, 'create'])->name('naissance.create');
         Route::get('/edit/{naissance}', [NaissanceController::class, 'edit'])->name('naissance.edit');
         Route::get('/naissance/{id}', [NaissanceController::class, 'show'])->name('naissance.show');
+        
     });
 
     Route::prefix('naissHop')->group(function() {
@@ -156,7 +167,6 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::get('/', [NaissanceDeclaController::class, 'index'])->name('naissanced.index');        
         Route::post('/create', [NaissanceDeclaController::class, 'store'])->name('naissanced.store');
         Route::get('/create', [NaissanceDeclaController::class, 'create'])->name('naissanced.create');
-        Route::get('/edit/{naissance}', [NaissanceDeclaController::class, 'edit'])->name('naissanced.edit');
 
     });
     //les routes de deces
@@ -164,7 +174,6 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::get('/', [DecesController::class, 'index'])->name('deces.index');        
         Route::post('/create', [DecesController::class, 'store'])->name('deces.store');
         Route::get('/create', [DecesController::class, 'create'])->name('deces.create');
-        Route::get('/edit/{deces}', [DecesController::class, 'edit'])->name('deces.edit');
     });
 
     //les routes de mariages
@@ -172,7 +181,6 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
         Route::get('/', [MariageController::class, 'index'])->name('mariage.index');        
         Route::post('/create', [MariageController::class, 'store'])->name('mariage.store');
         Route::get('/create', [MariageController::class, 'create'])->name('mariage.create');
-        Route::get('/edit/{mariage}', [MariageController::class, 'edit'])->name('mariage.edit');
         Route::get('/mariage/{id}', [MariageController::class, 'show'])->name('mariage.show');
     });
 

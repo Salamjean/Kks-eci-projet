@@ -149,6 +149,12 @@
     <div class="form-container sign-in-container">
       <form method="POST" action="{{ route('login') }}">
         @csrf
+
+        @if (Session::get('success'))
+        <div style="text-align:center; color:green ">
+            {{ Session::get('success') }}
+        </div>
+        @endif
         
         @error('email')
         <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>

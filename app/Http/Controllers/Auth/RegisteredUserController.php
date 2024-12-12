@@ -32,26 +32,26 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            'commune' => ['required', 'string'],
+        // Validation des données
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'commune' => 'required',
+            'password' => 'required|string|min:8|confirmed',
         ]);
-
+    
+        // Création de l'utilisateur
         $user = User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-            'commune' => $request['commune'],
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'commune'=>$validated['commune'],
+            'password' => bcrypt($validated['password']),
         ]);
-
-        return $user;
-
-        event(new Registered($user));
-
+    
+        // Authentification de l'utilisateur
         Auth::login($user);
-
-        return redirect()->route('dashboard', ['commune' => $user->commune]);
+    
+        // Redirection vers une page après l'enregistrement
+        return redirect()->route('login')->with('success','Votre compte a été créer avec succès connectez-vous'); // ou une autre route de votre choix
     }
 }

@@ -616,7 +616,7 @@ color: color-mix(in srgb, var(--default-color), transparent 70%);
 section,
 .section {
 color: var(--default-color);
-background-image: url('assets/images/profiles/arriereP.jpg');
+background-image: url('arriereP.jpg');
 padding: 60px 0;
 scroll-margin-top: 90px;
 overflow: clip;
@@ -1212,6 +1212,7 @@ left: 100px;
 }
 .service-box{
 position: fixed;
+
 }
 .service-details .service-box+.service-box {
 margin-top: 30px;

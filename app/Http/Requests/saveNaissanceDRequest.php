@@ -22,6 +22,7 @@ class saveNaissanceDRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'type' => 'required',
             'name' => 'required',
             'number' => 'required',
             
@@ -31,6 +32,7 @@ class saveNaissanceDRequest extends FormRequest
     public function messages() 
     {
         return [
+            'type.required' => 'le type d\'extrait que vous-voulez demander est obligatoire',
             'name.required' => 'Le nom est obligatoire',
             'number.required' => 'Le numéro de ton extrait est obligatoire est obligatoire',
         ];

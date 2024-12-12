@@ -7,14 +7,21 @@ use App\Models\Alert;
 use App\Models\Deces;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class DecesController extends Controller
 {
     public function index(Request $request)
-    {   
+    {
+        // Récupérer l'admin connecté
+        $admin = Auth::guard('vendor')->user();
+    
+        // Récupérer les alertes
         $alerts = Alert::all();
-        $query = Deces::query();
+    
+        // Initialiser la requête pour Deces en filtrant par commune
+        $query = Deces::where('commune', $admin->name); // Filtrer par commune
     
         // Vérifier le type de recherche et appliquer le filtre
         if ($request->filled('searchType') && $request->filled('searchInput')) {
@@ -44,20 +51,19 @@ public function edit(Deces $deces){
     return view('deces.edit', compact('deces'));
 }
 
-public function store(SaveDecesRequest $request)
+public function store(saveDecesRequest $request)
 {
     $imageBaseLink = '/images/deces/';
 
     // Liste des fichiers à traiter
     $filesToUpload = [
-        'identiteDeclarant' => 'declarant/',
-        'acteMariage' => 'mariage/',
-        'deParLaLoi' => 'loi/',
+        'identiteDeclarant' => 'parent/',
+        'acteMariage' => 'actemariage/',
+        'deParLaLoi' => 'deparlaloi/', // Si ce fichier est soumis
     ];
 
     $uploadedPaths = []; // Contiendra les chemins des fichiers uploadés
 
-    // Upload des fichiers
     foreach ($filesToUpload as $fileKey => $subDir) {
         if ($request->hasFile($fileKey)) {
             $file = $request->file($fileKey);
@@ -70,33 +76,33 @@ public function store(SaveDecesRequest $request)
         }
     }
 
-    // Enregistrement de l'objet Décès
-    try {
-        $deces = new Deces();
-        $deces->nomHopital = $request->nomHopital;
-        $deces->dateDces = $request->dateDces;
-        $deces->nomDefunt = $request->nomDefunt;
-        $deces->dateNaiss = $request->dateNaiss;
-        $deces->lieuNaiss = $request->lieuNaiss;
+    // Récupérer l'utilisateur connecté
+    $user = Auth::user();
 
-        // Ajouter les fichiers uploadés à l'objet si disponibles
-        $deces->identiteDeclarant = $uploadedPaths['identiteDeclarant'] ?? null;
-        $deces->acteMariage = $uploadedPaths['acteMariage'] ?? null;
-        $deces->deParLaLoi = $uploadedPaths['deParLaLoi'] ?? null;
+    // Enregistrement de l'objet Deces
+    $deces = new Deces();
+    $deces->nomHopital = $request->nomHopital;
+    $deces->dateDces = $request->dateDces;
+    $deces->nomDefunt = $request->nomDefunt;
+    $deces->dateNaiss = $request->dateNaiss;
+    $deces->lieuNaiss = $request->lieuNaiss;
+    $deces->identiteDeclarant = $uploadedPaths['identiteDeclarant'] ?? null;
+    $deces->acteMariage = $uploadedPaths['acteMariage'] ?? null;
+    $deces->deParLaLoi = $uploadedPaths['deParLaLoi'] ?? null; // Si présent
+    $deces->commune = $user->commune;
+    $deces->etat = 'En attente';
+    $deces->user_id = $user->id;  // Lier la demande à l'utilisateur connecté
 
-        $deces->save();
-        Alert::create([
-            'type' => 'deces',
-            'message' => "Une nouvelle demande d'extrait de décès a été enregistrée : {$deces->nomDefunt}.",
-        ]);
+    $deces->save();
 
-        // Redirection avec un message de succès
-        return redirect()->route('dashboard')->with('success', 'Déclaration de décès enregistrée avec succès.');
-    } catch (Exception $e) {
-        // Gérer les erreurs
-        return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
-    }
+    Alert::create([
+        'type' => 'deces',
+        'message' => "Une nouvelle demande d'extrait de décès a été enregistrée : {$deces->nomDefunt}.",
+    ]);
+
+    return redirect()->back()->with('success', 'Votre demande a été traitée avec succès.');
 }
+
 
 
 }

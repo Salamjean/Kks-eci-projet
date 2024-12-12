@@ -3,7 +3,26 @@
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<style>
+  .etat-en-attente {
+    background-color: orange;
+    color: black;
+}
 
+.etat-validee {
+    background-color: green;
+    color: white;
+}
+
+.etat-refusee {
+    background-color: red;
+    color: white;
+}
+.btn{
+  background-color: rgb(199, 195, 195);
+}
+
+</style>
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Listes des demandes d'extrait de Naissance</h1>
@@ -34,6 +53,7 @@
                       <th>Certificat De Déclaration</th>
                       <th>Acte De Mariage</th>
                       <th>Action</th>
+                      <th>Etat Actuel</th>
                   </tr>
               </thead>
               
@@ -79,10 +99,16 @@
                           </span>
                       </div>
                   </td>
-                  <td>
-                    <a href="{{ route('naissances.edit', $naissance->id) }}" class="btn btn-warning btn-sm">Mettre à jour l'état</a>
-                </td>
-                </tr>
+                  <div>
+                    <td>
+                      <a href="{{ route('naissances.edit', $naissance->id) }}" class="btn btn-sm"  style="size: 0.6rem">Mettre à jour l'état </a>
+                    </td>
+                    <td class="{{ $naissance->etat == 'en attente' ? 'bg-warning' : ($naissance->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
+                        {{ $naissance->etat }}
+                    </td>
+
+                  
+                  </div>
                 @empty
                 <tr>
                     <td colspan="7" class="text-center">Aucune demande effectué</td>
@@ -123,16 +149,26 @@
             <table class="table text-center align-items-center table-flush" id="dataTable">
               <thead class="bg-navbar text-white">
                   <tr style="font-size: 12px">
+                      <th>Type de demande</th>
                       <th>Pièce Du Parent</th>
                       <th>Certificat De Déclaration</th>
+                      <th>Action</th>
+                      <th>Etat Actuel</th>
                   </tr>
               </thead>
               
               <tbody>
                 @forelse ($naissancesD as $naissanceD)
                 <tr style="font-size: 12px">
+                    <td>{{ $naissanceD->type }}</td>
                     <td>{{ $naissanceD->name }}</td>
                     <td>{{ $naissanceD->number }}</td>
+                    <td>
+                      <a href="{{ route('naissanced.edit', $naissanceD->id) }}" class="btn btn-sm"  style="size: 0.6rem">Mettre à jour l'état </a>
+                    </td>
+                    <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
+                        {{ $naissanceD->etat }}
+                    </td>
                 </tr>
                 @empty
                 <tr>

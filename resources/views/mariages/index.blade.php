@@ -3,7 +3,27 @@
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+<style>
+    .etat-en-attente {
+      background-color: orange;
+      color: black;
+      display: flex;
+  }
+  
+  .etat-validee {
+      background-color: green;
+      color: white;
+  }
+  
+  .etat-refusee {
+      background-color: red;
+      color: white;
+  }
+  .btn{
+    background-color: rgb(199, 195, 195);
+  }
+  
+  </style>
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Listes des demandes d'extraits de Mariage</h1>
@@ -56,9 +76,11 @@
                 <div class="table-responsive p-3">
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
-                            <tr class="text-center" style="font-size: 12px">
-                                <th>Pièce d'Identité</th>
-                                <th>Extrait de Mariage</th>
+                            <tr  style="font-size: 12px">
+                                <th class="text-center">Pièce d'Identité</th>
+                                <th class="text-center">Extrait de Mariage</th>
+                                <th>Action</th>
+                                <th>Etat Actuel</th>
                             </tr>
                         </thead>
                         </tfoot>
@@ -85,10 +107,16 @@
                                          onclick="showImage(this)" 
                                          onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
                                 </td>
+                                <td>
+                                    <a href="{{ route('mariage.edit', $mariage->id) }}" class="btn btn-sm"  style="size: 0.6rem">Mettre à jour l'état </a>
+                                  </td>
+                                  <td class="{{ $mariage->etat == 'en attente' ? 'bg-warning' : ($mariage->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
+                                      {{ $mariage->etat }}
+                                  </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="2" class="text-center">Aucune déclaration trouvée</td>
+                                <td colspan="4" class="text-center">Aucune déclaration trouvée</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -108,13 +136,15 @@
                 <div class="table-responsive p-3">
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
-                            <tr class="text-center" style="font-size: 12px">
-                                <th>Nom de l'Époux</th>
-                                <th>Prénom de l'Époux</th>
-                                <th>Date de Naissance</th>
-                                <th>Lieu de Naissance</th>
-                                <th>Pièce d'Identité</th>
-                                <th>Extrait de Mariage</th>
+                            <tr  style="font-size: 12px">
+                                <th class="text-center">Nom de l'Époux</th>
+                                <th class="text-center">Prénom de l'Époux</th>
+                                <th class="text-center">Date de Naissance</th>
+                                <th class="text-center">Lieu de Naissance</th>
+                                <th class="text-center">Pièce d'Identité</th>
+                                <th class="text-center">Extrait de Mariage</th>
+                                <th>Action</th>
+                                <th>Etat Actuel</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -144,10 +174,16 @@
                                          onclick="showImage(this)" 
                                          onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
                                 </td>
+                                <td>
+                                    <a href="{{ route('mariage.edit', $mariage->id) }}" class="btn btn-sm"  style="size: 0.6rem">Mettre à jour l'état </a>
+                                  </td>
+                                  <td class="{{ $mariage->etat == 'en attente' ? 'bg-warning' : ($mariage->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
+                                      {{ $mariage->etat }}
+                                  </td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center">Aucune déclaration trouvée</td>
+                                <td colspan="7" class="text-center">Aucune déclaration trouvée</td>
                             </tr>
                             @endforelse
                         </tbody>

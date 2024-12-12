@@ -7,6 +7,7 @@ use App\Models\Alert;
 use App\Models\NaissanceD;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NaissanceDeclaController extends Controller
 {
@@ -17,23 +18,30 @@ class NaissanceDeclaController extends Controller
         return view('naissanceD.index');
     }
 
-    public function store(saveNaissanceDRequest $request){
-        try {
-
-            $naissanceD = new NaissanceD();
-            $naissanceD -> name = $request->name;
-            $naissanceD -> Number = $request->number;
-
-            $naissanceD->save();
-            Alert::create([
-                'type' => 'naissance',
-                'message' => "Une nouvelle demande d'extrait a été enregistrée : {$naissanceD->name}.",
-            ]);
-            return redirect()->route('dashboard')->with('success', 'Votre demande a été traitée avec succès.');
-        } catch (Exception $e) {
-            dd($e);
-        }
+    public function store(saveNaissanceDRequest $request)
+    {
+        // Récupérer l'utilisateur connecté
+        $user = Auth::user();
+    
+        // Enregistrement de l'objet NaissanceDecl
+        $naissanceD = new NaissanceD();
+        $naissanceD->type = $request->type;
+        $naissanceD->name = $request->name;
+        $naissanceD->number = $request->number;
+        $naissanceD->commune = $user->commune;
+        $naissanceD->etat = 'En attente';
+        $naissanceD->user_id = $user->id;
+    
+        $naissanceD->save();
+    
+        Alert::create([
+            'type' => 'naissanceDecl',
+            'message' => "Une nouvelle déclaration de naissance a été enregistrée : {$naissanceD->name}.",
+        ]);
+    
+        return redirect()->back()->with('success', 'Votre déclaration de naissance a été enregistrée avec succès.');
     }
+    
 
 
 }

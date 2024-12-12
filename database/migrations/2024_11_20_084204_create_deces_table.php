@@ -21,6 +21,9 @@ return new class extends Migration
             $table->string('identiteDeclarant');
             $table->string('acteMariage')->nullable();
             $table->string('deParLaLoi')->nullable();
+            $table->string('commune')->nullable()->after('id');
+            $table->string('etat')->default('en attente'); // État par défaut
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Ajout de user_id
             $table->timestamps();
         });
     }

@@ -3,7 +3,26 @@
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+<style>
+    .etat-en-attente {
+      background-color: orange;
+      color: black;
+  }
+  
+  .etat-validee {
+      background-color: green;
+      color: white;
+  }
+  
+  .etat-refusee {
+      background-color: red;
+      color: white;
+  }
+  .btn{
+    background-color: rgb(199, 195, 195);
+  }
+  
+  </style>
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Liste des Déclarations de Décès</h1>
@@ -62,6 +81,8 @@
                                 <th>Pièce du Déclarant</th>
                                 <th>Acte de Mariage</th>
                                 <th>Déclaration par la Loi</th>
+                                <th>Action</th>
+                                <th>Etat Actuel</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,6 +138,12 @@
                                         </span>
                                     </div>
                                 </td>
+                                <td>
+                                    <a href="{{ route('deces.edit', $deces->id) }}" class="btn btn-sm"  style="size: 0.6rem">Mettre à jour l'état </a>
+                                  </td>
+                                  <td class="{{ $deces->etat == 'en attente' ? 'bg-warning' : ($deces->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
+                                      {{ $deces->etat }}
+                                  </td>
                             </tr>
                             @empty
                             <tr>

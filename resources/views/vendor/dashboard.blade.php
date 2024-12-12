@@ -1,3 +1,4 @@
+
 @extends('vendor.layouts.template')
 
 @section('content')
@@ -9,7 +10,7 @@
     </div>
     <br>
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ route('vendor.dashboard') }}">Home</a></li>
       <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
     </ol>
   </div>
@@ -31,7 +32,7 @@
         <div class="card-body text-center">
           <div class="text-xs font-weight-bold text-uppercase mb-4">Total Demande Extrait Décès</div>
           <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $decesdash }}</div>
-          <i class="fas fa-skull fa-2x text-success"></i>
+          <i class="fas fa-school fa-2x text-success"></i>
         </div>
       </div>
     </div>
@@ -70,7 +71,7 @@
               <div class="small float-right"><b> {{ \App\Models\Naissance::count() + \App\Models\NaissanceD::count() }} sur {{ $totalData }} éléments</b></div>
             </div>
             <div class="progress" style="height: 12px;">
-              <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $totalNaiss }}%;" aria-valuenow="{{ $totalNaiss }}" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $NaissP }}%;" aria-valuenow="{{ $Naiss }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="mb-3">

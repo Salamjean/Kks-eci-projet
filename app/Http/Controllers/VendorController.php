@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alert;
+use App\Models\Deces;
+use App\Models\Mariage;
 use App\Models\Naissance;
+use App\Models\NaissanceD;
 use App\Models\Vendor;
 use Exception;
 use Illuminate\Http\Request;
@@ -72,7 +75,7 @@ class VendorController extends Controller
             'email.required' => 'Le mail est obligatoire.',
             'email.exists' => 'Cette adresse mail n\'existe pas.',
             'password.required' => 'Le mot de passe est obligatoire.',
-            'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
+            'password.min'=> 'Le mot de passe doit avoir au moins 8 caractères.',
         ]);
 
         try {
@@ -87,14 +90,14 @@ class VendorController extends Controller
         }
     }
 
-
+//Naissance edit 
     public function edit($id)
 {
     $alerts = Alert::all();
     $naissance = Naissance::findOrFail($id);
 
     // Les états possibles à afficher dans le formulaire
-    $etats = ['en attente', 'accepté', 'refusé'];
+    $etats = ['en attente', 'réçu', 'terminé'];
 
     return view('naissances.edit', compact('naissance', 'etats','alerts'));
 }
@@ -104,7 +107,7 @@ class VendorController extends Controller
     
     // Validation de l'état (si nécessaire)
     $request->validate([
-        'etat' => 'required|string|in:en attente,accepté,refusé', // Ajouter les états possibles
+        'etat' => 'required|string|in:en attente,réçu,terminé', // Ajouter les états possibles
     ]);
 
     // Mise à jour de l'état
@@ -112,6 +115,88 @@ class VendorController extends Controller
     $naissance->save();
     
     return redirect()->route('naissance.index')->with('success', 'L\'état de la demande a été mis à jour.');
+}
+
+//NaissanceD edit 
+    public function edit1($id)
+{
+    $alerts = Alert::all();
+    $naissanced = NaissanceD::findOrFail($id);
+
+    // Les états possibles à afficher dans le formulaire
+    $etats = ['en attente', 'réçu', 'terminé'];
+
+    return view('naissanced.edit', compact('naissanced', 'etats','alerts'));
+}
+    public function updateEtat1(Request $request, $id)
+{
+    $naissanced = NaissanceD::findOrFail($id);
+    
+    // Validation de l'état (si nécessaire)
+    $request->validate([
+        'etat' => 'required|string|in:en attente,réçu,terminé', // Ajouter les états possibles
+    ]);
+
+    // Mise à jour de l'état
+    $naissanced->etat = $request->etat;
+    $naissanced->save();
+    
+    return redirect()->route('naissance.index')->with('success', 'L\'état de la demande a été mis à jour.');
+}
+
+//Deces edit 
+    public function edit2($id)
+{
+    $alerts = Alert::all();
+    $deces = Deces::findOrFail($id);
+
+    // Les états possibles à afficher dans le formulaire
+    $etats = ['en attente', 'réçu', 'terminé'];
+
+    return view('deces.edit', compact('deces', 'etats','alerts'));
+}
+    public function updateEtat2(Request $request, $id)
+{
+    $deces = Deces::findOrFail($id);
+    
+    // Validation de l'état (si nécessaire)
+    $request->validate([
+        'etat' => 'required|string|in:en attente,réçu,terminé', // Ajouter les états possibles
+    ]);
+
+    // Mise à jour de l'état
+    $deces->etat = $request->etat;
+    $deces->save();
+    
+    return redirect()->route('deces.index')->with('success', 'L\'état de la demande a été mis à jour.');
+}
+
+
+//Mariage edit 
+    public function edit3($id)
+{
+    $alerts = Alert::all();
+    $mariage = Mariage::findOrFail($id);
+
+    // Les états possibles à afficher dans le formulaire
+    $etats = ['en attente', 'réçu', 'terminé'];
+
+    return view('mariages.edit', compact('mariage', 'etats','alerts'));
+}
+    public function updateEtat3(Request $request, $id)
+{
+    $mariage = Mariage::findOrFail($id);
+    
+    // Validation de l'état (si nécessaire)
+    $request->validate([
+        'etat' => 'required|string|in:en attente,réçu,terminé', // Ajouter les états possibles
+    ]);
+
+    // Mise à jour de l'état
+    $mariage->etat = $request->etat;
+    $mariage->save();
+    
+    return redirect()->route('mariage.index')->with('success', 'L\'état de la demande a été mis à jour.');
 }
 
 

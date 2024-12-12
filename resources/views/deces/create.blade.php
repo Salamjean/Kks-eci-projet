@@ -327,7 +327,11 @@
             
 
         <button type="button" onclick="validerFormulaire()" id="Valid">Valider la Déclaration</button>
-        <button type="submit" id="boutonImprimer" class="hidden" >Valider la Demande</button>
+        <form method="POST" action="{{ route('naissance.store') }}">
+            @csrf
+            <!-- Vos champs de formulaire ici -->
+            <button type="submit" id="boutonImprimer" class="hidden">Soumettre</button>
+        </form>
         
     </form>
 

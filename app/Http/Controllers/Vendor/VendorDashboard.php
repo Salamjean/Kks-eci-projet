@@ -16,61 +16,62 @@ class VendorDashboard extends Controller
 {
     public function index()
     {
-    // Récupérer l'admin connecté
-    $admin = Auth::guard('vendor')->user(); // Assurez-vous que l'authentification utilise 'vendor'
-
-    // Récupérer les naissances associées au lieu de naissance de cet admin
-    $naissances = Naissance::where('lieuNaiss', $admin->name)->get();
- 
-    // Calcul des données globales
+        // Récupérer l'admin connecté
+        $admin = Auth::guard('vendor')->user(); // Assurez-vous que l'authentification utilise 'vendor'
     
-    $totalData = Naissance::count() +NaissanceD::count() + Deces::count() + Mariage::count();
-    $naissancePercentage = $totalData > 0 ? (Naissance::count() / $totalData) * 100 : 0;
-    $naissanceDPercentage = $totalData > 0 ? (NaissanceD::count() / $totalData) * 100 : 0;
-    $decesPercentage = $totalData > 0 ? (Deces::count() / $totalData) * 100 : 0;
-    $mariagePercentage = $totalData > 0 ? (Mariage::count() / $totalData) * 100 : 0;
-    $totalNaiss = $naissancePercentage + $naissanceDPercentage;
-
-    // Données pour le tableau de bord
-    $naissancedash = Naissance::count();
-    $decesdash = Deces::count();
-    $mariagedash = Mariage::count();
-    $naissanceDdash = NaissanceD::count();
-    $Naiss = Naissance::count() + NaissanceD::count();
+        // Récupérer les naissances, naissancesD, deces et mariages associés à la commune de cet admin
+        $naissances = Naissance::where('commune', $admin->name)->orderBy('created_at', 'desc')->get();
+        $naissancesD = NaissanceD::where('commune', $admin->name)->orderBy('created_at', 'desc')->get();
+        $deces = Deces::where('commune', $admin->name)->orderBy('created_at', 'desc')->get();
+        $mariages = Mariage::where('commune', $admin->name)->orderBy('created_at', 'desc')->get();
     
-
-    // Récupération des données récentes
-    $recentNaissances = Naissance::orderBy('created_at', 'desc')->take(3)->get();
-    $recentDeces = Deces::orderBy('created_at', 'desc')->take(3)->get();
-    $recentMariages = Mariage::orderBy('created_at', 'desc')->take(3)->get();
-    $alerts = Alert::where('is_read', false)
-    ->whereIn('type', ['naissance','mariage', 'deces'])  // Filtrer les alertes par type
-    ->latest()
-    ->get();
-
-    $naissancesD = NaissanceD::all();
-
-    // Retourne la vue avec les données
-    return view('vendor.dashboard', compact(
-        'naissancedash',
-        'decesdash',
-        'mariagedash',
-        'naissances',
-        'totalData',
-        'naissancePercentage',
-        'naissanceDPercentage',
-        'decesPercentage',
-        'mariagePercentage',
-        'recentNaissances',
-        'recentDeces',
-        'recentMariages', 
-        'alerts',
-        'Naiss',
-        'naissancesD',
-        'totalNaiss'
-    ));
-}
-
+        // Calcul des données globales selon la commune
+        $totalData = $naissances->count() + $naissancesD->count() + $deces->count() + $mariages->count();
+        $naissancePercentage = $totalData > 0 ? ($naissances->count() / $totalData) * 100 : 0;
+        $naissanceDPercentage = $totalData > 0 ? ($naissancesD->count() / $totalData) * 100 : 0;
+        $decesPercentage = $totalData > 0 ? ($deces->count() / $totalData) * 100 : 0;
+        $mariagePercentage = $totalData > 0 ? ($mariages->count() / $totalData) * 100 : 0;
+        $NaissP = $naissancePercentage + $naissanceDPercentage; // Pourcentage des naissances et naissancesD	
+    
+        // Données pour le tableau de bord
+        $naissancedash = $naissances->count();
+        $decesdash = $deces->count();
+        $mariagedash = $mariages->count();
+        $naissanceDdash = $naissancesD->count();
+        $Naiss = $naissancedash + $naissanceDdash;
+    
+        // Récupération des données récentes (3 derniers éléments)
+        $recentNaissances = $naissances->take(3);
+        $recentDeces = $deces->take(3);
+        $recentMariages = $mariages->take(3);
+    
+        $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance', 'mariage', 'deces'])  // Filtrer les alertes par type
+            ->latest()
+            ->get();
+    
+        // Retourne la vue avec les données
+        return view('vendor.dashboard', compact(
+            'naissancedash',
+            'decesdash',
+            'NaissP',
+            'mariagedash',
+            'naissances',
+            'naissancesD',
+            'deces',
+            'mariages',
+            'totalData',
+            'naissancePercentage',
+            'naissanceDPercentage',
+            'decesPercentage',
+            'mariagePercentage',
+            'recentNaissances',
+            'recentDeces',
+            'recentMariages', 
+            'alerts',
+            'Naiss',
+        ));
+    }
 public function markAlertAsRead($id)
 {
     // Récupérer l'alerte par son ID

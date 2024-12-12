@@ -190,7 +190,11 @@
         <input type="file" id="extraitMariage" name="extraitMariage" >
       </div>
 
-      <button type="submit">Soumettre la demande</button>
+      <form method="POST" action="{{ route('mariage.store') }}">
+        @csrf
+        <!-- Vos champs de formulaire ici -->
+        <button type="submit">Soumettre</button>
+    </form>
     </form>
   </div>
 
