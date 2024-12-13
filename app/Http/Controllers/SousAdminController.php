@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SousAdminRequest;
 use App\Http\Requests\submitDefineAccessRequest;
 use App\Http\Requests\updateDoctorRequest;
+use App\Models\NaissHop;
 use App\Models\ResetCodePassword;
 use App\Models\SousAdmin;
 use App\Notifications\SendEmailToDoctorAfterRegistrationNotification;
@@ -21,8 +22,9 @@ class SousAdminController extends Controller
    
     public function dashboard(){
         try {
+            $naisshop = NaissHop::count();
             $sousadmins = SousAdmin::all();
-            return view('sous_admin.dashboard', compact('sousadmins'));
+            return view('sous_admin.dashboard', compact('sousadmins','naisshop'));
         } catch (Exception $e) {
             Log::error('Erreur lors de l\'exécution de la méthode dashboard: ' . $e->getMessage());
             return redirect()->route('error.page');  // Rediriger vers une page d'erreur, par exemple

@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DecesController;
+use App\Http\Controllers\DecesHopController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\Doctors\DoctorDashboard;
 use App\Http\Controllers\Doctors\SousDoctorsDashboard;
@@ -146,7 +147,7 @@ Route::middleware('auth:web')->group(function () {
     });
 
     Route::prefix('naissHop')->group(function() {
-        //les routes cotés hopitals
+        //les routes cotés Naissances hopital
         Route::get('/', [NaissHopController::class, 'index'])->name('naissHop.index');        
         Route::post('/create', [NaissHopController::class, 'store'])->name('naissHop.store');
         Route::get('/create', [NaissHopController::class, 'create'])->name('naissHop.create');
@@ -159,8 +160,15 @@ Route::middleware('auth:web')->group(function () {
 
         //les routes cotés administrator (Mairie)
         Route::get('/vendors', [NaissHopController::class, 'mairieindex'])->name('naissHop.mairieindex'); 
-
     });
+
+    Route::prefix('decesHop')->group(function(){
+        //Les routes les routes cotés Naissances hopital
+        Route::get('/', [DecesHopController::class, 'index'])->name('decesHop.index');        
+        //Route::post('/create', [DecesHopController::class, 'store'])->name('naissHop.store');
+        Route::get('/create', [DecesHopController::class, 'create'])->name('decesHop.create');
+    });
+    
 
     //les routes de declarations naissances
     Route::prefix('naissances/declarations')->group(function() {

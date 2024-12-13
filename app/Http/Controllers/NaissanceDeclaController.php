@@ -29,7 +29,7 @@ class NaissanceDeclaController extends Controller
         $naissanceD->name = $request->name;
         $naissanceD->number = $request->number;
         $naissanceD->commune = $user->commune;
-        $naissanceD->etat = 'En attente';
+        $naissanceD->etat = 'en attente';
         $naissanceD->user_id = $user->id;
     
         $naissanceD->save();

@@ -81,8 +81,8 @@
                                 <th>Pièce du Déclarant</th>
                                 <th>Acte de Mariage</th>
                                 <th>Déclaration par la Loi</th>
-                                <th>Action</th>
                                 <th>Etat Actuel</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -138,16 +138,17 @@
                                         </span>
                                     </div>
                                 </td>
+                                <td class="{{ $deces->etat == 'en attente' ? 'bg-warning' : ($deces->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
+                                    {{ $deces->etat }}
+                                </td>
                                 <td>
                                     <a href="{{ route('deces.edit', $deces->id) }}" class="btn btn-sm"  style="size: 0.6rem">Mettre à jour l'état </a>
                                   </td>
-                                  <td class="{{ $deces->etat == 'en attente' ? 'bg-warning' : ($deces->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
-                                      {{ $deces->etat }}
-                                  </td>
+                                  
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="text-center">Aucune déclaration trouvée</td>
+                                <td colspan="10" class="text-center">Aucune déclaration trouvée</td>
                             </tr>
                             @endforelse
 

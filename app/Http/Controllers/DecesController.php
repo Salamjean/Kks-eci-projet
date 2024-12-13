@@ -90,7 +90,7 @@ public function store(saveDecesRequest $request)
     $deces->acteMariage = $uploadedPaths['acteMariage'] ?? null;
     $deces->deParLaLoi = $uploadedPaths['deParLaLoi'] ?? null; // Si présent
     $deces->commune = $user->commune;
-    $deces->etat = 'En attente';
+    $deces->etat = 'en attente';
     $deces->user_id = $user->id;  // Lier la demande à l'utilisateur connecté
 
     $deces->save();

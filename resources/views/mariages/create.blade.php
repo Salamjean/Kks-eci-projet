@@ -162,10 +162,7 @@
 
       <div id="infoEpoux" class="hidden">
         <h3 style="font-size: 20px;" >Informations sur le conjoint(e)</h3><br>
-        <div class="form-group">
-          <label for="nomEpoux">Nom du conjoint(e)</label>
-          <input type="text" id="nomEpoux" name="nomEpoux" placeholder="Entrez le nom de l'époux">
-        </div>
+        
         <div class="form-group">
           <label for="prenomEpoux">Prénom du conjoint(e)</label>
           <input type="text" id="prenomEpoux" name="prenomEpoux" placeholder="Entrez le prénom de l'époux">
@@ -179,7 +176,11 @@
           <input type="text" id="lieuNaissanceEpoux" name="lieuNaissanceEpoux" placeholder="Entrez le lieu de naissance">
         </div>
       </div>
-
+      
+      <div class="form-group">
+        <label for="nomEpoux">Nom du conjoint(e)</label>
+        <input type="text" id="nomEpoux" name="nomEpoux" placeholder="Entrez le nom de l'époux">
+      </div>
       <div class="form-group">
         <label for="pieceIdentite">Pièce d'identité (format PDF)</label>
         <input type="file" id="pieceIdentite" name="pieceIdentite" >

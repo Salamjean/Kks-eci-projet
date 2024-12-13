@@ -35,11 +35,11 @@
       <!-- Department -->
       <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#department" aria-expanded="false" aria-controls="department">
-          <span><i class="fas fa-skull"></i>Déclaration Décès</span>
+          <span><i class="fas fa-school"></i>Déclaration Décès</span>
         </a>
         <ul id="department" class="collapse" aria-labelledby="department" data-parent="#side-nav-accordion">
-          <li> <a href="pages/department/add-department.html">Ajouter Déclaration</a> </li>
-          <li> <a href="pages/department/department-list.html">Liste Déclaration</a> </li>
+          <li> <a href="{{ route('decesHop.create') }}">Ajouter Déclaration</a> </li>
+          <li> <a href="{{ route('decesHop.index') }}">Liste Déclaration</a> </li>
         </ul>
       </li><br><br>
       <!-- /Department -->

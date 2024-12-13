@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Deces;
+use App\Models\Mariage;
 use App\Models\Naissance;
 use App\Models\NaissanceD;
 use App\Models\User;
@@ -14,27 +16,40 @@ class DashboardController extends Controller
     {
         if (Auth::check()) {
             $user = Auth::user();
-    
-            // Récupérer les naissances et naissancesD pour l'utilisateur
+        
+            // Récupérer les naissances et les marquer avec le type "naissance"
             $naissances = Naissance::where('user_id', $user->id)->get()->map(function ($naissance) {
                 $naissance->type = 'naissance';
                 return $naissance;
             });
-    
+        
+            // Récupérer les naissances différées et les marquer avec le type "naissanceD"
             $naissancesD = NaissanceD::where('user_id', $user->id)->get()->map(function ($naissanceD) {
-                $naissanceD->type = 'naissance';
+                $naissanceD->display_type = 'naissanceD'; // Utilise une nouvelle propriété pour l'affichage
                 return $naissanceD;
             });
-
-            // Combiner les deux collections
-            $demandes = $naissances->concat($naissancesD);
-       
-            // Compter le nombre de demandes effectuées par l'utilisateur
-            $nombreDemandes = $naissances->count() + $naissancesD->count();
-    
-            return view('dashboard', compact('user', 'demandes', 'nombreDemandes'));
+        
+            // Récupérer les décès et les marquer avec le type "deces"
+            $deces = Deces::where('user_id', $user->id)->get()->map(function ($deces) {
+                $deces->type = 'deces';
+                return $deces;
+            });
+        
+            // Récupérer les mariages et les marquer avec le type "mariage"
+            $mariages = Mariage::where('user_id', $user->id)->get()->map(function ($mariage) {
+                $mariage->type = 'mariage';
+                return $mariage;
+            });
+        
+            // Combiner toutes les collections
+            $demandes = $naissances->concat($naissancesD)->concat($deces)->concat($mariages);
+        
+            // Compter le nombre total de demandes
+            $nombreDemandes = $demandes->count();
+        
+            return view('dashboard', compact('user', 'demandes', 'nombreDemandes','naissancesD'));
         }
-    
+        
         return redirect()->route('login');
     }
 

@@ -118,15 +118,28 @@
                             <label for="demandes" class="text-sm mr-2">Sélectionnez une demande ({{ $nombreDemandes }}) :</label>
                             <select id="demandes" class="block p-2 border border-gray-300 rounded-md h-12" onchange="updateStatus()">
                               @forelse ($demandes as $demande)
-                                  <option value="{{ $demande->etat }}" {{ $loop->first ? 'selected' : '' }}>
-                                      {{ isset($demande->type) && $demande->type === 'naissance' 
-                                          ? 'Demande n° ' . $demande->id . ' d\'extrait de naissance' 
-                                          : 'Demande n° ' . $demande->id . ' d\'extrait de naissance' }}
-                                  </option>
+                                  @if ($demande->type === 'deces')
+                                      <option value="{{ $demande->etat }}" {{ $loop->first ? 'selected' : '' }}>
+                                          Demande d'extrait de décès de {{ $demande->nomDefunt }}
+                                      </option>
+                                  @elseif ($demande->type === 'naissance')
+                                      <option value="{{ $demande->etat }}" {{ $loop->first ? 'selected' : '' }}>
+                                          Demande d'extrait de naissance pour l'enfant de {{ $demande->nomDefunt }}
+                                      </option>
+                                  @elseif ($demande->display_type === 'naissanceD')
+                                      <option value="{{ $demande->etat }}" {{ $loop->first ? 'selected' : '' }}>
+                                        Demande d'extrait de naissance {{ $demande->type }} de {{ $demande->name }}
+                                      </option>
+                                    @elseif ($demande->type === 'mariage')
+                                      <option value="{{ $demande->etat }}" {{ $loop->first ? 'selected' : '' }}>
+                                        Demande d'extrait de mariage de {{ $demande->nomEpoux }}
+                                      </option>
+                                  @endif
                               @empty
                                   <option>Aucune demande effectuée</option>
                               @endforelse
                           </select>
+                          
                         </li>
         
                         <!-- Steps -->

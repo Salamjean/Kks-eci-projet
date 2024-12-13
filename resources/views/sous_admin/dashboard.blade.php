@@ -48,7 +48,7 @@
                     <div class="ms-card-body media">
                         <div class="media-body">
                             <h6>Total Naissance</h6>
-                            <p class="ms-card-change">4567</p>
+                            <p class="ms-card-change text-center">{{ $naisshop }}</p>
                         </div>
                     </div>
                     <i class="fas fa-user ms-icon-mr"></i>
@@ -64,7 +64,7 @@
                             <p class="ms-card-change">4567</p>
                         </div>
                     </div>
-                    <i class="fa fa-skull ms-icon-mr"></i>
+                    <i class="fa fa-school ms-icon-mr"></i>
                 </div>
             </a>
         </div>
