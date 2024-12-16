@@ -114,7 +114,7 @@ class VendorController extends Controller
     $naissance->etat = $request->etat;
     $naissance->save();
     
-    return redirect()->route('naissance.index')->with('success', 'L\'état de la demande a été mis à jour.');
+    return redirect()->route('naissance.index')->with('success', "Etat de la demande a été mis à jour.");
 }
 
 //NaissanceD edit 
@@ -141,7 +141,7 @@ class VendorController extends Controller
     $naissanced->etat = $request->etat;
     $naissanced->save();
     
-    return redirect()->route('naissance.index')->with('success', 'L\'état de la demande a été mis à jour.');
+    return redirect()->route('naissance.index')->with('success', 'Etat de la demande a été mis à jour.');
 }
 
 //Deces edit 
@@ -168,7 +168,7 @@ class VendorController extends Controller
     $deces->etat = $request->etat;
     $deces->save();
     
-    return redirect()->route('deces.index')->with('success', 'L\'état de la demande a été mis à jour.');
+    return redirect()->route('deces.index')->with('success', 'Etat de la demande a été mis à jour.');
 }
 
 
@@ -196,7 +196,7 @@ class VendorController extends Controller
     $mariage->etat = $request->etat;
     $mariage->save();
     
-    return redirect()->route('mariage.index')->with('success', 'L\'état de la demande a été mis à jour.');
+    return redirect()->route('mariage.index')->with('success', 'Etat de la demande a été mis à jour.');
 }
 
 

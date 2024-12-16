@@ -34,7 +34,7 @@ class NaissHopController extends Controller
     public function delete(NaissHop $naisshop){
         try {
             $naisshop->delete();
-            return redirect()->route('naissHop.index')->with('success1','Le Docteur a été supprimé avec succès.');
+            return redirect()->route('naissHop.index')->with('success1','La declaration a été supprimé avec succès.');
         } catch (Exception $e) {
             // dd($e);
             throw new Exception('error','Une erreur est survenue lors de la suppression du Docteur');
@@ -58,20 +58,19 @@ class NaissHopController extends Controller
             $naisshop->PrP = $request->PrP;
             $naisshop->contP = $request->contP;
             $naisshop->CNI_Pere = $request->CNI_Pere;
-            $naisshop->NomEnf = $request->NomEnf;
             $naisshop->DateNaissance = $request->DateNaissance;
             $naisshop->sexe = $request->sexe;
             $naisshop->update();
 
             return redirect()->route('naissHop.index')->with('success','Vos informations ont été mises à jour avec succès.');
         } catch (Exception $e) {
-            // dd($e);
-            throw new Exception('error','Une erreur est survenue lors de la modification de la declaration');
+            dd($e);
         }
     }
 
     public function store(Request $request)
 {
+ 
     // Validation des données
     $validatedData = $request->validate([
         'NomM' => 'required',

@@ -44,49 +44,65 @@
   
   <body class="service-details-page">
     <header id="header" class="header d-flex align-items-center fixed-top">
-      <div class="row" style="width:100%; justify-content:center">
-      @if (Session::get('success1')) <!-- Pour la suppression -->
-        <script>
-            Swal.fire({
-                icon: 'success',
-                title: 'Suppression réussie',
-                text: '{{ Session::get('success1') }}',
-                timer: 3000,
-                showConfirmButton: false,
-                background: '#ffcccc', // Couleur de fond personnalisée
-                color: '#b30000' // Texte rouge foncé
-            });
-        </script>
+      <style>
+        .alert {
+            display: none; /* Masqué par défaut */
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            position: relative;
+            transition: opacity 0.5s ease;
+        }
+        .alert-success {
+            background-color: #ccffcc; /* Couleur de fond personnalisée */
+            color: #006600; /* Texte vert foncé */
+            border-color: #b3e6b3; /* Bordure verte */
+        }
+        .alert-error {
+            background-color: #f86750; /* Couleur de fond rouge vif */
+            color: #ffffff; /* Texte blanc */
+            border-color: #f44336; /* Bordure rouge */
+        }
+    </style>
+    
+    <div>
+        @if (Session::get('success1')) <!-- Pour la suppression -->
+            <div class="alert alert-success" id="success1">
+                {{ Session::get('success1') }}
+            </div>
         @endif
     
-        @if (Session::get('success')) <!-- Pour la modification -->
-            <script>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Action réussie',
-                    text: '{{ Session::get('success') }}',
-                    timer: 3000,
-                    showConfirmButton: true,
-                    background: '#ccffcc', // Couleur de fond personnalisée
-                    color: '#006600' // Texte vert foncé
-                });
-            </script>
+        @if (Session::get('success')) <!-- Pour la connexion -->
+            <div class="alert alert-success" id="success">
+                {{ Session::get('success') }}
+            </div>
         @endif
     
         @if (Session::get('error')) <!-- Pour une erreur générale -->
-            <script>
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erreur',
-                    text: '{{ Session::get('error') }}',
-                    timer: 3000,
-                    showConfirmButton: false,
-                    background: '#f86750', // Couleur de fond rouge vif
-                    color: '#ffffff' // Texte blanc
-                });
-            </script>
+            <div class="alert alert-error" id="error">
+                {{ Session::get('error') }}
+            </div>
         @endif
     </div>
+    
+    <script>
+        // Affiche les messages et les fait disparaître après 3 secondes
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                if (alert) {
+                    alert.style.display = 'block'; // Affiche le message
+                    setTimeout(() => {
+                        alert.style.opacity = '0'; // Fait disparaître le message
+                        setTimeout(() => {
+                            alert.style.display = 'none'; // Masque le message après la transition
+                        }, 500); // Attendre que l'animation soit terminée
+                    }, 3000); // Délai avant de commencer la disparition
+                }
+            });
+        });
+    </script>
     </header>
     
     <main class="main">

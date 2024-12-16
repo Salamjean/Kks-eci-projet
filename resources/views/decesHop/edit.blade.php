@@ -121,9 +121,9 @@
     }
   </style>
 
-<form id="msform" action="#" method="POST">
-    @csrf
-    @method('POST')
+<form id="msform" action="{{ route('decesHop.update', $deceshop->id) }}" method="POST">
+  @csrf
+  @method('PUT')
     <!-- Form Header -->
     <div class="form-header">
       <h2>Déclaration de décès</h2>
@@ -135,30 +135,30 @@
       <div class="div">
         <div class="input-group">
           <label for="nomM">Nom du défunt</label>
-          <input type="text" id="nomM" name="NomM" placeholder="Entrez le nom du défunt" required />
+          <input type="text" id="nomM" name="NomM" placeholder="Entrez le nom du défunt" value="{{ $deceshop->NomM }}"  />
         </div>
 
         <div class="input-group">
           <label for="prM">Prénom du défunt</label>
-          <input type="text" id="prM" name="PrM" placeholder="Entrez le prénom du défunt" required />
+          <input type="text" id="prM" name="PrM" placeholder="Entrez le prénom du défunt" value="{{ $deceshop->PrM }}"  />
         </div>
       </div>
 
       <div class="div">
         <div class="input-group">
           <label for="dateNaissance">Date de naissance du défunt</label>
-          <input type="date" id="dateNaissance" name="DateNaissance" required />
+          <input type="date" id="dateNaissance" name="DateNaissance" value="{{ $deceshop->DateNaissance }}"  />
         </div>
 
         <div class="input-group">
           <label for="dateDeces">Date du décès</label>
-          <input type="date" id="dateDeces" name="DateDeces" required />
+          <input type="date" id="dateDeces" name="DateDeces" value="{{ $deceshop->DateDeces }}"  />
         </div>
       </div>
 
       <div class="input-group">
         <label for="remarques">Décrivez les circonstances du décès</label>
-        <textarea id="remarques" name="Remarques" required maxlength="200"></textarea>
+        <textarea id="remarques" name="Remarques">{{ $deceshop->Remarques }}</textarea>
       </div>
       <div class="input-group">
         <input type="text" class="text-center" style="background-color:#e8e8e8" name="nomHop" value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
@@ -168,7 +168,7 @@
       </div>
      
 
-      <button type="submit" class="action-button" style="margin-left:42%">Valider</button>
+      <button type="submit" style="margin-left:38%" class="action-button">Mettre à jour</button>
     </fieldset>
   </form>
 </div>

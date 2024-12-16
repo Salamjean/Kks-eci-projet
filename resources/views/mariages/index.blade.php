@@ -1,6 +1,7 @@
 @extends('vendor.layouts.template')
 
 @section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <style>
@@ -37,6 +38,50 @@
     <!-- Formulaire de recherche -->
     <form method="GET" action="{{ route('mariage.index') }}" class="mb-4">
         <div class="row">
+            <div class="row" style="width:100%; justify-content:center">
+                <div class="row" style="width:100%; justify-content:center">
+                    @if (Session::get('success1')) <!-- Pour la suppression -->
+                        <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Suppression réussie',
+                                text: '{{ Session::get('success1') }}',
+                                showConfirmButton: true,  // Afficher le bouton OK
+                                confirmButtonText: 'OK',  // Texte du bouton
+                                background: '#ffcccc',   // Couleur de fond personnalisée
+                                color: '#b30000'          // Texte rouge foncé
+                            });
+                        </script>
+                    @endif
+                
+                    @if (Session::get('success')) <!-- Pour la modification -->
+                        <script>
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Action réussie',
+                                text: '{{ Session::get('success') }}',
+                                showConfirmButton: true,  // Afficher le bouton OK
+                                confirmButtonText: 'OK',  // Texte du bouton
+                                background: '#ccffcc',   // Couleur de fond personnalisée
+                                color: '#006600'          // Texte vert foncé
+                            });
+                        </script>
+                    @endif
+                
+                    @if (Session::get('error')) <!-- Pour une erreur générale -->
+                        <script>
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur',
+                                text: '{{ Session::get('error') }}',
+                                showConfirmButton: true,  // Afficher le bouton OK
+                                confirmButtonText: 'OK',  // Texte du bouton
+                                background: '#f86750',    // Couleur de fond rouge vif
+                                color: '#ffffff'          // Texte blanc
+                            });
+                        </script>
+                    @endif
+                </div>
             <!-- Type de recherche -->
             <div class="col-md-4">
                 <select id="searchType" name="searchType" class="form-control" onchange="updateInputPlaceholder()">
@@ -223,3 +268,16 @@
 </script>
 
 @endsection
+<script>
+    function showImage(imageElement) {
+      const modalImage = document.getElementById('modalImage');
+  
+      // Vérifier si l'image utilise déjà la valeur de remplacement (image par défaut)
+      if (imageElement.src.includes('assets/images/profiles/bébé.jpg')) {
+          modalImage.src = imageElement.src; // Utiliser l'image par défaut
+      } else {
+          modalImage.src = imageElement.src; // Utiliser l'image actuelle (valide)
+      }
+  }
+  
+  </script>

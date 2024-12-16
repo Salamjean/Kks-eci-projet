@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion / Inscription</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
@@ -187,12 +189,27 @@
       </div>
     </div>
   </div>
+  
   <script>
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
     const container = document.getElementById('container');
+
+    // Gestion des événements pour les boutons
     signUpButton.addEventListener('click', () => container.classList.add("right-panel-active"));
     signInButton.addEventListener('click', () => container.classList.remove("right-panel-active"));
-  </script>
+
+    // Affichage du pop-up après l'inscription réussie
+    document.addEventListener('DOMContentLoaded', function() {
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Inscription réussie',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'OK'
+            });
+        @endif
+    });
+</script>
 </body>
 </html>

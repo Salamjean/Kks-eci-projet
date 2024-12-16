@@ -248,7 +248,6 @@
     <fieldset >
       <h2 class="fs-title">Informations du nouveau-né</h2>
       <h3 class="fs-subtitle">Complétez les informations du bébé</h3>
-      <input type="text" class="text-center" name="NomEnf" style="background-color:#f0ecec; font-wei"  value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
       <input type="date" class="text-center" name="DateNaissance" placeholder="Entrez la date de naissance" value="{{ $naisshop->DateNaissance }}"  />
       <select class="text-center" name="sexe" >
         <option value="masculin" {{ $naisshop->sexe == 'masculin' ? 'selected' : '' }}>Masculin</option>

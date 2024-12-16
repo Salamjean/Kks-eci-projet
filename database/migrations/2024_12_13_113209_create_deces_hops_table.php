@@ -13,6 +13,16 @@ return new class extends Migration
     {
         Schema::create('deces_hops', function (Blueprint $table) {
             $table->id();
+             // les informations de sur le defunt
+             $table->string('NomM');
+             $table->string('PrM');
+             $table->string('DateNaissance');
+             $table->string('DateDeces');
+             $table->string('Remarques');
+             $table->string('nomHop');
+             $table->string('commune');
+             $table->string('codeDM')->default('rien')->unique();
+             $table->string('codeCMD')->default('rien')->unique();
             $table->timestamps();
         });
     }

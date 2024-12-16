@@ -262,3 +262,16 @@
     </script>
 
 @endsection
+<script>
+    function showImage(imageElement) {
+      const modalImage = document.getElementById('modalImage');
+  
+      // Vérifier si l'image utilise déjà la valeur de remplacement (image par défaut)
+      if (imageElement.src.includes('assets/images/profiles/bébé.jpg')) {
+          modalImage.src = imageElement.src; // Utiliser l'image par défaut
+      } else {
+          modalImage.src = imageElement.src; // Utiliser l'image actuelle (valide)
+      }
+  }
+  
+  </script>

@@ -41,17 +41,14 @@ class RegisteredUserController extends Controller
         ]);
     
         // Création de l'utilisateur
-        $user = User::create([
+        User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
-            'commune'=>$validated['commune'],
+            'commune' => $validated['commune'],
             'password' => bcrypt($validated['password']),
         ]);
     
-        // Authentification de l'utilisateur
-        Auth::login($user);
-    
-        // Redirection vers une page après l'enregistrement
-        return redirect()->route('login')->with('success','Votre compte a été créer avec succès connectez-vous'); // ou une autre route de votre choix
+        // Redirection vers la page de connexion avec un message de succès
+        return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès. Connectez-vous.');
     }
 }

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -9,18 +10,15 @@
     <style>
         
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f9;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            
-            position: relative;
-            
+            background-color:#f4f7f9;
+            color: #333;
+            display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            width: 100vw;
-            box-sizing: border-box;
+            min-height: 100vh;
         }
         /*Reduction du formulaire*/
         .reduit {
@@ -30,17 +28,15 @@
             height: 50px;
         }
         .conteneurInfo {
-            position: relative;
-            left: 400px;
-            top: 05em;
-            width: 100%;
-            max-width: 650px;
-            background-color: #ffffff;
+           
+                    background: #ffffff;
+            padding: 30px 40px;
             border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-            padding: 2rem;
-            animation: fadeIn 1s ease;
-            
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 60%;
+            animation: fadeIn 0.6s ease-in-out;
+                    
             
         }
 

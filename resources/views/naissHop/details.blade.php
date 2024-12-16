@@ -12,6 +12,10 @@
     <h1 class="text-center text-primary" style="font-size: 27px">Détails de la déclaration</h1>
     <table class="table table-bordered bg-white" style="border-block: 3px">
         <tr>
+            <th>Numéro du Certificat Médical de Naissance</th>
+            <td>{{ $naisshop->codeCMN }}</td>
+        </tr>
+        <tr>
             <th>Nom de la Mère</th>
             <td>{{ $naisshop->NomM }}</td>
         </tr>

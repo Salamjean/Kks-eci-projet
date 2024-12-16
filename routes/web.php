@@ -154,9 +154,9 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/edit/{naisshop}', [NaissHopController::class, 'edit'])->name('naissHop.edit');
         Route::put('/edit/{naisshop}', [NaissHopController::class, 'update'])->name('naissHop.update');
         Route::get('/delete/{naisshop}', [NaissHopController::class, 'delete'])->name('naissHop.delete');
-        Route::get('/naissHop/{id}', [NaissHopController::class, 'show'])->name('naissHop.show');
+        Route::get('/{id}', [NaissHopController::class, 'show'])->name('naissHop.show');
         Route::post('/verifier-code-dm', [NaissHopController::class, 'verifierCodeDM'])->name('verifierCodeDM');
-        Route::get('/naisshop/download/{id}', [NaissHopController::class, 'download'])->name('naissHop.download');
+        Route::get('/download/{id}', [NaissHopController::class, 'download'])->name('naissHop.download');
 
         //les routes cotés administrator (Mairie)
         Route::get('/vendors', [NaissHopController::class, 'mairieindex'])->name('naissHop.mairieindex'); 
@@ -165,8 +165,14 @@ Route::middleware('auth:web')->group(function () {
     Route::prefix('decesHop')->group(function(){
         //Les routes les routes cotés Naissances hopital
         Route::get('/', [DecesHopController::class, 'index'])->name('decesHop.index');        
-        //Route::post('/create', [DecesHopController::class, 'store'])->name('naissHop.store');
+        Route::post('/create', [DecesHopController::class, 'store'])->name('decesHop.store');
         Route::get('/create', [DecesHopController::class, 'create'])->name('decesHop.create');
+        Route::get('/edit/{deceshop}', [DecesHopController::class, 'edit'])->name('decesHop.edit');
+        Route::put('/edit/{deceshop}', [DecesHopController::class, 'update'])->name('decesHop.update');
+        Route::get('/delete/{deceshop}', [DecesHopController::class, 'delete'])->name('decesHop.delete');
+        Route::get('/{id}', [DecesHopController::class, 'show'])->name('decesHop.show');
+        Route::post('/deces/verifierCodeCMD', [DecesHopController::class, 'verifierCodeCMD'])->name('deces.verifierCodeCMD');
+        Route::get('/download/{id}', [DecesHopController::class, 'download'])->name('decesHop.download');
     });
     
 
