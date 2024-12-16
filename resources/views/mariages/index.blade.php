@@ -35,81 +35,7 @@
         </ol>
     </div>
 
-    <!-- Formulaire de recherche -->
-    <form method="GET" action="{{ route('mariage.index') }}" class="mb-4">
-        <div class="row">
-            <div class="row" style="width:100%; justify-content:center">
-                <div class="row" style="width:100%; justify-content:center">
-                    @if (Session::get('success1')) <!-- Pour la suppression -->
-                        <script>
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Suppression réussie',
-                                text: '{{ Session::get('success1') }}',
-                                showConfirmButton: true,  // Afficher le bouton OK
-                                confirmButtonText: 'OK',  // Texte du bouton
-                                background: '#ffcccc',   // Couleur de fond personnalisée
-                                color: '#b30000'          // Texte rouge foncé
-                            });
-                        </script>
-                    @endif
-                
-                    @if (Session::get('success')) <!-- Pour la modification -->
-                        <script>
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Action réussie',
-                                text: '{{ Session::get('success') }}',
-                                showConfirmButton: true,  // Afficher le bouton OK
-                                confirmButtonText: 'OK',  // Texte du bouton
-                                background: '#ccffcc',   // Couleur de fond personnalisée
-                                color: '#006600'          // Texte vert foncé
-                            });
-                        </script>
-                    @endif
-                
-                    @if (Session::get('error')) <!-- Pour une erreur générale -->
-                        <script>
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erreur',
-                                text: '{{ Session::get('error') }}',
-                                showConfirmButton: true,  // Afficher le bouton OK
-                                confirmButtonText: 'OK',  // Texte du bouton
-                                background: '#f86750',    // Couleur de fond rouge vif
-                                color: '#ffffff'          // Texte blanc
-                            });
-                        </script>
-                    @endif
-                </div>
-            <!-- Type de recherche -->
-            <div class="col-md-4">
-                <select id="searchType" name="searchType" class="form-control" onchange="updateInputPlaceholder()">
-                    <option value="">Choisir un type de recherche</option>
-                    <option value="nomConjoint" {{ request('searchType') == 'nomConjoint' ? 'selected' : '' }}>
-                        Par nom du conjoint
-                    </option>
-                    <option value="prenomConjoint" {{ request('searchType') == 'prenomConjoint' ? 'selected' : '' }}>
-                        Par prénom du conjoint
-                    </option>
-                    <option value="lieuNaissance" {{ request('searchType') == 'lieuNaissance' ? 'selected' : '' }}>
-                        Par lieu de naissance
-                    </option>
-                </select>
-            </div>
-
-            <!-- Champ de saisie -->
-            <div class="col-md-6">
-                <input type="text" id="searchInput" name="searchInput" class="form-control" 
-                       placeholder="Entrez un critère de recherche" value="{{ request('searchInput') }}">
-            </div>
-
-            <!-- Bouton de recherche -->
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary">Rechercher</button>
-            </div>
-        </div>
-    </form>
+   
 
     <!-- Mariages avec fichiers seulement (champ manquants) -->
     <div class="row">
@@ -119,18 +45,19 @@
                     <h6 class="m-0 font-weight-bold text-primary">Demande De Copie Simples</h6>
                 </div>
                 <div class="table-responsive p-3">
+                    <!-- Champ de recherche -->
+                    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Rechercher...">
+                
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
-                            <tr  style="font-size: 12px">
+                            <tr style="font-size: 12px">
                                 <th class="text-center">Nom du conjoint(e)</th>
                                 <th class="text-center">Pièce d'Identité</th>
                                 <th class="text-center">Extrait de Mariage</th>
                                 <th>Etat Actuel</th>
                                 <th>Action</th>
-                                
                             </tr>
                         </thead>
-                        </tfoot>
                         <tbody>
                             @forelse ($mariagesAvecFichiersSeulement as $mariage)
                             <tr style="font-size: 12px">
@@ -155,13 +82,12 @@
                                          onclick="showImage(this)" 
                                          onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
                                 </td>
-                                <td class="{{ $mariage->etat == 'en attente' ? 'bg-warning' : ($mariage->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
+                                <td class="{{ $mariage->etat == 'en attente' ? 'bg-warning' : ($mariage->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                     {{ $mariage->etat }}
                                 </td>
                                 <td>
-                                    <a href="{{ route('mariage.edit', $mariage->id) }}" class="btn btn-sm"  style="size: 0.6rem">Mettre à jour l'état </a>
-                                  </td>
-                                 
+                                    <a href="{{ route('mariage.edit', $mariage->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
+                                </td>
                             </tr>
                             @empty
                             <tr>
@@ -171,6 +97,21 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <script>
+                    document.getElementById('searchInput').addEventListener('keyup', function() {
+                        const filter = this.value.toLowerCase();
+                        const rows = document.querySelectorAll('#dataTable tbody tr');
+                
+                        rows.forEach(row => {
+                            const cells = row.querySelectorAll('td');
+                            const match = Array.from(cells).some(cell => 
+                                cell.textContent.toLowerCase().includes(filter)
+                            );
+                            row.style.display = match ? '' : 'none';
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>

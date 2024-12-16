@@ -19,15 +19,33 @@ class NaissHopController extends Controller
         $doctor = Doctor::all();
         return view('naissHop.create', compact('doctor'));
     }
-    public function index(){
-        $naisshops = NaissHop::all(); // Récupère toutes les déclarations
+    public function index() {
+        // Récupérer l'administrateur connecté
+        $sousadmin = Auth::guard('sous_admin')->user();
+        
+        // Récupérer la commune de l'administrateur
+        $communeAdmin = $sousadmin->commune; // Ajustez selon votre logique
+    
+        // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
+        $naisshops = NaissHop::where('commune', $communeAdmin)->get();
+    
         return view('naissHop.index', ['naisshops' => $naisshops]);
     }
-    public function mairieindex(){
+    public function mairieindex() {
         $alerts = Alert::all();
-        $sousadmin = Auth::guard('sous_admin')->user();
-        $naisshops = NaissHop::all(); // Récupère toutes les déclarations
-        return view('naissHop.mairieindex', ['naisshops' => $naisshops], compact('alerts','sousadmin'));
+        $sousadmin = Auth::guard('vendor')->user();
+        
+        // Récupérer la commune de l'administrateur
+        $communeAdmin = $sousadmin->name; // Ajustez selon votre logique
+    
+        // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
+        $naisshops = NaissHop::where('commune', $communeAdmin)->get();
+    
+        return view('naissHop.mairieindex', [
+            'naisshops' => $naisshops,
+            'alerts' => $alerts,
+            'sousadmin' => $sousadmin
+        ]);
     }
 
     public function mairieDecesindex(){

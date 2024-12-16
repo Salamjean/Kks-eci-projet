@@ -194,9 +194,17 @@ class DoctorController extends Controller
         }
     }
     
-    public function index(){
-        $sousadmins = SousAdmin::all();
-        return view('doctor/index', compact('sousadmins'));
+    public function index() {
+        // Récupérer l'administrateur connecté
+        $sousadmin = Auth::guard('doctor')->user();
+        
+        // Récupérer la commune de l'administrateur
+        $communeAdmin = $sousadmin->commune; // Ajustez selon votre logique
+    
+        // Récupérer les sous-administrateurs filtrés par la commune
+        $sousadmins = SousAdmin::where('commune', $communeAdmin)->get();
+    
+        return view('doctor.index', compact('sousadmins'));
     }
     public function create(){
         return view('doctor/create');

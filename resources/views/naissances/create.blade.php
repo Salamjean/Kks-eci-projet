@@ -192,7 +192,7 @@
         /*Les input de saisir*/
        
         #dossierNum{
-            width: 600px;
+            width: 100%;
         }
         .erreur-texte {
         font-weight: bold;

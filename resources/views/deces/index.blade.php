@@ -70,40 +70,12 @@
             @endif
         </div>
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Liste des Déclarations de Décès</h1>
+        <h1 class="h3 mb-0 text-gray-800">Liste des extraits de Décès</h1>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('vendor.dashboard') }}">Accueil</a></li>
             <li class="breadcrumb-item active" aria-current="page">Décès</li>
         </ol>
     </div>
-
-    <form method="GET" action="{{ route('deces.index') }}" class="mb-4">
-      <div class="row">
-          <!-- Type de recherche -->
-          <div class="col-md-4">
-              <select id="searchType" name="searchType" class="form-control" onchange="updateInputPlaceholder()">
-                  <option value="">Choisir un type de recherche</option>
-                  <option value="nomDefunt" {{ request('searchType') == 'nomDefunt' ? 'selected' : '' }}>
-                      Par nom du défunt
-                  </option>
-                  <option value="nomHopital" {{ request('searchType') == 'nomHopital' ? 'selected' : '' }}>
-                      Par hôpital
-                  </option>
-              </select>
-          </div>
-  
-          <!-- Champ de saisie -->
-          <div class="col-md-6">
-              <input type="text" id="searchInput" name="searchInput" class="form-control" 
-                     placeholder="Entrez un critère de recherche" value="{{ request('searchInput') }}">
-          </div>
-  
-          <!-- Bouton de recherche -->
-          <div class="col-md-2">
-              <button type="submit" class="btn btn-primary">Rechercher</button>
-          </div>
-      </div>
-  </form>
   
 
     <!-- Row -->
@@ -115,6 +87,9 @@
                     <h6 class="m-0 font-weight-bold text-primary">Les Décès Déclarés</h6>
                 </div>
                 <div class="table-responsive p-3">
+                    <!-- Champ de recherche -->
+                    <input type="text" id="searchInput" class="form-control mb-3" placeholder="Rechercher...">
+                
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
                             <tr style="font-size: 12px">
@@ -183,20 +158,19 @@
                                         </span>
                                     </div>
                                 </td>
-                                <td class="{{ $deces->etat == 'en attente' ? 'bg-warning' : ($deces->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
+                                <td class="{{ $deces->etat == 'en attente' ? 'bg-warning' : ($deces->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                     {{ $deces->etat }}
                                 </td>
                                 <td>
-                                    <a href="{{ route('deces.edit', $deces->id) }}" class="btn btn-sm"  style="size: 0.6rem">Mettre à jour l'état </a>
-                                  </td>
-                                  
+                                    <a href="{{ route('deces.edit', $deces->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
+                                </td>
                             </tr>
                             @empty
                             <tr>
                                 <td colspan="10" class="text-center">Aucune déclaration trouvée</td>
                             </tr>
                             @endforelse
-
+                
                             <!-- Modal -->
                             <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
@@ -214,6 +188,21 @@
                         </tbody>
                     </table>
                 </div>
+                
+                <script>
+                    document.getElementById('searchInput').addEventListener('keyup', function() {
+                        const filter = this.value.toLowerCase();
+                        const rows = document.querySelectorAll('#dataTable tbody tr');
+                
+                        rows.forEach(row => {
+                            const cells = row.querySelectorAll('td');
+                            const match = Array.from(cells).some(cell => 
+                                cell.textContent.toLowerCase().includes(filter)
+                            );
+                            row.style.display = match ? '' : 'none';
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>
