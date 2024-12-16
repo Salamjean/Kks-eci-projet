@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateNaissHopRequest;
 use App\Models\Alert;
+use App\Models\DecesHop;
 use App\Models\Doctor;
 use App\Models\NaissHop;
 use App\Models\SousAdmin;
@@ -27,6 +28,13 @@ class NaissHopController extends Controller
         $sousadmin = Auth::guard('sous_admin')->user();
         $naisshops = NaissHop::all(); // Récupère toutes les déclarations
         return view('naissHop.mairieindex', ['naisshops' => $naisshops], compact('alerts','sousadmin'));
+    }
+
+    public function mairieDecesindex(){
+        $alerts = Alert::all();
+        $sousadmin = Auth::guard('sous_admin')->user();
+        $deceshops = DecesHop::all(); // Récupère toutes les déclarations
+        return view('decesHop.mairieindex', ['deceshops' => $deceshops], compact('alerts','sousadmin'));
     }
     public function edit(NaissHop $naisshop){
         return view('naissHop.edit', compact('naisshop'));

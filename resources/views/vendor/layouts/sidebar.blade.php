@@ -38,7 +38,7 @@
       <div id="collapseForm" class="collapse" aria-labelledby="headingForm" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header">Décès</h6>
-          <a class="collapse-item" href="#">Déclaration-Décès</a>
+          <a class="collapse-item" href="{{ route('deces.mairieDecesindex') }}">Déclaration-Décès</a>
           <a class="collapse-item" href="{{ route('deces.index') }}">Extrait-Décès</a>
         </div>
       </div>

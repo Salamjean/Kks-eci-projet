@@ -117,8 +117,7 @@ Route::middleware('auth:web')->group(function () {
     
 
     Route::middleware('sous_admin')->prefix('SousDoctor')->group(function(){
-        Route::get('/edit/{$sousadmin}',[SousAdminController::class, 'edit'])->name('doctor.edit');
-        Route::put('/edit/{$sousadmin}',[SousAdminController::class, 'update'])->name('doctor.update');
+    
     });
     Route::get('/validate-account/{email}', [SousAdminController::class, 'defineAccess']);
     Route::post('/validate-account/{email}', [SousAdminController::class, 'submitDefineAccess'])->name('doctor.validate');
@@ -146,22 +145,25 @@ Route::middleware('auth:web')->group(function () {
         
     });
 
-    Route::prefix('naissHop')->group(function() {
-        //les routes cotés Naissances hopital
-        Route::get('/', [NaissHopController::class, 'index'])->name('naissHop.index');        
-        Route::post('/create', [NaissHopController::class, 'store'])->name('naissHop.store');
-        Route::get('/create', [NaissHopController::class, 'create'])->name('naissHop.create');
-        Route::get('/edit/{naisshop}', [NaissHopController::class, 'edit'])->name('naissHop.edit');
-        Route::put('/edit/{naisshop}', [NaissHopController::class, 'update'])->name('naissHop.update');
-        Route::get('/delete/{naisshop}', [NaissHopController::class, 'delete'])->name('naissHop.delete');
-        Route::get('/{id}', [NaissHopController::class, 'show'])->name('naissHop.show');
+    Route::prefix('naissHop')->group(function () {
+        // Routes pour les naissances à l'hôpital
+        Route::get('/hopital', [NaissHopController::class, 'index'])->name('naissHop.index');
+        Route::get('/hopital/create', [NaissHopController::class, 'create'])->name('naissHop.create');
+        Route::post('/hopital/create', [NaissHopController::class, 'store'])->name('naissHop.store');
+        Route::get('/hopital/edit/{naisshop}', [NaissHopController::class, 'edit'])->name('naissHop.edit');
+        Route::put('/hopital/edit/{naisshop}', [NaissHopController::class, 'update'])->name('naissHop.update');
+        Route::get('/hopital/delete/{naisshop}', [NaissHopController::class, 'delete'])->name('naissHop.delete');
+        Route::get('/hopital/download/{id}', [NaissHopController::class, 'download'])->name('naissHop.download');
+        Route::get('/hopital/{id}', [NaissHopController::class, 'show'])->name('naissHop.show');
+    
+        // Routes pour la mairie
+        Route::get('/mairie', [NaissHopController::class, 'mairieindex'])->name('naissHop.mairieindex');
+        Route::get('/mairie-deces', [NaissHopController::class, 'mairieDecesindex'])->name('deces.mairieDecesindex');
+    
+        // Route spécifique pour vérifier le code DM
         Route::post('/verifier-code-dm', [NaissHopController::class, 'verifierCodeDM'])->name('verifierCodeDM');
-        Route::get('/download/{id}', [NaissHopController::class, 'download'])->name('naissHop.download');
-
-        //les routes cotés administrator (Mairie)
-        Route::get('/vendors', [NaissHopController::class, 'mairieindex'])->name('naissHop.mairieindex'); 
     });
-
+    
     Route::prefix('decesHop')->group(function(){
         //Les routes les routes cotés Naissances hopital
         Route::get('/', [DecesHopController::class, 'index'])->name('decesHop.index');        
