@@ -148,7 +148,7 @@
                                       </option>
                                     @elseif ($demande->type === 'mariage')
                                       <option value="{{ $demande->etat }}" {{ $loop->first ? 'selected' : '' }}>
-                                        Demande d'extrait de mariage de {{ $demande->nomEpoux }}
+                                        Demande d'extrait de mariage faite par vous ({{ $demande->user->name }})
                                       </option>
                                   @endif
                               @empty

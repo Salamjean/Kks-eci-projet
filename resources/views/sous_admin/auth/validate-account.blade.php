@@ -12,7 +12,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url(meilleurs-plugin-formulaires.png);
+    background-image: url({{ asset('assets/images/profiles/connexion.png') }});
 }
 
 .form {

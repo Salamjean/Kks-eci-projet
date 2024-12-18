@@ -24,7 +24,7 @@ class NaissHopController extends Controller
         $sousadmin = Auth::guard('sous_admin')->user();
         
         // Récupérer la commune de l'administrateur
-        $communeAdmin = $sousadmin->commune; // Ajustez selon votre logique
+        $communeAdmin = $sousadmin->commune; 
     
         // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
         $naisshops = NaissHop::where('commune', $communeAdmin)->get();
@@ -50,9 +50,19 @@ class NaissHopController extends Controller
 
     public function mairieDecesindex(){
         $alerts = Alert::all();
-        $sousadmin = Auth::guard('sous_admin')->user();
-        $deceshops = DecesHop::all(); // Récupère toutes les déclarations
-        return view('decesHop.mairieindex', ['deceshops' => $deceshops], compact('alerts','sousadmin'));
+        $sousadmin = Auth::guard('vendor')->user();
+        
+        // Récupérer la commune de l'administrateur
+        $communeAdmin = $sousadmin->name; // Ajustez selon votre logique
+    
+        // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
+        $deceshops = DecesHop::where('commune', $communeAdmin)->get();
+    
+        return view('decesHop.mairieindex', [
+            'deceshops' => $deceshops,
+            'alerts' => $alerts,
+            'sousadmin' => $sousadmin
+        ]);
     }
     public function edit(NaissHop $naisshop){
         return view('naissHop.edit', compact('naisshop'));
@@ -69,8 +79,15 @@ class NaissHopController extends Controller
 
     public function show($id)
     {
+        $alerts = Alert::all();
         $naisshop = NaissHop::findOrFail($id); // Récupérer les données ou générer une erreur 404 si non trouvé
-        return view('naissHop.details', compact('naisshop'));
+        return view('naissHop.details', compact('naisshop','alerts'));
+    }
+    public function mairieshow($id)
+    {
+        $alerts = Alert::all();
+        $naisshop = NaissHop::findOrFail($id); // Récupérer les données ou générer une erreur 404 si non trouvé
+        return view('naissHop.mairiedetails', compact('naisshop','alerts'));
     }
         
 
@@ -102,6 +119,7 @@ class NaissHopController extends Controller
         'NomM' => 'required',
         'PrM' => 'required',
         'contM' => 'required|unique:naiss_hops,contM|max:11',
+        'dateM'=>'required',
         'CNI_mere' => 'nullable|mimes:jpeg,png,jpg,pdf|max:2048',
         'NomP' => 'required',
         'PrP' => 'required',
@@ -116,6 +134,7 @@ class NaissHopController extends Controller
         'PrM.required' => 'Le prénom de la mère est obligatoire',
         'contM.required' => 'Le contact est obligatoire',
         'contM.max' => 'Le contact doit être 10 chiffres',
+        'dateM.required' => 'La date de naissance de la mère est obligatoire',
         'CNI_mere.mimes' => 'Le format du fichier de la CNI doit être jpeg, png, jpg ou pdf',
         'CNI_mere.max' => 'Le fichier de la CNI ne peut dépasser 2Mo',
         'NomP.required' => 'Le nom de l\'accompagnateur est obligatoire',
@@ -144,6 +163,7 @@ class NaissHopController extends Controller
         'NomM' => $validatedData['NomM'],
         'PrM' => $validatedData['PrM'],
         'contM' => $validatedData['contM'],
+        'dateM' => $validatedData['dateM'],
         'CNI_mere' => $uploadedFiles['CNI_mere'] ?? null,
         'NomP' => $validatedData['NomP'],
         'PrP' => $validatedData['PrP'],
@@ -195,7 +215,7 @@ public function verifierCodeDM(Request $request)
     if ($naissHop) {
         return response()->json([
             'existe' => true,
-            'nomHopital' => 'HOSPITAL GEMMA',  // Vous pouvez aussi le récupérer dynamiquement si nécessaire
+            'nomHopital' => $naissHop->NomEnf,  // Vous pouvez aussi le récupérer dynamiquement si nécessaire
             'nomMere' => $naissHop->NomM . ' ' . $naissHop->PrM,
             'nomPere' => $naissHop->NomP . ' ' . $naissHop->PrP,
             'dateNaiss' => $naissHop->DateNaissance

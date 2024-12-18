@@ -10,7 +10,10 @@
     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
     * { box-sizing: border-box; }
-    body { background: #f6f5f7; display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: 'Montserrat', sans-serif; height: 100vh; margin: -20px 0 50px; }
+    body {display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: 'Montserrat', sans-serif; height: 100vh; margin: -20px 0 50px;
+    background-image: url({{ asset('assets/images/profiles/userbg.jpg') }});
+    background-size: cover;
+   }
     h1 { font-weight: bold; margin: 0; }
     h2 { text-align: center; }
     p { font-size: 14px; font-weight: 100; line-height: 20px; letter-spacing: 0.5px; margin: 20px 0 30px; }

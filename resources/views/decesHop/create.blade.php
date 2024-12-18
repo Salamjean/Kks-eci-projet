@@ -121,7 +121,7 @@
     }
   </style>
 
-<form id="msform" action="#" method="POST">
+<form id="msform" action="{{ route('decesHop.store') }}" method="POST">
     @csrf
     @method('POST')
     <!-- Form Header -->

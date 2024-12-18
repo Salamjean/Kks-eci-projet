@@ -7,15 +7,17 @@
     <title>Connexion d'un Admin</title>
     <style>
         body {
-            background-color: white;
+            background-image: url({{ asset('assets/images/profiles/vendorbg.jpg') }});
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh; /* Ajouté pour centrer verticalement */
-            margin: 0; /* Supprime les marges par défaut */
-            background-image: url(meilleurs-plugin-formulaires.png);
-            background-size: cover; /* Assure que l'image de fond couvre tout l'écran */
+            height: 100vh; 
+            margin: 0; 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
+
 
         .form-control {
             display: flex;
@@ -54,7 +56,7 @@
         }
 
         .input:focus {
-            border: 1.5px solid #007bff; /* Couleur primaire remplacée */
+            border: 1.5px solid #007bff; 
         }
 
         .label {
@@ -72,7 +74,7 @@
             top: -5px;
             left: 5px;
             font-size: 12px;
-            color: #007bff; /* Couleur primaire remplacée */
+            color: #007bff; 
             background-color: #ffffff;
             padding-left: 5px;
             padding-right: 5px;
@@ -81,7 +83,7 @@
         .submit-btn {
             margin-top: 30px;
             height: 55px;
-            background: #6777ef; /* Couleur primaire */
+            background: #6777ef; 
             border: 0;
             outline: none;
             color: #ffffff;

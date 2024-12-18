@@ -116,10 +116,10 @@ class MariageController extends Controller
     
 
 public function show($id)
-{   
+{
     $alerts = Alert::all();
     $users = User::all();
-    $mariage = Mariage::findOrFail($id); // Récupérer les données ou générer une erreur 404 si non trouvé
+    $mariage = Mariage::with('user')->findOrFail($id); // Récupérer les données avec l'utilisateur
     return view('mariages.details', compact('mariage', 'users','alerts'));
 }
     

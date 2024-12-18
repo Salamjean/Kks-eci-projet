@@ -157,127 +157,53 @@
         }
     </style>
 </head>
-blade
-
-Copier
-@extends('vendor.layouts.template')
-
-@section('content')
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détails de la demande d'extrait de mariage</title>
-    
-    <!-- Insertion de SweetAlert2 -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        /* Styles globaux à conserver ici... */
-    </style>
-</head>
 <body>
     <div class="row" style="width:100%; justify-content:center">
+        <div class="row" style="width:100%; justify-content:center">
+        
+
         <div class="container">
-            <h1>Détails de la demande d'extrait de mariage de {{ $mariage->nomEpoux }}</h1>
+            <h1>Détails de la demande d'extrait de naissance de {{ $naissanced->name }}</h1>
             <div class="header" style="margin-left:40%">
-                <a href="{{ route('mariage.index') }}" class="add-patient">Listes des déclarations</a>
+                <a href="{{ route('naissance.index') }}" class="add-patient"> Listes des déclarations</a>
             </div>
 
             <table id="patients-table" class="display text-center">
                 <tr>
                     <th>Nom du demandeur</th>
-                    <td>{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
+                    <td>{{ $naissanced->user ? $naissanced->user->name : 'Demandeur inconnu' }}</td>
                 </tr>
                 <tr>
-                    <th>Demande effectuée depuis la commune de</th>
-                    <td>{{ $mariage->user ? $mariage->user->commune : 'Demandeur inconnu' }}</td>
+                    <th>Type de demande</th>
+                    <td>{{ $naissanced->type }}</td>
                 </tr>
                 <tr>
-                    <th>Nom Du Conjoint(e)</th>
-                    <td>{{ $mariage->nomEpoux ?? 'Demande d\'une copie Simple' }}</td>
+                    <th>Nom sur l'extrait</th>
+                    <td>{{ $naissanced->name }}</td>
                 </tr>
                 <tr>
-                    <th>Prénom Du Conjoint(e)</th>
-                    <td>{{ $mariage->prenomEpoux ?? 'Demande d\'une copie Simple' }}</td>
+                    <th>Numéro d'extrait</th>
+                    <td>{{ $naissanced->number }}</td>
                 </tr>
                 <tr>
-                    <th>Identité de l'Époux</th>
-                    <td>
-                        <div style="position: relative; width: 100px; height: 100px; margin-left:210px">
-                            <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 
-                                 alt="Identité de l'Époux" 
-                                 width="100" 
-                                 height="100" 
-                                 onclick="showImagePreview(this.src)" 
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                Aucun fichier
-                            </span>
-                        </div>
-                    </td>
+                    <th>Date de demande</th>
+                    <td>{{ $naissanced->created_at->format('d/m/Y') }}</td>
                 </tr>
                 <tr>
-                    <th>Certificat de Mariage</th>
-                    <td>
-                        <div style="position: relative; width: 100px; height: 100px; margin-left:210px">
-                            <img src="{{ asset('storage/' . $mariage->extraitMariage) }}" 
-                                 alt="Certificat de Mariage" 
-                                 width="100" 
-                                 height="100" 
-                                 onclick="showImagePreview(this.src)" 
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                Aucun fichier
-                            </span>
-                        </div>
-                    </td>
+                    <th>Heure de demande</th>
+                    <td>{{ $naissanced->created_at->format('H:i:s') }}</td>
                 </tr>
                 <tr>
-                    <th>Date De Demande</th>
-                    <td>{{ $mariage->created_at->format('d/m/Y') }}</td>
-                </tr>
-                <tr>
-                    <th>Heure De Demande</th>
-                    <td>{{ $mariage->created_at->format('H:i:s') }}</td>
-                </tr>
-                <tr>
-                    <th>État De Demande</th>
-                    <td>{{ $mariage->etat }}</td>
+                    <th>Etat de la demande</th>
+                    <td>{{ $naissanced->etat }}</td>
                 </tr>
             </table>
         </div>
-    </div>
+  
 
-    <!-- Modal pour l'aperçu de l'image -->
-    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-labelledby="imagePreviewModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="imagePreviewModalLabel">Aperçu de l'image</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <img id="imagePreview" src="" alt="Aperçu" class="img-fluid">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function showImagePreview(src) {
-            document.getElementById('imagePreview').src = src;
-            $('#imagePreviewModal').modal('show'); // Utiliser jQuery pour afficher le modal
-        }
-    </script>
+    
 </body>
 </html>
 @endsection
-
-
 
 

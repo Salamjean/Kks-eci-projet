@@ -12,6 +12,7 @@ class NaissHop extends Model
         'NomM',
         'PrM',
         'contM',
+        'dateM',
         'CNI_mere',
         'NomP',
         'PrP',

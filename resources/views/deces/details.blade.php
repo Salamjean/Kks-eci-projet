@@ -160,34 +160,42 @@
 <body>
     <div class="row" style="width:100%; justify-content:center">
         <div class="container">
-            <h1>Détails de la demande d'extrait de naissance de l'enfant de {{ $naissance->nomDefunt }}</h1>
+            <h1>Détails de la demande d'extrait de décès de {{ $deces->nomDefunt }}</h1>
             <div class="header" style="margin-left:40%">
-                <a href="{{ route('naissance.index') }}" class="add-patient">Listes des déclarations</a>
+                <a href="{{ route('deces.index') }}" class="add-patient">Listes des déclarations</a>
             </div>
 
             <table id="patients-table" class="display text-center">
                 <tr>
                     <th>Nom du demandeur</th>
-                    <td>{{ $naissance->user ? $naissance->user->name : 'Demandeur inconnu' }}</td>
+                    <td>{{ $deces->user ? $deces->user->name : 'Demandeur inconnu' }}</td>
                 </tr>
                 <tr>
-                    <th>Nom de l'Hôpital</th>
-                    <td>{{ $naissance->nomHopital }}</td>
+                    <th>Commune du demandeur</th>
+                    <td>{{ $deces->commune }}</td>
                 </tr>
                 <tr>
-                    <th>Nom et prénoms</th>
-                    <td>{{ $naissance->nomDefunt }}</td>
+                    <th>Hôpital</th>
+                    <td>{{ $deces->nomHopital }}</td>
                 </tr>
                 <tr>
-                    <th>Lieu de Naissance</th>
-                    <td>{{ $naissance->commune }}</td>
+                    <th>Nom du Défunt</th>
+                    <td>{{ $deces->nomDefunt }}</td>
+                </tr>
+                <tr>
+                    <th>Date de naissance du défunt</th>
+                    <td>{{ $deces->dateNaiss }}</td>
+                </tr>
+                <tr>
+                    <th>Lieu de décès</th>
+                    <td>{{ $deces->lieuNaiss }}</td>
                 </tr>
                 
                 <tr>
-                    <th>Pièce d'Identité Du Déclarant</th>
+                    <th>Pièce Identité Du Déclarant</th>
                     <td>
-                        <div style="position: relative; width: 100px; height: 100px; margin-left:230px">
-                            <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
+                        <div style="position: relative; width: 100px; height: 100px; margin-left:210px">
+                            <img src="{{ asset('storage/' . $deces->identiteDeclarant) }}" 
                                  alt="Identité Déclarant" 
                                  width="100" 
                                  height="100" 
@@ -200,11 +208,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Certificat De Déclaration De Naissance</th>
+                    <th>Certificat De Déclaration De décès</th>
                     <td>
-                        <div style="position: relative; width: 100px; height: 100px; margin-left:230px">
-                            <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" 
-                                 alt="CDNaiss" 
+                        <div style="position: relative; width: 100px; height: 100px; margin-left:210px">
+                            <img src="{{ asset('storage/' . $deces->acteMariage) }}" 
+                                 alt="CD décès" 
                                  width="100" 
                                  height="100" 
                                  onclick="showImagePreview(this.src)" 
@@ -218,9 +226,9 @@
                 <tr>
                     <th>Acte de Mariage</th>
                     <td>
-                        <div style="position: relative; width: 100px; height: 100px; margin-left:230px">
-                            @if ($naissance->acteMariage)
-                                <img src="{{ asset('storage/' . $naissance->acteMariage) }}" 
+                        <div style="position: relative; width: 100px; height: 100px; margin-left:210px">
+                            @if ($deces->acteMariage)
+                                <img src="{{ asset('storage/' . $deces->deParLaLoi) }}" 
                                      alt="Acte de Mariage" 
                                      width="100" 
                                      height="100" 
@@ -237,15 +245,15 @@
                 </tr>
                 <tr>
                     <th>Date de Demande</th>
-                    <td>{{ $naissance->created_at->format('d/m/Y') }}</td>
+                    <td>{{ $deces->created_at->format('d/m/Y') }}</td>
                 </tr>
                 <tr>
                     <th>Heure de Demande</th>
-                    <td>{{ $naissance->created_at->format('H:i:s') }}</td>
+                    <td>{{ $deces->created_at->format('H:i:s') }}</td>
                 </tr>
                 <tr>
                     <th>État de Demande</th>
-                    <td>{{ $naissance->etat }}</td>
+                    <td>{{ $deces->etat }}</td>
                 </tr>
             </table>
         </div>
@@ -272,9 +280,6 @@
             $('#imagePreviewModal').modal('show'); // Utiliser jQuery pour afficher le modal
         }
     </script>
-
-    <!-- Scripts Bootstrap pour le modal -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 @endsection

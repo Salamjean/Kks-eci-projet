@@ -14,7 +14,7 @@
   <link href="{{ asset("assets1/css/ruang-admin.min.css") }}" rel="stylesheet">
 </head>
 
-<body id="page-top">
+<body id="page-top" >
   <div id="wrapper">
     <!-- Sidebar -->
     @include('vendor.layouts.sidebar')

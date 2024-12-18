@@ -6,7 +6,7 @@
         height: 70px; /* Taille du cercle */
         border-radius: 55%; /* Cela rend l'image ronde */
         object-fit: cover;" src="{{ asset('storage/' . Auth::guard('sous_admin')->user()->profile_picture) }}"></a>
-      <h5 class="text-center text-white mt-2">{{ Auth::guard('sous_admin')->user()->name }} </h5>
+      <h5 class="text-center text-white mt-2">Dr. {{ Auth::guard('sous_admin')->user()->name }} </h5>
       
     </div>
     <!-- Navigation -->

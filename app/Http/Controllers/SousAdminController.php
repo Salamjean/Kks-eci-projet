@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SousAdminRequest;
 use App\Http\Requests\submitDefineAccessRequest;
 use App\Http\Requests\updateDoctorRequest;
+use App\Models\DecesHop;
 use App\Models\NaissHop;
 use App\Models\ResetCodePassword;
 use App\Models\SousAdmin;
@@ -12,6 +13,7 @@ use App\Notifications\SendEmailToDoctorAfterRegistrationNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -22,14 +24,74 @@ class SousAdminController extends Controller
    
     public function dashboard(){
         try {
-            $naisshop = NaissHop::count();
-            $sousadmins = SousAdmin::all();
-            return view('sous_admin.dashboard', compact('sousadmins','naisshop'));
+            $sousadmin = Auth::guard('sous_admin')->user();
+            $communeAdmin = $sousadmin->commune;
+    
+            // Récupérer les déclarations de naissance récentes dans les dernières 24 heures
+            $declarationsRecents = NaissHop::where('commune', $communeAdmin)
+                ->where('created_at', '>=', now()->subHours(24))
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+    
+            // Récupérer les déclarations de décès récentes dans les dernières 24 heures
+            $decesRecents = DecesHop::where('commune', $communeAdmin)
+                ->where('created_at', '>=', now()->subHours(24))
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+    
+            // Compter les déclarations par mois
+            $naisshopData = NaissHop::select(DB::raw("strftime('%Y-%m', created_at) as month"), DB::raw('count(*) as count'))
+                ->where('commune', $communeAdmin)
+                ->groupBy('month')
+                ->orderBy('month')
+                ->pluck('count', 'month');
+    
+            $deceshopData = DecesHop::select(DB::raw("strftime('%Y-%m', created_at) as month"), DB::raw('count(*) as count'))
+                ->where('commune', $communeAdmin)
+                ->groupBy('month')
+                ->orderBy('month')
+                ->pluck('count', 'month');
+    
+            // Compter le total des déclarations de naissance et de décès
+            $naisshop = NaissHop::where('commune', $communeAdmin)->count();
+            $deceshop = DecesHop::where('commune', $communeAdmin)->count();
+            $total = $naisshop + $deceshop;
+    
+            // Combiner les données
+            $months = $naisshopData->keys()->merge($deceshopData->keys())->unique()->sort();
+            $naisshopCounts = $months->map(fn($month) => $naisshopData->get($month, 0))->toArray();
+            $deceshopCounts = $months->map(fn($month) => $deceshopData->get($month, 0))->toArray();
+    
+            // Formater les mois pour l'affichage
+            $formattedMonths = $months->map(fn($month) => \Carbon\Carbon::parse($month)->format('M Y'))->toArray();
+    
+            // Calculer les taux de croissance des naissances
+            $naisshopRates = [];
+            foreach ($naisshopCounts as $index => $count) {
+                $previousCount = $index > 0 ? $naisshopCounts[$index - 1] : 0;
+                $rate = $previousCount ? (($count - $previousCount) / $previousCount) * 100 : 0;
+                $naisshopRates[] = $rate;
+            }
+    
+            // Calculer les taux de croissance des décès
+            $deceshopRates = [];
+            foreach ($deceshopCounts as $index => $count) {
+                $previousCount = $index > 0 ? $deceshopCounts[$index - 1] : 0;
+                $rate = $previousCount ? (($count - $previousCount) / $previousCount) * 100 : 0;
+                $deceshopRates[] = $rate;
+            }
+    
+            // Passer les données à la vue
+            return view('sous_admin.dashboard', compact('naisshop', 'deceshop', 'total', 'naisshopCounts', 'deceshopCounts', 'formattedMonths', 'declarationsRecents', 'decesRecents', 'naisshopRates', 'deceshopRates'));
         } catch (Exception $e) {
-            Log::error('Erreur lors de l\'exécution de la méthode dashboard: ' . $e->getMessage());
-            return redirect()->route('error.page');  // Rediriger vers une page d'erreur, par exemple
+            dd($e);
         }
     }
+    
+    
+    
     public function souslogout(){
         Auth::guard('sous_admin')->logout();
         return redirect()->route('sous_admin.login');
@@ -114,11 +176,10 @@ class SousAdminController extends Controller
     Auth::guard('sous_admin')->logout();
     return view('sous_admin.auth.login');
 }
-  public function soushandleLogin(Request $request)
+public function soushandleLogin(Request $request)
 {
-   
     $request->validate([
-        'email' =>'required|exists:sous_admins,email',
+        'email' => 'required|exists:sous_admins,email',
         'password' => 'required|min:8',
     ], [
         'email.required' => 'Le mail est obligatoire.',
@@ -129,15 +190,18 @@ class SousAdminController extends Controller
 
     try {
         if (auth('sous_admin')->attempt($request->only('email', 'password'))) {
-            return redirect()->route('sous_admin.dashboard')->with('success', 'Bienvenu sur votre page');
+            // Récupérer l'utilisateur authentifié
+            $sousAdmin = auth('sous_admin')->user();
+            $sousAdminId = $sousAdmin->id;
+
+            // Rediriger vers la page spécifique en fonction de l'ID
+            return redirect()->route('sous_admin.dashboard', ['id' => $sousAdminId])
+                ->with('success', 'Bienvenu sur votre page');
         } else {
             return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
         }
     } catch (Exception $e) {
         dd($e);
     }
-}
-
-
-  
+} 
 }

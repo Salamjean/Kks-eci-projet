@@ -209,7 +209,7 @@
                 </div>
                 <a href="{{ route('decesHop.create') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter une nouvelle déclaration</a>
             </div>
-
+            
             <table id="patients-table" class="display">
                 <thead style="text-align: center">
                     <tr>
@@ -227,7 +227,7 @@
                     @forelse ($deceshops as $deceshop)
                     <tr>
                         <td>{{ $deceshop->codeCMD }}</td>
-                        <td>{{ $deceshop->NomM  }}</td>
+                        <td>{{ $deceshop->NomM }}</td>
                         <td>{{ $deceshop->PrM }}</td>
                         <td>{{ $deceshop->DateNaissance }}</td>
                         <td>{{ $deceshop->DateDeces }}</td>
@@ -236,17 +236,14 @@
                         <td>
                             <button class="edit"><a href="{{ route('decesHop.edit', $deceshop->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
                         </td>
-                        
                         <td>
                             <button class="delete" onclick="confirmDelete('{{ route('decesHop.delete', $deceshop->id) }}')">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </td>
-                        
                         <td>
                             <button class="eye"><a href="{{ route('decesHop.show', $deceshop->id) }}" class="eye"><i class="fas fa-eye"></i></a></button>
                         </td>
-                         
                         <td>
                             <button class="eye">
                                 <a href="{{ route('decesHop.download', $deceshop->id) }}" style="color: #009efb">
@@ -254,14 +251,29 @@
                                 </a>
                             </button>
                         </td>
-                    </tr> 
+                    </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center">Aucun Décès Déclaré</td>
+                        <td colspan="7" class="text-center">Aucun Décès Déclaré</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
+            
+            <script>
+                document.getElementById('search').addEventListener('keyup', function() {
+                    const filter = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('#patients-table tbody tr');
+            
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        const match = Array.from(cells).some(cell => 
+                            cell.textContent.toLowerCase().includes(filter)
+                        );
+                        row.style.display = match ? '' : 'none';
+                    });
+                });
+            </script>
         </div>
     </div>
 

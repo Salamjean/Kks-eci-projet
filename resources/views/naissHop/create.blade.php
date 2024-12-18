@@ -208,6 +208,10 @@
       @error('PrM')
       <div class="text-danger text-center">{{ $message }}</div>
   @enderror
+      <input type="date" name="dateM" />
+      @error('dateM')
+      <div class="text-danger text-center">{{ $message }}</div>
+  @enderror
       <input type="text" name="contM" placeholder="Entrez le numéro de la mère"><br>
       @error('contM')
       <div class="text-danger text-center">{{ $message }}</div>

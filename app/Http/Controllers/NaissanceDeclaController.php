@@ -41,6 +41,13 @@ class NaissanceDeclaController extends Controller
     
         return redirect()->back()->with('success', 'Votre déclaration de naissance a été enregistrée avec succès.');
     }
+
+    public function show($id)
+    {
+        $alerts = Alert::all();
+        $naissanced = NaissanceD::with('user')->findOrFail($id); // Récupérer les données avec l'utilisateur
+        return view('naissanceD.details', compact('naissanced', 'alerts'));
+    }
     
 
 

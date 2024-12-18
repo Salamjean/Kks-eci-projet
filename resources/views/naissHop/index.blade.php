@@ -202,14 +202,14 @@
         </div>
 
         <div class="container">
-            <h1>Liste Des Naissance Déclarées</h1>
+            <h1>Liste Des Naissances Déclarées</h1>
             <div class="header">
                 <div class="search-bar">
                     <input type="text" id="search" placeholder="Rechercher une déclaration...">
                 </div>
                 <a href="{{ route('naissHop.create') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter une nouvelle déclaration</a>
             </div>
-
+            
             <table id="patients-table" class="display">
                 <thead style="text-align: center">
                     <tr>
@@ -255,6 +255,21 @@
                     @endforelse
                 </tbody>
             </table>
+            
+            <script>
+                document.getElementById('search').addEventListener('keyup', function() {
+                    const filter = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('#patients-table tbody tr');
+            
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        const match = Array.from(cells).some(cell => 
+                            cell.textContent.toLowerCase().includes(filter)
+                        );
+                        row.style.display = match ? '' : 'none';
+                    });
+                });
+            </script>
         </div>
     </div>
 

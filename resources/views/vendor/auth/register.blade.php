@@ -8,13 +8,12 @@
     <title>Inscription d'un Admin</title>
     <style>
         body {
-            background-color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
-            background-image: url(meilleurs-plugin-formulaires.png);
+            background-image: url({{ asset('assets/images/profiles/vendorbg.jpg') }});
             background-size: cover;
         }
 

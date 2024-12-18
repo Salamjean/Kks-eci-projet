@@ -160,92 +160,83 @@
 <body>
     <div class="row" style="width:100%; justify-content:center">
         <div class="container">
-            <h1>Détails de la demande d'extrait de naissance de l'enfant de {{ $naissance->nomDefunt }}</h1>
+            <h1>Détails de la déclaration de naissance de l'enfant de {{ $naisshop->NomM }}</h1>
             <div class="header" style="margin-left:40%">
-                <a href="{{ route('naissance.index') }}" class="add-patient">Listes des déclarations</a>
+                <a href="{{ route('naissHop.mairieindex') }}" class="add-patient">Listes des déclarations</a>
             </div>
 
             <table id="patients-table" class="display text-center">
                 <tr>
-                    <th>Nom du demandeur</th>
-                    <td>{{ $naissance->user ? $naissance->user->name : 'Demandeur inconnu' }}</td>
+                    <th>Numéro du Certificat Médical de Naissance</th>
+                    <td>{{ $naisshop->codeCMN }}</td>
                 </tr>
                 <tr>
-                    <th>Nom de l'Hôpital</th>
-                    <td>{{ $naissance->nomHopital }}</td>
+                    <th>Nom de la Mère</th>
+                    <td>{{ $naisshop->NomM }}</td>
                 </tr>
                 <tr>
-                    <th>Nom et prénoms</th>
-                    <td>{{ $naissance->nomDefunt }}</td>
+                    <th>Prénom de la Mère</th>
+                    <td>{{ $naisshop->PrM }}</td>
                 </tr>
                 <tr>
-                    <th>Lieu de Naissance</th>
-                    <td>{{ $naissance->commune }}</td>
+                    <th>Contact de la Mère</th>
+                    <td>{{ $naisshop->contM }}</td>
                 </tr>
-                
                 <tr>
-                    <th>Pièce d'Identité Du Déclarant</th>
+                    <th>Identité de la Mère (CNI)</th>
                     <td>
-                        <div style="position: relative; width: 100px; height: 100px; margin-left:230px">
-                            <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
-                                 alt="Identité Déclarant" 
+                        @if ($naisshop->CNI_mere)
+                            <img src="{{ asset('storage/' . $naisshop->CNI_mere) }}" 
+                                 alt="CNI Mère" 
                                  width="100" 
                                  height="100" 
+                                 class="rounded" 
                                  onclick="showImagePreview(this.src)" 
                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                Aucun fichier
-                            </span>
-                        </div>
+                        @else
+                            Aucun fichier disponible
+                        @endif
                     </td>
                 </tr>
                 <tr>
-                    <th>Certificat De Déclaration De Naissance</th>
+                    <th>Nom de l'accompagnateur</th>
+                    <td>{{ $naisshop->NomP }}</td>
+                </tr>
+                <tr>
+                    <th>Prénom de l'accompagnateur</th>
+                    <td>{{ $naisshop->PrP }}</td>
+                </tr>
+                <tr>
+                    <th>Contact de l'accompagnateur</th>
+                    <td>{{ $naisshop->contP }}</td>
+                </tr>
+                <tr>
+                    <th>Identité de l'accompagnateur (CNI)</th>
                     <td>
-                        <div style="position: relative; width: 100px; height: 100px; margin-left:230px">
-                            <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" 
-                                 alt="CDNaiss" 
+                        @if ($naisshop->CNI_Pere)
+                            <img src="{{ asset('storage/' . $naisshop->CNI_Pere) }}" 
+                                 alt="CNI Père" 
                                  width="100" 
                                  height="100" 
+                                 class="rounded" 
                                  onclick="showImagePreview(this.src)" 
                                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                Aucun fichier
-                            </span>
-                        </div>
+                        @else
+                            Aucun fichier disponible
+                        @endif
                     </td>
                 </tr>
                 <tr>
-                    <th>Acte de Mariage</th>
-                    <td>
-                        <div style="position: relative; width: 100px; height: 100px; margin-left:230px">
-                            @if ($naissance->acteMariage)
-                                <img src="{{ asset('storage/' . $naissance->acteMariage) }}" 
-                                     alt="Acte de Mariage" 
-                                     width="100" 
-                                     height="100" 
-                                     onclick="showImagePreview(this.src)" 
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                    Aucun fichier
-                                </span>
-                            @else
-                                Aucun fichier
-                            @endif
-                        </div>
-                    </td>
+                    <th>Hôpital de Naissance</th>
+                    <td>{{ $naisshop->NomEnf }}</td>
                 </tr>
                 <tr>
-                    <th>Date de Demande</th>
-                    <td>{{ $naissance->created_at->format('d/m/Y') }}</td>
+                    <th>Commune de Naissance</th>
+                    <td>{{ $naisshop->commune }}</td>
                 </tr>
                 <tr>
-                    <th>Heure de Demande</th>
-                    <td>{{ $naissance->created_at->format('H:i:s') }}</td>
-                </tr>
-                <tr>
-                    <th>État de Demande</th>
-                    <td>{{ $naissance->etat }}</td>
+                    <th>Date de Naissance</th>
+                    <td>{{ $naisshop->DateNaissance }}</td>
                 </tr>
             </table>
         </div>
@@ -272,9 +263,6 @@
             $('#imagePreviewModal').modal('show'); // Utiliser jQuery pour afficher le modal
         }
     </script>
-
-    <!-- Scripts Bootstrap pour le modal -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 @endsection

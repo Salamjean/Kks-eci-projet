@@ -155,6 +155,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/hopital/delete/{naisshop}', [NaissHopController::class, 'delete'])->name('naissHop.delete');
         Route::get('/hopital/download/{id}', [NaissHopController::class, 'download'])->name('naissHop.download');
         Route::get('/hopital/{id}', [NaissHopController::class, 'show'])->name('naissHop.show');
+        Route::get('/mairie/{id}', [NaissHopController::class, 'mairieshow'])->name('naissHopmairie.show');
     
         // Routes pour la mairie
         Route::get('/mairie', [NaissHopController::class, 'mairieindex'])->name('naissHop.mairieindex');
@@ -173,6 +174,7 @@ Route::middleware('auth:web')->group(function () {
         Route::put('/edit/{deceshop}', [DecesHopController::class, 'update'])->name('decesHop.update');
         Route::get('/delete/{deceshop}', [DecesHopController::class, 'delete'])->name('decesHop.delete');
         Route::get('/{id}', [DecesHopController::class, 'show'])->name('decesHop.show');
+        Route::get('/mairie/{id}', [DecesHopController::class, 'mairieshow'])->name('mairiedecesHop.show');
         Route::post('/deces/verifierCodeCMD', [DecesHopController::class, 'verifierCodeCMD'])->name('deces.verifierCodeCMD');
         Route::get('/download/{id}', [DecesHopController::class, 'download'])->name('decesHop.download');
     });
@@ -183,6 +185,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/', [NaissanceDeclaController::class, 'index'])->name('naissanced.index');        
         Route::post('/create', [NaissanceDeclaController::class, 'store'])->name('naissanced.store');
         Route::get('/create', [NaissanceDeclaController::class, 'create'])->name('naissanced.create');
+        Route::get('/naissanced/{id}', [NaissanceDeclaController::class, 'show'])->name('naissanced.show');
 
     });
     //les routes de deces
@@ -190,6 +193,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/', [DecesController::class, 'index'])->name('deces.index');        
         Route::post('/create', [DecesController::class, 'store'])->name('deces.store');
         Route::get('/create', [DecesController::class, 'create'])->name('deces.create');
+        Route::get('/deces/{id}', [DecesController::class, 'show'])->name('deces.show');
     });
 
     //les routes de mariages

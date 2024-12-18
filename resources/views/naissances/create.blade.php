@@ -398,7 +398,7 @@
         <h3>Remplissez le formulaire suivant pour la demande d'Acte de naissance</h3>
 
         <label for="dossierNum">Numéro de dossier médical</label>
-        <input type="text" id="dossierNum" placeholder="Ex : DM1411782251" required >
+        <input type="text" id="dossierNum" placeholder="Ex : CMN1411782251" required >
 
         <div class="hidden" id="infoDefunt">
             <div class="hop"><label for="nomHopital">Hôpital</label>

@@ -103,6 +103,12 @@ public function store(saveDecesRequest $request)
     return redirect()->back()->with('success', 'Votre demande a été traitée avec succès.');
 }
 
+public function show($id)
+{
+    $alerts = Alert::all();
+    $deces = Deces::with('user')->findOrFail($id); // Récupérer les données avec l'utilisateur
+    return view('deces.details', compact('deces', 'alerts'));
+}
 
 
 }

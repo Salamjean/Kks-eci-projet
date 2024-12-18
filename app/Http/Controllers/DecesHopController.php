@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateDecesHopRequest;
+use App\Models\Alert;
 use App\Models\DecesHop;
 use App\Models\Doctor;
 use Exception;
@@ -42,6 +43,12 @@ class DecesHopController extends Controller
     {
         $deceshop = DecesHop::findOrFail($id); 
         return view('decesHop.details', compact('deceshop'));
+    }
+    public function mairieshow($id)
+    {
+        $alerts = Alert::all();
+        $deceshop = DecesHop::findOrFail($id); 
+        return view('decesHop.mariedetails', compact('deceshop','alerts'));
     }
 
     public function update(UpdateDecesHopRequest $request,DecesHop $deceshop){

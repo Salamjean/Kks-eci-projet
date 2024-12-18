@@ -1,8 +1,12 @@
-@extends('doctor.layouts.template')
+@extends('vendor.layouts.template')
 
 @section('content')
-    <title>Liste des Patients</title>
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <!-- Insertion de SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
@@ -21,7 +25,7 @@
 
         .container {
             width: 95%;
-            margin-left: 0 3%;
+            margin: 0 auto;
             justify-content: center;
             background: #ffffff;
             border-radius: 8px;
@@ -33,7 +37,7 @@
             text-align: center;
             color: black;
             margin-bottom: 20px;
-            font-size: 40px;
+            font-size: 25px;
         }
 
         .header {
@@ -65,7 +69,7 @@
         }
 
         .add-patient {
-            background-color: #009efb;
+            background-color: #6777ef;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -84,7 +88,9 @@
         }
 
         .add-patient:hover {
-            background-color: #007acd;
+            background-color: #7d8bef;
+            color: white;
+            text-decoration: none;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
@@ -125,30 +131,26 @@
             font-size: 16px;
         }
 
-        a .edit{
+        a .edit {
             color: #28a745;
             transition: color 0.3s ease;
         }
+        a .eye {
+            color: #3047b8;
+            transition: color 0.3s ease;
+        }
 
-        a .delete{
+        a .delete {
             color: #dc3545;
-            transition: color 0.3s ease;
-        }
-
-        .edit {
-            color: #28a745;
             transition: color 0.3s ease;
         }
 
         .edit:hover {
             color: #1e7e34;
         }
-
-        .delete {
-            color: #dc3545;
-            transition: color 0.3s ease;
+        .eye:hover {
+            color: #1e617e;
         }
-
         .delete:hover {
             color: #c82333;
         }
@@ -163,10 +165,10 @@
                         icon: 'success',
                         title: 'Suppression réussie',
                         text: '{{ Session::get('success1') }}',
-                        showConfirmButton: true,  // Afficher le bouton OK
-                        confirmButtonText: 'OK',  // Texte du bouton
-                        background: '#ffcccc',   // Couleur de fond personnalisée
-                        color: '#b30000'          // Texte rouge foncé
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK',
+                        background: '#ffcccc',
+                        color: '#b30000'
                     });
                 </script>
             @endif
@@ -177,10 +179,10 @@
                         icon: 'success',
                         title: 'Action réussie',
                         text: '{{ Session::get('success') }}',
-                        showConfirmButton: true,  // Afficher le bouton OK
-                        confirmButtonText: 'OK',  // Texte du bouton
-                        background: '#ccffcc',   // Couleur de fond personnalisée
-                        color: '#006600'          // Texte vert foncé
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK',
+                        background: '#ccffcc',
+                        color: '#006600'
                     });
                 </script>
             @endif
@@ -191,71 +193,62 @@
                         icon: 'error',
                         title: 'Erreur',
                         text: '{{ Session::get('error') }}',
-                        showConfirmButton: true,  // Afficher le bouton OK
-                        confirmButtonText: 'OK',  // Texte du bouton
-                        background: '#f86750',    // Couleur de fond rouge vif
-                        color: '#ffffff'          // Texte blanc
+                        showConfirmButton: true,
+                        confirmButtonText: 'OK',
+                        background: '#f86750',
+                        color: '#ffffff'
                     });
                 </script>
             @endif
         </div>
 
         <div class="container">
-            <h1>Liste Des Docteurs De L'Hôpital</h1>
-            <div class="header">
-                <div class="search-bar">
-                    <input type="text" id="search" placeholder="Rechercher un docteur...">
-                </div>
-                <a href="{{ route('doctor.create') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter un docteur</a>
+            <h1>Détails de la déclarations du défunt {{ $deceshop->NomM }}</h1>
+            <div class="header" style="margin-left:40%">
+                <a href="{{ route('deces.mairieDecesindex') }}" class="add-patient"> Listes des déclarations</a>
             </div>
-        
-            <table id="patients-table" class="display">
-                <thead class="text-center">
+
+            <table id="patients-table" class="display text-center">
+                
                     <tr>
-                        <th>Nom</th>
-                        <th>Prénoms</th>
-                        <th>Email</th>
-                        <th>Description</th>
-                        <th>Contact</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($sousadmins as $sousadmin)
-                    <tr class="text-center">
-                        <td>{{ $sousadmin->name }}</td>
-                        <td>{{ $sousadmin->prenom }}</td>
-                        <td>{{ $sousadmin->email }}</td>
-                        <td>{{ $sousadmin->description }}</td>
-                        <td>{{ $sousadmin->contact }}</td>
-                        <td>
-                            <button class="edit"><a href="{{ route('doctor.edit', $sousadmin->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
-                            <button class="delete"><a href="{{ route('doctor.delete', $sousadmin->id) }}" class="delete"><i class="fas fa-trash"></i></a></button>
-                        </td>
-                    </tr>
-                    @empty
+                        <th>N° CMD</th>
+                        <td>{{ $deceshop->codeCMD }}</td>
                     <tr>
-                        <td colspan="6" class="text-center">Aucun docteur trouvé</td>
+                    <tr>
+                        <th>Nom du défunt</th>
+                        <td>{{ $deceshop->NomM }}</td>
+                    <tr>
+                    <tr>
+                        <th>Prénoms du défunt</th>
+                        <td>{{ $deceshop->PrM }}</td>
+                    <tr>
+                    <tr>
+                        <th>Date de Naissance</th>
+                        <td>{{ $deceshop->DateNaissance }}</td>
+                    <tr>
+                    <tr>
+                        <th>Date de Décès</th>
+                        <td>{{ $deceshop->DateDeces }}</td>
+                    <tr>
+                    <tr>
+                        <th>Causes du Décès</th>
+                        <td>{{ $deceshop->Remarques }}</td>
+                    <tr>
+                    <tr>
+                        <th>Commune de Décès</th>
+                        <td>{{ $deceshop->commune }}</td>
+                    <tr>
+                    <tr>
+                        <th>Hôpital</th>
+                        <td>{{ $deceshop->nomHop }}</td>
                     </tr>
-                    @endforelse
-                </tbody>
+
+              
+               
             </table>
         </div>
-        
-        <script>
-            document.getElementById('search').addEventListener('keyup', function() {
-                const filter = this.value.toLowerCase();
-                const rows = document.querySelectorAll('#patients-table tbody tr');
-        
-                rows.forEach(row => {
-                    const cells = row.querySelectorAll('td');
-                    const match = Array.from(cells).some(cell => 
-                        cell.textContent.toLowerCase().includes(filter)
-                    );
-                    row.style.display = match ? '' : 'none';
-                });
-            });
-        </script>
+    </div>
+
     <script>
         $(document).ready(function() {
             $('#patients-table').DataTable({
@@ -272,19 +265,25 @@
                 $('#patients-table').DataTable().search(this.value).draw();
             });
         });
-    </script>
 
+        function confirmDelete(route) {
+            Swal.fire({
+                title: 'Êtes-vous sûr?',
+                text: "Vous ne pourrez pas revenir en arrière!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Oui, supprimer!',
+                cancelButtonText: 'Annuler'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Rediriger vers l'URL de suppression
+                    window.location.href = route;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
 @endsection
-<script>
-    function showImage(imageElement) {
-      const modalImage = document.getElementById('modalImage');
-  
-      // Vérifier si l'image utilise déjà la valeur de remplacement (image par défaut)
-      if (imageElement.src.includes('assets/images/profiles/bébé.jpg')) {
-          modalImage.src = imageElement.src; // Utiliser l'image par défaut
-      } else {
-          modalImage.src = imageElement.src; // Utiliser l'image actuelle (valide)
-      }
-  }
-  
-  </script>

@@ -5,73 +5,122 @@ namespace App\Http\Controllers\Vendor;
 use App\Http\Controllers\Controller;
 use App\Models\Alert;
 use App\Models\Deces;
+use App\Models\DecesHop;
 use App\Models\Mariage;
 use App\Models\Naissance;
 use App\Models\NaissanceD;
+use App\Models\NaissHop;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class VendorDashboard extends Controller
 {
-    public function index()
-    {
-        // Récupérer l'admin connecté
-        $admin = Auth::guard('vendor')->user(); // Assurez-vous que l'authentification utilise 'vendor'
     
-        // Récupérer les naissances, naissancesD, deces et mariages associés à la commune de cet admin
-        $naissances = Naissance::where('commune', $admin->name)->orderBy('created_at', 'desc')->get();
-        $naissancesD = NaissanceD::where('commune', $admin->name)->orderBy('created_at', 'desc')->get();
-        $deces = Deces::where('commune', $admin->name)->orderBy('created_at', 'desc')->get();
-        $mariages = Mariage::where('commune', $admin->name)->orderBy('created_at', 'desc')->get();
-    
-        // Calcul des données globales selon la commune
-        $totalData = $naissances->count() + $naissancesD->count() + $deces->count() + $mariages->count();
-        $naissancePercentage = $totalData > 0 ? ($naissances->count() / $totalData) * 100 : 0;
-        $naissanceDPercentage = $totalData > 0 ? ($naissancesD->count() / $totalData) * 100 : 0;
-        $decesPercentage = $totalData > 0 ? ($deces->count() / $totalData) * 100 : 0;
-        $mariagePercentage = $totalData > 0 ? ($mariages->count() / $totalData) * 100 : 0;
-        $NaissP = $naissancePercentage + $naissanceDPercentage; // Pourcentage des naissances et naissancesD	
-    
-        // Données pour le tableau de bord
-        $naissancedash = $naissances->count();
-        $decesdash = $deces->count();
-        $mariagedash = $mariages->count();
-        $naissanceDdash = $naissancesD->count();
-        $Naiss = $naissancedash + $naissanceDdash;
-    
-        // Récupération des données récentes (3 derniers éléments)
-        $recentNaissances = $naissances->take(3);
-        $recentDeces = $deces->take(3);
-        $recentMariages = $mariages->take(3);
-    
-        $alerts = Alert::where('is_read', false)
-            ->whereIn('type', ['naissance', 'mariage', 'deces'])  // Filtrer les alertes par type
-            ->latest()
-            ->get();
-    
-        // Retourne la vue avec les données
-        return view('vendor.dashboard', compact(
-            'naissancedash',
-            'decesdash',
-            'NaissP',
-            'mariagedash',
-            'naissances',
-            'naissancesD',
-            'deces',
-            'mariages',
-            'totalData',
-            'naissancePercentage',
-            'naissanceDPercentage',
-            'decesPercentage',
-            'mariagePercentage',
-            'recentNaissances',
-            'recentDeces',
-            'recentMariages', 
-            'alerts',
-            'Naiss',
-        ));
-    }
+    public function index(Request $request)
+{
+    // Récupérer l'admin connecté
+    $admin = Auth::guard('vendor')->user();
+
+    // Récupérer le mois et l'année sélectionnés pour les naissances, décès et mariages
+    $selectedMonth = $request->input('month', date('m'));
+    $selectedYear = $request->input('year', date('Y'));
+
+    // Récupérer le mois et l'année sélectionnés pour les naisshops et deceshops
+    $selectedMonthHops = $request->input('month_hops', date('m'));
+    $selectedYearHops = $request->input('year_hops', date('Y'));
+
+    // Récupérer les données associées à la commune de cet admin pour le mois sélectionné
+    // Données pour naissances, décès, et mariages
+    $naissances = Naissance::where('commune', $admin->name)
+        ->whereMonth('created_at', $selectedMonth)
+        ->whereYear('created_at', $selectedYear)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    $naissancesD = NaissanceD::where('commune', $admin->name)
+        ->whereMonth('created_at', $selectedMonth)
+        ->whereYear('created_at', $selectedYear)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    $deces = Deces::where('commune', $admin->name)
+        ->whereMonth('created_at', $selectedMonth)
+        ->whereYear('created_at', $selectedYear)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    $mariages = Mariage::where('commune', $admin->name)
+        ->whereMonth('created_at', $selectedMonth)
+        ->whereYear('created_at', $selectedYear)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    // Données pour naisshops et deceshops
+    $naisshops = NaissHop::where('commune', $admin->name)
+        ->whereMonth('created_at', $selectedMonthHops)
+        ->whereYear('created_at', $selectedYearHops)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    $deceshops = DecesHop::where('commune', $admin->name)
+        ->whereMonth('created_at', $selectedMonthHops)
+        ->whereYear('created_at', $selectedYearHops)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    // Calcul des données globales
+    $totalData = $naissances->count() + $naissancesD->count() + $deces->count() + $mariages->count();
+    $totalDataHops = $naisshops->count() + $deceshops->count();
+
+    // Pourcentages
+    $naissancePercentage = $totalData > 0 ? ($naissances->count() / $totalData) * 100 : 0;
+    $naissanceDPercentage = $totalData > 0 ? ($naissancesD->count() / $totalData) * 100 : 0;
+    $decesPercentage = $totalData > 0 ? ($deces->count() / $totalData) * 100 : 0;
+    $mariagePercentage = $totalData > 0 ? ($mariages->count() / $totalData) * 100 : 0;
+    $naisshopPercentage = $totalDataHops > 0 ? ($naisshops->count() / $totalDataHops) * 100 : 0;
+    $deceshopPercentage = $totalDataHops > 0 ? ($deceshops->count() / $totalDataHops) * 100 : 0;
+
+    $NaissP = $naissancePercentage + $naissanceDPercentage;    
+    $NaissHop = $naisshopPercentage + $deceshopPercentage; 
+
+    // Données pour le tableau de bord
+    $naissancedash = $naissances->count();
+    $decesdash = $deces->count();
+    $mariagedash = $mariages->count();
+    $naissanceDdash = $naissancesD->count();
+    $naisshopsdash = $naisshops->count();
+    $deceshopsdash = $deceshops->count();
+    $Naiss = $naissancedash + $naissanceDdash;
+    $NaissHopTotal = $naisshopsdash + $deceshopsdash;
+
+    // Récupération des données récentes (3 derniers éléments)
+    $recentNaissances = $naissances->take(2);
+    $recentNaissancesd = $naissancesD->take(2);
+    $recentDeces = $deces->take(2);
+    $recentMariages = $mariages->take(2);
+    $recentNaisshops = $naisshops->take(2);
+    $recentDeceshops = $deceshops->take(2);
+
+    $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces'])  
+        ->latest()
+        ->get();
+
+    // Retourne la vue avec les données
+    return view('vendor.dashboard', compact(
+        'naissancedash', 'naisshopsdash', 'deceshopsdash', 
+        'NaissHopTotal', 'decesdash', 'NaissP', 'mariagedash', 
+        'naissances', 'naissancesD', 'deces', 'mariages', 
+        'totalDataHops', 'totalData', 'naissancePercentage', 
+        'naissanceDPercentage', 'decesPercentage', 'mariagePercentage', 
+        'naisshopPercentage', 'deceshopPercentage', 
+        'recentNaissances', 'recentDeces', 'recentMariages', 
+        'alerts', 'Naiss', 'NaissHop', 
+        'selectedMonth', 'selectedYear', 
+        'selectedMonthHops', 'selectedYearHops','recentNaisshops', 'recentDeceshops','recentNaissancesd'
+    ));
+}
 public function markAlertAsRead($id)
 {
     // Récupérer l'alerte par son ID

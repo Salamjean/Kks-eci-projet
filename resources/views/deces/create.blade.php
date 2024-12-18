@@ -95,7 +95,7 @@
 
         <!-- Champ pour le numéro de dossier -->
         <label for="dossierNum">Numéro de dossier médical</label>
-        <input type="text" id="dossierNum" name="dossierNum" placeholder="Ex : DM1411782251" required>
+        <input type="text" id="dossierNum" name="dossierNum" placeholder="Ex : CMD1411782251" required>
 
         <!-- Information sur le défunt (masqué initialement) -->
         <div class="hidden" id="infoDefunt">
@@ -196,7 +196,7 @@
                     // Masquer le bouton Valider après la vérification
                     document.getElementById("Valid").classList.add("hidden");
                 } else {
-                    document.getElementById("messageErreur").textContent = "Le numéro de code CMD " + dossierNum + " est incorrect.";
+                    document.getElementById("messageErreur").textContent = "n°" + dossierNum +" de déclaration"+ " est incorrect.";
                     ouvrirModal();
                 }
             })

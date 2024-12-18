@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('NomM');
             $table->string('PrM');
             $table->string('contM');
+            $table->string('dateM');
             $table->string('CNI_mere')->nullable();
             // les informations du pere
             $table->string('NomP');

@@ -99,11 +99,11 @@ class NaissanceController extends Controller
 }
 
 
-    public function show($id)
+public function show($id)
 {
     $alerts = Alert::all();
-    $naissance = Naissance::findOrFail($id); // Récupérer les données ou générer une erreur 404 si non trouvé
-    return view('naissances.details', compact('naissance','alerts'));
+    $naissance = Naissance::with('user')->findOrFail($id); // Récupérer les données avec l'utilisateur
+    return view('naissances.details', compact('naissance', 'alerts'));
 }
 
 public function showEtat($id)
