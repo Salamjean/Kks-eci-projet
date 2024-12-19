@@ -10,6 +10,8 @@ use App\Models\Doctor;
 use Exception;
 use Illuminate\Http\Request;
 use PDF;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\QrCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -74,64 +76,80 @@ class DecesHopController extends Controller
 
 
     public function store(Request $request)
-    {
-        // Validation des données
-        $validatedData = $request->validate([
-            'NomM' => 'required',
-            'PrM' => 'required',
-            'DateNaissance' => 'required|date',
-            'DateDeces' => 'required|date',
-            'nomHop' => 'required',
-            'commune' => 'required',
-            'Remarques' => 'nullable|string',
-        ], [
-            'NomM.required' => 'Le nom du défunt est obligatoire',
-            'PrM.required' => 'Le prénom du défunt est obligatoire',
-            'commune.required' => 'La commune est obligatoire',
-            'nomHop.required' => 'La commune est obligatoire',
-            'DateNaissance.required' => 'La date de naissance est obligatoire',
-            'DateDeces.required' => 'La date de décès est obligatoire',
-        ]);
-    
-        // Création dans la base de données
-        $decesHop = DecesHop::create([
-            'NomM' => $validatedData['NomM'],
-            'PrM' => $validatedData['PrM'],
-            'DateNaissance' => $validatedData['DateNaissance'],
-            'DateDeces' => $validatedData['DateDeces'],
-            'nomHop' => $validatedData['nomHop'],
-            'commune' => $validatedData['commune'],
-            'Remarques' => $validatedData['Remarques'] ?? null,
-        ]);
-    
-        // Génération des codes
-        $anneeDeces = date('Y', strtotime($decesHop->DateDeces));
-        $id = $decesHop->id;
-        $codeDM = "DM{$anneeDeces}{$id}225";
-        $codeCMD = "CMD{$anneeDeces}{$id}225";
-    
-        $decesHop->update([
-            'codeDM' => $codeDM,
-            'codeCMD' => $codeCMD,
-        ]);
-    
-        // Récupérer les informations du sous-admin (modifiez selon votre logique)
-        $sousadmin = Auth::guard('sous_admin')->user();
-    
-        // Générer le PDF
-        $pdf = PDF::loadView('decesHop.pdf', compact('decesHop', 'codeDM', 'codeCMD', 'sousadmin'));
-    
-        // Sauvegarder le PDF dans le dossier public
-        $pdfFileName = "declaration_deces_{$decesHop->id}.pdf";
-        $pdf->save(storage_path("app/public/deces_hops/{$pdfFileName}"));
-        Alert::create([
-            'type' => 'decesHop',
-            'message' => "Une nouvelle déclaration de deces a été enregistrée par : {$decesHop->nomHop}.",
-        ]);
-    
-        // Retourner le PDF pour téléchargement direct
-        return redirect()->route('decesHop.index')->with('success', 'Déclaration de décès effectuée avec succès');
-    }
+{
+    // Validation des données
+    $validatedData = $request->validate([
+        'NomM' => 'required',
+        'PrM' => 'required',
+        'DateNaissance' => 'required|date',
+        'DateDeces' => 'required|date',
+        'nomHop' => 'required',
+        'commune' => 'required',
+        'Remarques' => 'nullable|string',
+    ]);
+
+    // Création dans la base de données
+    $decesHop = DecesHop::create([
+        'NomM' => $validatedData['NomM'],
+        'PrM' => $validatedData['PrM'],
+        'DateNaissance' => $validatedData['DateNaissance'],
+        'DateDeces' => $validatedData['DateDeces'],
+        'nomHop' => $validatedData['nomHop'],
+        'commune' => $validatedData['commune'],
+        'Remarques' => $validatedData['Remarques'] ?? null,
+    ]);
+
+    // Génération des codes
+    $anneeDeces = date('Y', strtotime($decesHop->DateDeces));
+    $id = $decesHop->id;
+    $codeDM = "DM{$anneeDeces}{$id}225";
+    $codeCMD = "CMD{$anneeDeces}{$id}225";
+
+    $decesHop->update([
+        'codeDM' => $codeDM,
+        'codeCMD' => $codeCMD,
+    ]);
+
+    // Génération du QR code
+    $qrCodeData = "Les details de décès:\n" .
+    "Nom du défunt: {$validatedData['NomM']}\n" . 
+    "Prénom du défunt: {$validatedData['PrM']}\n" .
+    "Date de naissance  du défunt: {$validatedData['DateNaissance']}\n" .
+    "Date de décès: {$validatedData['DateDeces']}\n" .
+    "Hôpital: {$validatedData['nomHop']}\n" .
+    "Commune: {$validatedData['commune']}\n" .
+    "Cause de décès: {$validatedData['Remarques']}";
+
+    $qrCode = QrCode::create($qrCodeData)
+        ->setSize(300)
+        ->setMargin(10);
+
+    // Écrire le QR code dans un fichier
+    $writer = new PngWriter();
+    $result = $writer->write($qrCode);
+
+    // Sauvegarder l'image
+    $qrCodePath = storage_path("app/public/deces_hops/qrcode_{$decesHop->id}.png");
+    $result->saveToFile($qrCodePath);
+
+    // Récupérer les informations du sous-admin
+    $sousadmin = Auth::guard('sous_admin')->user();
+
+    // Générer le PDF
+    $pdf = PDF::loadView('decesHop.pdf', compact('decesHop', 'codeDM', 'codeCMD', 'sousadmin', 'qrCodePath'));
+
+    // Sauvegarder le PDF dans le dossier public
+    $pdfFileName = "declaration_deces_{$decesHop->id}.pdf";
+    $pdf->save(storage_path("app/public/deces_hops/{$pdfFileName}"));
+
+    Alert::create([
+        'type' => 'decesHop',
+        'message' => "Une nouvelle déclaration de décès a été enregistrée par : {$decesHop->nomHop}.",
+    ]);
+
+    // Retourner le PDF pour téléchargement direct
+    return redirect()->route('decesHop.index')->with('success', 'Déclaration de décès effectuée avec succès');
+}
 
     // Dans votre contrôleur, par exemple DecesController.php
 

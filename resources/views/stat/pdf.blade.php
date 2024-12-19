@@ -10,6 +10,18 @@
             margin: 0;
             height: 100vh;
         }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
         body::before {
             content: "";
             position: absolute;
@@ -17,7 +29,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url(assets/images/profiles/femme.png);
             background-size: cover;
             background-position: center;
             opacity: 0.3;
@@ -77,38 +88,48 @@
             </div>
         </div>
         <br><br><br><br><br><br><br><br>
-        <h1 class="tete">CERTIFICAT MÉDICAL DE NAISSANCE</h1>
+        <h1 class="tete">{{ $hopitalName }}</h1>
     </header>
     <main>
-        <div class="InfoNor">
-            <p><strong>Sanitaire :</strong> {{ $sousadmin->nomHop }}</p>
-            <p><strong>Ville/Commune de Naissance :</strong> {{ $naissHop->commune }}</p>
-            <p><strong>Date et Heure de Déclaration :</strong> {{ $naissHop->created_at }}</p>
-            <p><strong>Numéro de Déclaration :</strong> {{ $naissHop->codeCMN }}</p>
-        </div>
+        <h1 style="text-align: center">Statistiques</h1>
+        <table>
+            <thead>
+                <tr style="text-align: center">
+                    <th>Déclaration</th>
+                    <th>Nombre</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="text-align: center">
+                    <td>Naissances</td>
+                    <td>{{ $naisshopCount }}</td>
+                </tr>
+                <tr style="text-align: center">
+                    <td>Décès</td>
+                    <td>{{ $deceshopCount }}</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <div class="InfoImp">
-            <p>Je soussigné(e) : Dr {{ $sousadmin->name }} {{ $sousadmin->prenom }},</p>
-            <p>Certifie que Mme : {{ $naissHop->NomM }},</p>
-            <p>a bien accouché dans notre établissement sanitaire le : {{ $naissHop->DateNaissance }}.</p>
-            <p>De 1 enfant vivant, de sexe {{ $naissHop->sexe }}</p>
-        </div>
-       
-        <div class="signature">
-            <p>Fait à Abobo. Le {{ $naissHop->created_at }}</p>
-            <p>Le Médecin :</p>
-            <p>{{ $sousadmin->name }} {{ $sousadmin->prenom }}</p>
-        </div>
-         <!-- Afficher le QR code -->
-         <div style=" margin:70px 0 0 10px">
-            <img src="{{ public_path('storage/naiss_hops/qrcode_' . $naissHop->id . '.png') }}" alt="QR Code" style="width: 150px; height: auto;">
-        </div>
+        <h2 style="text-align: center">Les statisques par Mois</h2>
+        <table>
+            <thead>
+                <tr style="text-align: center">
+                    <th>Mois</th>
+                    <th>Naissances</th>
+                    <th>Décès</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for ($i = 1; $i <= 12; $i++)
+                    <tr style="text-align: center">
+                        <td>{{ \Carbon\Carbon::create()->month($i)->translatedFormat('F') }}</td>
+                        <td>{{ $naissData[$i] ?? 0 }}</td>
+                        <td>{{ $decesData[$i] ?? 0 }}</td>
+                    </tr>
+                @endfor
+            </tbody>
+        </table>
     </main>
-    <hr>
-    <footer>
-        134. Cet article stipule qu'une personne est coupable d'infractions en rapport avec la falsification,<br> 
-        la reproduction ou l'usage de faux documents dans des contextes où ces actes sont destinés à induire en erreur l'autorité publique ou des tiers.<br>
-        Est puni de deux (02) à dix (10) ans et une amende de 200 000 à 2 000 000 de franc CFA.
-    </footer>
 </body>
 </html>

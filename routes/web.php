@@ -14,6 +14,7 @@ use App\Http\Controllers\NaissanceDeclaController;
 use App\Http\Controllers\NaissHopController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SousAdminController;
+use App\Http\Controllers\StatController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Naissance;
@@ -178,6 +179,15 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/deces/verifierCodeCMD', [DecesHopController::class, 'verifierCodeCMD'])->name('deces.verifierCodeCMD');
         Route::get('/download/{id}', [DecesHopController::class, 'download'])->name('decesHop.download');
     });
+
+    // Les routes pour les statistiques
+    Route::prefix('stats')->group(function () {
+        Route::get('/', [StatController::class, 'index'])->name('stats.index');
+        Route::get('/download', [StatController::class, 'download'])->name('stats.download');
+        
+    });
+
+    //les routes de declarations deces
     
 
     //les routes de declarations naissances

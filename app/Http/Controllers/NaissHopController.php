@@ -8,10 +8,14 @@ use App\Models\DecesHop;
 use App\Models\Doctor;
 use App\Models\NaissHop;
 use App\Models\SousAdmin;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\QrCode;
+use writeFile;
 use PDF;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class NaissHopController extends Controller
 {
@@ -124,98 +128,104 @@ class NaissHopController extends Controller
     }
 
     public function store(Request $request)
-{
- 
-    // Validation des données
-    $validatedData = $request->validate([
-        'NomM' => 'required',
-        'PrM' => 'required',
-        'contM' => 'required|unique:naiss_hops,contM|max:11',
-        'dateM'=>'required',
-        'CNI_mere' => 'nullable|mimes:jpeg,png,jpg,pdf|max:2048',
-        'NomP' => 'required',
-        'PrP' => 'required',
-        'contP' => 'required|unique:naiss_hops,contP|max:11',
-        'CNI_Pere' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
-        'NomEnf' => 'required',
-        'DateNaissance' => 'required|date',
-        'commune' => 'required',
-        'sexe'=>'required',
-    ], [
-        'NomM.required' => 'Le nom de la mère est obligatoire',
-        'PrM.required' => 'Le prénom de la mère est obligatoire',
-        'contM.required' => 'Le contact est obligatoire',
-        'contM.max' => 'Le contact doit être 10 chiffres',
-        'dateM.required' => 'La date de naissance de la mère est obligatoire',
-        'CNI_mere.mimes' => 'Le format du fichier de la CNI doit être jpeg, png, jpg ou pdf',
-        'CNI_mere.max' => 'Le fichier de la CNI ne peut dépasser 2Mo',
-        'NomP.required' => 'Le nom de l\'accompagnateur est obligatoire',
-        'PrP.required' => 'Le prénom de l\'accompagnateur est obligatoire',
-        'contP.required' => 'Le contact est obligatoire',
-        'contP.max' => 'Le contact doit être 10 chiffres',
-        'CNI_Pere.mimes' => 'Le format du fichier de la CNI doit être jpeg, png, jpg ou pdf',
-        'CNI_Pere.max' => 'Le fichier de la CNI ne peut dépasser 2Mo',
-        'NomEnf.required' => 'Le nom de l\'enfant est obligatoire',
-        'DateNaissance.required' => 'La date de naissance est obligatoire',
-        'sexe.required' => 'Le sexe est obligatoire',
-        'commune.required' => 'La commune est obligatoire',
-    ]);
+    {
+        // Validation des données
+        $validatedData = $request->validate([
+            'NomM' => 'required',
+            'PrM' => 'required',
+            'contM' => 'required|unique:naiss_hops,contM|max:11',
+            'dateM' => 'required',
+            'CNI_mere' => 'nullable|mimes:jpeg,png,jpg,pdf|max:2048',
+            'NomP' => 'required',
+            'PrP' => 'required',
+            'contP' => 'required|unique:naiss_hops,contP|max:11',
+            'CNI_Pere' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
+            'NomEnf' => 'required',
+            'DateNaissance' => 'required|date',
+            'commune' => 'required',
+            'sexe' => 'required',
+        ]);
+    
+        // Gérer les fichiers
+        $uploadedFiles = [];
+        if ($request->hasFile('CNI_mere')) {
+            $uploadedFiles['CNI_mere'] = $request->file('CNI_mere')->store('public/naiss_hops');
+        }
+        if ($request->hasFile('CNI_Pere')) {
+            $uploadedFiles['CNI_Pere'] = $request->file('CNI_Pere')->store('public/naiss_hops');
+        }
+    
+        // Création dans la base de données
+        $naissHop = NaissHop::create([
+            'NomM' => $validatedData['NomM'],
+            'PrM' => $validatedData['PrM'],
+            'contM' => $validatedData['contM'],
+            'dateM' => $validatedData['dateM'],
+            'CNI_mere' => $uploadedFiles['CNI_mere'] ?? null,
+            'NomP' => $validatedData['NomP'],
+            'PrP' => $validatedData['PrP'],
+            'contP' => $validatedData['contP'],
+            'CNI_Pere' => $uploadedFiles['CNI_Pere'] ?? null,
+            'NomEnf' => $validatedData['NomEnf'],
+            'commune' => $validatedData['commune'],
+            'DateNaissance' => $validatedData['DateNaissance'],
+            'sexe' => $validatedData['sexe'],
+        ]);
+    
+        // Génération des codes
+        $anneeNaissance = date('Y', strtotime($naissHop->DateNaissance));
+        $id = $naissHop->id;
+        $codeDM = "DM{$anneeNaissance}{$id}225";
+        $codeCMN = "CMN{$anneeNaissance}{$id}225";
+    
+        $naissHop->update([
+            'codeDM' => $codeDM,
+            'codeCMN' => $codeCMN,
+        ]);
+    
+            // Génération du QR code
+        $qrCodeData = "Les Informations concernants la mère \n" .
+        "Nom de la mère: {$validatedData['NomM']}\n" . 
+        "Prénom de la mère: {$validatedData['PrM']}\n" .
+        "Contact de la mère: {$validatedData['contM']}\n" .
+        "Date de naissance : {$validatedData['dateM']}\n \n" .
+        "Les Informations concernants l'enfant \n" .
+        "Date de naissance : {$validatedData['DateNaissance']}\n".
+        "Sexe : {$validatedData['sexe']}\n".
+        "Hôpital de naissance : {$validatedData['NomEnf']}\n".
+        "Commune de naissance : {$validatedData['commune']}\n" . 
+        "Accompagner par : {$validatedData['NomP']} {$validatedData['PrP']}" ; 
 
-    // Gérer les fichiers
-    $uploadedFiles = [];
-    if ($request->hasFile('CNI_mere')) {
-        $uploadedFiles['CNI_mere'] = $request->file('CNI_mere')->store('public/naiss_hops');
+        $qrCode = QrCode::create($qrCodeData)
+        ->setSize(300)
+        ->setMargin(10);
+
+        // Écrire le QR code dans un fichier
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+        
+        // Sauvegarder l'image
+        $qrCodePath = storage_path("app/public/naiss_hops/qrcode_{$naissHop->id}.png");
+        $result->saveToFile($qrCodePath);
+        
+        // Récupérer les informations du sous-admin
+        $sousadmin = Auth::guard('sous_admin')->user();
+    
+        // Générer le PDF
+        $pdf = PDF::loadView('naissHop.pdf', compact('naissHop', 'codeDM', 'codeCMN', 'sousadmin', 'qrCodePath'));
+    
+        // Sauvegarder le PDF dans le dossier public
+        $pdfFileName = "declaration_{$naissHop->id}.pdf";
+        $pdf->save(storage_path("app/public/naiss_hops/{$pdfFileName}"));
+    
+        Alert::create([
+            'type' => 'naissHop',
+            'message' => "Une nouvelle déclaration de naissance a été enregistrée par : {$naissHop->nomHop}.",
+        ]);
+    
+        // Retourner le PDF pour téléchargement direct
+        return redirect()->route('naissHop.index',compact('naissHop'))->with('success', 'Déclaration effectuée avec succès');
     }
-    if ($request->hasFile('CNI_Pere')) {
-        $uploadedFiles['CNI_Pere'] = $request->file('CNI_Pere')->store('public/naiss_hops');
-    }
-
-    // Création dans la base de données
-    $naissHop = NaissHop::create([
-        'NomM' => $validatedData['NomM'],
-        'PrM' => $validatedData['PrM'],
-        'contM' => $validatedData['contM'],
-        'dateM' => $validatedData['dateM'],
-        'CNI_mere' => $uploadedFiles['CNI_mere'] ?? null,
-        'NomP' => $validatedData['NomP'],
-        'PrP' => $validatedData['PrP'],
-        'contP' => $validatedData['contP'],
-        'CNI_Pere' => $uploadedFiles['CNI_Pere'] ?? null,
-        'NomEnf' => $validatedData['NomEnf'],
-        'commune' => $validatedData['commune'],
-        'DateNaissance' => $validatedData['DateNaissance'],
-        'sexe' => $validatedData['sexe'],
-    ]);
-
-    // Génération des codes
-    $anneeNaissance = date('Y', strtotime($naissHop->DateNaissance));
-    $id = $naissHop->id;
-    $codeDM = "DM{$anneeNaissance}{$id}225";
-    $codeCMN = "CMN{$anneeNaissance}{$id}225";
-
-    $naissHop->update([
-        'codeDM' => $codeDM,
-        'codeCMN' => $codeCMN,
-    ]);
-
-    // Récupérer les informations du sous-admin (modifiez selon votre logique)
-    $sousadmin = Auth::guard('sous_admin')->user(); // 
-   
-    // Générer le PDF
-    $pdf = PDF::loadView('naissHop.pdf', compact('naissHop', 'codeDM', 'codeCMN','sousadmin'));
-
-    // Sauvegarder le PDF dans le dossier public
-    $pdfFileName = "declaration_{$naissHop->id}.pdf";
-    $pdf->save(storage_path("app/public/naiss_hops/{$pdfFileName}"));
-
-    Alert::create([
-        'type' => 'naissHop',
-        'message' => "Une nouvelle déclaration de naissance a été enregistrée par : {$naissHop->nomHop}.",
-    ]);
-
-    // Retourner le PDF pour téléchargement direct
-    return redirect()->route('naissHop.index')->with('success', 'Déclaration effectuée avec succès');
-}
 
     
     

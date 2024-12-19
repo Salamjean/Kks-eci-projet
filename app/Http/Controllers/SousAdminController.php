@@ -22,69 +22,76 @@ use Illuminate\Support\Facades\Notification;
 class SousAdminController extends Controller
 {
    
-    public function dashboard(){
+    public function dashboard(Request $request){
         try {
             $sousadmin = Auth::guard('sous_admin')->user();
-            $communeAdmin = $sousadmin->commune;
+            $communeAdmin = $sousadmin->nomHop;
     
-            // Récupérer les déclarations de naissance récentes dans les dernières 24 heures
-            $declarationsRecents = NaissHop::where('commune', $communeAdmin)
-                ->where('created_at', '>=', now()->subHours(24))
+            // Récupérer les déclarations de naissances du jour en cours
+            $declarationsRecents = NaissHop::where('NomEnf', $communeAdmin)
+                ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                 ->orderBy('created_at', 'desc')
-                ->take(5)
+                ->take(4)
                 ->get();
-    
-            // Récupérer les déclarations de décès récentes dans les dernières 24 heures
-            $decesRecents = DecesHop::where('commune', $communeAdmin)
-                ->where('created_at', '>=', now()->subHours(24))
+                
+            // Récupérer les déclarations de deces du jour en cours
+            $decesRecents = DecesHop::where('nomHop', $communeAdmin)
+                ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                 ->orderBy('created_at', 'desc')
-                ->take(5)
+                ->take(4)
                 ->get();
     
             // Compter les déclarations par mois
             $naisshopData = NaissHop::select(DB::raw("strftime('%Y-%m', created_at) as month"), DB::raw('count(*) as count'))
-                ->where('commune', $communeAdmin)
+                ->where('NomEnf', $communeAdmin)
                 ->groupBy('month')
                 ->orderBy('month')
                 ->pluck('count', 'month');
     
             $deceshopData = DecesHop::select(DB::raw("strftime('%Y-%m', created_at) as month"), DB::raw('count(*) as count'))
-                ->where('commune', $communeAdmin)
+                ->where('nomHop', $communeAdmin)
                 ->groupBy('month')
                 ->orderBy('month')
                 ->pluck('count', 'month');
     
-            // Compter le total des déclarations de naissance et de décès
-            $naisshop = NaissHop::where('commune', $communeAdmin)->count();
-            $deceshop = DecesHop::where('commune', $communeAdmin)->count();
+                    // Récupérer le mois et l'année sélectionnés
+            $selectedMonth = $request->input('month', date('m'));
+            $selectedYear = $request->input('year', date('Y'));
+
+            // Compter le total des déclarations de naissance et de décès pour le mois sélectionné
+            $naisshop = NaissHop::where('NomEnf', $communeAdmin)
+                ->whereMonth('created_at', $selectedMonth)
+                ->whereYear('created_at', $selectedYear)
+                ->count();
+
+            $deceshop = DecesHop::where('nomHop', $communeAdmin)
+                ->whereMonth('created_at', $selectedMonth)
+                ->whereYear('created_at', $selectedYear)
+                ->count();
+
+            // Récupérer les données pour les graphiques
+            $naissData = NaissHop::where('NomEnf', $communeAdmin)
+                ->whereYear('created_at', $selectedYear)
+                ->selectRaw('strftime("%m", created_at) as month, COUNT(*) as count')
+                ->groupBy('month')
+                ->orderBy('month')
+                ->pluck('count', 'month')->toArray();
+
+            $decesData = DecesHop::where('nomHop', $communeAdmin)
+                ->whereYear('created_at', $selectedYear)
+                ->selectRaw('strftime("%m", created_at) as month, COUNT(*) as count')
+                ->groupBy('month')
+                ->orderBy('month')
+                ->pluck('count', 'month')->toArray();
+
+            // Remplir les données manquantes pour chaque mois
+            $naissData = array_replace(array_fill(1, 12, 0), $naissData);
+            $decesData = array_replace(array_fill(1, 12, 0), $decesData);
+
             $total = $naisshop + $deceshop;
     
-            // Combiner les données
-            $months = $naisshopData->keys()->merge($deceshopData->keys())->unique()->sort();
-            $naisshopCounts = $months->map(fn($month) => $naisshopData->get($month, 0))->toArray();
-            $deceshopCounts = $months->map(fn($month) => $deceshopData->get($month, 0))->toArray();
-    
-            // Formater les mois pour l'affichage
-            $formattedMonths = $months->map(fn($month) => \Carbon\Carbon::parse($month)->format('M Y'))->toArray();
-    
-            // Calculer les taux de croissance des naissances
-            $naisshopRates = [];
-            foreach ($naisshopCounts as $index => $count) {
-                $previousCount = $index > 0 ? $naisshopCounts[$index - 1] : 0;
-                $rate = $previousCount ? (($count - $previousCount) / $previousCount) * 100 : 0;
-                $naisshopRates[] = $rate;
-            }
-    
-            // Calculer les taux de croissance des décès
-            $deceshopRates = [];
-            foreach ($deceshopCounts as $index => $count) {
-                $previousCount = $index > 0 ? $deceshopCounts[$index - 1] : 0;
-                $rate = $previousCount ? (($count - $previousCount) / $previousCount) * 100 : 0;
-                $deceshopRates[] = $rate;
-            }
-    
             // Passer les données à la vue
-            return view('sous_admin.dashboard', compact('naisshop', 'deceshop', 'total', 'naisshopCounts', 'deceshopCounts', 'formattedMonths', 'declarationsRecents', 'decesRecents', 'naisshopRates', 'deceshopRates'));
+            return view('sous_admin.dashboard', compact('naisshop', 'deceshop', 'total', 'selectedMonth', 'selectedYear', 'naissData', 'decesData', 'declarationsRecents', 'decesRecents'));
         } catch (Exception $e) {
             dd($e);
         }

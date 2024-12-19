@@ -101,6 +101,10 @@
             <p>Le Médecin :</p>
             <p>{{ $sousadmin->name }} {{ $sousadmin->prenom }}</p>
         </div>
+        <!-- Afficher le QR code -->
+        <div style="margin: 70px 0 0 10px">
+            <img src="{{ public_path('storage/deces_hops/qrcode_' . $decesHop->id . '.png') }}" alt="QR Code" style="width: 150px; height: auto;">
+        </div>
     </main>
     <hr>
     <footer>
