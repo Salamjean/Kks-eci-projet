@@ -103,9 +103,9 @@ class VendorDashboard extends Controller
     $recentDeceshops = $deceshops->take(2);
 
     $alerts = Alert::where('is_read', false)
-        ->whereIn('type', ['naissance', 'mariage', 'deces'])  
-        ->latest()
-        ->get();
+    ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+    ->latest()
+    ->get();
 
     // Retourne la vue avec les données
     return view('vendor.dashboard', compact(

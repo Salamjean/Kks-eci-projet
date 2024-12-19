@@ -35,8 +35,8 @@ class NaissanceDeclaController extends Controller
         $naissanceD->save();
     
         Alert::create([
-            'type' => 'naissanceDecl',
-            'message' => "Une nouvelle déclaration de naissance a été enregistrée : {$naissanceD->name}.",
+            'type' => 'naissance',
+            'message' => "Une nouvelle demande d\'extrait de naissance a été enregistrée : {$naissanceD->user_id->name}.",
         ]);
     
         return redirect()->back()->with('success', 'Votre déclaration de naissance a été enregistrée avec succès.');
@@ -44,7 +44,10 @@ class NaissanceDeclaController extends Controller
 
     public function show($id)
     {
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
         $naissanced = NaissanceD::with('user')->findOrFail($id); // Récupérer les données avec l'utilisateur
         return view('naissanceD.details', compact('naissanced', 'alerts'));
     }

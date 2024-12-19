@@ -26,7 +26,10 @@ class NaissanceController extends Controller
         $admin = Auth::guard('vendor')->user();
     
         // Récupérer les alertes
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
     
         // Filtrer les naissances selon la commune de l'admin connecté
         $naissances = Naissance::where('commune', $admin->name)->paginate(10); // Filtrage par commune
@@ -101,15 +104,22 @@ class NaissanceController extends Controller
 
 public function show($id)
 {
-    $alerts = Alert::all();
+    // Récupérer les alertes
+    $alerts = Alert::where('is_read', false)
+    ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+    ->latest()
+    ->get();
     $naissance = Naissance::with('user')->findOrFail($id); // Récupérer les données avec l'utilisateur
     return view('naissances.details', compact('naissance', 'alerts'));
 }
 
 public function showEtat($id)
 {
-    // Récupérer l'alerte et la demande d'extrait de naissance
-    $alerts = Alert::all();
+   // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     $naissance = Naissance::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
     
     // Retourner la vue avec les informations

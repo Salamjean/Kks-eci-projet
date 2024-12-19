@@ -1,4 +1,62 @@
 <!-- dashboard.blade.php -->
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px; 
+    margin: auto;
+    padding: 20px;
+}
+
+.text {
+    margin: 20px 0;
+}
+
+.button-77 {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: 0;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.success-message {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    border-radius: 5px;
+    z-index: 9999;
+}
+
+@media (max-width: 768px) {
+    .button-77 {
+        width: 100%; 
+    }
+
+    .text {
+        font-size: 14px; 
+    }
+
+    img {
+        max-width: 100%; 
+        height: auto;
+    }
+}
+</style>
 @if($user->has_actions)
 
 <!-- Afficher les actions ou les informations spécifiques -->
@@ -127,7 +185,7 @@
         </head>
         <body class="h-screen flex items-center justify-center bg-gray-100">
             <div class="container">
-                <nav class="breadcrumbs rounded-lg ml-16 shadow-md w-full">
+                <nav class="breadcrumbs rounded-lg shadow-md w-full">
                     <ol class="flex items-center justify-center space-x-4">
                         <!-- Select -->
                         <li class="flex items-center">

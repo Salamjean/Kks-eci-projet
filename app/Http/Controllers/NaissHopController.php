@@ -32,7 +32,10 @@ class NaissHopController extends Controller
         return view('naissHop.index', ['naisshops' => $naisshops]);
     }
     public function mairieindex() {
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+            ->latest()
+            ->get();
         $sousadmin = Auth::guard('vendor')->user();
         
         // Récupérer la commune de l'administrateur
@@ -49,7 +52,10 @@ class NaissHopController extends Controller
     }
 
     public function mairieDecesindex(){
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
         $sousadmin = Auth::guard('vendor')->user();
         
         // Récupérer la commune de l'administrateur
@@ -79,13 +85,19 @@ class NaissHopController extends Controller
 
     public function show($id)
     {
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
         $naisshop = NaissHop::findOrFail($id); // Récupérer les données ou générer une erreur 404 si non trouvé
         return view('naissHop.details', compact('naisshop','alerts'));
     }
     public function mairieshow($id)
     {
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+    ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+    ->latest()
+    ->get();
         $naisshop = NaissHop::findOrFail($id); // Récupérer les données ou générer une erreur 404 si non trouvé
         return view('naissHop.mairiedetails', compact('naisshop','alerts'));
     }
@@ -195,6 +207,11 @@ class NaissHopController extends Controller
     // Sauvegarder le PDF dans le dossier public
     $pdfFileName = "declaration_{$naissHop->id}.pdf";
     $pdf->save(storage_path("app/public/naiss_hops/{$pdfFileName}"));
+
+    Alert::create([
+        'type' => 'naissHop',
+        'message' => "Une nouvelle déclaration de naissance a été enregistrée par : {$naissHop->nomHop}.",
+    ]);
 
     // Retourner le PDF pour téléchargement direct
     return redirect()->route('naissHop.index')->with('success', 'Déclaration effectuée avec succès');

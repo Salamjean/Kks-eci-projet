@@ -50,7 +50,10 @@ class MariageController extends Controller
         });
 
         // Récupérer toutes les alertes
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
 
         // Retourner la vue avec les mariages filtrés et les alertes
         return view('mariages.index', compact('mariagesAvecFichiersSeulement', 'mariagesComplets', 'mariages', 'alerts'));
@@ -117,7 +120,10 @@ class MariageController extends Controller
 
 public function show($id)
 {
-    $alerts = Alert::all();
+    $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
     $users = User::all();
     $mariage = Mariage::with('user')->findOrFail($id); // Récupérer les données avec l'utilisateur
     return view('mariages.details', compact('mariage', 'users','alerts'));

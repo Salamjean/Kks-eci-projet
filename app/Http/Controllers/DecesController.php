@@ -17,8 +17,11 @@ class DecesController extends Controller
         // Récupérer l'admin connecté
         $admin = Auth::guard('vendor')->user();
     
-        // Récupérer les alertes
-        $alerts = Alert::all();
+       // Récupérer les alertes
+       $alerts = Alert::where('is_read', false)
+       ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+       ->latest()
+       ->get();
     
         // Initialiser la requête pour Deces en filtrant par commune
         $query = Deces::where('commune', $admin->name); // Filtrer par commune
@@ -105,7 +108,11 @@ public function store(saveDecesRequest $request)
 
 public function show($id)
 {
-    $alerts = Alert::all();
+   // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     $deces = Deces::with('user')->findOrFail($id); // Récupérer les données avec l'utilisateur
     return view('deces.details', compact('deces', 'alerts'));
 }

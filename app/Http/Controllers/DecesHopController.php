@@ -46,7 +46,11 @@ class DecesHopController extends Controller
     }
     public function mairieshow($id)
     {
-        $alerts = Alert::all();
+       // Récupérer les alertes
+       $alerts = Alert::where('is_read', false)
+       ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+       ->latest()
+       ->get();
         $deceshop = DecesHop::findOrFail($id); 
         return view('decesHop.mariedetails', compact('deceshop','alerts'));
     }
@@ -120,6 +124,10 @@ class DecesHopController extends Controller
         // Sauvegarder le PDF dans le dossier public
         $pdfFileName = "declaration_deces_{$decesHop->id}.pdf";
         $pdf->save(storage_path("app/public/deces_hops/{$pdfFileName}"));
+        Alert::create([
+            'type' => 'decesHop',
+            'message' => "Une nouvelle déclaration de deces a été enregistrée par : {$decesHop->nomHop}.",
+        ]);
     
         // Retourner le PDF pour téléchargement direct
         return redirect()->route('decesHop.index')->with('success', 'Déclaration de décès effectuée avec succès');
