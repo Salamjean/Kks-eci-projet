@@ -32,19 +32,14 @@
         </ul>
       </li>
       <!-- Doctor -->
-      <!-- Patient -->
-      <br><br>
-      <!-- /Department -->
-      <!-- Schedule -->
       <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#schedule" aria-expanded="false" aria-controls="schedule">
-          <span><i class="fas fa-list-alt"></i>Doctor Schedule</span>
+          <span><i class="fas fa-list-alt"></i>Statistique</span>
         </a>
         <ul id="schedule" class="collapse" aria-labelledby="schedule" data-parent="#side-nav-accordion">
-          <li> <a href="pages/doctor-schedule/add-schedule.html">Add Schedule</a> </li>
-          <li> <a href="pages/doctor-schedule/schedule-list.html">Schedule List</a> </li>
+          <li> <a href="{{ route('stats.superindex') }}">Statistique</a> </li>
         </ul>
-      </li>
+      </li><br><br>
       <!-- /Schedule -->
       <!-- Appointment -->
       <li class="menu-item">

@@ -95,6 +95,7 @@
             <table class="table align-items-center table-flush" id="dataTable">
                 <thead class="bg-navbar text-white">
                     <tr style="font-size: 12px">
+                        <th>Demandeur</th>
                         <th>Hôpital</th>
                         <th>Nom Du Nouveau Né</th>
                         <th>Date De Naissance</th>
@@ -110,6 +111,7 @@
                 <tbody>
                     @forelse ($naissances as $naissance)
                     <tr style="font-size: 12px">
+                        <td>{{ $naissance->user ? $naissance->user->name : 'Demandeur inconnu' }}</td>
                         <td>{{ $naissance->nomHopital }}</td>
                         <td>{{ $naissance->nomDefunt }}</td>
                         <td>{{ $naissance->dateNaiss }}</td>
@@ -220,6 +222,7 @@
                     <table class="table text-center align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
                             <tr style="font-size: 12px">
+                                <th>Demandeur</th>
                                 <th>Type de demande</th>
                                 <th>Pièce Du Parent</th>
                                 <th>Certificat De Déclaration</th>
@@ -231,6 +234,7 @@
                         <tbody>
                             @forelse ($naissancesD as $naissanceD)
                             <tr style="font-size: 12px">
+                                <td>{{ $naissance->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
                                 <td>{{ $naissanceD->type }}</td>
                                 <td>{{ $naissanceD->name }}</td>
                                 <td>{{ $naissanceD->number }}</td>
@@ -243,7 +247,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center">Aucune demande effectuée</td>
+                                <td colspan="6" class="text-center">Aucune demande effectuée</td>
                             </tr>
                             @endforelse
                             

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AgentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DecesController;
 use App\Http\Controllers\DecesHopController;
@@ -76,17 +77,31 @@ Route::middleware('auth:web')->group(function () {
     });
 
     //Les routes de l'administrator (Mairie)
-    Route::middleware('auth:vendor')->prefix('vendors/dashboard')->group(function(){
-        Route::get('/', [VendorDashboard::class, 'index'])->name('vendor.dashboard');
-        Route::get('/logout', [VendorDashboard::class, 'logout'])->name('vendor.logout');
-    });
+    Route::prefix('vendors')->group(function () {
+        // Routes pour l'authentification
+    Route::get('/register', [VendorController::class, 'register'])->name('vendor.register');
+    Route::post('/register', [VendorController::class, 'handleRegister'])->name('vendor.handleRegister');
+    Route::get('/login', [VendorController::class, 'login'])->name('vendor.login');
+    Route::post('/login', [VendorController::class, 'handleLogin'])->name('vendor.handleLogin');
     
-    // Routes pour l'authentification
-    Route::prefix('vendors/')->group(function () {
-        Route::get('/register', [VendorController::class, 'register'])->name('vendor.register');
-        Route::post('/register', [VendorController::class, 'handleRegister'])->name('vendor.handleRegister');
-        Route::get('/login', [VendorController::class, 'login'])->name('vendor.login');
-        Route::post('/login', [VendorController::class, 'handleLogin'])->name('vendor.handleLogin');
+    Route::middleware('auth:vendor')->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [VendorDashboard::class, 'index'])->name('vendor.dashboard');
+    Route::get('/logout', [VendorDashboard::class, 'logout'])->name('vendor.logout');
+    
+    // Création d'un hôpital
+    Route::get('/hospital/create', [VendorController::class, 'hoptitalcreate'])->name('doctor.hoptitalcreate');
+    Route::post('/hospital/store', [VendorController::class, 'hoptitalstore'])->name('doctor.hoptitalstore');
+    
+            // Gestion des agents
+    Route::prefix('agents')->group(function () {
+        Route::get('/', [AgentController::class, 'agentindex'])->name('agent.index');
+        Route::get('/create', [AgentController::class, 'agentcreate'])->name('agent.create');
+        Route::post('/store', [AgentController::class, 'agentstore'])->name('agent.store');
+        Route::get('/{agent}/edit', [AgentController::class, 'agentedit'])->name('agent.edit');
+        Route::put('/{agent}/update', [AgentController::class, 'agentupdate'])->name('agent.update');
+        Route::delete('/{agent}/delete', [AgentController::class, 'agentdelete'])->name('agent.delete');
+
 
         //edit de l'etat de naissance
         Route::get('/naissance/{id}/edit', [VendorController::class, 'edit'])->name('naissances.edit');
@@ -103,8 +118,9 @@ Route::middleware('auth:web')->group(function () {
         //edit de l'etat de mariage 
         Route::get('/mariage/{id}/edit', [VendorController::class, 'edit3'])->name('mariage.edit');
         Route::post('/mariage/{id}/update-etat', [VendorController::class, 'updateEtat3'])->name('mariage.updateEtat');
-
+        });
     });
+});
 
     // Routes pour le sous-admin (Sous docteurs)
     Route::prefix('sous-admin')->name('sous_admin.')->group(function () {
@@ -120,8 +136,14 @@ Route::middleware('auth:web')->group(function () {
     Route::middleware('sous_admin')->prefix('SousDoctor')->group(function(){
     
     });
+
+    //Les routes pour definie les access de apres l'envoie du mail
     Route::get('/validate-account/{email}', [SousAdminController::class, 'defineAccess']);
     Route::post('/validate-account/{email}', [SousAdminController::class, 'submitDefineAccess'])->name('doctor.validate');
+    Route::get('/validate-hopital-account/{email}', [VendorController::class, 'defineAccess']);
+    Route::post('/validate-hopital-account/{email}', [VendorController::class, 'submitDefineAccess'])->name('doctor.hopitalvalidate');
+    Route::get('/validate-agent-account/{email}', [AgentController::class, 'defineAccess']);
+    Route::post('/validate-agent-account/{email}', [AgentController::class, 'submitDefineAccess'])->name('agent.validate');
 
 
     //creer un docteurs
@@ -139,15 +161,21 @@ Route::middleware('auth:web')->group(function () {
 //les routes de extraits naissances
     Route::prefix('naissances')->group(function() {
         Route::get('/', [NaissanceController::class, 'index'])->name('naissance.index');        
+        Route::get('/agent', [NaissanceController::class, 'agentindex'])->name('naissance.agentindex');        
         Route::post('/create', [NaissanceController::class, 'store'])->name('naissance.store');
         Route::get('/create', [NaissanceController::class, 'create'])->name('naissance.create');
         Route::get('/edit/{naissance}', [NaissanceController::class, 'edit'])->name('naissance.edit');
         Route::get('/naissance/{id}', [NaissanceController::class, 'show'])->name('naissance.show');
-        
+    });
+//les routes de extraits naissances
+    Route::prefix('agent')->group(function() {
+        Route::get('/dashboard', [AgentController::class, 'agentdashboard'])->name('agent.dashboard');
+        Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
     });
 
     Route::prefix('naissHop')->group(function () {
         // Routes pour les naissances à l'hôpital
+        Route::get('/hopital', [NaissHopController::class, 'index'])->name('naissHop.index');
         Route::get('/hopital', [NaissHopController::class, 'index'])->name('naissHop.index');
         Route::get('/hopital/create', [NaissHopController::class, 'create'])->name('naissHop.create');
         Route::post('/hopital/create', [NaissHopController::class, 'store'])->name('naissHop.store');
@@ -160,7 +188,9 @@ Route::middleware('auth:web')->group(function () {
     
         // Routes pour la mairie
         Route::get('/mairie', [NaissHopController::class, 'mairieindex'])->name('naissHop.mairieindex');
+        Route::get('/mairie-agent', [NaissHopController::class, 'agentmairieindex'])->name('naissHop.agentmairieindex');
         Route::get('/mairie-deces', [NaissHopController::class, 'mairieDecesindex'])->name('deces.mairieDecesindex');
+        Route::get('/mairie-agent-deces', [NaissHopController::class, 'agentmairieDecesindex'])->name('deces.agentmairieDecesindex');
     
         // Route spécifique pour vérifier le code DM
         Route::post('/verifier-code-dm', [NaissHopController::class, 'verifierCodeDM'])->name('verifierCodeDM');
@@ -168,6 +198,7 @@ Route::middleware('auth:web')->group(function () {
     
     Route::prefix('decesHop')->group(function(){
         //Les routes les routes cotés Naissances hopital
+        Route::get('/', [DecesHopController::class, 'index'])->name('decesHop.index');        
         Route::get('/', [DecesHopController::class, 'index'])->name('decesHop.index');        
         Route::post('/create', [DecesHopController::class, 'store'])->name('decesHop.store');
         Route::get('/create', [DecesHopController::class, 'create'])->name('decesHop.create');
@@ -184,11 +215,12 @@ Route::middleware('auth:web')->group(function () {
     Route::prefix('stats')->group(function () {
         Route::get('/', [StatController::class, 'index'])->name('stats.index');
         Route::get('/download', [StatController::class, 'download'])->name('stats.download');
-        
+        Route::get('/super', [StatController::class, 'superindex'])->name('stats.superindex');
+        Route::get('/super/download', [StatController::class, 'superdownload'])->name('stats.superdownload'); // Modifie la route pour éviter le conflit
     });
-
-    //les routes de declarations deces
     
+
+      
 
     //les routes de declarations naissances
     Route::prefix('naissances/declarations')->group(function() {
@@ -201,14 +233,18 @@ Route::middleware('auth:web')->group(function () {
     //les routes de deces
     Route::prefix('deces')->group(function() {
         Route::get('/', [DecesController::class, 'index'])->name('deces.index');        
+        Route::get('/agent', [DecesController::class, 'agentindex'])->name('deces.agentindex');        
         Route::post('/create', [DecesController::class, 'store'])->name('deces.store');
         Route::get('/create', [DecesController::class, 'create'])->name('deces.create');
         Route::get('/deces/{id}', [DecesController::class, 'show'])->name('deces.show');
+        Route::get('/create/deja',[DecesController::class,'createdeja'])->name('deces.createdeja');
+        Route::post('/create/deja-store',[DecesController::class,'storedeja'])->name('deces.storedeja');
     });
 
     //les routes de mariages
     Route::prefix('mariages')->group(function() {
         Route::get('/', [MariageController::class, 'index'])->name('mariage.index');        
+        Route::get('/agent', [MariageController::class, 'agentindex'])->name('mariage.agentindex');        
         Route::post('/create', [MariageController::class, 'store'])->name('mariage.store');
         Route::get('/create', [MariageController::class, 'create'])->name('mariage.create');
         Route::get('/mariage/{id}', [MariageController::class, 'show'])->name('mariage.show');

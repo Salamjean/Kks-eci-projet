@@ -89,7 +89,7 @@
 
         <div class="InfoImp">
             <p>Je soussigné(e) : Dr {{ $sousadmin->name }} {{ $sousadmin->prenom }},</p>
-            <p>Certifie que Mme : {{ $naissHop->NomM }},</p>
+            <p>Certifie que Mme : {{ $naissHop->NomM }} {{ $naissHop->PrM }},</p>
             <p>a bien accouché dans notre établissement sanitaire le : {{ $naissHop->DateNaissance }}.</p>
             <p>De 1 enfant vivant, de sexe {{ $naissHop->sexe }}</p>
         </div>

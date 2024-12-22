@@ -29,7 +29,7 @@
         }
         .conteneurInfo {
            
-                    background: #ffffff;
+            background: #ffffff;
             padding: 30px 40px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
@@ -406,14 +406,14 @@
             </div>
             
             <div class="NomDfnt">
-                <label for="nomDefunt">Nom de la mère</label>
+                <label for="nomDefunt">Nom et prénom de la mère</label>
                 <input type="text" id="nomDefunt" class="readonly-input"  name="nomDefunt" readonly>
 
             </div>
 
             
             <div class="dateNais">
-                <label for="dateNaiss">Nom de l'accompagnateur</label>
+                <label for="dateNaiss">Nom et prénom de l'accompagnateur</label>
                 <input type="text" id="dateNaiss" class="readonly-input"  name="dateNaiss" readonly>
             </div>
             <div class="lieuNais">
@@ -423,7 +423,7 @@
             </div>
             
             <div class="conteneurInput">
-                <label for="identiteDeclarant">Pièce d'identité des parent</label>
+                <label for="identiteDeclarant">Pièce d'identité du pere</label>
                 <input type="file" id="identiteDeclarant" value="{{ old('identiteDeclarant') }}" name="identiteDeclarant">
                 @error('identiteDeclarant')
                     <span style="color: #e82724">{{ $message }}</span>

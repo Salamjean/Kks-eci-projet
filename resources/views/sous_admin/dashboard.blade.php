@@ -45,8 +45,10 @@
     }
 
     .declaration-item {
-        min-width: 200px;
-        margin-right: 10px;
+        display: flex;
+        justify-content: center;
+        min-width: 150px;
+        margin-left: 40px;
     }
 
     .border {

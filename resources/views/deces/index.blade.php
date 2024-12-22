@@ -93,6 +93,7 @@
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
                             <tr style="font-size: 12px">
+                                <th>Demandeur</th>
                                 <th>Hôpital</th>
                                 <th>Date de Décès</th>
                                 <th>Nom du Défunt</th>
@@ -108,6 +109,7 @@
                         <tbody>
                             @forelse ($deces as $deces)
                             <tr style="font-size: 12px">
+                                <td>{{ $deces->user ? $deces->user->name : 'Demandeur inconnu' }}</td>
                                 <td>{{ $deces->nomHopital }}</td>
                                 <td>{{ $deces->dateDces }}</td>
                                 <td>{{ $deces->nomDefunt }}</td>

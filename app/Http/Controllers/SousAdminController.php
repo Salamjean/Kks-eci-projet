@@ -31,14 +31,14 @@ class SousAdminController extends Controller
             $declarationsRecents = NaissHop::where('NomEnf', $communeAdmin)
                 ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                 ->orderBy('created_at', 'desc')
-                ->take(4)
+                ->take(3)
                 ->get();
                 
             // Récupérer les déclarations de deces du jour en cours
             $decesRecents = DecesHop::where('nomHop', $communeAdmin)
                 ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                 ->orderBy('created_at', 'desc')
-                ->take(4)
+                ->take(3)
                 ->get();
     
             // Compter les déclarations par mois
@@ -121,9 +121,10 @@ class SousAdminController extends Controller
         };
     }
 
-    public function submitDefineAccess(submitDefineAccessRequest $request){
+    public function submitDefineAccess(Request $request){
 
     try {
+        
         $sousadmin = SousAdmin::where('email', $request->email)->first();
 
         if ($sousadmin) {
@@ -144,7 +145,7 @@ class SousAdminController extends Controller
             $sousadmin->update();
 
             if($sousadmin){
-               $existingcode =  ResetCodePassword::where('eamil', $sousadmin->email)->count();
+               $existingcode =  ResetCodePassword::where('email', $sousadmin->email)->count();
 
                if($existingcode > 1){
                    ResetCodePassword::where('email', $sousadmin->email)->delete();

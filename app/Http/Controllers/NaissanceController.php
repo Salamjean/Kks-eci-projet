@@ -38,6 +38,24 @@ class NaissanceController extends Controller
         // Retourner la vue avec les données
         return view('naissances.index', compact('naissances', 'alerts', 'naissancesD'));
     }
+    public function agentindex()
+    {
+        // Récupérer l'admin connecté
+        $admin = Auth::guard('vendor')->user();
+    
+        // Récupérer les alertes
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
+    
+        // Filtrer les naissances selon la commune de l'admin connecté
+        $naissances = Naissance::where('commune', $admin->name)->paginate(10); // Filtrage par commune
+        $naissancesD = NaissanceD::where('commune', $admin->name)->paginate(10); // Filtrage par commune
+    
+        // Retourner la vue avec les données
+        return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD'));
+    }
 
 
     public function create(){
@@ -53,6 +71,7 @@ class NaissanceController extends Controller
 
     public function store(saveNaissanceRequest $request)
 {
+
     $imageBaseLink = '/images/naissances/';
     
     // Liste des fichiers à traiter

@@ -73,6 +73,7 @@
     </div>
 </div>
   <!-- Boutons de téléchargement -->
+  <h6 class="text-center mb-0">Télécharger les statistiques</h6>
   <div class="form-inline mb-3 justify-content-center text-center">
     <a href="{{ route('stats.download') }}" class="btn btn-danger mx-2"><i class="fas fa-download"></i> PDF</a>
     <a href="#" class="btn btn-success mx-2"><i class="fas fa-download"></i> Excel</a>

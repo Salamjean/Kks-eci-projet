@@ -18,7 +18,14 @@ use Illuminate\Support\Facades\DB;
 class DecesHopController extends Controller
 {
     public function index(){
-        $deceshops = DecesHop::all(); // Récupère toutes les déclarations
+         // Récupérer l'administrateur connecté
+         $sousadmin = Auth::guard('sous_admin')->user();
+        
+         // Récupérer la commune de l'administrateur
+         $communeAdmin = $sousadmin->nomHop; 
+     
+         // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
+         $deceshops = DecesHop::where('nomHop', $communeAdmin)->get();
         return view('decesHop.index', ['deceshops' => $deceshops]);
     }
     public function create(){

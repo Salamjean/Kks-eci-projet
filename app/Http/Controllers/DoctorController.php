@@ -199,10 +199,10 @@ class DoctorController extends Controller
         $sousadmin = Auth::guard('doctor')->user();
         
         // Récupérer la commune de l'administrateur
-        $communeAdmin = $sousadmin->commune; // Ajustez selon votre logique
+        $communeAdmin = $sousadmin->nomHop; // Ajustez selon votre logique
     
         // Récupérer les sous-administrateurs filtrés par la commune
-        $sousadmins = SousAdmin::where('commune', $communeAdmin)->get();
+        $sousadmins = SousAdmin::where('nomHop', $communeAdmin)->get();
     
         return view('doctor.index', compact('sousadmins'));
     }

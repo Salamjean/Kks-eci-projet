@@ -7,7 +7,7 @@
     <title>Connexion d'un Admin</title>
     <style>
         body {
-            background-image: url({{ asset('assets/images/profiles/vendorbg.jpg') }});
+            background-image: url({{ asset('assets/images/profiles/Bguser.jpg') }});
             display: flex;
             align-items: center;
             justify-content: center;

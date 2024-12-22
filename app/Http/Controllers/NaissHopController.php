@@ -28,10 +28,10 @@ class NaissHopController extends Controller
         $sousadmin = Auth::guard('sous_admin')->user();
         
         // Récupérer la commune de l'administrateur
-        $communeAdmin = $sousadmin->commune; 
+        $communeAdmin = $sousadmin->nomHop; 
     
         // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
-        $naisshops = NaissHop::where('commune', $communeAdmin)->get();
+        $naisshops = NaissHop::where('NomEnf', $communeAdmin)->get();
     
         return view('naissHop.index', ['naisshops' => $naisshops]);
     }
@@ -55,6 +55,26 @@ class NaissHopController extends Controller
         ]);
     }
 
+    public function agentmairieindex() {
+        $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+            ->latest()
+            ->get();
+        $sousadmin = Auth::guard('vendor')->user();
+        
+        // Récupérer la commune de l'administrateur
+        $communeAdmin = $sousadmin->name; // Ajustez selon votre logique
+    
+        // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
+        $naisshops = NaissHop::where('commune', $communeAdmin)->get();
+    
+        return view('naissHop.agentmairieindex', [
+            'naisshops' => $naisshops,
+            'alerts' => $alerts,
+            'sousadmin' => $sousadmin
+        ]);
+    }
+
     public function mairieDecesindex(){
         $alerts = Alert::where('is_read', false)
         ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
@@ -69,6 +89,26 @@ class NaissHopController extends Controller
         $deceshops = DecesHop::where('commune', $communeAdmin)->get();
     
         return view('decesHop.mairieindex', [
+            'deceshops' => $deceshops,
+            'alerts' => $alerts,
+            'sousadmin' => $sousadmin
+        ]);
+    }
+
+    public function agentmairieDecesindex(){
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
+        $sousadmin = Auth::guard('vendor')->user();
+        
+        // Récupérer la commune de l'administrateur
+        $communeAdmin = $sousadmin->name; // Ajustez selon votre logique
+    
+        // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
+        $deceshops = DecesHop::where('commune', $communeAdmin)->get();
+    
+        return view('decesHop.agentmairieindex', [
             'deceshops' => $deceshops,
             'alerts' => $alerts,
             'sousadmin' => $sousadmin
