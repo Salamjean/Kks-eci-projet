@@ -9,7 +9,7 @@
         <div class="card">
             <!-- En-tête de la carte -->
             <div class="card-header py-3 bg-primary">
-                <h6 class="m-0 font-weight-bold text-white text-center">Naissances Récentes et Existantes</h6>
+                <h6 class="m-0 font-weight-bold text-white text-center">Naissances Récentes</h6>
             </div>
             <!-- Corps de la carte -->
             <div class="card-body">
@@ -33,7 +33,11 @@
                                         <td>{{ $naissance->created_at->format('d/m/Y') }}</td>
                                         <td>{{ $naissance->created_at->format('H:i:s') }}</td>
                                         <td>
-                                            <a href="#" class="btn btn-sm btn-primary">Récuperer</a>
+                                            <form action="{{ route('naissance.traiter', $naissance->id) }}" method="POST" style="display:inline;">
+                                                @csrf
+                                                @method('POST')
+                                                <button type="submit" class="btn btn-sm btn-primary">Récuperer</button>
+                                            </form>
                                         </td>
                                     </tr>
                                 @empty
@@ -48,6 +52,7 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
             </div>
         </div>
     </div>
@@ -80,7 +85,11 @@
                                     <td>{{ $deces->created_at->format('d/m/Y') }}</td>
                                     <td>{{ $deces->created_at->format('H:i:s') }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-primary">Récuperer</a>
+                                        <form action="{{ route('deces.traiter', $deces->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('POST')
+                                            <button type="submit" class="btn btn-sm btn-primary">Récuperer</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @empty
@@ -121,7 +130,11 @@
                                     <td>{{ $mariage->created_at->format('d/m/Y') }}</td>
                                     <td>{{ $mariage->created_at->format('H:i:s') }}</td>
                                     <td>
-                                        <a href="#" class="btn btn-sm btn-primary">Récuperer</a>
+                                        <form action="{{ route('mariage.traiter', $mariage->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('POST')
+                                            <button type="submit" class="btn btn-sm btn-primary">Récuperer</button>
+                                        </form>
                                     </td>
                                 </tr>
                             @empty
@@ -134,98 +147,4 @@
         </div>
     </div>
 </div>
-
-<h3 class="text-center uppercase">Les déclarations</h3>
-
-<!-- Section : Les Déclarations Récentes -->
-<div class="row mb-4">
-    <!-- Carte : Naissances Récentes -->
-    <div class="col-xl-6 col-lg-6 mb-4">
-        <div class="card">
-            <!-- En-tête de la carte -->
-            <div class="card-header py-3 bg-primary">
-                <h6 class="m-0 font-weight-bold text-white text-center">Naissances Récentes</h6>
-            </div>
-            <!-- Corps de la carte -->
-            <div class="card-body">
-                <div class="table-responsive">
-                    <h5 class="font-weight-bold text-primary text-center mb-3">Naissances Récentes</h5>
-                    <table class="table table-striped table-hover align-items-center">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Type</th>
-                                <th>Hôpital</th>
-                                <th>Date</th>
-                                <th>Heure</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($recentNaisshops as $naisshop)
-                                <tr>
-                                    <td>Naisshop</td>
-                                    <td>{{ $naisshop->NomEnf }}</td>
-                                    <td>{{ $naisshop->created_at->format('d/m/Y') }}</td>
-                                    <td>{{ $naisshop->created_at->format('H:i:s') }}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-primary">Détails</a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center">Aucune déclaration de naissance</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Carte : Décès Récentes -->
-    <div class="col-xl-6 col-lg-6 mb-4">
-        <div class="card">
-            <!-- En-tête de la carte -->
-            <div class="card-header py-3 bg-primary">
-                <h6 class="m-0 font-weight-bold text-white text-center">Décès Récent</h6>
-            </div>
-            <!-- Corps de la carte -->
-            <div class="card-body">
-                <div class="table-responsive">
-                    <h5 class="font-weight-bold text-primary text-center mb-3">Décès Récents</h5>
-                    <table class="table table-striped table-hover align-items-center">
-                        <thead class="thead-light">
-                            <tr>
-                                <th>Type</th>
-                                <th>Hôpital</th>
-                                <th>Date</th>
-                                <th>Heure</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($recentDeceshops as $deceshop)
-                                <tr>
-                                    <td>Deceshop</td>
-                                    <td>{{ $deceshop->nomHop }}</td>
-                                    <td>{{ $deceshop->created_at->format('d/m/Y') }}</td>
-                                    <td>{{ $deceshop->created_at->format('H:i:s') }}</td>
-                                    <td>
-                                        <a href="#" class="btn btn-sm btn-primary">Détails</a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center">Aucune déclaration de décès récente</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 @endsection

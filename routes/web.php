@@ -166,11 +166,22 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/create', [NaissanceController::class, 'create'])->name('naissance.create');
         Route::get('/edit/{naissance}', [NaissanceController::class, 'edit'])->name('naissance.edit');
         Route::get('/naissance/{id}', [NaissanceController::class, 'show'])->name('naissance.show');
+       
     });
+
+    Route::post('/naissance/traiter/{id}', [NaissanceController::class, 'traiterDemande'])->name('naissance.traiter');
+    Route::post('/deces/traiter/{id}', [NaissanceController::class, 'traiterDemandeDeces'])->name('deces.traiter');
+    Route::post('/mariage/traiter/{id}', [NaissanceController::class, 'traiterDemandeMariage'])->name('mariage.traiter');
 //les routes de extraits naissances
     Route::prefix('agent')->group(function() {
+        Route::get('/login', [AgentController::class, 'login'])->name('agent.login');
+        Route::post('/login', [AgentController::class, 'handleLogin'])->name('agent.handleLogin');
+    });
+
+    Route::middleware('agent')->prefix('agent')->group(function(){
         Route::get('/dashboard', [AgentController::class, 'agentdashboard'])->name('agent.dashboard');
         Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
+        Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');
     });
 
     Route::prefix('naissHop')->group(function () {
@@ -251,7 +262,7 @@ Route::middleware('auth:web')->group(function () {
     });
 
     Route::post('/alerts/{id}/mark-as-read', [VendorDashboard::class, 'markAlertAsRead']);
-
+    
 
     require __DIR__.'/auth.php';
     require __DIR__.'/admin-auth.php';

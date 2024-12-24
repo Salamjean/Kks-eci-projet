@@ -103,7 +103,7 @@
                                 <th>Acte de Mariage</th>
                                 <th>Déclaration par la Loi</th>
                                 <th>Etat Actuel</th>
-                                <th>Action</th>
+                                <th>Agent</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -163,9 +163,7 @@
                                 <td class="{{ $deces->etat == 'en attente' ? 'bg-warning' : ($deces->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                     {{ $deces->etat }}
                                 </td>
-                                <td>
-                                    <a href="{{ route('deces.edit', $deces->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
-                                </td>
+                                <td>{{ $deces->agent ? $deces->agent->name . ' ' . $deces->agent->prenom : 'Non attribué' }}</td>
                             </tr>
                             @empty
                             <tr>

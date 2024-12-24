@@ -166,7 +166,7 @@
                                 <td>
                                     <a href="{{ route('deces.edit', $deces->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
                                 </td>
-                            </tr>
+                             </tr>
                             @empty
                             <tr>
                                 <td colspan="10" class="text-center">Aucune déclaration trouvée</td>

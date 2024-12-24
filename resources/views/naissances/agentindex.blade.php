@@ -74,9 +74,8 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Listes des demandes d'extrait de Naissance</h1>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="./">Home</a></li>
-        <li class="breadcrumb-item">Tables</li>
-        <li class="breadcrumb-item active" aria-current="page">DataTables</li>
+        <li class="breadcrumb-item"><a href="./">Accueil</a></li>
+        <li class="breadcrumb-item">Listes </li>
       </ol>
     </div>
 
@@ -230,43 +229,26 @@
                                 <th>Action</th>
                             </tr>
                         </thead>
-                        
                         <tbody>
                             @forelse ($naissancesD as $naissanceD)
-                            <tr style="font-size: 12px">
-                                <td>{{ $naissance->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
-                                <td>{{ $naissanceD->type }}</td>
-                                <td>{{ $naissanceD->name }}</td>
-                                <td>{{ $naissanceD->number }}</td>
-                                <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
-                                    {{ $naissanceD->etat }}
-                                </td>
-                                <td>
-                                    <a href="{{ route('naissanced.edit', $naissanceD->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
-                                </td>
-                            </tr>
+                                <tr style="font-size: 12px">
+                                    <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
+                                    <td>{{ $naissanceD->type }}</td>
+                                    <td>{{ $naissanceD->name }}</td>
+                                    <td>{{ $naissanceD->number }}</td>
+                                    <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
+                                        {{ $naissanceD->etat }}
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('naissanced.edit', $naissanceD->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="5" class="text-center">Aucune demande effectuée</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="6" class="text-center">Aucune demande effectuée</td>
+                                </tr>
                             @endforelse
-                            
-                            <!-- Modal -->
-                            <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="imageModalLabel">Aperçu de l'image</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
-                                        </div>
-                                        <div class="modal-body text-center">
-                                            <img id="modalImage" src="{{ asset('assets/images/profiles/bébé.jpg') }}" alt="Image prévisualisée" class="img-fluid">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </tbody>
-                    </table>
                 </div>
             </div>
         </div>

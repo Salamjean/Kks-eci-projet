@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
-class Agent extends Model
+class Agent extends Authenticatable
 {
+    use HasFactory, Notifiable;
     protected $fillable = [
         'name',
         'prenom',
@@ -14,11 +17,48 @@ class Agent extends Model
         'password',
         'profile_picture',
         'commune',
+        'communeM',
     ];
 
-    // Définir la relation avec l'utilisateur
-    public function user()
+    public function naissances()
     {
-        return $this->belongsTo(User::class); // Associe à la table users
+        return $this->hasMany(NaissanceD::class, 'agent_id');
     }
+    public function naissance()
+    {
+        return $this->hasMany(Naissance::class, 'agent_id');
+    }
+    public function deces()
+    {
+        return $this->hasMany(Deces::class, 'agent_id');
+    }
+    public function mariage()
+    {
+        return $this->hasMany(Mariage::class, 'agent_id');
+    }
+
+     /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+    ];
+
+       /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
+    }
+
+    protected $guarded = [];
 }
+

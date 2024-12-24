@@ -39,23 +39,93 @@ class NaissanceController extends Controller
         return view('naissances.index', compact('naissances', 'alerts', 'naissancesD'));
     }
     public function agentindex()
-    {
-        // Récupérer l'admin connecté
-        $admin = Auth::guard('vendor')->user();
-    
-        // Récupérer les alertes
-        $alerts = Alert::where('is_read', false)
-        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+{
+    // Récupérer l'admin connecté
+    $admin = Auth::guard('agent')->user();
+
+    // Récupérer les alertes
+    $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  
         ->latest()
         ->get();
-    
-        // Filtrer les naissances selon la commune de l'admin connecté
-        $naissances = Naissance::where('commune', $admin->name)->paginate(10); // Filtrage par commune
-        $naissancesD = NaissanceD::where('commune', $admin->name)->paginate(10); // Filtrage par commune
-    
-        // Retourner la vue avec les données
-        return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD'));
+
+    // Filtrer les naissances selon la commune de l'admin connecté
+    // et l'agent connecté pour les demandes traitées par cet agent
+    $naissances = Naissance::where('commune', $admin->communeM)
+        ->where('agent_id', $admin->id) // Filtrage par agent
+        ->paginate(10); // Pagination
+
+    $naissancesD = NaissanceD::where('commune', $admin->communeM)
+        ->where('agent_id', $admin->id) // Filtrage par agent
+        ->paginate(10); // Pagination
+
+    // Retourner la vue avec les données
+    return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD'));
+}
+
+    public function traiterDemande($id)
+{
+    $agent = Auth::guard('agent')->user();
+
+    // Essayer de trouver une demande de naissance
+    $naissance = Naissance::find($id);
+    if ($naissance) {
+        $naissance->is_read = true; // Marquer comme traité
+        $naissance->agent_id = $agent->id; // Enregistrer l'ID de l'agent
+        $naissance->save();
+
+        return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissance traitée avec succès.');
     }
+
+    $agent = Auth::guard('agent')->user();
+    // Essayer de trouver une demande de naissanceD
+    $naissanceD = NaissanceD::find($id);
+    if ($naissanceD) {
+        $naissanceD->is_read = true; // Marquer comme traité
+        $naissanceD->agent_id = $agent->id; // Enregistrer l'ID de l'agent
+        $naissanceD->save();
+
+        return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissanceD traitée avec succès.');
+    }
+
+    // Si aucune demande n'est trouvée
+    return redirect()->route('naissance.agentindex')->with('error', 'Demande introuvable.');
+}
+
+
+    public function traiterDemandeDeces($id)
+{
+    $agent = Auth::guard('agent')->user();
+    // Essayer de trouver une demande de deces
+    $deces = Deces::find($id);
+    if ($deces) {
+        $deces->is_read = true; // Marquer comme traité
+        $deces->agent_id = $agent->id; // Enregistrer l'ID de l'agent
+        $deces->save();
+
+        return redirect()->route('deces.agentindex')->with('success', 'Demande de deces traitée avec succès.');
+    }
+    // Si aucune demande n'est trouvée
+    return redirect()->route('deces.agentindex')->with('error', 'Demande introuvable.');
+}
+
+
+
+    public function traiterDemandeMariage($id)
+{
+    $agent = Auth::guard('agent')->user();
+    // Essayer de trouver une demande de mariage
+    $mariage = Mariage::find($id);
+    if ($mariage) {
+        $mariage->is_read = true; // Marquer comme traité
+        $mariage->agent_id = $agent->id; // Enregistrer l'ID de l'agent
+        $mariage->save();
+
+        return redirect()->route('mariage.agentindex')->with('success', 'Demande de mariage traitée avec succès.');
+    }
+    // Si aucune demande n'est trouvée
+    return redirect()->route('mariage.agentindex')->with('error', 'Demande introuvable.');
+}
 
 
     public function create(){

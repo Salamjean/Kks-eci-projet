@@ -42,33 +42,36 @@ class DecesController extends Controller
         return view('deces.index', compact('deces','alerts'));
     }
     public function agentindex(Request $request)
-    {
-        // Récupérer l'admin connecté
-        $admin = Auth::guard('vendor')->user();
-    
-       // Récupérer les alertes
-       $alerts = Alert::where('is_read', false)
-       ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
-       ->latest()
-       ->get();
-    
-        // Initialiser la requête pour Deces en filtrant par commune
-        $query = Deces::where('commune', $admin->name); // Filtrer par commune
-    
-        // Vérifier le type de recherche et appliquer le filtre
-        if ($request->filled('searchType') && $request->filled('searchInput')) {
-            if ($request->searchType === 'nomDefunt') {
-                $query->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
-            } elseif ($request->searchType === 'nomHopital') {
-                $query->where('nomHopital', 'like', '%' . $request->searchInput . '%');
-            }
+{
+    // Récupérer l'admin connecté
+    $admin = Auth::guard('agent')->user();
+
+    // Récupérer les alertes
+    $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  
+        ->latest()
+        ->get();
+
+    // Construire la requête pour Deces en filtrant par commune
+    $query = Deces::where('commune', $admin->communeM)
+        ->where('agent_id', $admin->id); // Filtrage par agent
+
+    // Vérifier le type de recherche et appliquer le filtre
+    if ($request->filled('searchType') && $request->filled('searchInput')) {
+        if ($request->searchType === 'nomDefunt') {
+            $query->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
+        } elseif ($request->searchType === 'nomHopital') {
+            $query->where('nomHopital', 'like', '%' . $request->searchInput . '%');
         }
-    
-        // Récupérer les résultats filtrés
-        $deces = $query->get();
-    
-        return view('deces.agentindex', compact('deces','alerts'));
     }
+
+    // Paginer les résultats
+    $deces = $query->paginate(10);
+
+    // Passer les données à la vue
+    return view('deces.agentindex', compact('deces', 'alerts'));
+}
+
     
 
     

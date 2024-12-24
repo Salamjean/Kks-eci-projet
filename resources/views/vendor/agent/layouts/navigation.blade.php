@@ -80,24 +80,10 @@
          aria-haspopup="true" aria-expanded="false">
         <!-- Image selon la ville -->
         @php
-          $user = Auth::guard('vendor')->user();
-          $cities = [
-              'Yopougon' => 'yopougon.png',
-              'Marcory' => 'marcory.png',
-              'Cocody' => 'cocody.png',
-              'abobo' => 'abobo.png',
-              'Koumassi' => 'koumassi.png',
-              'Port-Bouët' => 'portbouet.png',
-              'Treichville' => 'treichville.png',
-              'Attécoubé' => 'attecoube.png',
-              'Adjamé' => 'adjame.png',
-              'Songon' => 'songon.png',
-          ];
-          $image = isset($cities[$user->name]) ? $cities[$user->name] : 'default.png';
+          $user = Auth::guard('agent')->user();
         @endphp
-        <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/' . $image) }}" 
-             alt="Logo {{ $user->name }}">
-        <span class="ml-2 d-none d-lg-inline text-white small">Mairie de {{ $user->name }}</span>
+        <img class="img-profile rounded-circle" src="{{ asset('storage/' . (Auth::guard('agent')->user()->profile_picture ?? 'default-profile.png')) }}" >
+        <span class="ml-2 d-none d-lg-inline text-white small">Agent {{ $user->name }} {{ $user->prenom }}</span>
       </a>
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
         <a class="dropdown-item" href="#">
@@ -107,7 +93,7 @@
           <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Paramètres
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="{{ route('vendor.logout') }}">
+        <a class="dropdown-item" href="{{ route('agent.logout') }}">
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Déconnexion
         </a>
       </div>

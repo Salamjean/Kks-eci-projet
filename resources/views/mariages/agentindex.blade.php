@@ -29,9 +29,8 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Listes des demandes d'extraits de Mariage</h1>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="./">Home</a></li>
+            <li class="breadcrumb-item"><a href="./">Accueil</a></li>
             <li class="breadcrumb-item">Tables</li>
-            <li class="breadcrumb-item active" aria-current="page">DataTables</li>
         </ol>
     </div>
 
@@ -51,6 +50,7 @@
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
                             <tr style="font-size: 12px">
+                                <th class="text-center">Nom du demandeur</th>
                                 <th class="text-center">Nom du conjoint(e)</th>
                                 <th class="text-center">Pièce d'Identité</th>
                                 <th class="text-center">Extrait de Mariage</th>
@@ -61,6 +61,7 @@
                         <tbody>
                             @forelse ($mariagesAvecFichiersSeulement as $mariage)
                             <tr style="font-size: 12px">
+                                <td>{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
                                 <td class="text-center">{{ $mariage->nomEpoux }}</td>
                                 <td class="text-center">
                                     <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 

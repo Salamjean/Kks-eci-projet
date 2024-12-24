@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('profile_picture')->nullable();
             $table->string('commune');
+            $table->string('communeM');
             $table->dateTime('email_verified_at')->nullable();
             $table->timestamps();
         });

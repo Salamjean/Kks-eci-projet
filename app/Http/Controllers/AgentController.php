@@ -47,7 +47,7 @@ class AgentController extends Controller
         // Récupérer le vendor connecté
         $vendor = Auth::guard('vendor')->user();
 
-        if (!$vendor) {
+        if (!$vendor || !$vendor->name) {
             return redirect()->back()->withErrors(['error' => 'Impossible de récupérer les informations du vendor.']);
         }
 
@@ -64,6 +64,8 @@ class AgentController extends Controller
         }
 
         $agent->commune = $request->commune;
+        $agent->communeM = $vendor->name;
+        
         $agent->save();
 
         // Envoi de l'e-mail de vérification
@@ -84,6 +86,42 @@ class AgentController extends Controller
         return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
     }
  }
+
+ public function login(){
+    return view('vendor.agent.auth.login');
+}
+
+
+public function handleLogin(Request $request)
+    {
+        $request->validate([
+            'email' =>'required|exists:agents,email',
+            'password' => 'required|min:8',
+        ], [
+            
+            
+            'email.required' => 'Le mail est obligatoire.',
+            'email.exists' => 'Cette adresse mail n\'existe pas.',
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.min'=> 'Le mot de passe doit avoir au moins 8 caractères.',
+        ]);
+
+        try {
+            if(auth('agent')->attempt($request->only('email', 'password')))
+            {
+                return redirect()->route('agent.vue')->with('Bienvenu sur votre page ');
+            }else{
+                return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
+            }
+        } catch (Exception $e) {
+            dd($e);
+        }
+    }
+
+    public function logout(){
+        Auth::guard('agent')->logout();
+        return redirect()->route('agent.login');
+    }
 
  public function agentindex(){
     $alerts = Alert::all();
@@ -190,52 +228,56 @@ public function agentdashboard(Agent $agent) {
     $alerts = Alert::all();
     return view('vendor.agent.dashboard', compact('agent','alerts'));
 }
-public function agentvue(Agent $agent, Request  $request) {
-    // Récupérer l'admin connecté
-    $admin = Auth::guard('vendor')->user();
 
-    // Récupérer le mois et l'année sélectionnés pour les naissances, décès et mariages
+
+public function agentvue(Agent $agent, Request $request) {
+    // Récupérer l'admin connecté
+    $admin = Auth::guard('agent')->user();
+
+    // Récupérer le mois et l'année sélectionnés
     $selectedMonth = $request->input('month', date('m'));
     $selectedYear = $request->input('year', date('Y'));
-
-    // Récupérer le mois et l'année sélectionnés pour les naisshops et deceshops
     $selectedMonthHops = $request->input('month_hops', date('m'));
     $selectedYearHops = $request->input('year_hops', date('Y'));
 
     // Récupérer les données associées à la commune de cet admin pour le mois sélectionné
     // Données pour naissances, décès, et mariages
-    $naissances = Naissance::where('commune', $admin->name)
+    $naissances = Naissance::where('commune', $admin->communeM)
+        ->where('is_read', false) // Filtrer pour les demandes non traitées
         ->whereMonth('created_at', $selectedMonth)
         ->whereYear('created_at', $selectedYear)
         ->orderBy('created_at', 'desc')
         ->get();
 
-    $naissancesD = NaissanceD::where('commune', $admin->name)
+    $naissancesD = NaissanceD::where('commune', $admin->communeM)
+        ->where('is_read', false) // Filtrer pour les demandes non traitées
         ->whereMonth('created_at', $selectedMonth)
         ->whereYear('created_at', $selectedYear)
         ->orderBy('created_at', 'desc')
         ->get();
 
-    $deces = Deces::where('commune', $admin->name)
+    $deces = Deces::where('commune', $admin->communeM)
+        ->where('is_read', false) // Filtrer pour les demandes non traitées
         ->whereMonth('created_at', $selectedMonth)
         ->whereYear('created_at', $selectedYear)
         ->orderBy('created_at', 'desc')
         ->get();
 
-    $mariages = Mariage::where('commune', $admin->name)
+    $mariages = Mariage::where('commune', $admin->communeM)
+        ->where('is_read', false) // Filtrer pour les demandes non traitées
         ->whereMonth('created_at', $selectedMonth)
         ->whereYear('created_at', $selectedYear)
         ->orderBy('created_at', 'desc')
         ->get();
 
     // Données pour naisshops et deceshops
-    $naisshops = NaissHop::where('commune', $admin->name)
+    $naisshops = NaissHop::where('commune', $admin->communeM)
         ->whereMonth('created_at', $selectedMonthHops)
         ->whereYear('created_at', $selectedYearHops)
         ->orderBy('created_at', 'desc')
         ->get();
 
-    $deceshops = DecesHop::where('commune', $admin->name)
+    $deceshops = DecesHop::where('commune', $admin->communeM)
         ->whereMonth('created_at', $selectedMonthHops)
         ->whereYear('created_at', $selectedYearHops)
         ->orderBy('created_at', 'desc')
@@ -266,18 +308,18 @@ public function agentvue(Agent $agent, Request  $request) {
     $Naiss = $naissancedash + $naissanceDdash;
     $NaissHopTotal = $naisshopsdash + $deceshopsdash;
 
-    // Récupération des données récentes (3 derniers éléments)
+    // Récupération des données récentes (2 derniers éléments)
     $recentNaissances = $naissances->take(2);
-    $recentNaissancesd = $naissancesD->take(2);
+    $recentNaissancesd = $naissancesD->take(2); // Filtrer pour les récentes non traitées
     $recentDeces = $deces->take(2);
     $recentMariages = $mariages->take(2);
     $recentNaisshops = $naisshops->take(2);
     $recentDeceshops = $deceshops->take(2);
 
     $alerts = Alert::where('is_read', false)
-    ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
-    ->latest()
-    ->get();
+        ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  
+        ->latest()
+        ->get();
 
     // Retourne la vue avec les données
     return view('vendor.agent.vue', compact(
@@ -287,10 +329,10 @@ public function agentvue(Agent $agent, Request  $request) {
         'totalDataHops', 'totalData', 'naissancePercentage', 
         'naissanceDPercentage', 'decesPercentage', 'mariagePercentage', 
         'naisshopPercentage', 'deceshopPercentage', 
-        'recentNaissances', 'recentDeces', 'recentMariages', 
-        'alerts', 'Naiss', 'NaissHop', 
+        'recentNaissances', 'recentNaissancesd', 'recentDeces', 
+        'recentMariages', 'alerts', 'Naiss', 'NaissHop', 
         'selectedMonth', 'selectedYear', 
-        'selectedMonthHops', 'selectedYearHops','recentNaisshops', 'recentDeceshops','recentNaissancesd'
+        'selectedMonthHops', 'selectedYearHops', 'recentNaisshops', 'recentDeceshops'
     ));
 }
 }

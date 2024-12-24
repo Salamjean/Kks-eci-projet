@@ -158,8 +158,8 @@
 
         <div class="form-row mb-3">
             <div class="col-md-12">
-                <label for="validationCustom005" class="form-label">Commune</label>
-                <input type="text" class="form-control" name="commune" id="validationCustom005" placeholder="Entrez sa commune" required>
+                <label for="validationCustom005" class="form-label">Lieu de résidance</label>
+                <input type="text" class="form-control" name="commune" id="validationCustom005" placeholder="Entrez son lieu de résidence" required>
                
             </div>
         </div>

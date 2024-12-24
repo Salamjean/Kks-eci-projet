@@ -104,7 +104,7 @@
                         <th>Certificat De Déclaration</th>
                         <th>Acte De Mariage</th>
                         <th>Etat Actuel</th>
-                        <th>Action</th>
+                        <th>Agent</th>
                     </tr>
                 </thead>
                 
@@ -154,9 +154,7 @@
                         <td class="{{ $naissance->etat == 'en attente' ? 'bg-warning' : ($naissance->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                             {{ $naissance->etat }}
                         </td>
-                        <td>
-                            <a href="{{ route('naissances.edit', $naissance->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
-                        </td>
+                        <td>{{ $naissance->agent ? $naissance->agent->name . ' ' . $naissance->agent->prenom : 'Non attribué' }}</td>
                     </tr>
                     @empty
                     <tr>
@@ -227,23 +225,21 @@
                                 <th>Pièce Du Parent</th>
                                 <th>Certificat De Déclaration</th>
                                 <th>Etat Actuel</th>
-                                <th>Action</th>
+                                <th>Agent</th>
                             </tr>
                         </thead>
                         
                         <tbody>
                             @forelse ($naissancesD as $naissanceD)
                             <tr style="font-size: 12px">
-                                <td>{{ $naissance->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
+                                <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
                                 <td>{{ $naissanceD->type }}</td>
                                 <td>{{ $naissanceD->name }}</td>
                                 <td>{{ $naissanceD->number }}</td>
                                 <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                     {{ $naissanceD->etat }}
                                 </td>
-                                <td>
-                                    <a href="{{ route('naissanced.edit', $naissanceD->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
-                                </td>
+                                <td>{{ $naissanceD->agent ? $naissanceD->agent->name . ' ' . $naissanceD->agent->prenom : 'Non attribué' }}</td>
                             </tr>
                             @empty
                             <tr>

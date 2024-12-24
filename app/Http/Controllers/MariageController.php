@@ -61,10 +61,11 @@ class MariageController extends Controller
     public function agentindex(Request $request)
     {
         // Récupérer l'admin connecté
-        $admin = Auth::guard('vendor')->user();
+        $admin = Auth::guard('agent')->user();
 
         // Initialiser la requête pour Mariage et filtrer par commune de l'admin
-        $query = Mariage::where('commune', $admin->name); // Filtrer par commune de l'admin connecté
+        $query = Mariage::where('commune', $admin->communeM)
+        ->where('agent_id', $admin->id); // Filtrer par commune de l'admin connecté
 
         // Vérifier le type de recherche et appliquer le filtre
         if ($request->filled('searchType') && $request->filled('searchInput')) {
@@ -81,11 +82,11 @@ class MariageController extends Controller
         }
 
         // Récupérer tous les mariages correspondant aux critères de filtrage
-        $mariages = $query->get();
+        $mariages = $query->paginate(10);
 
         // Filtrer les mariages où pieceIdentite et extraitMariage sont remplis et la commune est celle de l'admin
         $mariagesAvecFichiersSeulement = $mariages->filter(function($mariage) use ($admin) {
-            return !is_null($mariage->pieceIdentite) && !is_null($mariage->extraitMariage) && $mariage->commune == $admin->name;
+            return !is_null($mariage->pieceIdentite) && !is_null($mariage->extraitMariage) && $mariage->commune == $admin->communeM;
         });
 
         // Filtrer les mariages où nomEpoux, prenomEpoux, dateNaissanceEpoux, lieuNaissanceEpoux, commune sont remplis

@@ -60,6 +60,11 @@ return [
             'driver' => 'session',
             'provider' => 'sous_admins',
         ],
+
+        'agent' => [
+            'driver' => 'session',
+            'provider' => 'agents',
+        ],
     ],
 
     /*
@@ -103,6 +108,11 @@ return [
         'sous_admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\SousAdmin::class,
+        ],
+
+        'agents' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Agent::class,
         ],
 
         // 'users' => [

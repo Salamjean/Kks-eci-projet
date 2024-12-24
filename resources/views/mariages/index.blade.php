@@ -55,7 +55,7 @@
                                 <th class="text-center">Pièce d'Identité</th>
                                 <th class="text-center">Extrait de Mariage</th>
                                 <th>Etat Actuel</th>
-                                <th>Action</th>
+                                <th>Agent</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,9 +85,7 @@
                                 <td class="{{ $mariage->etat == 'en attente' ? 'bg-warning' : ($mariage->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                     {{ $mariage->etat }}
                                 </td>
-                                <td>
-                                    <a href="{{ route('mariage.edit', $mariage->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
-                                </td>
+                                <td>{{ $mariage->agent ? $mariage->agent->name . ' ' . $mariage->agent->prenom : 'Non attribué' }}</td>
                             </tr>
                             @empty
                             <tr>
@@ -134,7 +132,7 @@
                                 <th class="text-center">Pièce d'Identité</th>
                                 <th class="text-center">Extrait de Mariage</th>
                                 <th>Etat Actuel</th>
-                                <th>Action</th>
+                                <th>Agent</th>
                                 
                             </tr>
                         </thead>
@@ -168,10 +166,7 @@
                                 <td class="{{ $mariage->etat == 'en attente' ? 'bg-warning' : ($mariage->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
                                     {{ $mariage->etat }}
                                 </td>
-                                <td>
-                                    <a href="{{ route('mariage.edit', $mariage->id) }}" class="btn btn-sm"  style="size: 0.6rem">Mettre à jour l'état </a>
-                                  </td>
-                                  
+                                <td>{{ $mariage->agent ? $mariage->agent->name . ' ' . $mariage->agent->prenom : 'Non attribué' }}</td>
                             </tr>
                             @empty
                             <tr>
