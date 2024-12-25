@@ -36,7 +36,7 @@ class NaissanceDeclaController extends Controller
     
         Alert::create([
             'type' => 'naissance',
-            'message' => "Une nouvelle demande d\'extrait de naissance a été enregistrée : {$naissanceD->user_id->name}.",
+            'message' => "Une nouvelle demande d\'extrait de naissance a été enregistrée : {$naissanceD->name}.",
         ]);
     
         return redirect()->back()->with('success', 'Votre déclaration de naissance a été enregistrée avec succès.');

@@ -267,30 +267,25 @@ class NaissHopController extends Controller
         return redirect()->route('naissHop.index',compact('naissHop'))->with('success', 'Déclaration effectuée avec succès');
     }
 
+    public function verifierCodeDM(Request $request)
+    {
+        $codeCMN = $request->input('codeCMN');
+        
+        // Rechercher dans la table naiss_hops en utilisant le codeCMN
+        $naissHop = NaissHop::where('codeCMN', $codeCMN)->first();
     
-    
-    // NaissHopController.php
-// NaissHopController.php
-
-public function verifierCodeDM(Request $request)
-{
-    $codeCMN = $request->input('codeCMN');
-    
-    // Rechercher dans la table naiss_hops en utilisant le codeDM
-    $naissHop = NaissHop::where('codeCMN', $codeCMN)->first();
-
-    if ($naissHop) {
-        return response()->json([
-            'existe' => true,
-            'nomHopital' => $naissHop->NomEnf,  // Vous pouvez aussi le récupérer dynamiquement si nécessaire
-            'nomMere' => $naissHop->NomM . ' ' . $naissHop->PrM,
-            'nomPere' => $naissHop->NomP . ' ' . $naissHop->PrP,
-            'dateNaiss' => $naissHop->DateNaissance
-        ]);
-    } else {
-        return response()->json(['existe' => false]);
+        if ($naissHop) {
+            return response()->json([
+                'existe' => true,
+                'nomHopital' => $naissHop->NomEnf,
+                'nomMere' => $naissHop->NomM . ' ' . $naissHop->PrM,
+                'nomPere' => $naissHop->NomP . ' ' . $naissHop->PrP,
+                'dateNaiss' => $naissHop->DateNaissance
+            ]);
+        } else {
+            return response()->json(['existe' => false]);
+        }
     }
-}
 
 
 public function download($id)

@@ -160,28 +160,31 @@ class DecesHopController extends Controller
 
     // Dans votre contrôleur, par exemple DecesController.php
 
-    public function verifierCodeCMD(Request $request)
-{
-    $codeCMD = $request->input('codeCMD');
-    
-    // Rechercher le codeCMD dans la table 'deces_hops'
-    $deces = DB::table('deces_hops')->where('codeCMD', $codeCMD)->first();
-
-    if ($deces) {
-        // Retourner les informations du défunt si trouvé
-        return response()->json([
-            'existe' => true,
-            'nomHopital' => $deces->nomHop,
-            'dateDeces' => $deces->DateDeces,
-            'nomDefunt' => $deces->NomM . ' ' . $deces->PrM,
-            'dateNaiss' => $deces->DateNaissance,
-            'lieuNaiss' => $deces->commune
+    public function verifierCodeDMD(Request $request)
+    {
+        $validatedData = $request->validate([
+            'codeCMN' => 'required|string|max:50', // Validation de l'entrée
         ]);
+    
+        $codeCMN = $validatedData['codeCMN'];
+    
+        // Recherche du dossier médical
+        $decesHop = DecesHop::where('codeCMD', $codeCMN)->first();
+    
+        if ($decesHop) {
+            return response()->json([
+                'existe' => true,
+                'nomHopital' => $decesHop->nomHop,
+                'nomDefunt' => $decesHop->NomM . ' ' . $decesHop->PrM,
+                'dateNaiss' => $decesHop->DateNaissance,
+                'dateDeces' => $decesHop->DateDeces,
+                'lieuNaiss' => $decesHop->commune,
+            ]);
+        }
+    
+        return response()->json(['existe' => false]);
     }
-
-    return response()->json(['existe' => false]);
-}
-
+    
 public function download($id)
 {
     // Récupérer l'objet NaissHop

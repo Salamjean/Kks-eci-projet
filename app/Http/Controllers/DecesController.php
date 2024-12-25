@@ -26,6 +26,7 @@ class DecesController extends Controller
     
         // Initialiser la requête pour Deces en filtrant par commune
         $query = Deces::where('commune', $admin->name); // Filtrer par commune
+        $querys = Decesdeja::where('commune', $admin->name); // Filtrer par commune
     
         // Vérifier le type de recherche et appliquer le filtre
         if ($request->filled('searchType') && $request->filled('searchInput')) {
@@ -38,8 +39,30 @@ class DecesController extends Controller
     
         // Récupérer les résultats filtrés
         $deces = $query->get();
+        $decesdeja = $querys->get();
     
-        return view('deces.index', compact('deces','alerts'));
+        return view('deces.index', compact('deces','decesdeja','alerts'));
+    }
+    
+
+    public function userindex()
+    {
+        // Récupérer l'admin connecté
+        $user = Auth::user();
+    
+        // Récupérer les alertes
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
+    
+        // Filtrer les naissances selon la commune de l'admin connecté
+        $deces = Deces::where('commune', $user->commune)->paginate(10); // Filtrage par commune
+        $decesdeja = Decesdeja::where('commune', $user->commune)->paginate(10); // Filtrage par commune
+       // Filtrage par commune
+    
+        // Retourner la vue avec les données
+        return view('deces.userindex', compact('deces','decesdeja', 'alerts'));
     }
     public function agentindex(Request $request)
 {
@@ -55,6 +78,8 @@ class DecesController extends Controller
     // Construire la requête pour Deces en filtrant par commune
     $query = Deces::where('commune', $admin->communeM)
         ->where('agent_id', $admin->id); // Filtrage par agent
+    $query = Decesdeja::where('commune', $admin->communeM)
+        ->where('agent_id', $admin->id); // Filtrage par agent
 
     // Vérifier le type de recherche et appliquer le filtre
     if ($request->filled('searchType') && $request->filled('searchInput')) {
@@ -67,9 +92,10 @@ class DecesController extends Controller
 
     // Paginer les résultats
     $deces = $query->paginate(10);
+    $decesdeja = $query->paginate(10);
 
     // Passer les données à la vue
-    return view('deces.agentindex', compact('deces', 'alerts'));
+    return view('deces.agentindex', compact('deces','decesdeja', 'alerts'));
 }
 
     

@@ -209,6 +209,99 @@
         </div>
     </div>
 </div>
+
+  <!-- Row -->
+  <div class="row">
+    <!-- Datatables -->
+    <div class="col-lg-12">
+        <div class="card mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Les Décès Déclarés</h6>
+            </div>
+            <div class="table-responsive p-3">
+                <table class="table align-items-center table-flush" id="dataTable">
+                    <thead class="bg-navbar text-white">
+                        <tr style="font-size: 12px">
+                            <th>Demandeur</th>
+                            <th>Nom et prénoms du défunt</th>
+                            <th>Numéro du régistre</th>
+                            <th>Date du régistre</th>
+                            <th>Certificat Médical de Décès</th>
+                            <th>Premier Acte de décès</th>
+                            <th>Etat Actuel</th>
+                            <th>Agent</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($decesdeja as $dece)
+                        <tr style="font-size: 12px">
+                            <td>{{ $dece->user ? $dece->user->name : 'Demandeur inconnu' }}</td>
+                            <td>{{ $dece->name }}</td>
+                            <td>{{ $dece->numberR }}</td>
+                            <td>{{ $dece->dateR }}</td>
+                            <td>{{ $dece->CMD }}</td>
+                            <td>
+                                <div style="position: relative; width: 100px; height: 100px;">
+                                    <img src="{{ asset('storage/' . $dece->pActe) }}" 
+                                         alt="Pièce du déclarant" 
+                                         width="100" 
+                                         height="100" 
+                                         data-bs-toggle="modal" 
+                                         data-bs-target="#imageModal" 
+                                         onclick="showImage(this)" 
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                    <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
+                                        Aucun fichier
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="{{ $dece->etat == 'en attente' ? 'bg-warning' : ($dece->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
+                                {{ $dece->etat }}
+                            </td>
+                            <td>{{ $dece->agent ? $dece->agent->name . ' ' . $dece->agent->prenom : 'Non attribué' }}</td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="10" class="text-center">Aucune déclaration trouvée</td>
+                        </tr>
+                        @endforelse
+            
+                        <!-- Modal -->
+                        <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="imageModalLabel">Aperçu de l'image</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <img id="modalImage" src="{{ asset('assets/images/profiles/bébé.jpg') }}" alt="Image prévisualisée" class="img-fluid">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tbody>
+                </table>
+            </div>
+            
+            <script>
+                document.getElementById('searchInput').addEventListener('keyup', function() {
+                    const filter = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('#dataTable tbody tr');
+            
+                    rows.forEach(row => {
+                        const cells = row.querySelectorAll('td');
+                        const match = Array.from(cells).some(cell => 
+                            cell.textContent.toLowerCase().includes(filter)
+                        );
+                        row.style.display = match ? '' : 'none';
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+</div>
 @endsection
 
 <script>

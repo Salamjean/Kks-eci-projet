@@ -1,4 +1,3 @@
-
 @extends('vendor.layouts.template')
 
 @section('content')

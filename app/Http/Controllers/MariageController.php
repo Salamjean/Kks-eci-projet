@@ -58,6 +58,52 @@ class MariageController extends Controller
         // Retourner la vue avec les mariages filtrés et les alertes
         return view('mariages.index', compact('mariagesAvecFichiersSeulement', 'mariagesComplets', 'mariages', 'alerts'));
     }
+
+    public function userindex(Request $request)
+    {
+        // Récupérer l'admin connecté
+        $admin = Auth::user();
+
+        // Initialiser la requête pour Mariage et filtrer par commune de l'admin
+        $query = Mariage::where('commune', $admin->commune); // Filtrer par commune de l'admin connecté
+
+        // Vérifier le type de recherche et appliquer le filtre
+        if ($request->filled('searchType') && $request->filled('searchInput')) {
+            if ($request->searchType === 'nomConjoint') {
+                $query->where('nomEpoux', 'like', '%' . $request->searchInput . '%')
+                      ->orWhere('nomEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (nomEpoux, nomEpouse)
+            } elseif ($request->searchType === 'prenomConjoint') {
+                $query->where('prenomEpoux', 'like', '%' . $request->searchInput . '%')
+                      ->orWhere('prenomEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (prenomEpoux, prenomEpouse)
+            } elseif ($request->searchType === 'lieuNaissance') {
+                $query->where('lieuNaissanceEpoux', 'like', '%' . $request->searchInput . '%')
+                      ->orWhere('lieuNaissanceEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (lieuNaissanceEpoux, lieuNaissanceEpouse)
+            }
+        }
+
+        // Récupérer tous les mariages correspondant aux critères de filtrage
+        $mariages = $query->get();
+
+        // Filtrer les mariages où pieceIdentite et extraitMariage sont remplis et la commune est celle de l'admin
+        $mariagesAvecFichiersSeulement = $mariages->filter(function($mariage) use ($admin) {
+            return !is_null($mariage->pieceIdentite) && !is_null($mariage->extraitMariage) && $mariage->commune == $admin->commune;
+        });
+
+        // Filtrer les mariages où nomEpoux, prenomEpoux, dateNaissanceEpoux, lieuNaissanceEpoux, commune sont remplis
+        $mariagesComplets = $mariages->filter(function($mariage) {
+            return $mariage->nomEpoux && $mariage->prenomEpoux && $mariage->dateNaissanceEpoux &&
+                   $mariage->lieuNaissanceEpoux && $mariage->commune && $mariage->pieceIdentite && $mariage->extraitMariage;
+        });
+
+        // Récupérer toutes les alertes
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
+
+        // Retourner la vue avec les mariages filtrés et les alertes
+        return view('mariages.userindex', compact('mariagesAvecFichiersSeulement', 'mariagesComplets', 'mariages', 'alerts'));
+    }
     public function agentindex(Request $request)
     {
         // Récupérer l'admin connecté

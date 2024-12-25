@@ -38,6 +38,24 @@ class NaissanceController extends Controller
         // Retourner la vue avec les données
         return view('naissances.index', compact('naissances', 'alerts', 'naissancesD'));
     }
+    public function userindex()
+    {
+        // Récupérer l'admin connecté
+        $user = Auth::user();
+    
+        // Récupérer les alertes
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
+    
+        // Filtrer les naissances selon la commune de l'admin connecté
+        $naissances = Naissance::where('commune', $user->commune)->paginate(10); // Filtrage par commune
+        $naissancesD = NaissanceD::where('commune', $user->commune)->paginate(10); // Filtrage par commune
+    
+        // Retourner la vue avec les données
+        return view('naissances.userindex', compact('naissances', 'alerts', 'naissancesD'));
+    }
     public function agentindex()
 {
     // Récupérer l'admin connecté

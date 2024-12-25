@@ -28,14 +28,20 @@ button {
             cursor: pointer;
             font-size: 16px;
         }
+        a {
+            text-decoration: none;
+            color: black;
+        }
 
         a .edit {
             color: #28a745;
             transition: color 0.3s ease;
+            
         }
         a .eye {
             color: #3047b8;
             transition: color 0.3s ease;
+            text-decoration: none;
         }
 
         a .delete {
@@ -143,11 +149,16 @@ button {
                         <td>{{ $agent->contact }}</td>
                         <td>{{ $agent->commune }}</td>
                         <td>
+                            <form action="{{ route('agent.edit', $agent->id) }}" method="GET">
+                                @csrf
+                                <button style="margin-left:50%" type="submit" ><a href="{{ route('agent.edit', $agent->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
+                            </form>
+                        </td>
+                        <td>
                         <form action="{{ route('agent.delete', $agent->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet agent ?');" 
                             style="display: flex; justify-content:center; align-items:center">
                             @csrf
                             @method('DELETE')
-                            <button class="edit"><a href="{{ route('agent.edit', $agent->id) }}" class="edit"><i class="fas fa-edit" ></i></a></button>
                             <button type="submit" class="delete"><a href="{{ route('agent.delete', $agent->id) }}" class="delete"><i class="fas fa-trash"></i></button>
                         </form>
                     </td>

@@ -1,127 +1,134 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Déclaration d'Acte de Décès</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f7f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            box-sizing: border-box;
-        }
-        .conteneurInfo {
-            width: 100%;
-            max-width: 650px;
-            background-color: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-            padding: 2rem;
-            animation: fadeIn 1s ease;
-        }
-        h1 {
-            font-size: 2rem;
-            color: #1a5c58;
-            text-align: center;
-            margin-bottom: 1rem;
-        }
-        label {
-            display: block;
-            font-weight: bold;
-            color: #1a5c58;
-            margin-top: 1rem;
-        }
-        input[type="text"], input[type="file"],input[type="date"], select {
-            width: 100%;
-            padding: 0.8rem;
-            margin-top: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            background: #f9f9f9;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        select {
-            padding: 0.8rem;
-        }
-        .radio-group {
-            display: flex;
-            gap: 1rem;
-        }
-        .radio-group input[type="radio"] {
-            margin-top: 0;
-        }
-        button {
-            background-color: #3e8e41;
-            color: #ffffff;
-            cursor: pointer;
-            margin-top: 1rem;
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 10px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #144d4b;
-        }
-        .hidden {
-            display: none;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 20%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff;
-            padding: 1.5rem;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-    </style>
-</head>
-<body>
+@extends('utilisateur.layouts.template')
 
-    <form class="conteneurInfo" id="declarationForm" method="POST" enctype="multipart/form-data" action="{{ route('deces.storedeja') }}">
+@section('title', 'Demande d\'Acte de Décès')
+
+@section('content')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    /* Styles spécifiques au formulaire */
+    .conteneurInfo {
+        background: #ffffff;
+        padding: 30px 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        max-width: 600px;
+        margin: auto;
+        animation: fadeIn 0.6s ease-in-out;
+    }
+
+    h1 {
+        text-align: center;
+        color: #1a5c58;
+        margin-bottom: 1rem;
+    }
+
+    label {
+        font-weight: bold;
+        color: #1a5c58;
+        margin-top: 1rem;
+    }
+
+    input[type="text"], input[type="file"], input[type="date"] {
+        width: 100%;
+        padding: 0.8rem;
+        margin-top: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: #f9f9f9;
+        outline: none;
+    }
+
+    button {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: bold;
+        background-color: #3e8e41;
+        border: none;
+        border-radius: 8px;
+        color: #ffffff;
+        cursor: pointer;
+        margin-top: 2rem;
+    }
+
+    button:hover {
+        background-color: #144d4b;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+</style>
+
+@if (Session::get('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Succès',
+            text: '{{ Session::get('success') }}',
+            timer: 3000,
+            showConfirmButton: false,
+        });
+    </script>
+@endif
+
+
+@if (Session::get('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Succès',
+            text: '{{ Session::get('success') }}',
+            timer: 3000,
+            showConfirmButton: false,
+        });
+    </script>
+@endif
+
+@if (Session::get('error'))
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Erreur',
+            text: '{{ Session::get('error') }}',
+            timer: 3000,
+            showConfirmButton: false,
+        });
+    </script>
+@endif
+
+<div class="conteneurInfo">
+    <h1>Formulaire de Demande d'Acte de Décès</h1>
+    <form id="declarationForm" method="POST" enctype="multipart/form-data" action="{{ route('deces.storedeja') }}">
         @csrf
-        <h1>Demande d'Acte de Décès deja existant</h1>
+        <div class="form-group">
+            <label for="name">Nom et Prénoms du Défunt</label>
+            <input type="text" id="name" name="name" placeholder="Exemple : Jean Dupont" required>
+        </div>
 
-        
-        
-          <div class="form-group">
-            <label for="pieceIdentite">Entrez votre nom et Prenoms du défunt</label>
-            <input type="text" id="pieceIdentite" name="name" >
-          </div>
-  
-          <div class="form-group">
-            <label for="extraitMariage">Entrez le numéro de registre</label>
-            <input type="text" id="extraitMariage" name="numberR" >
-          </div>
-          <div class="form-group">
-            <label for="extraitMariage">Entrez la date de registre</label>
-            <input type="date" id="extraitMariage" name="dateR" >
-          </div>
-          <div class="form-group">
-            <label for="extraitMariage">N° du Certificat Médical de décès</label>
-            <input type="text" id="extraitMariage" name="CMD" >
-          </div>
-          <div class="form-group">
-            <label for="extraitMariage">Joindre le premier acte de décès</label>
-            <input type="file" id="extraitMariage" name="pActe" >
-          </div>
-          
-  
-          <form method="POST" action="{{ route('deces.storedeja') }}">
-            @csrf
-            <!-- Vos champs de formulaire ici -->
-            <button type="submit">Soumettre</button>
-        </form>
-</body>
-</html>
+        <div class="form-group">
+            <label for="numberR">Numéro de Registre</label>
+            <input type="text" id="numberR" name="numberR" placeholder="Exemple : 123456" required>
+        </div>
+
+        <div class="form-group">
+            <label for="dateR">Date de Registre</label>
+            <input type="date" id="dateR" name="dateR" required>
+        </div>
+
+        <div class="form-group">
+            <label for="CMD">Numéro du Certificat Médical de Décès</label>
+            <input type="text" id="CMD" name="CMD" placeholder="Exemple : CMD-2023-001" required>
+        </div>
+
+        <div class="form-group">
+            <label for="pActe">Joindre le Premier Acte de Décès (Scan ou PDF)</label>
+            <input type="file" id="pActe" name="pActe" accept=".pdf,.jpg,.png" required>
+        </div>
+
+        <button type="submit">Soumettre la Demande</button>
+    </form>
+</div>
+
+@endsection

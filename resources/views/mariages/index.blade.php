@@ -125,6 +125,7 @@
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
                             <tr  style="font-size: 12px">
+                                <th class="text-center">Nom du demandeur</th>
                                 <th class="text-center">Nom de l'Époux</th>
                                 <th class="text-center">Prénom de l'Époux</th>
                                 <th class="text-center">Date de Naissance</th>
@@ -139,6 +140,7 @@
                         <tbody>
                             @forelse ($mariagesComplets as $mariage)
                             <tr class="text-center" style="font-size: 12px">
+                                <td>{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}
                                 <td>{{ $mariage->nomEpoux }}</td>
                                 <td>{{ $mariage->prenomEpoux }}</td>
                                 <td>{{ $mariage->dateNaissanceEpoux }}</td>

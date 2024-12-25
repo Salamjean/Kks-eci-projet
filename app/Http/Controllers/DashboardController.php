@@ -43,16 +43,19 @@ class DashboardController extends Controller
         
             // Combiner toutes les collections
             $demandes = $naissances->concat($naissancesD)->concat($deces)->concat($mariages);
-        
+            $naissancesCount = Naissance::where('user_id', $user->id)->count();
+            $naissanceDCount = NaissanceD::where('user_id', $user->id)->count();
+            $decesCount = Deces::where('user_id', $user->id)->count();
+            $mariageCount = Mariage::where('user_id', $user->id)->count();
             // Compter le nombre total de demandes
             $nombreDemandes = $demandes->count();
         
-            return view('dashboard', compact('user', 'demandes', 'nombreDemandes','naissancesD'));
+            return view('utilisateur.dashboard', compact('user', 'demandes', 'nombreDemandes',
+            'naissancesD','naissancesCount','naissanceDCount','decesCount','mariageCount'));
         }
         
         return redirect()->route('login');
     }
-
     public function show($id)
     {
         // Trouver l'utilisateur par son ID

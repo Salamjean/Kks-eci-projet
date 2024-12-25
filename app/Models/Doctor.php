@@ -12,6 +12,7 @@ class Doctor extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'contact',
         'password',
         'nomHop',
         'commune',
