@@ -8,25 +8,25 @@
     <div>
       <!-- Logo principal agrandi -->
       <a class="navbar-brand brand-logo" href="index.html">
-        @if (Auth::user()->commune === 'Yopougon')
+        @if (Auth::user()->commune === 'yopougon')
         <img src="{{ asset('assets/images/profiles/yopougon.png') }}" alt="Logo Yopougon" style="height: 100px; width: auto;" />
-        @elseif (Auth::user()->commune === 'Marcory')
+        @elseif (Auth::user()->commune === 'marcory')
         <img src="{{ asset('assets/images/profiles/marcory.png') }}" alt="Logo Marcory" style="height: 100px; width: auto;" />
-        @elseif (Auth::user()->commune === 'Cocody')
+        @elseif (Auth::user()->commune === 'cocody')
         <img src="{{ asset('assets/images/profiles/cocody.png') }}" alt="Logo Cocody" style="height: 100px; width: auto;" />
         @elseif (Auth::user()->commune === 'abobo')
         <img src="{{ asset('assets/images/profiles/abobo.png') }}" alt="Logo Abobo" style="height: 100px; width: auto;" />
-        @elseif (Auth::user()->commune === 'Koumassi')
+        @elseif (Auth::user()->commune === 'koumassi')
         <img src="{{ asset('assets/images/profiles/koumassi.png') }}" alt="Logo Koumassi" style="height: 100px; width: auto;" />
-        @elseif (Auth::user()->commune === 'Port-Bouët')
+        @elseif (Auth::user()->commune === 'port-Bouët')
         <img src="{{ asset('assets/images/profiles/portbouet.png') }}" alt="Logo Port-Bouët" style="height: 100px; width: auto;" />
-        @elseif (Auth::user()->commune === 'Treichville')
+        @elseif (Auth::user()->commune === 'treichville')
         <img src="{{ asset('assets/images/profiles/treichville.png') }}" alt="Logo Treichville" style="height: 100px; width: auto;" />
-        @elseif (Auth::user()->commune === 'Attécoubé')
+        @elseif (Auth::user()->commune === 'attécoubé')
         <img src="{{ asset('assets/images/profiles/attecoube.png') }}" alt="Logo Attécoubé" style="height: 100px; width: auto;" />
-        @elseif (Auth::user()->commune === 'Adjamé')
-        <img src="{{ asset('assets/images/profiles/adjame.png') }}" alt="Logo Adjamé" style="height: 100px; width: auto;" />
-        @elseif (Auth::user()->commune === 'Songon')
+        @elseif (Auth::user()->commune === 'adjame')
+        <img src="{{ asset('assets/images/profiles/cocody.png') }}" alt="Logo Adjamé" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'songon')
         <img src="{{ asset('assets/images/profiles/songon.png') }}" alt="Logo Songon" style="height: 100px; width: auto;" />
         @else
         <img src="{{ asset('assets/images/logo.svg') }}" alt="Logo par défaut" style="height: 100px; width: auto;" />
@@ -46,7 +46,7 @@
   <div class="navbar-menu-wrapper" style="display: flex; justify-content:space-between">
     <ul class="navbar-nav">
       <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
-        <h1 class="welcome-text">Bienvenue, <span class="text-black fw-bold">{{ Auth::user()->name }}</span></h1>
+        <h1 class="welcome-text">Bienvenue, Mlle/Mme/M. <span class="text-black fw-bold">{{ Auth::user()->name }} {{ Auth::user()->prenom }}</span></h1>
         <h3 class="welcome-sub-text">Vous pouvez maintenant effectuer votre demande</h3>
       </li>
     </ul>
@@ -54,12 +54,21 @@
     <ul class="navbar-nav">
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-          <img class="img-xs rounded-circle" src="images/face8.jpg" alt="Profile image">
-        </a>
+          <img class="ms-user-img ms-img-round float-right" 
+               style="width: 50px; height: 40px; border-radius: 50%; object-fit: cover;" 
+               src="{{ optional(Auth::user())->profile_picture 
+                       ? asset('storage/' . Auth::user()->profile_picture) 
+                       : asset('assets/images/profiles/useriii.jpeg') }}" 
+               alt="Profile Picture">
+      </a>
+      
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
           <div class="dropdown-header text-center">
-            <img class="img-md rounded-circle" src="images/face8.jpg" alt="Profile image">
-            <p class="mb-1 mt-3 font-weight-semibold">{{ Auth::user()->name }}</p>
+            @if(Auth::check())
+              <p class="mb-1 mt-3 font-weight-semibold">
+                  {{ Auth::user()->name ?? 'Nom non défini' }} {{ Auth::user()->prenom ?? 'Prénom non défini' }}
+              </p>
+            @endif
             <p class="fw-light text-muted mb-0">{{ Auth::user()->email }}</p>
           </div>
           <a class="dropdown-item" href="{{ route('profile.edit') }}">

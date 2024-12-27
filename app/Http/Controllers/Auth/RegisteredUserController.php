@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
@@ -35,20 +36,35 @@ class RegisteredUserController extends Controller
         // Validation des données
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'prenom' => 'required',
             'email' => 'required|email|unique:users,email',
             'commune' => 'required',
             'password' => 'required|string|min:8|confirmed',
+            'profile_picture'=>'required',
         ]);
     
         // Création de l'utilisateur
-        User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-            'commune' => $validated['commune'],
-            'password' => bcrypt($validated['password']),
-        ]);
+        try {
+            $profilePicturePath = null;
+            if ($request->hasFile('profile_picture')) {
+                $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+                Log::info('Profile picture stored at: ' . $profilePicturePath);
+            }
     
-        // Redirection vers la page de connexion avec un message de succès
-        return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès. Connectez-vous.');
+            User::create([
+                'name' => $request->name,
+                'prenom' => $request->prenom,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'commune' => $request->commune,
+                'profile_picture' => $profilePicturePath,
+            ]);
+    
+            return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès. Vous pouvez vous connecter.');
+    
+        } catch (\Exception $e) {
+            Log::error('Error during registration: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Une erreur est survenue. Veuillez réessayer.'])->withInput();
+        }
     }
 }

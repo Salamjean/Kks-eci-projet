@@ -30,7 +30,7 @@
       </a>
       <div class="collapse" id="form-elements">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item"><a class="nav-link" href="{{ route('deces.create') }}">Extrait de décès avec certificat</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ route('deces.create') }}">Décès avec certificat</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('deces.createdeja') }}">Extrait de décès</a></li>
           <li class="nav-item"><a class="nav-link" href="{{ route('decesutilisateur.index') }}">Listes Extrait de décès</a></li>
         </ul>

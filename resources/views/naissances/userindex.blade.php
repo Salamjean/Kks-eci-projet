@@ -37,36 +37,47 @@
                         <div class="table-responsive mt-4">
                             <table class="table select-table">
                                 <thead class="bg-navbar text-white">
-                                    <tr class="text-center" style="font-size: 12px">
+                                    <tr class="text-center">
                                         <th>Demandeur</th>
                                         <th>Hôpital</th>
-                                        <th>Nom Du Nouveau Né</th>
-                                        <th>Date De Naissance</th>
-                                        <th>Lieu De Naissance</th>
-                                        <th>Pièce Du Parent</th>
-                                        <th>Certificat De Déclaration</th>
-                                        <th>Acte De Mariage</th>
+                                        <th>Nom et Prénoms de la mère</th>
+                                        <th>Nom et Prénoms (choisir) du né</th>
+                                        <th>Nom et Prénoms du père</th>
+                                        <th>Date de Naissance de l'enfant</th>
+                                        <th>CNI du père</th>
+                                        <th>Certificat Médical de Naissance</th>
                                         <th>Etat Actuel</th>
                                         <th>Agent</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($naissances as $naissance)
-                                    <tr class="text-center" style="font-size: 12px">
+                                    <tr class="text-center">
                                         <td>{{ $naissance->user ? $naissance->user->name : 'Demandeur inconnu' }}</td>
                                         <td>{{ $naissance->nomHopital }}</td>
                                         <td>{{ $naissance->nomDefunt }}</td>
-                                        <td>{{ $naissance->dateNaiss }}</td>
+                                        <td>{{ $naissance->nom . ' ' . $naissance->prenom }}</td>
+                                        <td>{{ $naissance->nompere . ' ' . $naissance->prenompere }}</td>
                                         <td>{{ $naissance->lieuNaiss }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" alt="Pièce du parent" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
+                                                 alt="Pièce du parent" 
+                                                 width="100" 
+                                                 height=auto
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" alt="Certificat de déclaration" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
-                                        </td>
-                                        <td>
-                                            <img src="{{ asset('storage/' . $naissance->acteMariage) }}" alt="Acte de mariage" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                            <span style="display: none; color: gray;">Aucun fichier</span>
+                                            <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" 
+                                                 alt="Certificat de déclaration" 
+                                                 width="100" 
+                                                 height=auto
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
                                             <span class="badge {{ $naissance->etat == 'en attente' ? 'badge-opacity-warning' : ($naissance->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}">
@@ -77,7 +88,7 @@
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="10" class="text-center">Aucune demande effectuée</td>
+                                        <td colspan="9" class="text-center">Aucune demande effectuée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -94,23 +105,36 @@
                                         <th>Demandeur</th>
                                         <th>Type de demande</th>
                                         <th>Nom sur l'extrait</th>
-                                        <th>numéro du registre</th>
+                                        <th>Numéro de régistre</th>
+                                        <th>Date de régistre</th>
+                                        <th>Pièce d'identité du demandeur</th>
                                         <th>Etat Actuel</th>
                                         <th>Agent</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($naissancesD as $naissanceD)
-                                    <tr class="text-center" style="font-size: 12px">
+                                    <tr class="text-center">
                                         <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
                                         <td>{{ $naissanceD->type }}</td>
-                                        <td>{{ $naissanceD->name }}</td>
+                                        <td>{{ $naissanceD->name.' '.$naissanceD->prenom }}</td>
                                         <td>{{ $naissanceD->number }}</td>
+                                        <td>{{ $naissanceD->DateR }}</td>
                                         <td>
-                                          <span class="badge {{ $naissanceD->etat == 'en attente' ? 'badge-opacity-warning' : ($naissanceD->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}">
-                                              {{ $naissanceD->etat }}
-                                          </span>
-                                      </td>
+                                            <img src="{{ asset('storage/' . $naissanceD->CNI) }}" 
+                                                 alt="Certificat de déclaration" 
+                                                 width="100" 
+                                                 height=auto
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                        </td>
+                                        <td>
+                                            <span class="badge {{ $naissanceD->etat == 'en attente' ? 'badge-opacity-warning' : ($naissanceD->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}">
+                                                {{ $naissanceD->etat }}
+                                            </span>
+                                        </td>
                                         <td>{{ $naissanceD->agent ? $naissanceD->agent->name . ' ' . $naissanceD->agent->prenom : 'Non attribué' }}</td>
                                     </tr>
                                     @empty

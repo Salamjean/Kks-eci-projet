@@ -9,6 +9,7 @@ class NaissanceD extends Model
     protected $fillable = [
         'type',
         'name',
+        'prenom',
         'number',
         'commune',
         'etat',

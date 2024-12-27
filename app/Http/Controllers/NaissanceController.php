@@ -159,7 +159,6 @@ class NaissanceController extends Controller
 
     public function store(saveNaissanceRequest $request)
 {
-
     $imageBaseLink = '/images/naissances/';
     
     // Liste des fichiers à traiter
@@ -196,6 +195,11 @@ class NaissanceController extends Controller
     $naissance->cdnaiss = $uploadedPaths['cdnaiss'] ?? null;
     $naissance->acteMariage = $uploadedPaths['acteMariage'] ?? null;
     $naissance->commune = $user->commune;
+    $naissance->nom = $request->nom;
+    $naissance->prenom = $request->prenom;
+    $naissance->nompere = $request->nompere;
+    $naissance->prenompere = $request->prenompere;
+    $naissance->datepere = $request->datepere;
     $naissance->etat = 'en attente';
     $naissance->user_id = $user->id;  // Lier la demande à l'utilisateur connecté
     

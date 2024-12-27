@@ -8,6 +8,7 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.0",
         "endroid/qr-code": "^5.0",
+        "intervention/image": "^3.10",
         "laravel/breeze": "^2.2",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",

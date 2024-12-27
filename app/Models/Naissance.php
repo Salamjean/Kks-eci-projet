@@ -15,6 +15,11 @@ class Naissance extends Model
         'cdnaiss',
         'acteMariage',
         'commune',
+        'nom',
+        'prenom',
+        'nompere',
+        'prenompere',
+        'datepere',
         'etat',
         'user_id',  // Ajout de user_id
         'agent_id',  // Ajout de agent_id

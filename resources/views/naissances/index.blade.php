@@ -74,9 +74,8 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Listes des demandes d'extrait de Naissance</h1>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="./">Home</a></li>
-        <li class="breadcrumb-item">Tables</li>
-        <li class="breadcrumb-item active" aria-current="page">DataTables</li>
+        <li class="breadcrumb-item"><a href="{{ route('vendor.dashboard') }}">Accueil</a></li>
+        <li class="breadcrumb-item">Listes</li>
       </ol>
     </div>
 
@@ -97,12 +96,12 @@
                     <tr style="font-size: 12px">
                         <th>Demandeur</th>
                         <th>Hôpital</th>
-                        <th>Nom Du Nouveau Né</th>
-                        <th>Date De Naissance</th>
-                        <th>Lieu De Naissance</th>
-                        <th>Pièce Du Parent</th>
-                        <th>Certificat De Déclaration</th>
-                        <th>Acte De Mariage</th>
+                        <th>Nom et Prénoms de la mère</th>
+                        <th>Nom et Prénoms (choisir) du né</th>
+                        <th>Nom et Prénoms du père</th>
+                        <th>Date de Naissance de l'enfant</th>
+                        <th>CNI du père</th>
+                        <th>Certificat Médical de Naissance</th>
                         <th>Etat Actuel</th>
                         <th>Agent</th>
                     </tr>
@@ -114,7 +113,8 @@
                         <td>{{ $naissance->user ? $naissance->user->name : 'Demandeur inconnu' }}</td>
                         <td>{{ $naissance->nomHopital }}</td>
                         <td>{{ $naissance->nomDefunt }}</td>
-                        <td>{{ $naissance->dateNaiss }}</td>
+                        <td>{{ $naissance->nom . ' ' . $naissance->prenom }}</td>
+                        <td>{{ $naissance->nompere . ' ' . $naissance->prenompere }}</td>
                         <td>{{ $naissance->lieuNaiss }}</td>
                         <td>
                             <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
@@ -135,21 +135,6 @@
                                  data-bs-target="#imageModal" 
                                  onclick="showImage(this)" 
                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
-                        </td>
-                        <td>
-                            <div style="position: relative; width: 100px; height: 100px;">
-                                <img src="{{ asset('storage/' . $naissance->acteMariage) }}" 
-                                     alt="Acte de mariage" 
-                                     width="100" 
-                                     height=auto
-                                     data-bs-toggle="modal" 
-                                     data-bs-target="#imageModal" 
-                                     onclick="showImage(this)" 
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                    Aucun fichier
-                                </span>
-                            </div>
                         </td>
                         <td class="{{ $naissance->etat == 'en attente' ? 'bg-warning' : ($naissance->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                             {{ $naissance->etat }}
@@ -222,8 +207,10 @@
                             <tr style="font-size: 12px">
                                 <th>Demandeur</th>
                                 <th>Type de demande</th>
-                                <th>Pièce Du Parent</th>
-                                <th>Certificat De Déclaration</th>
+                                <th>Nom sur l'extrait</th>
+                                <th>Numéro de régistre</th>
+                                <th>Date de régistre</th>
+                                <th>Pièce d'identité du demandeur</th>
                                 <th>Etat Actuel</th>
                                 <th>Agent</th>
                             </tr>
@@ -236,6 +223,17 @@
                                 <td>{{ $naissanceD->type }}</td>
                                 <td>{{ $naissanceD->name }}</td>
                                 <td>{{ $naissanceD->number }}</td>
+                                <td>{{ $naissanceD->DateR }}</td>
+                                <td>
+                                    <img src="{{ asset('storage/' . $naissanceD->CNI) }}" 
+                                         alt="Certificat de déclaration" 
+                                         width="100" 
+                                         height=auto
+                                         data-bs-toggle="modal" 
+                                         data-bs-target="#imageModal" 
+                                         onclick="showImage(this)" 
+                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                </td>
                                 <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                     {{ $naissanceD->etat }}
                                 </td>

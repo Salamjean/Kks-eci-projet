@@ -5,6 +5,12 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
+     body {
+        background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}'); /* Remplacez par le chemin de votre image */
+        background-size: cover; /* Pour couvrir l'ensemble de la zone */
+        background-position: center; /* Centre l'image */
+        min-height: 100vh; /* Hauteur minimale pour remplir la page */
+    }
     /* Styles spécifiques au formulaire */
     .conteneurInfo {
         background: #ffffff;
@@ -20,6 +26,7 @@
         text-align: center;
         color: #1a5c58;
         margin-bottom: 1rem;
+        font-size: 40px;
     }
 
     label {
@@ -99,7 +106,7 @@
 @endif
 
 <div class="conteneurInfo">
-    <h1>Formulaire de Demande d'Acte de Décès</h1>
+    <h1>Demande d'acte de Décès</h1>
     <form id="declarationForm" method="POST" enctype="multipart/form-data" action="{{ route('deces.storedeja') }}">
         @csrf
         <div class="form-group">
@@ -127,7 +134,7 @@
             <input type="file" id="pActe" name="pActe" accept=".pdf,.jpg,.png" required>
         </div>
 
-        <button type="submit">Soumettre la Demande</button>
+        <button type="submit">Soumettre</button>
     </form>
 </div>
 

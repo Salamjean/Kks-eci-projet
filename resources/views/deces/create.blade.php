@@ -3,6 +3,12 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
+     body {
+        background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}'); /* Remplacez par le chemin de votre image */
+        background-size: cover; /* Pour couvrir l'ensemble de la zone */
+        background-position: center; /* Centre l'image */
+        min-height: 100vh; /* Hauteur minimale pour remplir la page */
+    }
     /* Style pour le formulaire */
     .conteneurInfo {
         background: #ffffff;
@@ -23,6 +29,7 @@
         text-align: center;
         color: #1a5c58;
         margin-bottom: 1rem;
+        font-size: 40px;
     }
 
     label {
@@ -61,6 +68,21 @@
     .hidden {
         display: none;
     }
+    
+    .form-row {
+        display: flex; 
+        justify-content: space-between; 
+        gap: 10px;
+    }
+
+    .half-width {
+        flex: 1; 
+        margin-right: 10px;
+    }
+
+    .half-width:last-child {
+        margin-right: 0; 
+    }
 </style>
 
 @if (Session::get('success'))
@@ -88,11 +110,11 @@
 @endif
 
 <div class="conteneurInfo">
-    <h1>Demande d'Acte de Décès</h1>
+    <h1>Demande d'acte de Décès</h1>
     <form method="POST" action="{{ route('deces.store') }}" enctype="multipart/form-data" id="declarationForm">
         @csrf
 
-        <div class="form-group">
+        <div class="form-group text-center">
             <label for="dossierNum">Numéro de Dossier Médical</label>
             <input type="text" id="dossierNum" name="dossierNum" value="{{ old('dossierNum') }}" placeholder="Ex: CMD1411782251">
             @error('dossierNum')
@@ -101,37 +123,57 @@
         </div>
 
         <div id="infoDefunt" class="hidden">
-            <div class="form-group">
-                <label for="nomHopital">Nom de l'Hôpital</label>
-                <input type="text" id="nomHopital" name="nomHopital" readonly>
+            <div class="form-row">    
+                <div class="form-group half-width text-center">
+                    <label for="nomHopital">Nom de l'Hôpital</label>
+                    <input type="text" id="nomHopital" name="nomHopital" readonly>
+                </div>
+
+                <div class="form-group half-width text-center">
+                    <label for="nomDefunt">Nom du Défunt</label>
+                    <input type="text" id="nomDefunt" name="nomDefunt" readonly>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="nomDefunt">Nom du Défunt</label>
-                <input type="text" id="nomDefunt" name="nomDefunt" readonly>
-            </div>
+            <div class="form-row">
+                <div class="form-group text-center">
+                    <label for="dateNaiss">Date de Naissance</label>
+                    <input type="text" id="dateNaiss" name="dateNaiss" readonly>
+                </div>
 
-            <div class="form-group">
-                <label for="dateNaiss">Date de Naissance</label>
-                <input type="text" id="dateNaiss" name="dateNaiss" readonly>
+                <div class="form-group text-center">
+                    <label for="dateDeces">Date de Décès</label>
+                    <input type="text" id="dateDces" name="dateDces" readonly>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="dateDeces">Date de Décès</label>
-                <input type="text" id="dateDces" name="dateDces" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="lieuNaiss">Lieu de Naissance</label>
-                <input type="text" id="lieuNaiss" name="lieuNaiss" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="identiteDeclarant">Pièce d'Identité du Déclarant</label>
-                <input type="file" id="identiteDeclarant" name="identiteDeclarant">
-                @error('identiteDeclarant')
+            <div class="form-row">
+                <div class="form-group text-center half-width">
+                    <label for="lieuNaiss">Lieu de Naissance</label>
+                    <input type="text" id="lieuNaiss" name="lieuNaiss" readonly>
+                </div>
+                <div class="form-group half-width">
+                    <label for="identiteDeclarant">Pièce d'Identité du défunt</label>
+                    <input type="file" id="identiteDeclarant" name="identiteDeclarant">
+                    @error('identiteDeclarant')
                     <span style="color: red">{{ $message }}</span>
-                @enderror
+                    @enderror
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group text-center half-width">
+                    <label for="identiteDeclarant">Certificat Médical de décès</label>
+                    <input type="file" id="acteMariage" name="acteMariage">
+                    @error('acteMariage')
+                        <span style="color: red">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group text-center half-width">
+                    <label for="deParLaLoi">De par la loi</label>
+                    <input type="file" id="deParLaLoi" name="deParLaLoi">
+                    @error('deParLaLoi')
+                        <span style="color: red">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
         </div>
 

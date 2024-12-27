@@ -5,13 +5,20 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <style>
+    body {
+        background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}'); /* Remplacez par le chemin de votre image */
+        background-size: cover; /* Pour couvrir l'ensemble de la zone */
+        background-position: center; /* Centre l'image */
+        min-height: 100vh; /* Hauteur minimale pour remplir la page */
+    }
+
     /* Styles pour le formulaire */
     .conteneurInfo {
-        background: #ffffff;
+        background: rgba(255, 255, 255, 0.8); /* Fond blanc avec transparence */
         padding: 30px 40px;
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        max-width: 600px;
+        max-width: 800px; /* Augmenté pour la nouvelle colonne */
         margin: auto;
         animation: fadeIn 0.6s ease-in-out;
     }
@@ -20,7 +27,6 @@
         from {
             opacity: 0;
         }
-
         to {
             opacity: 1;
         }
@@ -30,6 +36,7 @@
         text-align: center;
         color: #1a5c58;
         margin-bottom: 1rem;
+        font-size: 40px;
     }
 
     label {
@@ -38,7 +45,7 @@
         margin-top: 1rem;
     }
 
-    input[type="text"], input[type="file"] {
+    input[type="text"], input[type="file"], input[type="date"] {
         width: 100%;
         padding: 0.8rem;
         margin-top: 0.5rem;
@@ -67,6 +74,27 @@
 
     .hidden {
         display: none;
+    }
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: -0.5rem;
+    }
+
+    .form-group {
+        padding: 0.5rem;
+        flex: 1; /* Prend tout l'espace disponible */
+    }
+
+    .form-group.half-width {
+        flex: 0 0 50%; /* 50% de la largeur pour deux colonnes */
+    }
+
+    @media (max-width: 768px) {
+        .form-group.half-width {
+            flex: 0 0 100%; /* 100% de la largeur sur mobile */
+        }
     }
 </style>
 
@@ -97,14 +125,14 @@
 
 <!-- Contenu du formulaire -->
 <div class="conteneurInfo">
-    <h1>Demande d'Acte de Naissance</h1>
+    <h1>Demande d'acte de Naissance</h1>
     <form id="naissanceForm" method="POST" action="{{ route('naissance.store') }}" enctype="multipart/form-data">
         @csrf
 
         <!-- Saisie du numéro de dossier médical -->
-        <div class="form-group">
+        <div class="form-group" class="text-center">
             <label for="dossierNum">Numéro de Dossier Médical</label>
-            <input type="text" id="dossierNum" name="dossierNum" value="{{ old('dossierNum') }}" placeholder="Ex: CMN1411782251">
+            <input class="text-center" type="text" id="dossierNum" name="dossierNum" value="{{ old('dossierNum') }}" placeholder="Ex: CMN1411782251">
             @error('dossierNum')
             <span style="color: red">{{ $message }}</span>
             @enderror
@@ -112,36 +140,61 @@
 
         <!-- Section masquée avec les informations récupérées -->
         <div id="infoDefunt" class="hidden">
-            <div class="form-group">
+            <div class="form-group text-center">
                 <label for="nomHopital">Nom de l'Hôpital</label>
-                <input type="text" id="nomHopital" name="nomHopital" readonly>
+                <input class="text-center" type="text" id="nomHopital" name="nomHopital" readonly>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="nomDefunt">Nom et Prénom de la Mère</label>
+                    <input type="text" id="nomDefunt" name="nomDefunt" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label for="dateNaiss">Nom et Prénom de l'accompagnateur</label>
+                    <input type="text" id="dateNaiss" name="dateNaiss" readonly>
+                </div>
+            </div>
+            <h4 class="text-center">Les informations concernant l'enfant</h4>
+            <div class="form-row">
+                <div class="form-group half-width">
+                    <label for="lieuNaiss">Date de Naissance de l'Enfant</label>
+                    <input type="text" id="lieuNaiss" name="lieuNaiss" readonly>
+                </div>
+                <div class="form-group half-width">
+                    <label for="nom">Nom du nouveau né</label>
+                    <input type="text" id="nom" name="nom" placeholder="Entrez le nom du nouveau né">
+                </div>
+                <div class="form-group">
+                    <label for="prenom">Prénoms du nouveau né</label>
+                    <input type="text" id="prenom" name="prenom" placeholder="Entrez les prénoms du nouveau né">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="nomDefunt">Nom et Prénom de la Mère</label>
-                <input type="text" id="nomDefunt" name="nomDefunt" readonly>
+            <h4 class="text-center">Les informations concernant le père</h4>
+            <div class="form-row">
+                <div class="form-group half-width">
+                    <label for="nompere">Nom du père</label>
+                    <input type="text" id="nompere" name="nompere" placeholder="Entrez le nom du père">
+                </div>
+                <div class="form-group half-width">
+                    <label for="prenompere">Prénoms du père</label>
+                    <input type="text" id="prenompere" name="prenompere" placeholder="Entrez les prénoms du père">
+                </div>
+                <div class="form-group half-width">
+                    <label for="datepere">Date de naissance du père</label>
+                    <input type="date" id="datepere" name="datepere">
+                </div>
+                <div class="form-group half-width">
+                    <label for="identiteDeclarant">Pièce d'Identité du Père</label>
+                    <input type="file" id="identiteDeclarant" name="identiteDeclarant">
+                    @error('identiteDeclarant')
+                    <span style="color: red">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="dateNaiss">Nom et Prénom du Père</label>
-                <input type="text" id="dateNaiss" name="dateNaiss" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="lieuNaiss">Date de Naissance de l'Enfant</label>
-                <input type="text" id="lieuNaiss" name="lieuNaiss" readonly>
-            </div>
-
-            <!-- Téléchargement des documents -->
-            <div class="form-group">
-                <label for="identiteDeclarant">Pièce d'Identité du Père</label>
-                <input type="file" id="identiteDeclarant" name="identiteDeclarant">
-                @error('identiteDeclarant')
-                <span style="color: red">{{ $message }}</span>
-                @enderror
-            </div>
-
-            <div class="form-group">
+            <div class="form-group text-center">
                 <label for="cdnaiss">Certificat de Déclaration de Naissance</label>
                 <input type="file" id="cdnaiss" name="cdnaiss">
                 @error('cdnaiss')

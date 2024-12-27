@@ -4,12 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Connexion / Inscription</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
     @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 
     * { box-sizing: border-box; }
-    body { background-image: url({{ asset('assets/images/profiles/userbg.jpg') }});
-    background-size: cover; display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: 'Montserrat', sans-serif; height: 100vh; margin: -20px 0 50px; }
+    body {display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: 'Montserrat', sans-serif; height: 100vh; margin: -20px 0 50px;
+    background-image: url({{ asset('assets/images/profiles/userbg.jpg') }});
+    background-size: cover;
+   }
     h1 { font-weight: bold; margin: 0; }
     h2 { text-align: center; }
     p { font-size: 14px; font-weight: 100; line-height: 20px; letter-spacing: 0.5px; margin: 20px 0 30px; }
@@ -21,7 +25,7 @@
     button.ghost { background-color: transparent; border-color: #FFFFFF; }
     form { background-color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 0 50px; height: 100%; text-align: center; }
     input, select { background-color: #eee; border: none; padding: 12px 15px; margin: 8px 0; width: 100%; }
-    .container { background-color: #fff; border-radius: 10px; box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); position: relative; overflow: hidden; width: 768px; max-width: 100%; min-height: 480px; }
+    .container { background-color: #fff; border-radius: 10px; box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); position: relative; overflow: hidden; width: 768px; max-width: 100%; min-height: 600px; }
     .form-container { position: absolute; top: 0; height: 100%; transition: all 0.6s ease-in-out; }
     .sign-in-container { left: 0; width: 50%; z-index: 2; }
     .container.right-panel-active .sign-in-container { transform: translateX(100%); }
@@ -46,10 +50,11 @@
   <div class="container" id="container">
     <!-- Formulaire d'inscription -->
     <div class="form-container sign-up-container">
-      <form method="POST" action="{{ route('register') }}">
+      <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
         <h1>Créez votre compte</h1>
-        <input type="text" name="name" placeholder="Nom" required />
+        <input type="text" name="name" placeholder="Votre nom" required />
+        <input type="text" name="prenom" placeholder="Votre prénom" required />
         <input type="email" name="email" placeholder="Email" required />
         <input type="password" name="password" placeholder="Mot de passe" required />
         <input type="password" name="password_confirmation" placeholder="Confirmer le mot de passe" required />
@@ -128,7 +133,16 @@
             <option value="boura">Boura</option>
             <option value="bofora">Bofora</option>
             <option value="zagoua">Zagoua</option>
-        </select>
+        </select><br>
+        <div class="flex-column">
+          <label>Photo de Profil</label>
+      <div class="inputForm">
+          <input type="file" name="profile_picture" class="input" />
+          @error('profile_picture')
+          <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
+          @enderror
+      </div>
+    </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -151,6 +165,12 @@
       <form method="POST" action="{{ route('login') }}">
         @csrf
 
+        @if (Session::get('success'))
+        <div style="text-align:center; color:green ">
+            {{ Session::get('success') }}
+        </div>
+        @endif
+        
         @error('email')
         <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
         @enderror
@@ -159,7 +179,9 @@
         @enderror
         <h1>Se connecter</h1>
         <input type="email" name="email" placeholder="Email" required />
+       
         <input type="password" name="password" placeholder="Mot de passe" required />
+       
         <a href="{{ route('password.request') }}">Mot de passe oublié?</a>
         <button type="submit">Connexion</button>
       </form>
@@ -180,12 +202,27 @@
       </div>
     </div>
   </div>
+  
   <script>
     const signUpButton = document.getElementById('signUp');
     const signInButton = document.getElementById('signIn');
     const container = document.getElementById('container');
+
+    // Gestion des événements pour les boutons
     signUpButton.addEventListener('click', () => container.classList.add("right-panel-active"));
     signInButton.addEventListener('click', () => container.classList.remove("right-panel-active"));
-  </script>
+
+    // Affichage du pop-up après l'inscription réussie
+    document.addEventListener('DOMContentLoaded', function() {
+        @if (session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Inscription réussie',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'OK'
+            });
+        @endif
+    });
+</script>
 </body>
 </html>

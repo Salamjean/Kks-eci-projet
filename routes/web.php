@@ -35,7 +35,7 @@ Route::get('/admin/login', function () {
 //Routes utilisateur 
 Route::prefix('utilisateur')->group(function () {
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('utilisateur.dashboard');
+    Route::middleware('utilisateur')->get('/dashboard', [DashboardController::class, 'index'])->name('utilisateur.dashboard');
     Route::get('/index', [NaissanceController::class, 'userindex'])->name('utilisateur.index');
     Route::get('/deces-index', [DecesController::class, 'userindex'])->name('decesutilisateur.index');
     Route::get('/mariage-index', [MariageController::class, 'userindex'])->name('mariage.userindex');

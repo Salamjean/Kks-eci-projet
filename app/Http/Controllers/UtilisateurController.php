@@ -12,6 +12,7 @@ use App\Models\Utilisateur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class UtilisateurController extends Controller
 {
@@ -59,55 +60,52 @@ class UtilisateurController extends Controller
         
         return redirect()->route('login');
     }
-public function handleRegister(Request $request)
-    {
+    public function handleRegister(Request $request)
+{
+    $request->validate([
+        'name' => 'required',
+        'prenom' => 'required',
+        'email' => 'required|email|unique:users,email', // Assurez-vous que la table est correcte
+        'password' => 'required|min:8',
+        'nomHop' => 'required',
+        'commune' => 'required',
+        'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ], [
+        'name.required' => 'Le nom est obligatoire.',
+        'prenom.required' => 'Le prénom est obligatoire.',
+        'email.required' => 'L\'adresse e-mail est obligatoire.',
+        'email.email' => 'Veuillez fournir une adresse e-mail valide.',
+        'email.unique' => 'Cette adresse e-mail existe déjà.',
+        'password.required' => 'Le mot de passe est obligatoire.',
+        'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
+        'profile_picture.image' => 'La photo de profil doit être une image.',
+        'profile_picture.mimes' => 'Les formats d\'image autorisés sont jpeg, png, jpg, gif, svg.',
+        'profile_picture.max' => 'L\'image ne doit pas dépasser 2 Mo.',
+        'nomHop.required' => 'Le nom de l\'hôpital est obligatoire.',
+        'commune.required' => 'La commune est obligatoire.',
+    ]);
 
-        // Validation des données
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:doctors,email',
-            'password' => 'required|min:8',
-            'nomHop'=>'required',
-            'commune' => 'required',
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validation de l'image
-            
-        ], [
-            'name.required' => 'Le nom est obligatoire.',
-            'email.required' => 'L\'adresse e-mail est obligatoire.',
-            'email.email' => 'Veuillez fournir une adresse e-mail valide.',
-            'email.unique' => 'Cette adresse e-mail existe déjà.',
-            'password.required' => 'Le mot de passe est obligatoire.',
-            'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
-            'profile_picture.image' => 'La photo de profil doit être une image.',
-            'profile_picture.mimes' => 'Les formats d\'image autorisés sont jpeg, png, jpg, gif, svg.',
-            'profile_picture.max' => 'L\'image ne doit pas dépasser 2 Mo.',
-            'nomHop.required' => 'Le nom de l\'hôpital est obligatoire.',
-            'commune.required' => 'La commune est obligatoire.',
-        ]);
-        
-        try {
-            // Traitement de la photo de profil si elle existe
-            $profilePicturePath = null;
-            if ($request->hasFile('profile_picture')) {
-                // Générer un nom unique pour l'image et la sauvegarder dans le dossier 'profile_pictures'
-                $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
-            }
-            
-            // Création du nouveau compte
-            $utilisateur = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'commune' => $request->commune,
-                'profile_picture' => $profilePicturePath, // Sauvegarde du chemin de l'image
-            ]);
-    
-            // Redirection avec un message de succès
-            return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès. Vous pouvez vous connecter.');
-            
-        } catch (\Exception $e) {
-            // En cas d'erreur inattendue
-            return back()->withErrors(['error' => 'Une erreur est survenue. Veuillez réessayer.'])->withInput();
+    try {
+        $profilePicturePath = null;
+        if ($request->hasFile('profile_picture')) {
+            $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+            Log::info('Profile picture stored at: ' . $profilePicturePath);
         }
+
+        $utilisateur = User::create([
+            'name' => $request->name,
+            'prenom' => $request->prenom,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'commune' => $request->commune,
+            'profile_picture' => $profilePicturePath,
+        ]);
+
+        return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès. Vous pouvez vous connecter.');
+
+    } catch (\Exception $e) {
+        Log::error('Error during registration: ' . $e->getMessage());
+        return back()->withErrors(['error' => 'Une erreur est survenue. Veuillez réessayer.'])->withInput();
     }
+}
 }

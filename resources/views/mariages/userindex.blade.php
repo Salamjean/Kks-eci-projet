@@ -7,7 +7,7 @@
             <div class="card-body">
                 <div class="d-sm-flex justify-content-between align-items-start mb-4">
                     <h4 class="card-title card-title-dash">Listes des demandes d'extrait effectuée</h4>
-                    <a href="{{ route('naissance.create') }}">
+                    <a href="{{ route('mariage.create') }}">
                         <button class="btn btn-primary btn-lg text-white" type="button">Faire une nouvelle demande</button>
                     </a>
                 </div>
@@ -32,13 +32,13 @@
                                         <th class="text-center">Nom du demandeur</th>
                                         <th class="text-center">Pièce d'Identité</th>
                                         <th class="text-center">Extrait de Mariage</th>
-                                        <th>Etat Actuel</th>
-                                        <th>Agent</th>
+                                        <th class="text-center">Etat Actuel</th>
+                                        <th class="text-center">Agent</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($mariagesAvecFichiersSeulement as $mariage)
-                                    <tr style="font-size: 12px">
+                                    <tr class="text-center" style="font-size: 12px">
                                         <td>{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
                                         <td class="text-center">
                                             <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 
@@ -86,14 +86,14 @@
                                         <th class="text-center">Lieu de Naissance</th>
                                         <th class="text-center">Pièce d'Identité</th>
                                         <th class="text-center">Extrait de Mariage</th>
-                                        <th>Etat Actuel</th>
-                                        <th>Agent</th>
+                                        <th class="text-center">Etat Actuel</th>
+                                        <th class="text-center">Agent</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($mariagesComplets as $mariage)
                                     <tr class="text-center" style="font-size: 12px">
-                                        <td>{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
+                                        <td >{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
                                         <td>{{ $mariage->nomEpoux }}</td>
                                         <td>{{ $mariage->prenomEpoux }}</td>
                                         <td>{{ $mariage->dateNaissanceEpoux }}</td>

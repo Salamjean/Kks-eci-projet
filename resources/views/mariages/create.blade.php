@@ -4,6 +4,12 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
+        body {
+    background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}'); /* Remplacez par le chemin de votre image */
+    background-size: cover; /* Pour couvrir l'ensemble de la zone */
+    background-position: center; /* Centre l'image */
+    min-height: 100vh; /* Hauteur minimale pour remplir la page */
+}
         /* Style pour le formulaire */
         .conteneurInfo {
             background: #ffffff;
@@ -20,10 +26,11 @@
             to { opacity: 1; }
         }
 
-        h1 {
+        h2 {
             text-align: center;
             color: #1a5c58;
             margin-bottom: 1rem;
+            font-size: 40px;
         }
 
         label {
@@ -89,7 +96,7 @@
     @endif
 
     <div class="conteneurInfo">
-        <h1>Demande d'acte de Mariage</h1>
+        <h2>Demande d'acte de Mariage</h2>
         <form id="demandeForm" method="POST" enctype="multipart/form-data" action="{{ route('mariage.store') }}">
             @csrf
 

@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('naissance_d_s', function (Blueprint $table) {
             $table->id();
             $table->string('type'); // Type de demande
+            $table->string('pour'); // pour qui la demande
             $table->string('name'); // Nom de la demande
+            $table->string('prenom'); // Prenom de la demande
             $table->string('number'); // Numéro associé
+            $table->string('DateR'); // Numéro associé
+            $table->string('CNI'); // Numéro associé
             $table->string('commune')->nullable(); // Commune, nullable
             $table->string('etat')->default('en attente'); // État par défaut
             $table->boolean('is_read')->default(false); // Statut de lecture

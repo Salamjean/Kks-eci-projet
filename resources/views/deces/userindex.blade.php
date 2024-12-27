@@ -59,13 +59,10 @@
                                             <img src="{{ asset('storage/' . $deceD->identiteDeclarant) }}" alt="Pièce du parent" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $deceD->cdnaiss) }}" alt="Certificat de déclaration" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            <img src="{{ asset('storage/' . $deceD->acteMariage) }}" alt="Certificat de déclaration" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <div style="position: relative; width: 100px; height: 100px;">
-                                                <img src="{{ asset('storage/' . $deceD->acteMariage) }}" alt="Acte de mariage" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                                <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">Aucun fichier</span>
-                                            </div>
+                                            <img src="{{ asset('storage/' . $deceD->deParLaLoi) }}" alt="Certificat de déclaration" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
                                             <span class="badge {{ $deceD->etat == 'en attente' ? 'badge-opacity-warning' : ($deceD->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">
@@ -109,10 +106,7 @@
                                         <td>{{ $dece->dateR }}</td>
                                         <td>{{ $dece->CMD }}</td>
                                         <td>
-                                            <div style="position: relative; width: 100px; height: 100px;">
-                                                <img src="{{ asset('storage/' . $dece->pActe) }}" alt="Pièce du déclarant" width="100" height="100" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                                <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">Aucun fichier</span>
-                                            </div>
+                                            <img src="{{ asset('storage/' . $dece->pActe) }}" alt="Certificat de déclaration" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
                                             <span class="badge {{ $dece->etat == 'en attente' ? 'badge-opacity-warning' : ($dece->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">

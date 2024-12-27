@@ -25,7 +25,7 @@
     button.ghost { background-color: transparent; border-color: #FFFFFF; }
     form { background-color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 0 50px; height: 100%; text-align: center; }
     input, select { background-color: #eee; border: none; padding: 12px 15px; margin: 8px 0; width: 100%; }
-    .container { background-color: #fff; border-radius: 10px; box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); position: relative; overflow: hidden; width: 768px; max-width: 100%; min-height: 480px; }
+    .container { background-color: #fff; border-radius: 10px; box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); position: relative; overflow: hidden; width: 768px; max-width: 100%; min-height: 600px; }
     .form-container { position: absolute; top: 0; height: 100%; transition: all 0.6s ease-in-out; }
     .sign-in-container { left: 0; width: 50%; z-index: 2; }
     .container.right-panel-active .sign-in-container { transform: translateX(100%); }
@@ -50,10 +50,11 @@
   <div class="container" id="container">
     <!-- Formulaire d'inscription -->
     <div class="form-container sign-up-container">
-      <form method="POST" action="{{ route('register') }}">
+      <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
         <h1>Créez votre compte</h1>
-        <input type="text" name="name" placeholder="Nom" required />
+        <input type="text" name="name" placeholder="Votre nom" required />
+        <input type="text" name="prenom" placeholder="Votre prénom" required />
         <input type="email" name="email" placeholder="Email" required />
         <input type="password" name="password" placeholder="Mot de passe" required />
         <input type="password" name="password_confirmation" placeholder="Confirmer le mot de passe" required />
@@ -132,7 +133,16 @@
             <option value="boura">Boura</option>
             <option value="bofora">Bofora</option>
             <option value="zagoua">Zagoua</option>
-        </select>
+        </select><br>
+        <div class="flex-column">
+          <label>Photo de Profil</label>
+      <div class="inputForm">
+          <input type="file" name="profile_picture" class="input" />
+          @error('profile_picture')
+          <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
+          @enderror
+      </div>
+    </div>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
