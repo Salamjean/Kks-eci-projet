@@ -154,7 +154,7 @@ class VendorController extends Controller
     $naissanced->etat = $request->etat;
     $naissanced->save();
     
-    return redirect()->route('naissance.index')->with('success', 'Etat de la demande a été mis à jour.');
+    return redirect()->route('naissance.agentindex')->with('success', 'Etat de la demande a été mis à jour.');
 }
 
 //Deces edit 
@@ -209,12 +209,13 @@ class VendorController extends Controller
     $mariage->etat = $request->etat;
     $mariage->save();
     
-    return redirect()->route('mariage.index')->with('success', 'Etat de la demande a été mis à jour.');
+    return redirect()->route('mariage.agentindex')->with('success', 'Etat de la demande a été mis à jour.');
 }
 
 public function hoptitalcreate(){
     $alerts = Alert::all();
-    $doctors = Doctor::all();
+    $admin = Auth::guard('vendor')->user();
+    $doctors = Doctor::where('commune', $admin->name)->paginate(10);
     return view('vendor.hoptital.create', compact('alerts','doctors'));
 }
 public function hoptitalstore(Request $request)

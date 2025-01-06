@@ -7,7 +7,7 @@
     </div>
     <div>
       <!-- Logo principal agrandi -->
-      <a class="navbar-brand brand-logo" href="index.html">
+      <a class="navbar-brand brand-logo" href="{{ route('utilisateur.dashboard') }}">
         @if (Auth::user()->commune === 'yopougon')
         <img src="{{ asset('assets/images/profiles/yopougon.png') }}" alt="Logo Yopougon" style="height: 100px; width: auto;" />
         @elseif (Auth::user()->commune === 'marcory')
@@ -47,10 +47,11 @@
     <ul class="navbar-nav">
       <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
         <h1 class="welcome-text">Bienvenue, Mlle/Mme/M. <span class="text-black fw-bold">{{ Auth::user()->name }} {{ Auth::user()->prenom }}</span></h1>
+        <h3 style="color: black"><strong>Mairie de {{ Auth::user()->commune }}</strong></h3>
         <h3 class="welcome-sub-text">Vous pouvez maintenant effectuer votre demande</h3>
       </li>
     </ul>
-
+   
     <ul class="navbar-nav">
       <li class="nav-item dropdown d-none d-lg-block user-dropdown">
         <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">

@@ -217,7 +217,8 @@
                         <th>Nom de la mère</th>
                         <th>Nom de l'accompagnateur</th>
                         <th>Hôpital</th>
-                        <th>Date de Naissance du né</th>
+                        <th>N°CMU de la mère</th>
+                        <th>Date de Naissance</th>
                         <th colspan="4" style="text-align: center">Action</th>
                     </tr>
                 </thead>
@@ -228,6 +229,7 @@
                         <td>{{ $naisshop->NomM . ' ' . $naisshop->PrM }}</td>
                         <td>{{ $naisshop->NomP . ' ' . $naisshop->PrP }}</td>
                         <td>{{ $naisshop->NomEnf . ' ' . $naisshop->preEnf }}</td>
+                        <td>{{ $naisshop->codeCMU }}</td>
                         <td>{{ $naisshop->DateNaissance }}</td>
                         <td>
                             <button class="edit"><a href="{{ route('naissHop.edit', $naisshop->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>

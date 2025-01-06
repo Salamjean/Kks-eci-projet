@@ -51,14 +51,14 @@
                             <td>{{ $naisshop->DateNaissance }}</td>
                             <td>{{ $naisshop->created_at }}</td>
                             <td>
-                                <img src="{{ public_path('storage/naiss_hops/' . $naisshop->CNI_mere) }}" 
-                                     alt="Pièce du parent" 
-                                     width="100" 
-                                     height="auto"
-                                     data-bs-toggle="modal" 
-                                     data-bs-target="#imageModal" 
-                                     onclick="showImage(this)" 
-                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                <img src="{{ asset('storage/images/naissances/cni/' . $naisshop->CNI_mere) }}" 
+                                alt="Pièce du parent" 
+                                width="100" 
+                                height="auto"
+                                data-bs-toggle="modal" 
+                                data-bs-target="#imageModal" 
+                                onclick="showImage(this)" 
+                                onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                             </td>
                         </tr>
                         @empty

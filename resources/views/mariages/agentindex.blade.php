@@ -51,7 +51,6 @@
                         <thead class="bg-navbar text-white">
                             <tr style="font-size: 12px">
                                 <th class="text-center">Nom du demandeur</th>
-                                <th class="text-center">Nom du conjoint(e)</th>
                                 <th class="text-center">Pièce d'Identité</th>
                                 <th class="text-center">Extrait de Mariage</th>
                                 <th>Etat Actuel</th>
@@ -61,8 +60,8 @@
                         <tbody>
                             @forelse ($mariagesAvecFichiersSeulement as $mariage)
                             <tr style="font-size: 12px">
-                                <td>{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
-                                <td class="text-center">{{ $mariage->nomEpoux }}</td>
+                                <td class="text-center">{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
+
                                 <td class="text-center">
                                     <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 
                                          alt="Pièce d'identité" 

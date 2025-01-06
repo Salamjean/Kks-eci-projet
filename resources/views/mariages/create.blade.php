@@ -5,18 +5,18 @@
     
     <style>
         body {
-    background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}'); /* Remplacez par le chemin de votre image */
-    background-size: cover; /* Pour couvrir l'ensemble de la zone */
-    background-position: center; /* Centre l'image */
-    min-height: 100vh; /* Hauteur minimale pour remplir la page */
-}
-        /* Style pour le formulaire */
+            background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+        }
+
         .conteneurInfo {
             background: #ffffff;
             padding: 30px 40px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            max-width: 600px;
+            max-width: 900px;
             margin: auto;
             animation: fadeIn 0.6s ease-in-out;
         }
@@ -42,7 +42,6 @@
         input[type="text"], input[type="file"], select {
             width: 100%;
             padding: 0.8rem;
-            margin-top: 0.5rem;
             border: 1px solid #ddd;
             border-radius: 10px;
             background: #f9f9f9;
@@ -64,6 +63,17 @@
 
         button:hover {
             background-color: #144d4b;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .form-group {
+            flex: 1;
+            min-width: 48%; /* Pour que deux champs tiennent sur une ligne */
         }
 
         .hidden {
@@ -110,40 +120,68 @@
 
             <div id="infoEpoux" class="hidden">
                 <h3>Informations sur le conjoint(e)</h3>
-                <div class="form-group">
-                    <label for="nomEpoux">Nom du conjoint(e)</label>
-                    <input type="text" id="nomEpoux" name="nomEpoux" class="form-control" placeholder="Entrez le nom de l'époux">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nomEpoux">Nom du conjoint(e)</label>
+                        <input type="text" id="nomEpoux" name="nomEpoux" class="form-control" placeholder="Entrez le nom de l'époux" >
+                    </div>
+                    <div class="form-group">
+                        <label for="prenomEpoux">Prénom du conjoint(e)</label>
+                        <input type="text" id="prenomEpoux" name="prenomEpoux" class="form-control" placeholder="Entrez le prénom de l'époux" >
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="prenomEpoux">Prénom du conjoint(e)</label>
-                    <input type="text" id="prenomEpoux" name="prenomEpoux" class="form-control" placeholder="Entrez le prénom de l'époux">
-                </div>
-                <div class="form-group">
-                    <label for="dateNaissanceEpoux">Date de naissance du conjoint(e)</label>
-                    <input type="date" id="dateNaissanceEpoux" name="dateNaissanceEpoux" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label for="lieuNaissanceEpoux">Lieu de naissance du conjoint(e)</label>
-                    <input type="text" id="lieuNaissanceEpoux" name="lieuNaissanceEpoux" class="form-control" placeholder="Entrez le lieu de naissance">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dateNaissanceEpoux">Date de naissance du conjoint(e)</label>
+                        <input type="date" id="dateNaissanceEpoux" name="dateNaissanceEpoux" class="form-control" >
+                    </div>
+                    <div class="form-group">
+                        <label for="lieuNaissanceEpoux">Lieu de naissance du conjoint(e)</label>
+                        <input type="text" id="lieuNaissanceEpoux" name="lieuNaissanceEpoux" class="form-control" placeholder="Entrez le lieu de naissance" >
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="pieceIdentite">Pièce d'identité (format PDF)</label>
-                <input type="file" id="pieceIdentite" name="pieceIdentite" class="form-control">
+            <!-- Champ de commune de mariage -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="commune">Commune de mariage</label>
+                    <select id="commune" name="commune" class="form-control">
+                        <option value="{{ Auth::user()->commune }}">{{ Auth::user()->commune }}</option>
+                        <option value="abobo">Abobo</option>
+                        <option value="adjame">Adjamé</option>
+                        <option value="attiecoube">Attécoubé</option>
+                        <option value="cocody">Cocody</option>
+                        <option value="koumassi">Koumassi</option>
+                        <option value="marcory">Marcory</option>
+                        <option value="plateau">Plateau</option>
+                        <option value="port-bouet">Port-Bouët</option>
+                        <option value="treichville">Treichville</option>
+                        <option value="yopougon">Yopougon</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="pieceIdentite">Pièce d'identité</label>
+                    <input type="file" id="pieceIdentite" name="pieceIdentite" class="form-control" required>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="extraitMariage">Extrait de mariage (format PDF)</label>
-                <input type="file" id="extraitMariage" name="extraitMariage" class="form-control">
-            </div>
-
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="extraitMariage">Extrait de mariage</label>
+                    <input type="file" id="extraitMariage" name="extraitMariage" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="CMU">Numéro CMU</label>
+                    <input type="text" id="CMU" value="{{ Auth::user()->CMU }}" name="CMU" placeholder="Entrez votre numéro CMU" class="form-control" required>
+                </div>
+           
+        </div>
             <button type="submit">Soumettre</button>
         </form>
     </div>
 
     <script>
-        // Gestion des champs conditionnels
         document.getElementById('typeDemande').addEventListener('change', function() {
             const infoEpoux = document.getElementById('infoEpoux');
             infoEpoux.classList.toggle('hidden', this.value !== 'copieIntegrale');

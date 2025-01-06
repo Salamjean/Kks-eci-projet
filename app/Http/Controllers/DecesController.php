@@ -57,8 +57,8 @@ class DecesController extends Controller
         ->get();
     
         // Filtrer les naissances selon la commune de l'admin connecté
-        $deces = Deces::where('commune', $user->commune)->paginate(10); // Filtrage par commune
-        $decesdeja = Decesdeja::where('commune', $user->commune)->paginate(10); // Filtrage par commune
+        $deces = Deces::where('user_id', $user->id)->paginate(10); // Filtrage par commune
+        $decesdeja = Decesdeja::where('user_id', $user->id)->paginate(10); // Filtrage par commune
        // Filtrage par commune
     
         // Retourner la vue avec les données
@@ -99,7 +99,31 @@ class DecesController extends Controller
 }
 
     
-
+public function ajointindex(Request $request)
+{
+     // Récupérer l'admin connecté
+ $admin = Auth::guard('ajoint')->user();
+ // Récupérer les alertes
+ $alerts = Alert::where('is_read', false)
+ ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+ ->latest()
+ ->get();
+  // Initialiser la requête pour Deces en filtrant par commune
+  $query = Deces::where('commune', $admin->communeM); // Filtrer par commune
+  $querys = Decesdeja::where('commune', $admin->communeM); // Filtrer par commune
+  // Vérifier le type de recherche et appliquer le filtre
+  if ($request->filled('searchType') && $request->filled('searchInput')) {
+      if ($request->searchType === 'nomDefunt') {
+          $query->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
+      } elseif ($request->searchType === 'nomHopital') {
+          $query->where('nomHopital', 'like', '%' . $request->searchInput . '%');
+      }
+  }
+  // Récupérer les résultats filtrés
+  $deces = $query->get();
+  $decesdeja = $querys->get();
+  return view('deces.ajointindex', compact('deces','decesdeja','alerts'));
+}
     
 
 
@@ -161,7 +185,7 @@ public function store(saveDecesRequest $request)
         'message' => "Une nouvelle demande d'extrait de décès a été enregistrée : {$deces->nomDefunt}.",
     ]);
 
-    return redirect()->back()->with('success', 'Votre demande a été traitée avec succès.');
+    return redirect()->route('utilisateur.dashboard')->with('success', 'Votre demande a été traitée avec succès.');
 }
 
 public function show($id)
@@ -178,7 +202,6 @@ public function show($id)
 public function createdeja(){
     return view('deces.createdeja');
 }
-
 public function storedeja(Request $request)
 {
     $imageBaseLink = '/images/decesdeja/';
@@ -196,13 +219,13 @@ public function storedeja(Request $request)
         'name' => 'required',
         'numberR' => 'required',
         'dateR' => 'required',
-        'CMD' => 'required',
+        'communeD' => 'nullable|string|max:255', // Champ communeD optionnel mais validé
         'pActe' => 'image|mimes:png,jpg,jpeg|max:300',
     ], [
         'name.required' => 'Veuillez renseigner le nom du défunt',
         'numberR.required' => 'Veuillez renseigner le numéro de registre',
         'dateR.required' => 'Veuillez renseigner la date de registre',
-        'CMD.required' => 'Veuillez renseigner le code de secours',
+        'communeD.required' => 'Veuillez renseigner la commune du concerné',
         'pActe.image' => 'Le fichier doit être une image',
         'pActe.mimes' => 'Le format de l\'image doit être PNG, JPG ou JPEG',
         'pActe.max' => 'L\'image ne doit pas dépasser 300 Ko',
@@ -221,25 +244,28 @@ public function storedeja(Request $request)
     }
 
     try {
+        // Déterminer la commune à enregistrer
+        $commune = $request->has('communeD') && !empty($request->communeD) 
+            ? $request->communeD 
+            : $user->commune;
+
         // Enregistrement des données
         $decesdeja = new Decesdeja();
         $decesdeja->name = $request->name;
         $decesdeja->numberR = $request->numberR;
         $decesdeja->dateR = $request->dateR;
-        $decesdeja->CMD = $request->CMD;
+        $decesdeja->CMU = $request->CMU;
         $decesdeja->pActe = $uploadedPath; // Enregistrer le chemin de l'image si présente
-        $decesdeja->commune = $user->commune;
+        $decesdeja->commune = $commune;
         $decesdeja->etat = 'en attente';
         $decesdeja->user_id = $user->id;
         $decesdeja->save();
 
-        return redirect()->back()->with('success', 'Demande envoyée avec succès');
+        return redirect()->route('utilisateur.dashboard')->with('success', 'Demande envoyée avec succès.');
     } catch (Exception $e) {
         return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());
     }
 }
-
-
 
 
 }

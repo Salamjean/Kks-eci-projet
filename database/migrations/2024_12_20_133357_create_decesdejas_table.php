@@ -16,11 +16,13 @@ return new class extends Migration
             $table->string('name');
             $table->string('numberR');
             $table->string('dateR');
-            $table->string('CMD')->nullable();
             $table->string('pActe')->nullable();
+            $table->string('CMU');
             $table->string('commune')->nullable()->after('id');
             $table->string('etat')->default('en attente'); // État par défaut
+            $table->boolean('is_read')->default(false); // Statut de lecture
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Ajout de user_id
+            $table->foreignId('agent_id')->nullable()->constrained('agents')->onDelete('set null'); // Ajout de agent_id
             $table->timestamps();
         });
     }

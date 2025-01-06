@@ -2,7 +2,27 @@
 
 @section('content')
 
-<div class="row flex-grow">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .form-background {
+        background-image: url("{{ asset('assets/images/profiles/arriereP.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .modal-image {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+<div class="row flex-grow form-background">
     <div class="col-12 grid-margin stretch-card">
         <div class="card card-rounded">
             <div class="card-body">
@@ -20,16 +40,16 @@
                 <!-- Onglets -->
                 <ul class="nav nav-tabs" id="decesTabs" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" id="completes-tab" data-bs-toggle="tab" href="#completes" role="tab" aria-controls="completes" aria-selected="true">Demandes avec informations complètes</a>
+                        <a class="nav-link active" id="completes-tab" data-bs-toggle="tab" href="#completes" role="tab" aria-controls="completes" aria-selected="true">Demandes d'extrait avec certificat</a>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" id="partielles-tab" data-bs-toggle="tab" href="#partielles" role="tab" aria-controls="partielles" aria-selected="false">Demandes avec informations partielles</a>
+                        <a class="nav-link" id="partielles-tab" data-bs-toggle="tab" href="#partielles" role="tab" aria-controls="partielles" aria-selected="false">Demandes d'extrait pour moi/une tierce personne</a>
                     </li>
                 </ul>
 
                 <!-- Contenu des Onglets -->
                 <div class="tab-content" id="decesTabsContent">
-                    <!-- Premier Onglet : Demandes complètes -->
+                    <!-- Premier Onglet -->
                     <div class="tab-pane fade show active" id="completes" role="tabpanel" aria-labelledby="completes-tab">
                         <div class="table-responsive mt-4">
                             <table class="table select-table">
@@ -49,25 +69,23 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($deces as $deceD)
-                                    <tr style="font-size: 12px" class="text-center">
+                                    <tr class="text-center" style="font-size: 12px">
                                         <td>{{ $deceD->user ? $deceD->user->name : 'Demandeur inconnu' }}</td>
                                         <td>{{ $deceD->nomHopital }}</td>
                                         <td>{{ $deceD->nomDefunt }}</td>
                                         <td>{{ $deceD->dateNaiss }}</td>
                                         <td>{{ $deceD->dateDces }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $deceD->identiteDeclarant) }}" alt="Pièce du parent" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            <img src="{{ asset('storage/' . $deceD->identiteDeclarant) }}" alt="Pièce du parent" width="100" height="auto" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $deceD->acteMariage) }}" alt="Certificat de déclaration" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            <img src="{{ asset('storage/' . $deceD->acteMariage) }}" alt="Certificat de déclaration" width="100" height="auto" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $deceD->deParLaLoi) }}" alt="Certificat de déclaration" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            <img src="{{ asset('storage/' . $deceD->deParLaLoi) }}" alt="De par la Loi" width="100" height="auto" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <span class="badge {{ $deceD->etat == 'en attente' ? 'badge-opacity-warning' : ($deceD->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">
-                                                {{ $deceD->etat }}
-                                            </span>
+                                            <span class="badge {{ $deceD->etat == 'en attente' ? 'badge-opacity-warning' : ($deceD->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">{{ $deceD->etat }}</span>
                                         </td>
                                         <td>{{ $deceD->agent ? $deceD->agent->name . ' ' . $deceD->agent->prenom : 'Non attribué' }}</td>
                                     </tr>
@@ -81,7 +99,7 @@
                         </div>
                     </div>
 
-                    <!-- Deuxième Onglet : Demandes partielles -->
+                    <!-- Deuxième Onglet -->
                     <div class="tab-pane fade" id="partielles" role="tabpanel" aria-labelledby="partielles-tab">
                         <div class="table-responsive mt-5">
                             <table class="table select-table">
@@ -99,19 +117,17 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($decesdeja as $dece)
-                                    <tr style="font-size: 12px" class="text-center">
+                                    <tr class="text-center" style="font-size: 12px">
                                         <td>{{ $dece->user ? $dece->user->name : 'Demandeur inconnu' }}</td>
                                         <td>{{ $dece->name }}</td>
                                         <td>{{ $dece->numberR }}</td>
                                         <td>{{ $dece->dateR }}</td>
                                         <td>{{ $dece->CMD }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $dece->pActe) }}" alt="Certificat de déclaration" width="100" height="auto" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            <img src="{{ asset('storage/' . $dece->pActe) }}" alt="Certificat de déclaration" width="100" height="auto" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <span class="badge {{ $dece->etat == 'en attente' ? 'badge-opacity-warning' : ($dece->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">
-                                                {{ $dece->etat }}
-                                            </span>
+                                            <span class="badge {{ $dece->etat == 'en attente' ? 'badge-opacity-warning' : ($dece->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">{{ $dece->etat }}</span>
                                         </td>
                                         <td>{{ $dece->agent ? $dece->agent->name . ' ' . $dece->agent->prenom : 'Non attribué' }}</td>
                                     </tr>
@@ -125,23 +141,29 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
 
-@endsection
+<!-- Modale -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img id="modalImage" class="modal-image" src="" alt="Image en grand">
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     function showImage(imageElement) {
         const modalImage = document.getElementById('modalImage');
-
-        // Vérifier si l'image utilise déjà la valeur de remplacement (image par défaut)
-        if (imageElement.src.includes('assets/images/profiles/bébé.jpg')) {
-            modalImage.src = imageElement.src; // Utiliser l'image par défaut
-        } else {
-            modalImage.src = imageElement.src; // Utiliser l'image actuelle (valide)
-        }
+        modalImage.src = imageElement.src;
+        const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+        imageModal.show();
     }
 </script>
+
+@endsection

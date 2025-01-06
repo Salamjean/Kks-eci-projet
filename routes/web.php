@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AgentController;
+use App\Http\Controllers\AjointController;
+use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DecesController;
 use App\Http\Controllers\DecesHopController;
@@ -25,6 +27,11 @@ use App\Models\Vendor;
 use App\Models\Alert;
 
 Route::get('/E-ci', [GeneralController::class, 'general'])->name('general');
+Route::get('/E-ci-Naissance', [GeneralController::class, 'naissanceavec'])->name('naissanceavec');
+Route::get('/E-ci-Naissancesans', [GeneralController::class, 'naissancesans'])->name('naissancesans');
+Route::get('/E-ci-deces', [GeneralController::class, 'decesavec'])->name('decesavec');
+Route::get('/E-ci-decessans', [GeneralController::class, 'decessans'])->name('decessans');
+Route::get('/E-ci-mariagesans', [GeneralController::class, 'mariagesans'])->name('mariagesans');
 Route::get('/doctor/dashboard', function () {
     return view('doctor.dashboard');
 });
@@ -119,6 +126,26 @@ Route::middleware('auth:web')->group(function () {
         Route::put('/{agent}/update', [AgentController::class, 'agentupdate'])->name('agent.update');
         Route::delete('/{agent}/delete', [AgentController::class, 'agentdelete'])->name('agent.delete');
         });
+
+        //Gestion des ajoints
+        Route::prefix('ajoints')->group(function () {
+            Route::get('/', [AjointController::class, 'ajointindex'])->name('ajoint.index');
+            Route::get('/create', [AjointController::class, 'ajointcreate'])->name('ajoint.create');
+            Route::post('/store', [AjointController::class, 'ajointstore'])->name('ajoint.store');
+            Route::get('/{ajoint}/edit', [AjointController::class, 'ajointedit'])->name('ajoint.edit');
+            Route::put('/{ajoint}/update', [AjointController::class, 'ajointupdate'])->name('ajoint.update');
+            Route::delete('/{ajoint}/delete', [AjointController::class, 'ajointdelete'])->name('ajoint.delete');
+            });
+
+        // Gestion des caisses
+        Route::prefix('caisses')->group(function () {
+            Route::get('/', [CaisseController::class, 'caisseindex'])->name('caisse.index');
+            Route::get('/create', [CaisseController::class, 'caissecreate'])->name('caisse.create');
+            Route::post('/store', [CaisseController::class, 'caissestore'])->name('caisse.store');
+            Route::get('/{caisse}/edit', [CaisseController::class, 'caisseedit'])->name('caisse.edit');
+            Route::put('/{caisse}/update', [CaisseController::class, 'caisseupdate'])->name('caisse.update');
+            Route::delete('/{caisse}/delete', [CaisseController::class, 'caissedelete'])->name('caisse.delete');
+            });
     });
 });
 
@@ -160,6 +187,10 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/validate-hopital-account/{email}', [VendorController::class, 'submitDefineAccess'])->name('doctor.hopitalvalidate');
     Route::get('/validate-agent-account/{email}', [AgentController::class, 'defineAccess']);
     Route::post('/validate-agent-account/{email}', [AgentController::class, 'submitDefineAccess'])->name('agent.validate');
+    Route::get('/validate-ajoint-account/{email}', [AjointController::class, 'defineAccess']);
+    Route::post('/validate-ajoint-account/{email}', [AjointController::class, 'submitDefineAccess'])->name('ajoint.validate');
+    Route::get('/validate-caisse-account/{email}', [CaisseController::class, 'defineAccess']);
+    Route::post('/validate-caisse-account/{email}', [CaisseController::class, 'submitDefineAccess'])->name('caisse.validate');
 
 
     //creer un docteurs
@@ -178,6 +209,7 @@ Route::middleware('auth:web')->group(function () {
     Route::prefix('naissances')->group(function() {
         Route::get('/', [NaissanceController::class, 'index'])->name('naissance.index');        
         Route::get('/agent', [NaissanceController::class, 'agentindex'])->name('naissance.agentindex');        
+        Route::get('/ajoint', [NaissanceController::class, 'ajointindex'])->name('naissance.ajointindex');        
         Route::post('/create', [NaissanceController::class, 'store'])->name('naissance.store');
         Route::get('/create', [NaissanceController::class, 'create'])->name('naissance.create');
         Route::get('/edit/{naissance}', [NaissanceController::class, 'edit'])->name('naissance.edit');
@@ -194,10 +226,30 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/login', [AgentController::class, 'handleLogin'])->name('agent.handleLogin');
     });
 
+    Route::prefix('ajoint-maire')->group(function() {
+        Route::get('/login', [AjointController::class, 'login'])->name('ajoint.login');
+        Route::post('/login', [AjointController::class, 'handleLogin'])->name('ajoint.handleLogin');
+    });
+
+    Route::prefix('caisse')->group(function() {
+        Route::get('/login', [CaisseController::class, 'login'])->name('caisse.login');
+        Route::post('/login', [CaisseController::class, 'handleLogin'])->name('caisse.handleLogin');
+    });
+
     Route::middleware('agent')->prefix('agent')->group(function(){
         Route::get('/dashboard', [AgentController::class, 'agentdashboard'])->name('agent.dashboard');
         Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
         Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');
+    });
+
+    Route::middleware('ajoint')->prefix('ajoint')->group(function(){
+        Route::get('/vue', [AjointController::class, 'ajointvue'])->name('ajoint.dashboard');
+        Route::get('/logout', [AjointController::class, 'logout'])->name('ajoint.logout');
+    });
+
+    Route::middleware('caisse')->prefix('caisse')->group(function(){
+        Route::get('/vue', [CaisseController::class, 'dashboard'])->name('caisse.dashboard');
+        Route::get('/logout', [CaisseController::class, 'logout'])->name('caisse.logout');
     });
 
     Route::prefix('naissHop')->group(function () {
@@ -261,6 +313,7 @@ Route::middleware('auth:web')->group(function () {
     Route::prefix('deces')->group(function() {
         Route::get('/', [DecesController::class, 'index'])->name('deces.index');        
         Route::get('/agent', [DecesController::class, 'agentindex'])->name('deces.agentindex');        
+        Route::get('/ajoint', [DecesController::class, 'ajointindex'])->name('deces.ajointindex');        
         Route::post('/create', [DecesController::class, 'store'])->name('deces.store');
         Route::get('/create', [DecesController::class, 'create'])->name('deces.create');
         Route::get('/deces/{id}', [DecesController::class, 'show'])->name('deces.show');
@@ -273,6 +326,7 @@ Route::middleware('auth:web')->group(function () {
     Route::prefix('mariages')->group(function() {
         Route::get('/', [MariageController::class, 'index'])->name('mariage.index');        
         Route::get('/agent', [MariageController::class, 'agentindex'])->name('mariage.agentindex');        
+        Route::get('/ajoint', [MariageController::class, 'ajointindex'])->name('mariage.ajointindex');        
         Route::post('/create', [MariageController::class, 'store'])->name('mariage.store');
         Route::get('/create', [MariageController::class, 'create'])->name('mariage.create');
         Route::get('/mariage/{id}', [MariageController::class, 'show'])->name('mariage.show');

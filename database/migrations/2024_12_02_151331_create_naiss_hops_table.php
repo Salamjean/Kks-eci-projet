@@ -18,11 +18,13 @@ return new class extends Migration
             $table->string('PrM');
             $table->string('contM');
             $table->string('dateM');
+            $table->string('codeCMU');
             $table->string('CNI_mere')->nullable();
             // les informations du pere
             $table->string('NomP');
             $table->string('PrP');
             $table->string('contP');
+            $table->string('lien');
             $table->string('CNI_Pere')->nullable();
             // les informations de l'enfant
             $table->string('NomEnf');
@@ -31,7 +33,6 @@ return new class extends Migration
             $table->string('sexe');
             $table->string('codeDM')->default('rien')->unique();
             $table->string('codeCMN')->default('rien')->unique();
-
             $table->timestamps();
         });
     }

@@ -31,7 +31,7 @@
       <div class="card h-100">
         <div class="card-body text-center">
           <div class="text-xs font-weight-bold text-uppercase mb-4">Total Demande Extrait Décès</div>
-          <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $decesdash }}</div>
+          <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $decesdash + $decesdejadash }}</div>
           <i class="fas fa-school fa-2x text-success"></i>
         </div>
       </div>
@@ -134,10 +134,10 @@
           </div>
           <div class="mb-3">
             <div class="small text-gray-500">Décès
-              <div class="small float-right"><b>{{ $deces->count() }} sur {{ $totalData }} éléments</b></div>
+              <div class="small float-right"><b>{{ $deces->count() + $decesdeja->count() }} sur {{ $totalData }} éléments</b></div>
             </div>
             <div class="progress" style="height: 12px;">
-              <div class="progress-bar bg-success" role="progressbar" style="width: {{ $decesPercentage }}%;" aria-valuenow="{{ $decesPercentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+              <div class="progress-bar bg-success" role="progressbar" style="width: {{ $DecesP }}%;" aria-valuenow="{{ $Dece }}" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
           </div>
           <div class="mb-3">

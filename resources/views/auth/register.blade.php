@@ -47,6 +47,7 @@
   </style>
 </head>
 <body>
+  <button ><a href="{{ route('general') }}" style="color: white">Accueil</a></button><br>
   <div class="container" id="container">
     <!-- Formulaire d'inscription -->
     <div class="form-container sign-up-container">
@@ -59,7 +60,7 @@
         <input type="password" name="password" placeholder="Mot de passe" required />
         <input type="password" name="password_confirmation" placeholder="Confirmer le mot de passe" required />
         <select id="commune" name="commune" class="block mt-1 w-full" required>
-            <option value="">Sélectionnez une commune</option>
+            <option value="">Sélectionnez votre commune de naisance</option>
             <option value="abobo">Abobo</option>
             <option value="adjame">Adjamé</option>
             <option value="attiecoube">Attécoubé</option>
@@ -133,7 +134,8 @@
             <option value="boura">Boura</option>
             <option value="bofora">Bofora</option>
             <option value="zagoua">Zagoua</option>
-        </select><br>
+        </select>
+        <input type="text" name="CMU" placeholder="Entrez votre numéro CMU" required /><br>
         <div class="flex-column">
           <label>Photo de Profil</label>
       <div class="inputForm">

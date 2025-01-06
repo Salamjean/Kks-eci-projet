@@ -92,8 +92,8 @@
     <div id="collapseMaire" class="collapse" aria-labelledby="headingMaire" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Gestion Ajoint-Maire</h6>
-        <a class="collapse-item" href="#">Liste des Ajoint-Maire</a>
-        <a class="collapse-item" href="#">Ajouter un Ajoint-Maire</a>
+        <a class="collapse-item" href="{{ route('ajoint.index') }}">Liste des Ajoint-Maire</a>
+        <a class="collapse-item" href="{{ route('ajoint.create') }}">Ajouter un Ajoint-Maire</a>
       </div>
     </div>
   </li>
@@ -112,4 +112,20 @@
       </div>
     </div>
   </li>
+
+   <!-- Section Caisse -->
+ <li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCaisse"
+    aria-expanded="true" aria-controls="collapseCaisse">
+    <i class="fa fa-hospital"></i>
+    <span>Caisse</span>
+  </a>
+  <div id="collapseCaisse" class="collapse" aria-labelledby="headingCaisse" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">Gestion des caisses</h6>
+      <a class="collapse-item" href="{{ route('caisse.index') }}">Liste des caissiés</a>
+      <a class="collapse-item" href="{{ route('caisse.create') }}">Ajout d'un caissié</a>
+    </div>
+  </div>
+</li>
 </ul>

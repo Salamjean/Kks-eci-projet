@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('is_activated')->default(0);
             $table->string('commune')->nullable();
+            $table->string('CMU');
             $table->string('profile_picture')->nullable();
             $table->rememberToken();
             $table->timestamps();

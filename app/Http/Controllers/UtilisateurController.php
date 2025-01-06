@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deces;
+use App\Models\Decesdeja;
 use App\Models\Mariage;
 use App\Models\Naissance;
 use App\Models\NaissanceD;
@@ -38,6 +39,11 @@ class UtilisateurController extends Controller
                 $deces->type = 'deces';
                 return $deces;
             });
+
+            $decesdeja = Decesdeja::where('user_id', $user->id)->get()->map(function ($decesdeja) {
+                $decesdeja->type = 'deces';
+                return $decesdeja;
+            });
         
             // Récupérer les mariages et les marquer avec le type "mariage"
             $mariages = Mariage::where('user_id', $user->id)->get()->map(function ($mariage) {
@@ -50,12 +56,13 @@ class UtilisateurController extends Controller
             $naissancesCount = Naissance::where('user_id', $user->id)->count();
             $naissanceDCount = NaissanceD::where('user_id', $user->id)->count();
             $decesCount = Deces::where('user_id', $user->id)->count();
+            $decesdejaCount = Decesdeja::where('user_id', $user->id)->count();
             $mariageCount = Mariage::where('user_id', $user->id)->count();
             // Compter le nombre total de demandes
             $nombreDemandes = $demandes->count();
         
             return view('utilisateur.dashboard', compact('user', 'demandes', 'nombreDemandes',
-            'naissancesD','naissancesCount','naissanceDCount','decesCount','mariageCount'));
+            'naissancesD','naissancesCount','naissanceDCount','decesCount','decesdejaCount','mariageCount'));
         }
         
         return redirect()->route('login');

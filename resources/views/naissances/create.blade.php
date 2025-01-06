@@ -48,7 +48,6 @@
     input[type="text"], input[type="file"], input[type="date"] {
         width: 100%;
         padding: 0.8rem;
-        margin-top: 0.5rem;
         border: 1px solid #ddd;
         border-radius: 10px;
         background: #f9f9f9;

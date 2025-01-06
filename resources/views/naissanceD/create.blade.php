@@ -13,7 +13,7 @@ body {
     /* Style pour le formulaire */
     .conteneurInfo {
         background: #ffffff;
-        padding: 30px 40px;
+        padding: 20px 40px;
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         max-width: 600px;
@@ -36,13 +36,11 @@ body {
     label {
         font-weight: bold;
         color: #1a5c58;
-        margin-top: 1rem;
+        margin-top: 30px;
     }
 
     input[type="text"], input[type="file"],input[type="date"], select {
         width: 100%;
-        padding: 0.8rem;
-        margin-top: 0.5rem;
         border: 1px solid #ddd;
         border-radius: 10px;
         background: #f9f9f9;
@@ -111,21 +109,11 @@ body {
 @endif
 
 <div class="conteneurInfo">
-    <h1>Demande d'Extrait de Naissance</h1>
+    <h2 class="text-center">Demande d'Extrait de Naissance</h2>
     <form method="POST" action="{{ route('naissanced.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="type">Type de demande</label>
-                <select id="type" name="type" class="form-control">
-                    <option value="extrait_integral" {{ old('type') == 'extrait_integral' ? 'selected' : '' }}>Extrait intégral</option>
-                    <option value="simple" {{ old('type') == 'simple' ? 'selected' : '' }}>Simple</option>
-                </select>
-                @error('type')
-                    <span style="color: red">{{ $message }}</span>
-                @enderror
-            </div>
-        
+
             <div class="form-group col-md-6">
                 <label for="pour">Pour ?</label>
                 <select id="pour" name="pour" class="form-control" onchange="updateFields()">
@@ -136,68 +124,102 @@ body {
                     <span style="color: red">{{ $message }}</span>
                 @enderror
             </div>
+            
+            <div class="form-group col-md-6">
+                <label for="type">Type de demande</label>
+                <select id="type" name="type" class="form-control">
+                    <option value="simple" {{ old('type') == 'simple' ? 'selected' : '' }}>Simple</option>
+                    <option value="extrait_integral" {{ old('type') == 'extrait_integral' ? 'selected' : '' }}>Extrait intégral</option>
+                </select>
+                @error('type')
+                    <span style="color: red">{{ $message }}</span>
+                @enderror
+            </div>
         </div>
         
             <div class="form-row">
                 <div class="form-group">
                     <label for="name">Nom</label>
-                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $userName) }}">
+                    <input type="text" id="name" name="name" class="form-control" value="{{ old('name', $userName) }}" required>
                     @error('name')
                         <span style="color: red">{{ $message }}</span>
                     @enderror
                 </div>
                 <div class="form-group">
                     <label for="prenom">Prénoms</label>
-                    <input type="text" id="prenom" name="prenom" class="form-control" value="{{ old('prenom', $userPrenom) }}">
+                    <input type="text" id="prenom" name="prenom" class="form-control" value="{{ old('prenom', $userPrenom) }}" required>
                     @error('prenom')
                         <span style="color: red">{{ $message }}</span>
                     @enderror
                 </div>
             </div>
-            
-            <script>
-                function updateFields() {
-                    const pourSelect = document.getElementById('pour');
-                    const nameInput = document.getElementById('name');
-                    const prenomInput = document.getElementById('prenom');
-                    
-                    // Vérifie si "Moi" est sélectionné
-                    if (pourSelect.value === 'Moi') {
-                        nameInput.value = '{{ $userName }}'; // Remplit le champ avec le nom de l'utilisateur
-                        prenomInput.value = '{{ $userPrenom }}'; // Remplit le champ avec le prénom de l'utilisateur
-                    } else {
-                        nameInput.value = ''; // Vide le champ si une autre option est sélectionnée
-                        prenomInput.value = ''; // Vide le champ si une autre option est sélectionnée
-                    }
-                }
-            
-                // Appel initial pour mettre à jour les champs si "Moi" est déjà sélectionné
-                document.addEventListener('DOMContentLoaded', updateFields);
-            </script>
 
-    <div class="form-row">
-            <div class="form-group text-center">
-                <label for="number">Numéro de registre</label>
-                <input type="text" id="number" name="number" value="{{ old('number') }}">
-                @error('number')
-                    <span style="color: red">{{ $message }}</span>
-                @enderror
+            <div class="form-row">
+                    <div class="form-group text-center">
+                        <label for="number">Numéro de registre</label>
+                        <input type="text" id="number" name="number" value="{{ old('number') }}" required>
+                        @error('number')
+                            <span style="color: red">{{ $message }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group text-center">
+                        <label for="DateR">Date de registre</label>
+                        <input type="date" id="DateR" name="DateR" value="{{ old('DateR') }}" required>
+                        @error('DateR')
+                            <span style="color: red">{{ $message }}</span>
+                        @enderror
+                    </div>
             </div>
-            <div class="form-group text-center">
-                <label for="DateR">Date de registre</label>
-                <input type="date" id="DateR" name="DateR" value="{{ old('DateR') }}">
-                @error('DateR')
-                    <span style="color: red">{{ $message }}</span>
-                @enderror
-            </div>
-    </div>
-    <div class="form-group text-center">
-        <label for="CNI">Joindre Votre pièce d'identité</label>
-        <input type="file" id="CNI" name="CNI">
-        @error('CNI')
-            <span style="color: red">{{ $message }}</span>
-        @enderror
-    </div>
+
+            <div class="form-row">
+                <div class="form-group text-center">
+                    <label for="commune">Commune</label>
+                    <input type="text" id="commune" name="commune" class="form-control" value="{{ old('commune', $userCommune) }}" required>
+                    @error('commune')
+                        <span style="color: red">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group text-center">
+                    <label for="CNI">Joindre Votre pièce d'identité</label>
+                    <input type="file" id="CNI" name="CNI" required>
+                    @error('CNI')
+                        <span style="color: red">{{ $message }}</span>
+                    @enderror
+                </div>
+                </div>
+                <div class="form-group text-center">
+                    <label for="CMU">Numéro CMU</label>
+                    <input class="text-center" type="text" id="CMU" name="CMU" value="{{ old('CMU', $userCMU) }}" required>
+                    @error('CMU')
+                        <span style="color: red">{{ $message }}</span>
+                    @enderror
+                </div>
+                            
+                <script>
+                    function updateFields() {
+                        const pourSelect = document.getElementById('pour');
+                        const nameInput = document.getElementById('name');
+                        const prenomInput = document.getElementById('prenom');
+                        const communeInput = document.getElementById('commune');
+                        const CMUInput = document.getElementById('CMU');
+                        
+                        // Vérifie si "Moi" est sélectionné
+                        if (pourSelect.value === 'Moi') {
+                            nameInput.value = '{{ $userName }}'; // Remplit le champ avec le nom de l'utilisateur
+                            prenomInput.value = '{{ $userPrenom }}'; // Remplit le champ avec le prénom de l'utilisateur
+                            communeInput.value = '{{ $userCommune }}'; // Remplit le champ avec la commune de l'utilisateur
+                            CMUInput.value = '{{ $userCMU }}'; // Remplit le champ avec la CMU de l'utilisateur
+                        } else {
+                            nameInput.value = ''; // Vide le champ si une autre option est sélectionnée
+                            prenomInput.value = ''; // Vide le champ si une autre option est sélectionnée
+                            communeInput.value = ''; // Vide le champ si une autre option est sélectionnée
+                            CMUInput.value = ''; // Vide le champ si une autre option est sélectionnée
+                        }
+                    }
+                            
+                    // Appel initial pour mettre à jour les champs si "Moi" est déjà sélectionné
+                    document.addEventListener('DOMContentLoaded', updateFields);
+                </script>
 
         <button type="submit">Soumettre</button>
     </form>

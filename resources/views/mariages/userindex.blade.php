@@ -1,7 +1,24 @@
 @extends('utilisateur.layouts.template')
 
 @section('content')
-<div class="row flex-grow">
+
+<style>
+    .form-background {
+        background-image: url("{{ asset('assets/images/profiles/arriereP.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .modal-image {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+<div class="row flex-grow form-background">
     <div class="col-12 grid-margin stretch-card">
         <div class="card card-rounded">
             <div class="card-body">
@@ -18,7 +35,7 @@
                         <button class="nav-link active" id="table1-tab" data-bs-toggle="tab" data-bs-target="#table1" type="button" role="tab" aria-controls="table1" aria-selected="true">Demande de copie simples</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="table2-tab" data-bs-toggle="tab" data-bs-target="#table2" type="button" role="tab" aria-controls="table2" aria-selected="false">Demande de copie integrale</button>
+                        <button class="nav-link" id="table2-tab" data-bs-toggle="tab" data-bs-target="#table2" type="button" role="tab" aria-controls="table2" aria-selected="false">Demande de copie intégrale</button>
                     </li>
                 </ul>
 
@@ -136,10 +153,24 @@
     </div>
 </div>
 
+<!-- Modale -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img id="modalImage" class="modal-image" src="" alt="Image en grand">
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function showImage(imageElement) {
         const modalImage = document.getElementById('modalImage');
-        modalImage.src = imageElement.src.includes('default.jpg') ? imageElement.src : imageElement.src;
+        modalImage.src = imageElement.src;
+        const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+        imageModal.show();
     }
 </script>
+
 @endsection

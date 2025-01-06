@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateAgentRequest;
 use App\Models\Agent;
 use App\Models\Alert;
 use App\Models\Deces;
+use App\Models\Decesdeja;
 use App\Models\DecesHop;
 use App\Models\Mariage;
 use App\Models\Naissance;
@@ -124,8 +125,9 @@ public function handleLogin(Request $request)
     }
 
  public function agentindex(){
+    $admin = Auth::guard('vendor')->user();
     $alerts = Alert::all();
-    $agents = Agent::all();
+    $agents = Agent::where('communeM', $admin->name)->paginate(10);
     return view('vendor.agent.index', compact('agents','alerts'));
  }
 
@@ -263,6 +265,13 @@ public function agentvue(Agent $agent, Request $request) {
         ->orderBy('created_at', 'desc')
         ->get();
 
+    $decesdeja = Decesdeja::where('commune', $admin->communeM)
+        ->where('is_read', false) // Filtrer pour les demandes non traitées
+        ->whereMonth('created_at', $selectedMonth)
+        ->whereYear('created_at', $selectedYear)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
     $mariages = Mariage::where('commune', $admin->communeM)
         ->where('is_read', false) // Filtrer pour les demandes non traitées
         ->whereMonth('created_at', $selectedMonth)
@@ -284,23 +293,26 @@ public function agentvue(Agent $agent, Request $request) {
         ->get();
 
     // Calcul des données globales
-    $totalData = $naissances->count() + $naissancesD->count() + $deces->count() + $mariages->count();
+    $totalData = $naissances->count() + $naissancesD->count() + $deces->count()+ $decesdeja->count() + $mariages->count();
     $totalDataHops = $naisshops->count() + $deceshops->count();
 
     // Pourcentages
     $naissancePercentage = $totalData > 0 ? ($naissances->count() / $totalData) * 100 : 0;
     $naissanceDPercentage = $totalData > 0 ? ($naissancesD->count() / $totalData) * 100 : 0;
     $decesPercentage = $totalData > 0 ? ($deces->count() / $totalData) * 100 : 0;
+    $decesdejaPercentage = $totalData > 0 ? ($decesdeja->count() / $totalData) * 100 : 0;
     $mariagePercentage = $totalData > 0 ? ($mariages->count() / $totalData) * 100 : 0;
     $naisshopPercentage = $totalDataHops > 0 ? ($naisshops->count() / $totalDataHops) * 100 : 0;
     $deceshopPercentage = $totalDataHops > 0 ? ($deceshops->count() / $totalDataHops) * 100 : 0;
 
+    $Dece = $decesPercentage + $decesdejaPercentage;
     $NaissP = $naissancePercentage + $naissanceDPercentage;    
     $NaissHop = $naisshopPercentage + $deceshopPercentage; 
 
     // Données pour le tableau de bord
     $naissancedash = $naissances->count();
     $decesdash = $deces->count();
+    $decesdejadash = $decesdeja->count();
     $mariagedash = $mariages->count();
     $naissanceDdash = $naissancesD->count();
     $naisshopsdash = $naisshops->count();
@@ -312,25 +324,26 @@ public function agentvue(Agent $agent, Request $request) {
     $recentNaissances = $naissances->take(2);
     $recentNaissancesd = $naissancesD->take(2); // Filtrer pour les récentes non traitées
     $recentDeces = $deces->take(2);
+    $recentDecesdeja = $decesdeja->take(2);
     $recentMariages = $mariages->take(2);
     $recentNaisshops = $naisshops->take(2);
     $recentDeceshops = $deceshops->take(2);
 
     $alerts = Alert::where('is_read', false)
-        ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesdeja', 'decesHop', 'naissHop'])  
         ->latest()
         ->get();
 
     // Retourne la vue avec les données
     return view('vendor.agent.vue', compact(
-        'naissancedash', 'naisshopsdash', 'deceshopsdash', 
+        'naissancedash', 'naisshopsdash', 'deceshopsdash','decesdejadash', 
         'NaissHopTotal', 'decesdash', 'NaissP', 'mariagedash', 
-        'naissances', 'naissancesD', 'deces', 'mariages', 
+        'naissances', 'naissancesD', 'deces','decesdeja', 'mariages', 
         'totalDataHops', 'totalData', 'naissancePercentage', 
-        'naissanceDPercentage', 'decesPercentage', 'mariagePercentage', 
+        'naissanceDPercentage', 'decesPercentage','decesdejaPercentage', 'mariagePercentage', 
         'naisshopPercentage', 'deceshopPercentage', 
-        'recentNaissances', 'recentNaissancesd', 'recentDeces', 
-        'recentMariages', 'alerts', 'Naiss', 'NaissHop', 
+        'recentNaissances', 'recentNaissancesd', 'recentDeces','recentDecesdeja', 
+        'recentMariages', 'alerts', 'Naiss','Dece', 'NaissHop', 
         'selectedMonth', 'selectedYear', 
         'selectedMonthHops', 'selectedYearHops', 'recentNaisshops', 'recentDeceshops'
     ));

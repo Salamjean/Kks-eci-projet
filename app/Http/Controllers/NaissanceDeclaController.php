@@ -21,6 +21,8 @@ class NaissanceDeclaController extends Controller
         return view('naissanceD.create', [
             'userName' => $userConnecté ? $userConnecté->name : '', 
             'userPrenom' => $userConnecté ? $userConnecté->prenom : '', 
+            'userCommune' => $userConnecté ? $userConnecté->commune : '', 
+            'userCMU' => $userConnecté ? $userConnecté->CMU : '', 
         ]);
     }
     public function index(){
@@ -30,9 +32,9 @@ class NaissanceDeclaController extends Controller
 
     public function store(saveNaissanceDRequest $request)
     {
-       
-        $imageBaseLink = '/images/naissances/';
 
+        $imageBaseLink = '/images/naissances/';
+    
         $filesToUpload = [
             'CNI' => 'cni/', 
         ];
@@ -54,6 +56,11 @@ class NaissanceDeclaController extends Controller
         // Récupérer l'utilisateur connecté
         $user = Auth::user();
         
+        // Vérifier si une commune est spécifiée dans la requête
+        $commune = $request->has('commune') && !empty($request->commune) 
+            ? $request->commune 
+            : $user->commune;
+    
         // Enregistrement de l'objet NaissanceD
         $naissanceD = new NaissanceD();
         $naissanceD->type = $request->type; 
@@ -63,7 +70,8 @@ class NaissanceDeclaController extends Controller
         $naissanceD->number = $request->number; 
         $naissanceD->DateR = $request->DateR; 
         $naissanceD->CNI = $uploadedPaths['CNI'] ?? null;
-        $naissanceD->commune = $user->commune;
+        $naissanceD->CMU = $request->CMU; 
+        $naissanceD->commune = $commune;
         $naissanceD->etat = 'en attente'; 
         $naissanceD->is_read = false; 
         $naissanceD->user_id = $user->id;
@@ -75,8 +83,9 @@ class NaissanceDeclaController extends Controller
             'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissanceD->name}.",
         ]);
         
-        return redirect()->back()->with('success', 'Votre demande a été enregistrée avec succès, Vous pouvez la voir dans la listes');
+        return redirect()->route('utilisateur.dashboard')->with('success', 'Votre demande a été enregistrée avec succès, Vous pouvez la voir dans la liste.');
     }
+    
 
     public function show($id)
     {

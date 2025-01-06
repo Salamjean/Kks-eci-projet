@@ -20,6 +20,8 @@ class NaissHop extends Model
         'CNI_Pere',
         'NomEnf',
         'commune',
+        'codeCMU',
+        'lien',
         'DateNaissance',
         'codeDM',
         'codeCMN',
@@ -29,6 +31,6 @@ class NaissHop extends Model
      // Définir la relation avec le sous-administrateur
      public function sousAdmin()
      {
-         return $this->belongsTo(SousAdmin::class, 'sous_admin_id');
+         return $this->belongsTo(SousAdmin::class, 'user_id');
      }
 }

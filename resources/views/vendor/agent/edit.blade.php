@@ -78,7 +78,7 @@
 </style>
 
 <div class="signup-container">
-  <h6>Inscrire un agent pour la maire de {{ Auth::guard('vendor')->user()->name }}</h6>
+  <h6>Modifier les informations de l'agent {{ $agent->name . ' ' . $agent->prenom}}</h6>
   <div class="ms-panel-body">
     <form class="needs-validation" method="POST"  action="{{ route('agent.update', $agent->id) }}" novalidate>
         @csrf

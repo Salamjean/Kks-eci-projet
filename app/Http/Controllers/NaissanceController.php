@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\saveNaissanceRequest;
 use App\Models\Alert;
 use App\Models\Deces;
+use App\Models\Decesdeja;
 use App\Models\Image;
 use App\Models\Mariage;
 use App\Models\Naissance;
@@ -39,23 +40,24 @@ class NaissanceController extends Controller
         return view('naissances.index', compact('naissances', 'alerts', 'naissancesD'));
     }
     public function userindex()
-    {
-        // Récupérer l'admin connecté
-        $user = Auth::user();
-    
-        // Récupérer les alertes
-        $alerts = Alert::where('is_read', false)
-        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+{
+    // Récupérer l'utilisateur connecté
+    $user = Auth::user();
+
+    // Récupérer les alertes pour l'utilisateur
+    $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  
         ->latest()
         ->get();
-    
-        // Filtrer les naissances selon la commune de l'admin connecté
-        $naissances = Naissance::where('commune', $user->commune)->paginate(10); // Filtrage par commune
-        $naissancesD = NaissanceD::where('commune', $user->commune)->paginate(10); // Filtrage par commune
-    
-        // Retourner la vue avec les données
-        return view('naissances.userindex', compact('naissances', 'alerts', 'naissancesD'));
-    }
+
+    // Filtrer les naissances selon l'ID de l'utilisateur connecté
+    $naissances = Naissance::where('user_id', $user->id)->paginate(10);
+    $naissancesD = NaissanceD::where('user_id', $user->id)->paginate(10);
+
+    // Retourner la vue avec les données
+    return view('naissances.userindex', compact('naissances', 'alerts', 'naissancesD'));
+}
+
     public function agentindex()
 {
     // Récupérer l'admin connecté
@@ -79,6 +81,29 @@ class NaissanceController extends Controller
 
     // Retourner la vue avec les données
     return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD'));
+}
+
+public function ajointindex()
+{
+    // Récupérer l'admin connecté
+    $admin = Auth::guard('ajoint')->user();
+
+    // Récupérer les alertes
+    $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  
+        ->latest()
+        ->get();
+
+    // Filtrer les naissances selon la commune de l'admin connecté
+    // et l'agent connecté pour les demandes traitées par cet agent
+    $naissances = Naissance::where('commune', $admin->communeM)
+        ->paginate(10); // Pagination
+
+    $naissancesD = NaissanceD::where('commune', $admin->communeM)
+        ->paginate(10); // Pagination
+
+    // Retourner la vue avec les données
+    return view('naissances.ajointindex', compact('naissances', 'alerts', 'naissancesD'));
 }
 
     public function traiterDemande($id)
@@ -123,6 +148,18 @@ class NaissanceController extends Controller
 
         return redirect()->route('deces.agentindex')->with('success', 'Demande de deces traitée avec succès.');
     }
+
+    $agent = Auth::guard('agent')->user();
+    // Essayer de trouver une demande de naissanceD
+    $decesdeja = Decesdeja::find($id);
+    if ($decesdeja) {
+        $decesdeja->is_read = true; // Marquer comme traité
+        $decesdeja->agent_id = $agent->id; // Enregistrer l'ID de l'agent
+        $decesdeja->save();
+        return redirect()->route('deces.agentindex')->with('success', 'Demande de decesdeja traitée avec succès.');
+    }
+
+    
     // Si aucune demande n'est trouvée
     return redirect()->route('deces.agentindex')->with('error', 'Demande introuvable.');
 }
@@ -209,7 +246,7 @@ class NaissanceController extends Controller
         'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissance->nomDefunt}.",
     ]);
     
-    return redirect()->back()->with('success', 'Votre demande a été traitée avec succès.');
+    return redirect()->route('utilisateur.dashboard')->with('success', 'Votre demande a été traitée avec succès.');
 }
 
 

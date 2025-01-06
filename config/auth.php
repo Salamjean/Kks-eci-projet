@@ -66,6 +66,16 @@ return [
             'provider' => 'agents',
         ],
 
+        'ajoint' => [
+            'driver' => 'session',
+            'provider' => 'ajoints',
+        ],
+
+        'caisse' => [
+            'driver' => 'session',
+            'provider' => 'caisses',
+        ],
+
         'utilisateur' => [
             'driver' => 'session',
             'provider' => 'utilisateurs',
@@ -118,6 +128,16 @@ return [
         'agents' => [
             'driver' => 'eloquent',
             'model' => App\Models\Agent::class,
+        ],
+
+        'ajoints' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Ajoint::class,
+        ],
+
+        'caisses' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Caisse::class,
         ],
         'utilisateurs' => [
             'driver' => 'eloquent',

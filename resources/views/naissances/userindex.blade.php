@@ -2,7 +2,23 @@
 
 @section('content')
 
-<div class="row flex-grow">
+<style>
+    .form-background {
+        background-image: url("{{ asset('assets/images/profiles/arriereP.jpg') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 20px;
+        border-radius: 8px;
+    }
+
+    .modal-image {
+        max-width: 100%;
+        height: auto;
+    }
+</style>
+
+<div class="row flex-grow form-background">
     <div class="col-12 grid-margin stretch-card">
         <div class="card card-rounded">
             <div class="card-body">
@@ -63,9 +79,7 @@
                                             <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
                                                  alt="Pièce du parent" 
                                                  width="100" 
-                                                 height=auto
-                                                 data-bs-toggle="modal" 
-                                                 data-bs-target="#imageModal" 
+                                                 height="auto" 
                                                  onclick="showImage(this)" 
                                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
@@ -73,9 +87,7 @@
                                             <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" 
                                                  alt="Certificat de déclaration" 
                                                  width="100" 
-                                                 height=auto
-                                                 data-bs-toggle="modal" 
-                                                 data-bs-target="#imageModal" 
+                                                 height="auto" 
                                                  onclick="showImage(this)" 
                                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
@@ -107,6 +119,7 @@
                                         <th>Nom sur l'extrait</th>
                                         <th>Numéro de régistre</th>
                                         <th>Date de régistre</th>
+                                        <th>Numéro CMU</th>
                                         <th>Pièce d'identité du demandeur</th>
                                         <th>Etat Actuel</th>
                                         <th>Agent</th>
@@ -120,13 +133,12 @@
                                         <td>{{ $naissanceD->name.' '.$naissanceD->prenom }}</td>
                                         <td>{{ $naissanceD->number }}</td>
                                         <td>{{ $naissanceD->DateR }}</td>
+                                        <td>{{ $naissanceD->CMU }}</td>
                                         <td>
                                             <img src="{{ asset('storage/' . $naissanceD->CNI) }}" 
                                                  alt="Certificat de déclaration" 
                                                  width="100" 
-                                                 height=auto
-                                                 data-bs-toggle="modal" 
-                                                 data-bs-target="#imageModal" 
+                                                 height="auto" 
                                                  onclick="showImage(this)" 
                                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
@@ -153,11 +165,24 @@
     </div>
 </div>
 
-@endsection
+<!-- Modale -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img id="modalImage" class="modal-image" src="" alt="Image en grand">
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     function showImage(imageElement) {
         const modalImage = document.getElementById('modalImage');
-        modalImage.src = imageElement.src.includes('assets/images/profiles/bébé.jpg') ? imageElement.src : imageElement.src;
+        modalImage.src = imageElement.src;
+        const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+        imageModal.show();
     }
 </script>
+
+@endsection

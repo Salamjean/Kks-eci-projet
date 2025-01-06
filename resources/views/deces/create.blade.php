@@ -41,7 +41,6 @@
     input[type="text"], input[type="file"] {
         width: 100%;
         padding: 0.8rem;
-        margin-top: 0.5rem;
         border: 1px solid #ddd;
         border-radius: 10px;
         background: #f9f9f9;
@@ -115,8 +114,8 @@
         @csrf
 
         <div class="form-group text-center">
-            <label for="dossierNum">Numéro de Dossier Médical</label>
-            <input type="text" id="dossierNum" name="dossierNum" value="{{ old('dossierNum') }}" placeholder="Ex: CMD1411782251">
+            <label for="dossierNum" class="text-center">Numéro de Dossier Médical</label>
+            <input type="text" class="text-center" id="dossierNum" name="dossierNum" value="{{ old('dossierNum') }}" placeholder="Ex: CMD1411782251">
             @error('dossierNum')
                 <span style="color: red">{{ $message }}</span>
             @enderror

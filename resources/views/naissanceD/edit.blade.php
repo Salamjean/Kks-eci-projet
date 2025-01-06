@@ -1,4 +1,4 @@
-@extends('vendor.layouts.template')
+@extends('vendor.agent.layouts.template')
 
 @section('content')
 <div class="container">

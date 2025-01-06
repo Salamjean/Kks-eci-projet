@@ -64,7 +64,7 @@
       display: none;
     }
 
-    #msform input, #msform textarea {
+    select, #msform input, #msform textarea {
       padding: 15px;
       border: 1px solid #ccc;
       border-radius: 3px;
@@ -184,6 +184,20 @@
     border: 1px solid #ccc;
     border-radius: 5px;
     } 
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .form-group input {
+        margin-right: 10px; /* Espace entre les champs */
+    }
+
+    .error-message {
+        color: red; /* Couleur des messages d'erreur */
+        margin-left: 10px; /* Espace entre le champ et le message d'erreur */
+    }
   </style>
 </head>
 <body>
@@ -193,57 +207,80 @@
       <li class="active">Informations 
         <br>sur la mère</li>
       <li>Informations 
-        <br>sur le père</li>
+        <br>sur l'accompagnateur</li>
       <li>Informations du nouveau-né</li>
     </ul>
 
     <fieldset>
       <h2 class="fs-title">Déclaration de naissance</h2>
       <h3 class="fs-subtitle">Informations sur la mère</h3>
-      <input type="text" name="NomM" placeholder="Entrez le nom de la mère" />
-      @error('NomM')
-      <div class="text-danger text-center">{{ $message }}</div>
-  @enderror
-      <input type="text" name="PrM" placeholder="Entrez le prénom de la mère" />
-      @error('PrM')
-      <div class="text-danger text-center">{{ $message }}</div>
-  @enderror
-      <input type="date" name="dateM" />
-      @error('dateM')
-      <div class="text-danger text-center">{{ $message }}</div>
-  @enderror
-      <input type="text" name="contM" placeholder="Entrez le numéro de la mère"><br>
-      @error('contM')
-      <div class="text-danger text-center">{{ $message }}</div>
-  @enderror
-      <label style="position: relative; right: 22px;">Joindre copie CNI/passeport/extrait de la mère</label><br>
-      <input type="file" name="CNI_mere" />
-      @error('CNI_mere')
-      <div class="text-danger text-center">{{ $message }}</div>
-  @enderror
-      <input type="button" class="next action-button" value="Suivant" />
+      <div class="form-group">
+           <input type="text" name="NomM" placeholder="Entrez le nom de la mère" />
+            @error('NomM')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+  
+            <input type="text" name="PrM" placeholder="Entrez le prénom de la mère" />
+            @error('PrM')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+      </div>
+      <div style="display: flex; justify-content: space-around;">
+           <label>Entrez la date de naissance de la mère</label>
+           <label>Joindre copie CNI/passeport/extrait de la mère</label>
+      </div>
+      <div class="form-group">
+        <input type="date" name="dateM" />
+        @error('dateM')
+            <div class="text-danger text-center">{{ $message }}</div>
+        @enderror
+    
+        
+        <input type="file" name="CNI_mere" />
+        @error('CNI_mere')
+            <div class="text-danger text-center">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="form-group">
+         <input type="text" name="contM" placeholder="Entrez le numéro de téléphone de la mère" ><br>
+         @error('contM')
+         <div class="text-danger text-center">{{ $message }}</div>
+         @enderror
+         <input type="text" name="codeCMU" placeholder="Entrez le numéro CMU de la mère" ><br>
+         @error('CMU')
+         <div class="text-danger text-center">{{ $message }}</div>
+         @enderror
+    </div>
+         <input type="button" class="next action-button" value="Suivant" />
     </fieldset>
 
     <fieldset>
       <h2 class="fs-title">Déclaration de naissance</h2>
       <h3 class="fs-subtitle">Informations sur la compagnateur</h3>
+      <div class="form-group">
       <input type="text" name="NomP" placeholder="Entrez le nom de la compagnateur" />
       @error('NomP')
       <div class="text-danger text-center">{{ $message }}</div>
-  @enderror
-      <input type="text" name="PrP" placeholder="Entrez le prénom de la compagnateur" />
-      @error('PrP')
+      @enderror
+          <input type="text" name="PrP" placeholder="Entrez le prénom de la compagnateur" />
+          @error('PrP')
+          <div class="text-danger text-center">{{ $message }}</div>
+      @enderror
+      </div>
+      <div class="form-group">
+          <input type="text" name="contP" placeholder="Entrez le numéro de la compagnateur"><br>
+          @error('contP')
+          <div class="text-danger text-center">{{ $message }}</div>
+          @enderror
+          <input type="text" name="CNI_Pere" placeholder="Entrez le numéro CNI/CMU/Passsport" />
+          @error('CNI_Pere')
+          <div class="text-danger text-center">{{ $message }}</div>
+          @enderror
+      </div>
+      <input type="text" name="lien" placeholder="Entrez le lien parental" />
+      @error('lien')
       <div class="text-danger text-center">{{ $message }}</div>
-  @enderror
-      <input type="text" name="contP" placeholder="Entrez le numéro de la compagnateur"><br>
-      @error('contP')
-      <div class="text-danger text-center">{{ $message }}</div>
-  @enderror
-      <label style="position: relative; right: 27px;">Joindre copie CNI/passeport/extrait de la compagnateur</label><br>
-      <input type="file" name="CNI_Pere" />
-      @error('CNI_Pere')
-      <div class="text-danger text-center">{{ $message }}</div>
-  @enderror
+      @enderror
       <input type="button" class="previous action-button" value="Retour" />
       <input type="button" class="next action-button" value="Suivant" />
     </fieldset>

@@ -26,6 +26,7 @@ class User extends Authenticatable
         'password',
         'is_activated',
         'commune',
+        'CMU',
         'profile_picture',
     ];
 
