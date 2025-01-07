@@ -1,78 +1,11 @@
 <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Bouton Sidebar -->
-  <button id="sidebarToggleTop" class="btn btn-primary  rounded-circle mr-3">
-    <i class="fa fa-bars"></i>
-  </button>
-
-
 
   <!-- Icônes du Topbar -->
   <ul class="navbar-nav ml-auto align-items-center">
     <!-- Notifications -->
-    <li class="nav-item dropdown no-arrow mx-1">
-      <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
-         aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-bell fa-fw"></i>
-        @if($alerts->count() > 0)
-            <span class="badge badge-danger badge-counter">{{ $alerts->count() }}</span>
-        @endif
-      </a>
-      <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-        <h6 class="dropdown-header">Alertes</h6>
-        @forelse ($alerts as $alert)
-            <a class="dropdown-item d-flex align-items-center alert-item" href="#"
-               data-id="{{ $alert->id }}"
-               data-message="{{ $alert->message }}"
-               data-date="{{ $alert->created_at->format('d/m/Y H:i') }}">
-                <div class="icon-circle bg-primary">
-                    <i class="fas fa-file-alt text-white"></i>
-                </div>
-                <div>
-                    <span class="font-weight-bold">{{ $alert->message }}</span>
-                    <div class="text-gray-500">{{ $alert->created_at->diffForHumans() }}</div>
-                </div>
-            </a>
-        @empty
-            <a class="dropdown-item text-center small text-gray-500" href="#">Aucune alerte disponible</a>
-        @endforelse
-      </div>
-    </li>
-    
-    
-  
-  <!-- Modal pour afficher les détails de l'alerte -->
-  <div class="modal fade" id="alertDetailsModal" tabindex="-1" role="dialog" aria-labelledby="alertDetailsModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="alertDetailsModalLabel">Détails de l'alerte</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                  </button>
-              </div>
-              <div class="modal-body">
-                  <p><strong>Message:</strong> <span id="alertMessage"></span></p>
-                  <p><strong>Créée le:</strong> <span id="alertCreatedAt"></span></p>
-              </div>
-          </div>
-      </div>
-  </div>
-  
 
-    <!-- Messages -->
-    <li class="nav-item dropdown no-arrow mx-1">
-      <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" 
-         aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-envelope fa-fw"></i>
-        <span class="badge badge-warning badge-counter">2</span>
-      </a>
-      <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" 
-           aria-labelledby="messagesDropdown">
-        <h6 class="dropdown-header">Messages</h6>
-        <a class="dropdown-item text-center small text-gray-500" href="#">Voir tous les messages</a>
-      </div>
-    </li>
 
     <!-- Profil Utilisateur -->
     <li class="nav-item dropdown no-arrow">

@@ -220,7 +220,8 @@
                         <th>Date de Décès</th>
                         <th>Causes du Décès</th>
                         <th>Commune de Décès</th>
-                        <th colspan="4" style="text-align: center">Action</th>
+                        <th colspan="3" style="text-align: center">Action</th>
+                        <th colspan="2" style="text-align: center">Télécharger</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -247,14 +248,21 @@
                         <td>
                             <button class="eye">
                                 <a href="{{ route('decesHop.download', $deceshop->id) }}" style="color: #009efb">
-                                    <i class="fas fa-download" style="color: blue"></i> PDF
+                                    <i class="fas fa-download" style="color: blue"></i><br> Déclaration
+                                </a>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="eye">
+                                <a href="{{ route('decesHop.downloadcontagion', $deceshop->id) }}" style="color: #009efb">
+                                    <i class="fas fa-download" style="color: blue"></i> <br>Contagion
                                 </a>
                             </button>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center">Aucun Décès Déclaré</td>
+                        <td colspan="12" class="text-center">Aucun Décès Déclaré</td>
                     </tr>
                     @endforelse
                 </tbody>

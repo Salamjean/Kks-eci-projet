@@ -288,6 +288,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/mairie/{id}', [DecesHopController::class, 'mairieshow'])->name('mairiedecesHop.show');
         Route::post('/deces/verifierCodeCMD', [DecesHopController::class, 'verifierCodeDMD'])->name('deces.verifierCodeCMD');
         Route::get('/download/{id}', [DecesHopController::class, 'download'])->name('decesHop.download');
+        Route::get('/download-contagion/{id}', [DecesHopController::class, 'downloadcontagion'])->name('decesHop.downloadcontagion');
     });
 
     // Les routes pour les statistiques

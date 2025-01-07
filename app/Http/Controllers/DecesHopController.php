@@ -144,11 +144,16 @@ class DecesHopController extends Controller
 
     // Générer le PDF
     $pdf = PDF::loadView('decesHop.pdf', compact('decesHop', 'codeDM', 'codeCMD', 'sousadmin', 'qrCodePath'));
-
-    // Sauvegarder le PDF dans le dossier public
     $pdfFileName = "declaration_deces_{$decesHop->id}.pdf";
     $pdf->save(storage_path("app/public/deces_hops/{$pdfFileName}"));
 
+
+    // Générer la contagion PDF
+    $pdf3 = PDF::loadView('decesHop.contagionpdf', compact('decesHop', 'codeDM', 'codeCMD', 'sousadmin', 'qrCodePath'))
+    ->setPaper('a4', 'landscape'); 
+    $pdfFileName3 = "contagion_{$decesHop->id}.pdf";
+    $pdf3->save(storage_path("app/public/deces_hops/{$pdfFileName3}"));
+    
     Alert::create([
         'type' => 'decesHop',
         'message' => "Une nouvelle déclaration de décès a été enregistrée par : {$decesHop->nomHop}.",
@@ -202,6 +207,25 @@ public function download($id)
 
     // Retourner le PDF pour téléchargement direct
     return $pdf->download("declaration_{$decesHop->id}.pdf");
+}
+
+public function downloadcontagion($id)
+{
+    // Récupérer l'objet NaissHop
+    $decesHop = DecesHop::findOrFail($id);
+
+    // Récupérer les informations du sous-admin connecté
+    $sousadmin = Auth::guard('sous_admin')->user(); // Supposons que le sous-admin est connecté via `auth`
+
+    if (!$sousadmin) {
+        return back()->withErrors(['error' => 'Sous-admin non authentifié.']);
+    }
+
+    // Générer le PDF avec les données
+    $pdf = PDF::loadView('decesHop.contagionpdf', compact('decesHop', 'sousadmin'));
+
+    // Retourner le PDF pour téléchargement direct
+    return $pdf->download("contagion_{$decesHop->id}.pdf");
 }
 
     
