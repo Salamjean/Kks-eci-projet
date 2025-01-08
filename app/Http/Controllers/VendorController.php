@@ -31,10 +31,7 @@ class VendorController extends Controller
     public function dashboard(){
         return view('vendor.dashboard');
     }
-
-
     // Pour l'authentification
-    
     public function register(){
         return view('vendor.auth.register');
     }
@@ -227,6 +224,7 @@ public function hoptitalstore(Request $request)
         'contact' => 'required|string|min:10',
         'nomHop' => 'required|string|max:255',
         'commune' => 'required|string|max:255',
+        'type' => 'required|string|max:255',
         'profile_picture' => 'nullable|image|max:2048',
     
     ]);
@@ -252,6 +250,7 @@ public function hoptitalstore(Request $request)
 
         $doctor->nomHop = $request->nomHop;
         $doctor->commune = $request->commune;
+        $doctor->type = $request->type;
         $doctor->save();
 
         // Envoi de l'e-mail de vérification

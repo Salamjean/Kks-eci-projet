@@ -157,7 +157,18 @@
         </div>
 
         <div class="form-row mb-3">
-            <div class="col-md-12">
+            <div class="col-md-6">
+                <label for="validationCustom005" class="form-label">Type</label>
+                <select class="form-control" name="type" id="validationCustom005" required>
+                    <option value="" disabled selected>Choisissez le type d'hôpital...</option>
+                    <option value="hôpital-general">Hôpital Général</option>
+                    <option value="clinique">Clinique</option>
+                    <option value="pmi">PMI</option>
+                    <option value="chu">CHU</option>
+                    <option value="fsu">FSU</option>
+                </select>
+            </div>
+            <div class="col-md-6">
                 <label for="validationCustom005" class="form-label">Nom de l'hôpital</label>
                 <input type="text" class="form-control" name="nomHop" id="validationCustom005" placeholder="Entrez le nom de l'hôpital" required>
                

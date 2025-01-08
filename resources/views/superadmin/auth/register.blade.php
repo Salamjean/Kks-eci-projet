@@ -104,7 +104,7 @@
 </head>
 <body>
 
-<form class="form-control" method="POST" action="{{ route('vendor.validate', $email) }}">
+<form class="form-control" method="POST" action="{{ route('super_admin.handleRegister') }}">
   <div class="row" style="width:100%; justify-content:center">
     @if (Session::get('success1')) <!-- Pour la suppression -->
         <script>
@@ -148,7 +148,7 @@
         </script>
     @endif
 </div>
-    <p class="title">Inscription d'une mairie</p>
+    <p class="title">Kks-Technologies</p>
 
     @csrf
     @method('post')
@@ -157,6 +157,7 @@
         <div class="success-message">{{ Session::get('success') }}</div>
     @endif
 
+    <div class="input-field">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -171,22 +172,20 @@
             });
         });
     </script>
+        <input class="input" type="text" name="name" placeholder="Entrez votre nom & prénoms" value="{{ old('name') }}" required />
+        <label class="label" for="name">Nom et Prénoms</label>
+        @error('name')
+            <div class="error-message">{{ $message }}</div>
+        @enderror
+    </div>
 
     <div class="input-field">
-        <input class="input" type="email" name="email" placeholder="Email@exemple.com" value="{{ $email }}" required />
+        <input class="input" type="email" name="email" placeholder="Email@exemple.com" value="{{ old('email') }}" required />
         <label class="label" for="email">Email</label>
         @error('email')
             <div class="error-message">{{ $message }}</div>
         @enderror
     </div>
-    <div class="input-field">
-        <input  class="input" type="text" value="{{ old('code') }}" name="code" />
-        <label class="label" for="code">Code</label>
-        @error('code')
-            <div class="error-message">{{ $message }}</div>
-        @enderror
-    </div>
-    
 
     <div class="input-field">
         <input class="input" type="password" name="password" required />
@@ -196,15 +195,7 @@
         @enderror
     </div>
 
-    <div class="input-field">
-        <input class="input" type="password" name="confirme_password" required />
-        <label class="label" for="password">Confirmer Mot de passe</label>
-        @error('confirme_password')
-            <div class="error-message">{{ $message }}</div>
-        @enderror
-    </div>
-
-    <button type="submit" class="submit-btn">Valider</button>
+    <button type="submit" class="submit-btn">S'inscrire</button>
 </form>
 <script>
   document.addEventListener('DOMContentLoaded', function() {

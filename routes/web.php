@@ -19,6 +19,7 @@ use App\Http\Controllers\NaissHopController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SousAdminController;
 use App\Http\Controllers\StatController;
+use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
@@ -97,8 +98,27 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/register', [DoctorController::class, 'handleRegister'])->name('handleRegister');
     Route::get('/login', [DoctorController::class, 'login'])->name('doctor.login');
     Route::post('/login', [DoctorController::class, 'handleLogin'])->name('handleLogin');
-    
     });
+
+    //les routes du super admin
+    Route::prefix('super-admin')->group(function () {
+        // Routes pour l'authentification
+    Route::get('/register', [SuperAdminController::class, 'register'])->name('super_admin.register');
+    Route::post('/register', [SuperAdminController::class, 'handleRegister'])->name('super_admin.handleRegister');
+    Route::get('/login', [SuperAdminController::class, 'login'])->name('super_admin.login');
+    Route::post('/login', [SuperAdminController::class, 'handleLogin'])->name('super_admin.handleLogin');
+    });
+
+    Route::middleware('auth:super_admin')->group(function () {
+        // Dashboard
+        Route::get('/dashboard-super', [SuperAdminController::class, 'dashboard'])->name('super_admin.dashboard');
+        Route::get('/logout', [SuperAdminController::class, 'logout'])->name('super_admin.logout');
+
+        Route::get('/index-mairie', [SuperAdminController::class, 'index'])->name('super_admin.index');
+        Route::get('/mairie/create', [SuperAdminController::class, 'create'])->name('super_admin.create');
+        Route::post('/mairie/store', [SuperAdminController::class, 'store'])->name('super_admin.store');
+    
+    });        
 
     //Les routes de l'administrator (Mairie)
     Route::prefix('vendors')->group(function () {
@@ -185,6 +205,8 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/validate-account/{email}', [SousAdminController::class, 'submitDefineAccess'])->name('doctor.validate');
     Route::get('/validate-hopital-account/{email}', [VendorController::class, 'defineAccess']);
     Route::post('/validate-hopital-account/{email}', [VendorController::class, 'submitDefineAccess'])->name('doctor.hopitalvalidate');
+    Route::get('/validate-mairie-account/{email}', [SuperAdminController::class, 'defineAccess']);
+    Route::post('/validate-mairie-account/{email}', [SuperAdminController::class, 'submitDefineAccess'])->name('vendor.validate');
     Route::get('/validate-agent-account/{email}', [AgentController::class, 'defineAccess']);
     Route::post('/validate-agent-account/{email}', [AgentController::class, 'submitDefineAccess'])->name('agent.validate');
     Route::get('/validate-ajoint-account/{email}', [AjointController::class, 'defineAccess']);
@@ -296,7 +318,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/', [StatController::class, 'index'])->name('stats.index');
         Route::get('/download', [StatController::class, 'download'])->name('stats.download');
         Route::get('/super', [StatController::class, 'superindex'])->name('stats.superindex');
-        Route::get('/super/download', [StatController::class, 'superdownload'])->name('stats.superdownload'); // Modifie la route pour éviter le conflit
+        Route::get('/super/download', [StatController::class, 'superdownload'])->name('stats.superdownload');
     });
     
 

@@ -76,6 +76,11 @@ return [
             'provider' => 'caisses',
         ],
 
+        'super_admin' => [
+            'driver' => 'session',
+            'provider' => 'super_admins',
+        ],
+
         'utilisateur' => [
             'driver' => 'session',
             'provider' => 'utilisateurs',
@@ -138,6 +143,11 @@ return [
         'caisses' => [
             'driver' => 'eloquent',
             'model' => App\Models\Caisse::class,
+        ],
+
+        'super_admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\SuperAdmin::class
         ],
         'utilisateurs' => [
             'driver' => 'eloquent',

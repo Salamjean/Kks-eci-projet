@@ -2,22 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Doctor extends Authenticatable
+class SuperAdmin extends Authenticatable
 {
     use HasFactory, Notifiable;
     protected $fillable = [
         'name',
         'email',
-        'contact',
         'password',
-        'nomHop',
-        'commune',
-        'type',
-        'profile_picture',
     ];
 
      /**
@@ -40,6 +35,15 @@ class Doctor extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relation avec les naissances.
+     * Un administrateur peut être associé à plusieurs naissances via son "name" (lieu).
+     */
+    public function naissances()
+    {
+        return $this->hasMany(Naissance::class, 'lieuNaiss', 'name');
     }
 
     protected $guarded = [];
