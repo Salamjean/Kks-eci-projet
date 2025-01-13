@@ -165,7 +165,7 @@
                     y: {
                         beginAtZero: true,
                         ticks: {
-                            stepSize: 1 // Définit les intervalles de graduation à 1
+                            stepSize: 1 
                         }
                     }
                 }

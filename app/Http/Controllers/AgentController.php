@@ -232,6 +232,14 @@ public function agentdashboard(Agent $agent) {
 }
 
 
+public function superindex() {
+    $alerts = Alert::all();
+    $agents = Agent::all();
+    return view('vendor.agent.superindex', compact('agents','alerts'));
+}
+
+
+
 public function agentvue(Agent $agent, Request $request) {
     // Récupérer l'admin connecté
     $admin = Auth::guard('agent')->user();

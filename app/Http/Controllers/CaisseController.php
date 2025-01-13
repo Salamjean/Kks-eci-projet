@@ -34,6 +34,13 @@ class CaisseController extends Controller
         return view('vendor.caisse.index', compact('caisses','alerts'));
      }
 
+     public function superindex(){
+        $alerts = Alert::all();
+        $caisses = Caisse::all();
+        return view('vendor.caisse.superindex', compact('caisses','alerts'));
+     }
+     
+
      public function caissestore(Request $request){
         // Validation des données
        

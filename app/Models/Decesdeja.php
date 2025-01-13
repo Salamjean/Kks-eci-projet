@@ -11,6 +11,10 @@ class Decesdeja extends Model
         'numberR',
         'dateR',
         'pActe',
+        'CNIdfnt',
+        'CNIdcl',
+        'documentMariage',
+        'RequisPolice',
         'commune',
         'etat',
         'user_id',  // Ajout de user_id

@@ -48,7 +48,7 @@ class DashboardController extends Controller
         $demandes = $naissances->concat($naissancesD)->concat($deces)->concat($mariages)->concat($decesdeja);
 
         // Trier les demandes par date de création (les plus récentes en premier)
-        $demandesRecente = $demandes->sortByDesc('created_at')->take(4);;
+        $demandesRecente = $demandes->sortByDesc('created_at')->take(5);;
 
          // Calcul des totaux pour les groupes fusionnés
          $naissancesCount = Naissance::where('user_id', $user->id)->count();

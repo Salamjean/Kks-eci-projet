@@ -31,41 +31,48 @@
     <link rel="stylesheet" href="{{ asset('assets4/css/normalize.css') }}">
     <link rel="stylesheet" href="{{ asset('assets4/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets4/css/responsive.css') }}">
-
+    
     <style>
-			  html, body {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-  }
-  .main-wrapper {
-      flex: 1;
-      display: flex;
-      align-items: stretch;
-  }
-  .image-container {
-      flex: 0 0 30%; 
-      background-size: contain; 
-      background-position: center;
-      background-repeat: no-repeat;
-  }
-  .left-image {
-      background-image: url('{{ asset('assets4/img/fem.png') }}');
-  }
-  .right-image {
-      background-image: url('{{ asset('assets4/img/femmeEn.jpeg') }}');
-  }
-  .content {
-      flex: 2;
-      padding: 20px;
-      background-color: white;
-      text-align: center;
-  }
-  footer {
-      margin-top: auto;
-  }
-    </style>
+         html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background-image: url('{{ asset('assets4/img/decessur.jpg') }}'); /* Remplacez par le chemin de votre image */
+        background-size: cover; 
+        background-position: center;
+        background-repeat: no-repeat; 
+    }
+    .main-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: stretch;
+    }
+    .image-container {
+        flex: 0 0 30%; 
+        background-size: contain; 
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .left-image {
+        background-image: url('{{ asset('assets4/img/docu.png') }}');
+    }
+    .right-image {
+        background-image: url('{{ asset('assets4/img/docu.png') }}');
+    }
+    .content {
+        flex: 2;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.8); /* Ajoutez un fond semi-transparent pour le contenu */
+        text-align: center;
+    }
+    footer {
+        margin-top: auto;
+    }
+    p,h4,li{
+     font-size: 20px;
+ }
+	</style>
 </head>
 <body>
 
@@ -86,7 +93,7 @@
 
     <!-- Header Area -->
     <header class="header">
-        <div class="header-inner" style="background-color:orange;position:fixed; width:100%; z-index:1000">
+        <div class="header-inner" style="background-color:orange; position:fixed; width:100%; z-index:1000">
             <div class="container">
                 <div class="inner">
                     <div class="row">
@@ -103,7 +110,7 @@
                                         <li><a href="#" style="color:white">Naissance <i class="icofont-rounded-down"></i></a>
                                             <ul class="dropdown">
                                                 <li><a href="{{ route('naissanceavec') }}">Demande d'extrait avec Certificat</a></li>
-                                                <li><a href="{{ route('naissancesans') }}">Demande d'extrait simple </a></li>
+                                                <li><a href="{{ route('naissancesans') }}">Demande d'extrait simple</a></li>
                                             </ul>
                                         </li>
                                         <li class="active"><a href="#" style="color:white">Décès <i class="icofont-rounded-down"></i></a>
@@ -131,16 +138,16 @@
         </div>
     </header>
     <!-- End Header Area -->
-    
+    <br><br>
     <!-- Error Page -->
     <div class="main-wrapper">
-        <div class="image-container left-image"></div>
+       
         <section class="error-page section content">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 offset-lg-3 col-12">
+                    <div class="col-lg-12 offset-lg-0 col-12">
                         <div class="error-inner">
-                            <br><br><br><h1 style="font-size: 50px;color:black">Extrait de Décès Simple/Intégral</h1>
+                            <br><br><br><br><br><br><br><h1 style="font-size: 60px;color:black">Extrait de Décès Simple/Intégral</h1>
                             <p>Acte de décès peut donner lieu à la délivrance de 2 documents différents : la copie intégrale, l'extrait simple.
                                 La copie intégrale comporte des informations sur la personne concernée par l'acte (nom, prénoms, date et lieu de naissance), des informations sur ses parents et les mentions marginales lorsqu'elles existent.
                                 Un extrait simple comporte uniquement les informations sur la personne concernée par l'acte de décès.
@@ -157,11 +164,12 @@
                                 <a href="{{ route('utilisateur.dashboard') }}" class="btn" style="background-color: green">Faites votre demande</a>
                             </div>
                         </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
-        <div class="image-container right-image"></div>
+
     </div>
     <!--/ End Error Page -->
     
@@ -170,15 +178,14 @@
         <div class="copyright" style="background-color: green">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-12 col-md-12 col-12">
+                    <div class="col-lg-12 col-md-12 col-12 mt-0">
                         <div class="copyright-content">
-                            <p class="mb-0">© Copyright 2024 | All Rights Reserved by <a href="https://kks-technologies.com/" target="_blank">kks-technologies</a></p>
+                            <p class="mb-0">© Copyright 2024  |  All Rights Reserved by <a href="https://kks-technologies.com/" target="_blank">kks-technologies</a></p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!--/ End Copyright -->
     </footer>
     <!--/ End Footer Area -->
 
@@ -208,3 +215,8 @@
     <script src="{{ asset('assets4/js/main.js') }}"></script>
 </body>
 </html>
+
+
+
+
+

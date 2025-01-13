@@ -33,37 +33,44 @@
     <link rel="stylesheet" href="{{ asset('assets4/css/responsive.css') }}">
     
     <style>
-	 html, body {
-     height: 100%;
-     margin: 0;
-     display: flex;
-     flex-direction: column;
- }
- .main-wrapper {
-     flex: 1;
-     display: flex;
-     align-items: stretch;
- }
- .image-container {
-     flex: 0 0 30%; 
-     background-size: contain; 
-     background-position: center;
-     background-repeat: no-repeat;
- }
- .left-image {
-     background-image: url('{{ asset('assets4/img/ennn.png') }}');
- }
- .right-image {
-	background-image: url('{{ asset('assets4/img/docu.png') }}');
- }
- .content {
-     flex: 2;
-     padding: 20px;
-     background-color: white;
-     text-align: center;
- }
- footer {
-     margin-top: auto;
+         html, body {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background-image: url('{{ asset('assets4/img/docu.jpg') }}'); /* Remplacez par le chemin de votre image */
+        background-size: cover; 
+        background-position: center;
+        background-repeat: no-repeat; 
+    }
+    .main-wrapper {
+        flex: 1;
+        display: flex;
+        align-items: stretch;
+    }
+    .image-container {
+        flex: 0 0 30%; 
+        background-size: contain; 
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .left-image {
+        background-image: url('{{ asset('assets4/img/docu.png') }}');
+    }
+    .right-image {
+        background-image: url('{{ asset('assets4/img/docu.png') }}');
+    }
+    .content {
+        flex: 2;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.8); /* Ajoutez un fond semi-transparent pour le contenu */
+        text-align: center;
+    }
+    footer {
+        margin-top: auto;
+    }
+    p,h4,li{
+     font-size: 20px;
  }
 	</style>
 </head>
@@ -131,16 +138,16 @@
         </div>
     </header>
     <!-- End Header Area -->
-    
+    <br><br>
     <!-- Error Page -->
     <div class="main-wrapper">
-        <div class="image-container left-image"></div>
+       
         <section class="error-page section content">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 offset-lg-3 col-12">
+                    <div class="col-lg-12 offset-lg-0 col-12">
                         <div class="error-inner">
-                            <br><br><br><h1 style="font-size: 50px; color:black">Acte de Naissance Simple/integrale</h1>
+                            <br><br><br><br><br><h1 style="font-size: 60px; color:black">Acte de Naissance Simple/integrale</h1>
                             <p>Un acte de naissance peut donner lieu à la délivrance de 2 documents différents : la copie intégrale, l'extrait simple. La copie intégrale comporte des informations sur la personne concernée par l'acte (nom, prénoms, date et lieu de naissance), des informations sur ses parents et les mentions marginales lorsqu'elles existent. Un extrait simple comporte uniquement les informations sur la personne concernée par l'acte de naissance.</p>
                             <p>Pour une demande d'extrait de naissance simple/integrale, <br><br>
                                 il faut :
@@ -152,14 +159,14 @@
                                 <li>Timbre (500 F CFA /Copie)</li>
                             </p>
                             <div class="get-quote">
-                                <a href="{{ route('utilisateur.dashboard') }}" class="btn" style="background-color: green">Faites votre demande</a>
+                                <a href="{{ route('utilisateur.dashboard') }}" class="btn" style="background-color: green; padding:25px; width:300px">Faites votre demande</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <div class="image-container right-image"></div>
+
     </div>
     <!--/ End Error Page -->
     

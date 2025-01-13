@@ -25,7 +25,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Total Demande Extrait Décès -->
     <div class="col-xl-3 col-md-6 mb-2">
       <div class="card h-100">
@@ -62,7 +62,7 @@
 
   <div class="row mb-3">
     <!-- Total déclaration de Naisshop -->
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-body text-center">
           <div class="text-xs font-weight-bold text-uppercase mb-4">Total Declarations Naissance</div>
@@ -73,7 +73,7 @@
     </div>
 
     <!-- Total déclaration de Deceshop -->
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-body text-center">
           <div class="text-xs font-weight-bold text-uppercase mb-4">Total Declarations Deces</div>
@@ -84,7 +84,7 @@
     </div>
 
     <!-- Total Declarations -->
-    <div class="col-xl-3 col-md-6 mb-4">
+    <div class="col-xl-4 col-md-6 mb-4">
       <div class="card h-100">
         <div class="card-body text-center">
           <div class="text-xs font-weight-bold text-uppercase mb-4">Total Declarations</div>
@@ -97,7 +97,7 @@
 
   <div class="row mb-3">
     <!-- Taux des Demandes -->
-    <div class="col-xl-4 col-lg-5">
+    <div class="col-xl-12 col-lg-5">
       <div class="card mb-2">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Taux des Demandes</h6>
@@ -151,136 +151,11 @@
         </div>
       </div>
     </div>
-
-    <!-- Les Demandes les Plus Récentes -->
-    <div class="col-xl-8 col-lg-7 mb-2">
-      <div class="card">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
-          <h6 class="m-0 font-weight-bold text-white text-center">Les Demandes les Plus Récentes</h6>
-        </div>
-        <div class="table-responsive d-flex">
-         <!-- Naissances Récentes et Existantes -->
-<div>
-  <h3 class="font-weight-bold text-primary text-center" style="font-size: 20px;">Naissances Récentes</h3>
-  <table class="table align-items-center table-flush">
-      <thead class="thead-light">
-          <tr>
-              <th>Type</th>
-              <th>Hôpital</th>
-              <th>Date</th>
-              <th>Heure</th>
-              <th>Action</th>
-          </tr>
-      </thead>
-      <tbody>
-          @forelse ($recentNaissances as $naissance)
-              <tr>
-                  <td>Nouveau né</td>
-                  <td>{{ $naissance->nomHopital ?: 'Extrait Simple/Integral' }}</td>
-                  <td>{{ $naissance->created_at->format('d/m/Y') }}</td>
-                  <td>{{ $naissance->created_at->format('H:i:s') }}</td>
-                  <td>
-                      <a href="{{ route('naissance.show', $naissance->id) }}" class="btn btn-sm btn-primary">Détails</a>
-                  </td>
-              </tr>
-          @empty
-              <tr>
-                  <td colspan="5" class="text-center">Aucune naissance récente</td>
-              </tr>
-          @endforelse
-
-          @forelse ($recentNaissancesd as $naissanced)
-              <tr>
-                  <td>{{ $naissanced->type }}</td>
-                  <td>N/A</td> 
-                  <td>{{ $naissanced->created_at->format('d/m/Y') }}</td>
-                  <td>{{ $naissanced->created_at->format('H:i:s') }}</td>
-                  <td>
-                      <a href="{{ route('naissanced.show', $naissanced->id) }}" class="btn btn-sm btn-primary">Détails</a>
-                  </td>
-              </tr>
-          @empty
-              <tr>
-                  <td colspan="5" class="text-center">Aucune naissance existante</td>
-              </tr>
-          @endforelse
-      </tbody>
-  </table>
-</div>
-
-          <!-- Décès Récentes -->
-          <div style="margin-left: 20px;">
-            <h3 class="font-weight-bold text-primary text-center" style="font-size: 20px;">Décès récent</h3>
-            <table class="table align-items-center table-flush">
-              <thead class="thead-light">
-                <tr>
-                  <th>Type</th>
-                  <th>Hôpital</th>
-                  <th>Date</th>
-                  <th>Heure</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                @forelse ($recentDeces as $deces)
-                  <tr>
-                    <td>Décès</td>
-                    <td>{{ $deces->nomHopital }}</td>
-                    <td>{{ $deces->created_at->format('d/m/Y') }}</td>
-                    <td>{{ $deces->created_at->format('H:i:s') }}</td>
-                    <td>
-                      <a href="{{ route('deces.show', $deces->id) }}" class="btn btn-sm btn-primary">Détails</a>
-                    </td>
-                  </tr>
-                @empty
-                  <tr>
-                    <td colspan="6" class="text-center">Aucun décès récent</td>
-                  </tr>
-                @endforelse
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Mariages Récentes -->
-          <div style="margin-left: 20px;">
-            <h3 class="font-weight-bold text-primary text-center" style="font-size: 20px;">Mariage récent</h3>
-            <table class="table align-items-center table-flush">
-              <thead class="thead-light">
-                <tr>
-                  <th>Type</th>
-                  <th>Demandeur</th>
-                  <th>Date</th>
-                  <th>Heure</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                @forelse ($recentMariages as $mariage)
-                  <tr>
-                    <td>Mariage</td>
-                    <td>{{ $mariage->user->name }}</td>
-                    <td>{{ $mariage->created_at->format('d/m/Y') }}</td>
-                    <td>{{ $mariage->created_at->format('H:i:s') }}</td>
-                    <td>
-                      <a href="{{ route('mariage.show', $mariage->id) }}" class="btn btn-sm btn-primary">Détails</a>
-                    </td>
-                  </tr>
-                @empty
-                  <tr>
-                    <td colspan="6" class="text-center">Aucun mariage récent</td>
-                  </tr>
-                @endforelse
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <div class="row mb-3">
     <!-- Taux des Déclarations -->
-    <div class="col-xl-4 col-lg-5">
+    <div class="col-xl-12 col-lg-5">
       <div class="card mb-2">
         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
           <h6 class="m-0 font-weight-bold text-primary">Taux des Déclarations</h6>
@@ -326,105 +201,29 @@
         </div>
       </div>
     </div>
-
-    <!-- Les Déclarations les Plus Récentes -->
-    <div class="col-xl-8 col-lg-7">
-      <div class="card">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between bg-primary">
-          <h6 class="m-0 font-weight-bold text-white text-center">Les déclarations les Plus Récentes</h6>
-        </div>
-        <div class="table-responsive d-flex">
-          <!-- Naisshops Récentes -->
-          <div>
-            <h3 class="font-weight-bold text-primary text-center" style="font-size: 20px;">Naissance récente</h3>
-            <table class="table align-items-center table-flush">
-              <thead class="thead-light">
-                <tr>
-                  <th>Type</th>
-                  <th>Hôpital</th>
-                  <th>Date</th>
-                  <th>Heure</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                @forelse ($recentNaisshops as $naisshop)
-                  <tr>
-                    <td>Naisshop</td>
-                    <td>{{ $naisshop->NomEnf }}</td>
-                    <td>{{ $naisshop->created_at->format('d/m/Y') }}</td>
-                    <td>{{ $naisshop->created_at->format('H:i:s') }}</td>
-                    <td>
-                      <a href="{{ route('naissHopmairie.show', $naisshop->id) }}" class="btn btn-sm btn-primary">Détails</a>
-                    </td>
-                  </tr>
-                @empty
-                  <tr>
-                    <td colspan="4" class="text-center">Aucune déclaration de naissance</td>
-                  </tr>
-                @endforelse
-              </tbody>
-            </table>
-          </div>
-
-          <!-- Deceshops Récentes -->
-          <div style="margin-left: 20px;">
-            <h3 class="font-weight-bold text-primary text-center" style="font-size: 20px;">Décès récent</h3>
-            <table class="table align-items-center table-flush">
-              <thead class="thead-light">
-                <tr>
-                  <th>Type</th>
-                  <th>Hôpital</th>
-                  <th>Date</th>
-                  <th>Heure</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                @forelse ($recentDeceshops as $deceshop)
-                  <tr>
-                    <td>Deceshop</td>
-                    <td>{{ $deceshop->nomHop }}</td>
-                    <td>{{ $deceshop->created_at->format('d/m/Y') }}</td>
-                    <td>{{ $deceshop->created_at->format('H:i:s') }}</td>
-                    <td>
-                      <a href="{{ route('mairiedecesHop.show', $deceshop->id) }}" class="btn btn-sm btn-primary">Détails</a>
-                    </td>
-                  </tr>
-                @empty
-                  <tr>
-                    <td colspan="4" class="text-center">Aucune déclaration de deceshop récente</td>
-                  </tr>
-                @endforelse
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
-
 </div>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // Fonction pour mettre à jour l'état du message
     function updateStatusMessage(status) {
-        const statusElement = document.getElementById('status-message');
-        if (statusElement) {
-            statusElement.textContent = status;
-        }
+      const statusElement = document.getElementById('status-message');
+      if (statusElement) {
+        statusElement.textContent = status;
+      }
     }
 
     // Appel AJAX pour vérifier et mettre à jour le statut
     function fetchDemandeStatus(demandeId) {
-        fetch(`/demande-status/${demandeId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    updateStatusMessage(data.status);
-                }
-            })
-            .catch(error => console.error('Erreur:', error));
+      fetch(`/demande-status/${demandeId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status) {
+            updateStatusMessage(data.status);
+          }
+        })
+        .catch(error => console.error('Erreur:', error));
     }
 
     // Supposons que vous ayez un moyen de récupérer l'ID de la demande
@@ -433,17 +232,15 @@
 
     // Exécution lorsque l'admin ouvre la demande (simulé ici)
     document.getElementById('open-demande-btn').addEventListener('click', function() {
-        // Vous pouvez ici appeler un backend pour mettre à jour le statut
-        fetch(`/update-demande-status/${demandeId}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.status) {
-                    updateStatusMessage(data.status); // Mettre à jour le message
-                }
-            });
+      fetch(`/update-demande-status/${demandeId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.status) {
+            updateStatusMessage(data.status); // Mettre à jour le message
+          }
+        });
     });
-});
-
+  });
 </script>
 
 @endsection

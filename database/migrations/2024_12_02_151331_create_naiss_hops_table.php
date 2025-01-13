@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('sexe');
             $table->string('codeDM')->default('rien')->unique();
             $table->string('codeCMN')->default('rien')->unique();
+            $table->foreignId('sous_admin_id')->constrained()->onDelete('cascade'); // Ajout du docteur_id
             $table->timestamps();
         });
     }

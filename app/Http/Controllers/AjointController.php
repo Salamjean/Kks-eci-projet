@@ -86,6 +86,12 @@ class AjointController extends Controller
         return view('vendor.ajoint.index', compact('ajoints','alerts'));
      }
 
+     public function superindex(){
+        $alerts = Alert::all();
+        $ajoints = Ajoint::all();
+        return view('vendor.ajoint.superindex', compact('ajoints','alerts'));
+     }
+
      public function ajointedit(Ajoint $ajoint){
         $alerts = Alert::all();
         return view('vendor.ajoint.edit', compact('ajoint','alerts'));

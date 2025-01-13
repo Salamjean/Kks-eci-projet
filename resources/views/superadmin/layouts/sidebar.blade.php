@@ -1,5 +1,5 @@
 <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('vendor.dashboard') }}">
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('super_admin.dashboard') }}">
     <div>
       <img src="{{ asset('assets/images/profiles/E-ci-logo.png') }}" style="height:70px" class="mr-7">
       <div class="sidebar-brand-text mx-3" style="font-size: 30px">E-CI</div>
@@ -17,7 +17,7 @@
   <hr class="sidebar-divider">
 
   <div class="sidebar-heading" style="font-size: 15px; text-align:center">
-    Les Demandes
+   Toutes les Demandes
   </div>
 
   <li class="nav-item" style="font-size: 15px; text-align:center">
@@ -29,8 +29,8 @@
     <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Naissance</h6>
-        <a class="collapse-item" href="#">Déclaration-Naissance</a>
-        <a class="collapse-item" href="#">Extrait-Naissance</a>
+        <a class="collapse-item" href="{{ route('supernaisshop.index') }}">Déclaration-Naissance</a>
+        <a class="collapse-item" href="{{ route("supernaissance.index") }}">Extrait-Naissance</a>
       </div>
     </div>
   </li>
@@ -44,14 +44,14 @@
     <div id="collapseForm" class="collapse" aria-labelledby="headingForm" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Décès</h6>
-        <a class="collapse-item" href="#">Déclaration-Décès</a>
-        <a class="collapse-item" href="#">Extrait-Décès</a>
+        <a class="collapse-item" href="{{ route('superdeceshop.index') }}">Déclaration-Décès</a>
+        <a class="collapse-item" href="{{ route('superdeces.index') }}">Extrait-Décès</a>
       </div>
     </div>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="#">
+    <a class="nav-link" href="{{ route('supermariage.index') }}">
       <i class="fab fa-fw fa-wpforms"></i>
       <span>Acte de mariage</span>
     </a>
@@ -66,21 +66,36 @@
   </div>
 
 
-  <!-- Section Agent -->
+  <!-- Section Mairie -->
   <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAgent"
-      aria-expanded="true" aria-controls="collapseAgent">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMairie"
+      aria-expanded="true" aria-controls="collapseMairie">
       <i class="fa fa-user"></i>
       <span>Mairie</span>
     </a>
-    <div id="collapseAgent" class="collapse" aria-labelledby="headingAgent" data-parent="#accordionSidebar">
+    <div id="collapseMairie" class="collapse" aria-labelledby="headingMairie" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Gestion des Mairies</h6>
-        <a class="collapse-item" href="{{ route('super_admin.index') }}">Liste des mairies</a>
-        <a class="collapse-item" href="{{ route('super_admin.create') }}">Ajouter une mairie</a>
+        <a class="collapse-item" href="{{ route('super_admin.create') }}">Ajout d'une mairie</a>
+        <a class="collapse-item" href="{{ route('super_admin.index') }}">Toutes les mairies</a>
       </div>
     </div>
   </li>
+
+     <!-- Section Agent -->
+ <li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAgent"
+    aria-expanded="true" aria-controls="collapseAgent">
+    <i class="fa fa-user"></i>
+    <span>Agents</span>
+  </a>
+  <div id="collapseAgent" class="collapse" aria-labelledby="headingAgent" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">Gestion des Agents</h6>
+      <a class="collapse-item" href="{{ route('superagent.index') }}">Tous les agents</a>
+    </div>
+  </div>
+</li>
 
   <!-- Section Maire -->
   <li class="nav-item">
@@ -92,8 +107,7 @@
     <div id="collapseMaire" class="collapse" aria-labelledby="headingMaire" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Gestion Ajoint-Maire</h6>
-        <a class="collapse-item" href="#">Liste des Ajoint-Maire</a>
-        <a class="collapse-item" href="#">Ajouter un Ajoint-Maire</a>
+        <a class="collapse-item" href="{{ route('superajoint.index') }}">Tous les Ajoint-maire</a>
       </div>
     </div>
   </li>
@@ -108,7 +122,7 @@
     <div id="collapseHopital" class="collapse" aria-labelledby="headingHopital" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Gestion des Hôpitaux</h6>
-        <a class="collapse-item" href="#">Ajouter un Hôpital</a>
+        <a class="collapse-item" href="{{ route('superhopital.index') }}">Tous les hôputaux</a>
       </div>
     </div>
   </li>
@@ -123,8 +137,23 @@
   <div id="collapseCaisse" class="collapse" aria-labelledby="headingCaisse" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
       <h6 class="collapse-header">Gestion des caisses</h6>
-      <a class="collapse-item" href="#">Liste des caissiés</a>
-      <a class="collapse-item" href="#">Ajout d'un caissié</a>
+      <a class="collapse-item" href="{{ route('supercaisse.index') }}">Tous les caissiés</a>
+    </div>
+  </div>
+</li>
+
+
+<!-- Section Docteur -->
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseDocteur"
+    aria-expanded="true" aria-controls="collapseDocteur">
+    <i class="fa fa-hospital"></i>
+    <span>Docteur</span>
+  </a>
+  <div id="collapseDocteur" class="collapse" aria-labelledby="headingDocteur" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">Gestion des docteurs</h6>
+      <a class="collapse-item" href="{{ route('superdocteur.index') }}">Tous les docteurs</a>
     </div>
   </div>
 </li>

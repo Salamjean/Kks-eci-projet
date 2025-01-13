@@ -10,7 +10,8 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="text-center mb-4">
         <h2 class="font-semibold text-xl text-gray-800">
-            Total des caisses
+            Total des caisses <br>
+            <small>Nombres de mairies enrégistrées ({{ $mairie }})</small>
         </h2>
     </div>
   
@@ -30,7 +31,7 @@
       <div class="col-xl-3 col-md-6 mb-3">
         <div class="card h-100 shadow-sm">
           <div class="card-body text-center">
-            <h5 class="text-xl font-weight-bold text-uppercase mb-4">Solde Fourni</h5>
+            <h5 class="text-xl font-weight-bold text-uppercase mb-4">Solde Fourni selon les mairies enrégistrées</h5>
             <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $soldeActuel }} FCFA</div>
             <i class="fas fa-money-bill fa-2x text-success"></i>
           </div>
@@ -118,7 +119,8 @@
 <div class="container-fluid" id="container-wrapper">
     <div class="text-center mb-4">
         <h2 class="font-semibold text-xl text-gray-800">
-        Total d'hôpital et de déclaration effectuée 
+        Total de docteur et de déclaration effectuée <br>
+        <small>Nombre d'hôpital enrégistré ({{ $doctors }})</small>
         </h2>
     </div>
   
@@ -127,8 +129,8 @@
       <div class="col-xl-3 col-md-6 mb-3">
         <div class="card h-100 shadow-sm">
           <div class="card-body text-center">
-            <h5 class="text-xl font-weight-bold text-uppercase mb-4">Hôpital</h5>
-            <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $doctors }}</div>
+            <h5 class="text-xl font-weight-bold text-uppercase mb-4">Docteur</h5>
+            <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $sousadmin }}</div>
             <i class="fas fa-school fa-2x text-primary"></i>
           </div>
         </div>

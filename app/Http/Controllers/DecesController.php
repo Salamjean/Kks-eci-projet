@@ -43,6 +43,20 @@ class DecesController extends Controller
     
         return view('deces.index', compact('deces','decesdeja','alerts'));
     }
+
+    public function superindex(Request $request)
+    {
+       // Récupérer les alertes
+       $alerts = Alert::where('is_read', false)
+       ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+       ->latest()
+       ->get();
+    
+        // Initialiser la requête pour Deces en filtrant par commune
+        $deces = Deces::all(); 
+        $decesdeja = Decesdeja::all(); 
+        return view('deces.superindex', compact('deces','decesdeja','alerts'));
+    }
     
 
     public function userindex()
@@ -202,9 +216,35 @@ public function show($id)
 public function createdeja(){
     return view('deces.createdeja');
 }
+
 public function storedeja(Request $request)
 {
     $imageBaseLink = '/images/decesdeja/';
+
+    // Liste des fichiers à traiter
+    $filesToUpload = [
+        'pActe' => 'acte', // Pas de sous-dossier
+        'CNIdfnt' => 'cnid/', // Sous-dossier pour CNIdfnt
+        'CNIdcl' => 'cnid/', // Sous-dossier pour CNIdcl
+        'documentMariage' => 'mariage/', // Sous-dossier pour documentMariage
+        'RequisPolice' => 'police/', // Sous-dossier pour RequisPolice
+    ];
+
+    $uploadedPaths = []; // Contiendra les chemins des fichiers uploadés
+
+    foreach ($filesToUpload as $fileKey => $subDir) {
+        if ($request->hasFile($fileKey)) {
+            $file = $request->file($fileKey);
+            $extension = $file->getClientOriginalExtension();
+            $newFileName = (string) Str::uuid() . '.' . $extension;
+
+            // Stocker le fichier dans le bon sous-dossier
+            $file->storeAs("public/images/decesdeja/$subDir", $newFileName);
+
+            // Ajouter le chemin public à $uploadedPaths
+            $uploadedPaths[$fileKey] = $imageBaseLink . "$subDir" . $newFileName;
+        }
+    }
 
     // Vérifier si l'utilisateur est authentifié
     if (!Auth::check()) {
@@ -214,57 +254,24 @@ public function storedeja(Request $request)
     // Récupérer l'utilisateur connecté
     $user = Auth::user();
 
-    // Validation des données
-    $request->validate([
-        'name' => 'required',
-        'numberR' => 'required',
-        'dateR' => 'required',
-        'communeD' => 'nullable|string|max:255', // Champ communeD optionnel mais validé
-        'pActe' => 'image|mimes:png,jpg,jpeg|max:300',
-    ], [
-        'name.required' => 'Veuillez renseigner le nom du défunt',
-        'numberR.required' => 'Veuillez renseigner le numéro de registre',
-        'dateR.required' => 'Veuillez renseigner la date de registre',
-        'communeD.required' => 'Veuillez renseigner la commune du concerné',
-        'pActe.image' => 'Le fichier doit être une image',
-        'pActe.mimes' => 'Le format de l\'image doit être PNG, JPG ou JPEG',
-        'pActe.max' => 'L\'image ne doit pas dépasser 300 Ko',
-    ]);
+    // Enregistrement de l'objet Decesdeja
+    $decesdeja = new Decesdeja();
+    $decesdeja->name = $request->name;
+    $decesdeja->numberR = $request->numberR;
+    $decesdeja->dateR = $request->dateR;
+    $decesdeja->CMU = $request->CMU;
+    $decesdeja->pActe = $uploadedPaths['pActe'] ?? null; // Enregistrer le chemin de l'image si présente
+    $decesdeja->CNIdfnt = $uploadedPaths['CNIdfnt'] ?? null;
+    $decesdeja->CNIdcl = $uploadedPaths['CNIdcl'] ?? null;
+    $decesdeja->documentMariage = $uploadedPaths['documentMariage'] ?? null;
+    $decesdeja->RequisPolice = $uploadedPaths['RequisPolice'] ?? null;
+    $decesdeja->commune = $request->communeD ?: $user->commune; // Déterminer la commune
+    $decesdeja->etat = 'en attente';
+    $decesdeja->user_id = $user->id; // Lier la demande à l'utilisateur connecté
 
-    // Traitement du fichier pActe s'il est présent
-    $uploadedPath = null;
-    if ($request->hasFile('pActe')) {
-        $file = $request->file('pActe');
-        $extension = $file->getClientOriginalExtension();
-        $newFileName = (string) Str::uuid() . '.' . $extension;
+    $decesdeja->save();
 
-        // Assurez-vous que le dossier existe avant de stocker le fichier
-        $file->storeAs('public/images/decesdeja/', $newFileName);
-        $uploadedPath = $imageBaseLink . $newFileName;
-    }
-
-    try {
-        // Déterminer la commune à enregistrer
-        $commune = $request->has('communeD') && !empty($request->communeD) 
-            ? $request->communeD 
-            : $user->commune;
-
-        // Enregistrement des données
-        $decesdeja = new Decesdeja();
-        $decesdeja->name = $request->name;
-        $decesdeja->numberR = $request->numberR;
-        $decesdeja->dateR = $request->dateR;
-        $decesdeja->CMU = $request->CMU;
-        $decesdeja->pActe = $uploadedPath; // Enregistrer le chemin de l'image si présente
-        $decesdeja->commune = $commune;
-        $decesdeja->etat = 'en attente';
-        $decesdeja->user_id = $user->id;
-        $decesdeja->save();
-
-        return redirect()->route('utilisateur.dashboard')->with('success', 'Demande envoyée avec succès.');
-    } catch (Exception $e) {
-        return redirect()->back()->with('error', 'Erreur : ' . $e->getMessage());
-    }
+    return redirect()->route('utilisateur.dashboard')->with('success', 'Demande envoyée avec succès.');
 }
 
 

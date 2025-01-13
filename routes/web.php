@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Naissance;
 use App\Models\Vendor;
 use App\Models\Alert;
+use App\Models\Doctor;
 
 Route::get('/E-ci', [GeneralController::class, 'general'])->name('general');
 Route::get('/E-ci-Naissance', [GeneralController::class, 'naissanceavec'])->name('naissanceavec');
@@ -117,7 +118,17 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/index-mairie', [SuperAdminController::class, 'index'])->name('super_admin.index');
         Route::get('/mairie/create', [SuperAdminController::class, 'create'])->name('super_admin.create');
         Route::post('/mairie/store', [SuperAdminController::class, 'store'])->name('super_admin.store');
-    
+
+        Route::get('/super-admin-agents', [AgentController::class, 'superindex'])->name('superagent.index');
+        Route::get('/super-admin-Ajoints', [AjointController::class, 'superindex'])->name('superajoint.index');
+        Route::get('/super-admin-hopital', [VendorController::class, 'superindex'])->name('superhopital.index');
+        Route::get('/super-admin-caisse', [CaisseController::class, 'superindex'])->name('supercaisse.index');
+        Route::get('/super-admin-naissance', [NaissanceController::class, 'superindex'])->name('supernaissance.index');
+        Route::get('/super-admin-naisshop', [NaissHopController::class, 'superindex'])->name('supernaisshop.index');
+        Route::get('/super-admin-deces', [DecesController::class, 'superindex'])->name('superdeces.index');
+        Route::get('/super-admin-deceshop', [DecesHopController::class, 'superindex'])->name('superdeceshop.index');
+        Route::get('/super-admin-mariage', [MariageController::class, 'superindex'])->name('supermariage.index');
+        Route::get('/super-admin-docter', [SousAdminController::class, 'superindex'])->name('superdocteur.index');
     });        
 
     //Les routes de l'administrator (Mairie)

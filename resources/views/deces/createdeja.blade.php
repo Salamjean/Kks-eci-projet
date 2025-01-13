@@ -5,13 +5,13 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <style>
-     body {
-        background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}'); /* Remplacez par le chemin de votre image */
-        background-size: cover; /* Pour couvrir l'ensemble de la zone */
-        background-position: center; /* Centre l'image */
-        min-height: 100vh; /* Hauteur minimale pour remplir la page */
+    body {
+        background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
     }
-    /* Styles spécifiques au formulaire */
+
     .conteneurInfo {
         background: #ffffff;
         padding: 30px 40px;
@@ -33,15 +33,20 @@
         font-weight: bold;
         color: #1a5c58;
         margin-top: 1rem;
+        display: block;
     }
 
-    select, [type="text"], input[type="file"], input[type="date"] {
+    select,
+    [type="text"],
+    input[type="file"],
+    input[type="date"] {
         width: 100%;
         padding: 0.8rem;
         border: 1px solid #ddd;
         border-radius: 10px;
         background: #f9f9f9;
         outline: none;
+        margin-bottom: 1rem;
     }
 
     button {
@@ -60,60 +65,38 @@
     button:hover {
         background-color: #144d4b;
     }
+
     .form-row {
-            display: flex;
-            justify-content: space-between;
-        }
-        .form-group {
-            flex: 1; /* Permet aux éléments de prendre une largeur égale */
-            margin-right: 10px; /* Espacement entre les éléments */
-        }
-        .form-group:last-child {
-            margin-right: 0; /* Supprime l'espacement du dernier élément */
-        }
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .form-group {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+    .form-group:last-child {
+        margin-right: 0;
+    }
+
+    .radio-group {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1rem;
+    }
 
     @keyframes fadeIn {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
     }
 </style>
 
-@if (Session::get('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Succès',
-            text: '{{ Session::get('success') }}',
-            timer: 3000,
-            showConfirmButton: false,
-        });
-    </script>
-@endif
-
-
-@if (Session::get('success'))
-    <script>
-        Swal.fire({
-            icon: 'success',
-            title: 'Succès',
-            text: '{{ Session::get('success') }}',
-            timer: 3000,
-            showConfirmButton: false,
-        });
-    </script>
-@endif
-
-@if (Session::get('error'))
-    <script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Erreur',
-            text: '{{ Session::get('error') }}',
-            timer: 3000,
-            showConfirmButton: false,
-        });
-    </script>
-@endif
 <div class="conteneurInfo">
     <h1>Demande d'acte de Décès</h1>
     <form id="declarationForm" method="POST" enctype="multipart/form-data" action="{{ route('deces.storedeja') }}">
@@ -123,22 +106,21 @@
                 <label for="name">Nom et Prénoms du Défunt</label>
                 <input type="text" id="name" name="name" placeholder="Exemple : Jean Dupont" required>
             </div>
-
             <div class="form-group">
                 <label for="numberR">Numéro de Registre</label>
                 <input type="text" id="numberR" name="numberR" placeholder="Exemple : 123456" required>
             </div>
         </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="dateR">Date de Registre</label>
-                    <input type="date" id="dateR" name="dateR" required>
-                </div>
-                <div class="form-group">
-                    <label for="commune">Commune sur l'extrait</label>
-                    <select id="commune" name="communeD" required>
-                        <option value="">Selectionnez la commune</option>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="dateR">Date de Registre</label>
+                <input type="date" id="dateR" name="dateR" required>
+            </div>
+            <div class="form-group">
+                <label for="commune">Commune sur l'extrait</label>
+                <select id="commune" name="communeD" required>
+                    <option value="">Selectionnez la commune</option>
                             <option value="abobo">Abobo</option>
                             <option value="adjame">Adjamé</option>
                             <option value="attiecoube">Attécoubé</option>
@@ -212,24 +194,106 @@
                             <option value="boura">Boura</option>
                             <option value="bofora">Bofora</option>
                             <option value="zagoua">Zagoua</option>
-                    </select>
-                </div>
+                </select>
+            </div>
         </div>
 
         <div class="form-row">
-                <div class="form-group">
-                    <label for="pActe">Joindre le Premier Acte de Décès</label>
-                    <input type="file" id="pActe" name="pActe" accept=".pdf,.jpg,.png" required>
-                </div>
-                <div class="form-group">
-                    <label for="CMU">Numéro CMU du demandeur</label>
-                    <input type="text" id="CMU" name="CMU" value="{{ Auth::user()->CMU }}" placeholder="Entrez votre numero CMU" required>
-                </div>
+            <div class="form-group">
+                <label for="pActe">Certificat Médical de Décès</label>
+                <input type="file" id="pActe" name="pActe" accept=".pdf,.jpg,.png" required>
+            </div>
+            <div class="form-group">
+                <label for="CMU">Numéro CMU du demandeur</label>
+                <input type="text" id="CMU" name="CMU" value="{{ Auth::user()->CMU }}" placeholder="Entrez votre numéro CMU" required>
+            </div>
+        </div>
+
+        <label>Photocopie des documents :</label>
+        <div class="form-row">
+        <div class="form-group">
+            <label for="CNIdfnt">CNI/extrait de naissance du défunt(e)</label>
+            <input type="file" name="CNIdfnt" id="CNIdfnt" required>
+        </div>
+        <div class="form-group">
+           <label for="CNIdcl">CNI du déclarant</label>
+           <input type="file" name="CNIdcl" id="CNIdcl" required>
+        </div>
+        </div>
+
+        <!-- Groupe de boutons radio : Mariage -->
+        <div>
+            <label>Le défunt était-il marié ?</label>
+            <div style="display: flex; gap: 10px;">
+                <label for="oui">Oui</label>
+                <input type="radio" id="oui" name="married" value="oui">
+                <label for="non">Non</label>
+                <input type="radio" id="non" name="married" value="non">
+            </div>
+            <div id="married-file-inputs-container"></div>
+        </div>
+
+        <!-- Groupe de boutons radio : Décès hors centre de santé -->
+        <div>
+            <label>Le défunt est-il décédé hors d'un centre de santé ?</label>
+            <div style="display: flex; gap: 10px;">
+                <label for="ouiHorsS">Oui</label>
+                <input type="radio" id="ouiHorsS" name="DecesHorsS" value="oui">
+                <label for="nonHorsS">Non</label>
+                <input type="radio" id="nonHorsS" name="DecesHorsS" value="non">
+            </div>
+            <div id="deces-file-inputs-container"></div>
         </div>
 
         <button type="submit">Soumettre</button>
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Mariage radio buttons
+        const marriedYes = document.getElementById('oui');
+        const marriedNo = document.getElementById('non');
+        const marriedFileInputsContainer = document.getElementById('married-file-inputs-container');
+
+        // Décès hors centre de santé radio buttons
+        const horsSYes = document.getElementById('ouiHorsS');
+        const horsSNo = document.getElementById('nonHorsS');
+        const decesFileInputsContainer = document.getElementById('deces-file-inputs-container');
+
+        // Contenu des champs conditionnels
+        const marriageFields =
+         `
+            <div class="form-group">
+                <label for="documentMariage">Photocopie de document de mariage pour le défunt(e)</label>
+                <input type="file" id="documentMariage" name="documentMariage" required>
+            </div>
+        `;
+
+        const decesFields = `
+            <div class="form-group">
+                <label for="RequisPolice">Photocopie de la réquisition de la police</label>
+                <input type="file" id="RequisPolice" name="RequisPolice" required>
+            </div>
+        `;
+
+        // Gestion des champs conditionnels
+        marriedYes.addEventListener('change', () => {
+            marriedFileInputsContainer.innerHTML = marriageFields;
+        });
+        marriedNo.addEventListener('change', () => {
+            marriedFileInputsContainer.innerHTML = '';
+        });
+
+        horsSYes.addEventListener('change', () => {
+            decesFileInputsContainer.innerHTML = decesFields;
+        });
+        horsSNo.addEventListener('change', () => {
+            decesFileInputsContainer.innerHTML = '';
+        });
+    });
+</script>
+
 
 
 @endsection

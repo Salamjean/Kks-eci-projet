@@ -1,120 +1,92 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"  style="background-color:#2eca6a; height:70px">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-            
-                <!-- Navigation Links -->
-                <div >
-                    <x-nav-link :href="route('dashboard')" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-lightgreen hover:text-gray-700 focus:outline-none transition mt-4 ease-in-out duration-150" style="height:50px; ">
-                        @if (Auth::user()->commune === 'Yopougon')
-                        <img src="{{ asset('assets/images/profiles/yopougon.png') }}" alt="Logo yopougon" style="height: 100px">
-                    @elseif (Auth::user()->commune === 'Marcory')
-                        <img src="{{ asset('assets/images/profiles/marcory.png') }}" alt="Logo marcory" style="height: 100px">
-                    @elseif (Auth::user()->commune === 'Cocody')
-                        <img src="{{ asset('assets/images/profiles/cocody.png') }}" alt="Logo cocody" style="height: 100px">
-                    @elseif (Auth::user()->commune === 'Abobo')
-                        <img src="{{ asset('assets/images/profiles/abobo.png') }}" alt="Logo abobo" style="height: 80px;  width:100px">
-                    @elseif (Auth::user()->commune === 'koumassi')
-                        <img src="{{ asset('assets/images/profiles/koumassi.png') }}" alt="Logo koumassi" style="height: 60px; width:100px">
-                    @elseif (Auth::user()->commune === 'Port-Bouët')
-                        <img src="{{ asset('assets/images/profiles/portbouet.png') }}" alt="Logo Port-Bouët" style="height: 90px; width:100px">
-                    @elseif (Auth::user()->commune === 'Treichville')
-                        <img src="{{ asset('assets/images/profiles/treichville.png') }}" alt="Logo treichville" style="height: 100px">
-                    @elseif (Auth::user()->commune === 'Attécoubé')
-                        <img src="{{ asset('assets/images/profiles/attecoube.png') }}" alt="Logo attecoube" style="height: 70px; width:100px">
-                    @elseif (Auth::user()->commune === 'Adjamé')
-                        <img src="{{ asset('assets/images/profiles/adjame.png') }}" alt="Logo adjame" style="height: 80px ; width:100px">
-                    @elseif (Auth::user()->commune === 'Songon')
-                        <img src="{{ asset('assets/images/profiles/songon.png') }}" alt="Logo songon" style="height: 90px; width:100px">
-                    @else
-                       <div class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                        Mairie de {{ Auth::user()->commune }}
-                       </div>
-                    @endif
-                    </x-nav-link>
-                </div>
-            </div>
-            
-           
-
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
-
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profil') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Deconnexion') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-        </div>
+<nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+  <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
+    <div class="me-3">
+      <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+        <span class="icon-menu"></span>
+      </button>
     </div>
+    <div>
+      <!-- Logo principal agrandi -->
+      <a class="navbar-brand brand-logo" href="{{ route('utilisateur.dashboard') }}">
+        @if (Auth::user()->commune === 'yopougon')
+        <img src="{{ asset('assets/images/profiles/yopougon.png') }}" alt="Logo Yopougon" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'marcory')
+        <img src="{{ asset('assets/images/profiles/marcory.png') }}" alt="Logo Marcory" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'cocody')
+        <img src="{{ asset('assets/images/profiles/cocody.png') }}" alt="Logo Cocody" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'abobo')
+        <img src="{{ asset('assets/images/profiles/abobo.png') }}" alt="Logo Abobo" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'koumassi')
+        <img src="{{ asset('assets/images/profiles/koumassi.png') }}" alt="Logo Koumassi" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'port-Bouët')
+        <img src="{{ asset('assets/images/profiles/portbouet.png') }}" alt="Logo Port-Bouët" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'treichville')
+        <img src="{{ asset('assets/images/profiles/treichville.png') }}" alt="Logo Treichville" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'attécoubé')
+        <img src="{{ asset('assets/images/profiles/attecoube.png') }}" alt="Logo Attécoubé" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'adjame')
+        <img src="{{ asset('assets/images/profiles/cocody.png') }}" alt="Logo Adjamé" style="height: 100px; width: auto;" />
+        @elseif (Auth::user()->commune === 'songon')
+        <img src="{{ asset('assets/images/profiles/songon.png') }}" alt="Logo Songon" style="height: 100px; width: auto;" />
+        @else
+        <img src="{{ asset('assets/images/logo.svg') }}" alt="Logo par défaut" style="height: 100px; width: auto;" />
+        @endif
+      </a>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
-            </div>
-        </div>
+      <!-- Logo miniature agrandi -->
+      <a class="navbar-brand brand-logo-mini" href="index.html">
+        @if (Auth::user()->commune)
+        <img src="{{ asset('assets/images/profiles/' . strtolower(Auth::user()->commune) . '.png') }}" alt="Logo {{ Auth::user()->commune }}" style="height: 100px; width: auto;" />
+        @else
+        <img src="{{ asset('assets/images/logo-mini.svg') }}" alt="Logo miniature par défaut" style="height: 100px; width: auto;" />
+        @endif
+      </a>
     </div>
+  </div>
+  <div class="navbar-menu-wrapper" style="display: flex; justify-content:space-between">
+    <ul class="navbar-nav">
+      <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
+        <h1 class="welcome-text">Bienvenue, Mlle/Mme/M. <span class="text-black fw-bold">{{ Auth::user()->name }} {{ Auth::user()->prenom }}</span></h1>
+        <h3 style="color: black"><strong>Mairie de {{ Auth::user()->commune }}</strong></h3>
+        <h3 class="welcome-sub-text">Vous pouvez maintenant effectuer votre demande</h3>
+      </li>
+    </ul>
+   
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown d-none d-lg-block user-dropdown">
+        <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+          <img class="ms-user-img ms-img-round float-right" 
+               style="width: 50px; height: 40px; border-radius: 50%; object-fit: cover;" 
+               src="{{ optional(Auth::user())->profile_picture 
+                       ? asset('storage/' . Auth::user()->profile_picture) 
+                       : asset('assets/images/profiles/useriii.jpeg') }}" 
+               alt="Profile Picture">
+      </a>
+      
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
+          <div class="dropdown-header text-center">
+            @if(Auth::check())
+              <p class="mb-1 mt-3 font-weight-semibold">
+                  {{ Auth::user()->name ?? 'Nom non défini' }} {{ Auth::user()->prenom ?? 'Prénom non défini' }}
+              </p>
+            @endif
+            <p class="fw-light text-muted mb-0">{{ Auth::user()->email }}</p>
+          </div>
+          <a class="dropdown-item" href="{{ route('profile.edit') }}">
+            <i class="dropdown-item-icon mdi mdi-account-outline text-primary me-2"></i> Profil
+          </a>
+          <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button class="dropdown-item">
+              <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i> Déconnexion
+            </button>
+          </form>
+        </div>
+      </li>
+    </ul>
+
+    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
+      <span class="mdi mdi-menu"></span>
+    </button>
+  </div>
 </nav>

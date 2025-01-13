@@ -215,6 +215,12 @@ public function hoptitalcreate(){
     $doctors = Doctor::where('commune', $admin->name)->paginate(10);
     return view('vendor.hoptital.create', compact('alerts','doctors'));
 }
+
+public function superindex() {
+    $doctors = Doctor::all();
+    return view('vendor.hoptital.supercreate', compact('doctors'));
+}
+
 public function hoptitalstore(Request $request)
 {
     // Validation des données

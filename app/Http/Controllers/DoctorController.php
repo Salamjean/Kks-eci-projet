@@ -206,6 +206,9 @@ class DoctorController extends Controller
     
         return view('doctor.index', compact('sousadmins'));
     }
+
+
+    
     public function create(){
         return view('doctor/create');
     }

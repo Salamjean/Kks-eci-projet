@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SousAdminRequest;
 use App\Http\Requests\submitDefineAccessRequest;
 use App\Http\Requests\updateDoctorRequest;
+use App\Models\Alert;
 use App\Models\DecesHop;
 use App\Models\NaissHop;
 use App\Models\ResetCodePassword;
@@ -21,21 +22,23 @@ use Illuminate\Support\Facades\Notification;
 
 class SousAdminController extends Controller
 {
-   
-    public function dashboard(Request $request){
+    public function dashboard(Request $request) {
         try {
             $sousadmin = Auth::guard('sous_admin')->user();
             $communeAdmin = $sousadmin->nomHop;
+            $sousAdminId = $sousadmin->id; // Récupérer l'ID du sous-administrateur
     
             // Récupérer les déclarations de naissances du jour en cours
             $declarationsRecents = NaissHop::where('NomEnf', $communeAdmin)
+                ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                 ->orderBy('created_at', 'desc')
                 ->take(3)
                 ->get();
-                
-            // Récupérer les déclarations de deces du jour en cours
+            
+            // Récupérer les déclarations de décès du jour en cours
             $decesRecents = DecesHop::where('nomHop', $communeAdmin)
+                ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                 ->orderBy('created_at', 'desc')
                 ->take(3)
@@ -44,50 +47,55 @@ class SousAdminController extends Controller
             // Compter les déclarations par mois
             $naisshopData = NaissHop::select(DB::raw("strftime('%Y-%m', created_at) as month"), DB::raw('count(*) as count'))
                 ->where('NomEnf', $communeAdmin)
+                ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->groupBy('month')
                 ->orderBy('month')
                 ->pluck('count', 'month');
     
             $deceshopData = DecesHop::select(DB::raw("strftime('%Y-%m', created_at) as month"), DB::raw('count(*) as count'))
                 ->where('nomHop', $communeAdmin)
+                ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->groupBy('month')
                 ->orderBy('month')
                 ->pluck('count', 'month');
     
-                    // Récupérer le mois et l'année sélectionnés
+            // Récupérer le mois et l'année sélectionnés
             $selectedMonth = $request->input('month', date('m'));
             $selectedYear = $request->input('year', date('Y'));
-
+    
             // Compter le total des déclarations de naissance et de décès pour le mois sélectionné
             $naisshop = NaissHop::where('NomEnf', $communeAdmin)
+                ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->whereMonth('created_at', $selectedMonth)
                 ->whereYear('created_at', $selectedYear)
                 ->count();
-
+    
             $deceshop = DecesHop::where('nomHop', $communeAdmin)
+                ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->whereMonth('created_at', $selectedMonth)
                 ->whereYear('created_at', $selectedYear)
                 ->count();
-
+    
             // Récupérer les données pour les graphiques
             $naissData = NaissHop::where('NomEnf', $communeAdmin)
+                ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->whereYear('created_at', $selectedYear)
                 ->selectRaw('strftime("%m", created_at) as month, COUNT(*) as count')
                 ->groupBy('month')
                 ->orderBy('month')
                 ->pluck('count', 'month')->toArray();
-
+    
             $decesData = DecesHop::where('nomHop', $communeAdmin)
+                ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->whereYear('created_at', $selectedYear)
                 ->selectRaw('strftime("%m", created_at) as month, COUNT(*) as count')
                 ->groupBy('month')
                 ->orderBy('month')
                 ->pluck('count', 'month')->toArray();
-
+    
             // Remplir les données manquantes pour chaque mois
             $naissData = array_replace(array_fill(1, 12, 0), $naissData);
             $decesData = array_replace(array_fill(1, 12, 0), $decesData);
-
             $total = $naisshop + $deceshop;
     
             // Passer les données à la vue
@@ -95,9 +103,7 @@ class SousAdminController extends Controller
         } catch (Exception $e) {
             dd($e);
         }
-    }
-    
-    
+    }   
     
     public function souslogout(){
         Auth::guard('sous_admin')->logout();
@@ -179,6 +185,13 @@ class SousAdminController extends Controller
             throw new Exception('Une erreur est subvenue lors de la suppression du Docteur');
     }
   }
+
+  public function superindex() {
+    
+    $sousadmins = SousAdmin::all();
+    $alerts = Alert::all();
+    return view('sous_admin.superindex', compact('sousadmins','alerts'));
+}
 
   public function souslogin(){
     Auth::guard('sous_admin')->logout();

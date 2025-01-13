@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DecesHop;
 use App\Models\NaissHop;
 use App\Models\SousAdmin;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,14 +17,14 @@ class DoctorDashboard extends Controller
     // Récupérer le sousadmin connecté
     $sousadmin = Auth::guard('doctor')->user();
     
-    // Utiliser l'identifiant ou un autre critère pour récupérer plus d'infos sur ce sousadmin
-    $sousadminDetails = SousAdmin::where('id', $sousadmin->id)->first(); // ou `find($sousadmin->id)`
+    // Récupérer les détails du sousadmin
+    $sousadminDetails = SousAdmin::find($sousadmin->id);
 
-    // Récupérer le mois et l'année sélectionnés
-    $selectedMonth = $request->input('month', date('m'));
-    $selectedYear = $request->input('year', date('Y'));
+    // Récupérer le mois et l'année sélectionnés, ou la date actuelle par défaut
+    $selectedMonth = $request->input('month', Carbon::now()->month);
+    $selectedYear = $request->input('year', Carbon::now()->year);
 
-    // Compter le total des déclarations de naissance et de décès pour le mois sélectionné
+    // Compter le total des déclarations pour le mois sélectionné
     $communeAdmin = $sousadmin->nomHop;
     $docteur = SousAdmin::where('nomHop', $communeAdmin)
         ->whereMonth('created_at', $selectedMonth)
@@ -63,7 +64,8 @@ class DoctorDashboard extends Controller
     $total = $naisshop + $deceshop;
 
     // Passer les données à la vue
-    return view('doctor.dashboard', compact('sousadminDetails', 'naisshop', 'deceshop', 'docteur', 'total', 'selectedMonth', 'selectedYear', 'naissData', 'decesData'));
+    return view('doctor.dashboard', compact('sousadminDetails', 'naisshop', 'deceshop', 'docteur', 'total',
+     'selectedMonth', 'selectedYear', 'naissData', 'decesData'));
 }
 
 

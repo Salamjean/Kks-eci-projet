@@ -1,48 +1,105 @@
-<section>
-    <header>
-        <h2 class="text-lg font-medium text-gray-900">
-            {{ __('Modifier votre mot de passe') }}
-        </h2>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modifier votre mot de passe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9fafb;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h2 {
+            text-align: center;
+            color: #4a5568;
+        }
+        .mt-1 {
+            margin-top: 8px;
+        }
+        .mt-6 {
+            margin-top: 24px;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .btn-primary {
+            background-color: green;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .text-sm {
+            font-size: 14px;
+        }
+        .text-green-600 {
+            color: #38a169;
+        }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <header>
+        <h2>Modifier votre mot de passe</h2>
         <p class="mt-1 text-sm text-gray-600">
-            {{ __('Veillez à ce que votre compte utilise un mot de passe long et aléatoire pour rester sécurisé.') }}
+            Veillez à ce que votre compte utilise un mot de passe long et aléatoire pour rester sécurisé.
         </p>
     </header>
 
-    <form method="post" action="{{ route('password.update') }}" class="mt-6 space-y-6">
+    <form method="post" action="{{ route('password.update') }}" class="mt-6">
         @csrf
         @method('put')
 
-        <div>
-            <x-input-label for="update_password_current_password" :value="__('Mot de passe acteuel')" />
-            <x-text-input id="update_password_current_password" name="current_password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
-            <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
+        <div class="form-group">
+            <label for="update_password_current_password">Mot de passe actuel</label>
+            <input id="update_password_current_password" name="current_password" type="password" autocomplete="current-password" required />
+            <span class="text-red-600">@error('current_password') {{ $message }} @enderror</span>
+        </div>
+
+        <div class="form-group">
+            <label for="update_password_password">Nouveau mot de passe</label>
+            <input id="update_password_password" name="password" type="password" autocomplete="new-password" required />
+            <span class="text-red-600">@error('password') {{ $message }} @enderror</span>
+        </div>
+
+        <div class="form-group">
+            <label for="update_password_password_confirmation">Confirmer le mot de passe</label>
+            <input id="update_password_password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" required />
+            <span class="text-red-600">@error('password_confirmation') {{ $message }} @enderror</span>
         </div>
 
         <div>
-            <x-input-label for="update_password_password" :value="__('Nouveau mot de passe')" />
-            <x-text-input id="update_password_password" name="password" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
-        </div>
-
-        <div>
-            <x-input-label for="update_password_password_confirmation" :value="__('Confirmer le mot de passe')" />
-            <x-text-input id="update_password_password_confirmation" name="password_confirmation" type="password" class="mt-1 block w-full" autocomplete="new-password" />
-            <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center gap-4">
-            <x-primary-button style="background-color: green">{{ __('Mofidier') }}</x-primary-button>
-
+            <button type="submit" class="btn-primary">Modifier</button>
             @if (session('status') === 'password-updated')
-                <p
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition
-                    x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-green-600"
-                >{{ __('Mot de passe modifié.') }}</p>
+                <p class="text-sm text-green-600">{{ __('Mot de passe modifié.') }}</p>
             @endif
         </div>
     </form>
-</section>
+</div>
+
+</body>
+</html>

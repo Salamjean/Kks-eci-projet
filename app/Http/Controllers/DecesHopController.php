@@ -28,6 +28,16 @@ class DecesHopController extends Controller
          $deceshops = DecesHop::where('nomHop', $communeAdmin)->get();
         return view('decesHop.index', ['deceshops' => $deceshops]);
     }
+
+    public function superindex(){
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
+        $deceshops = DecesHop::all();
+       return view('decesHop.superindex',compact('deceshops','alerts'));
+   }
+
     public function create(){
         $doctor = Doctor::all();
         return view('decesHop.create', compact('doctor'));
@@ -94,7 +104,7 @@ class DecesHopController extends Controller
         'commune' => 'required',
         'Remarques' => 'nullable|string',
     ]);
-
+    $sousadmin = Auth::guard('sous_admin')->user();
     // Création dans la base de données
     $decesHop = DecesHop::create([
         'NomM' => $validatedData['NomM'],
@@ -104,6 +114,7 @@ class DecesHopController extends Controller
         'nomHop' => $validatedData['nomHop'],
         'commune' => $validatedData['commune'],
         'Remarques' => $validatedData['Remarques'] ?? null,
+        'sous_admin_id' => $sousadmin->id, 
     ]);
 
     // Génération des codes

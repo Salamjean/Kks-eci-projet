@@ -75,43 +75,6 @@
     display: block;
     font-size: 0.875rem;
   }
-
-  button {
-            border: none;
-            background: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        a {
-            text-decoration: none;
-            color: black;
-        }
-
-        a .edit {
-            color: #28a745;
-            transition: color 0.3s ease;
-            
-        }
-        a .eye {
-            color: #3047b8;
-            transition: color 0.3s ease;
-            text-decoration: none;
-        }
-
-        a .delete {
-            color: #dc3545;
-            transition: color 0.3s ease;
-        }
-
-        .edit:hover {
-            color: #1e7e34;
-        }
-        .eye:hover {
-            color: #1e617e;
-        }
-        .delete:hover {
-            color: #c82333;
-        }
 </style>
 
 <div class="signup-container">
@@ -167,55 +130,37 @@
     <div class="col-lg-12">
         <div class="card mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Liste de toutes les mairies</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Liste de tous les docteurs</h6>
             </div>
             <div class="table-responsive p-3">
                 <input type="text" id="searchInput" class="form-control mb-3" placeholder="Rechercher...">
                 <table class="table align-items-center table-flush" id="dataTable">
-                    <thead class="bg-navbar text-white">
-                        <tr style="font-size: 12px">
-                            <th>Mairie</th>
-                            <th>Mails</th>
-                            <th>Nombres d'agents</th>
-                            <th>Nombre de caissié</th>
-                            <th>Nombre d'hôpital</th>
-                            <th>Nombre d'ajoint-maire</th>
-                            <th>Solde restant</th>
-                            <th colspan="2" class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
-                        @forelse ($mairies as $mairie)
-                        <tr style="font-size: 12px">
-                            <td>{{ strtoupper($mairie->name) }}</td> <!-- Nom de la mairie -->
-                            <td>{{ $mairie->email }}</td> <!-- Email de la mairie -->
-                            <td>{{ $agentsCount[$mairie->name] ?? 0 }}</td>
-                            <td>{{ $caisseCount[$mairie->name] ?? 0 }}</td>
-                            <td>{{ $doctorCount[$mairie->name] ?? 0 }}</td>
-                            <td>{{ $ajointCount[$mairie->name] ?? 0 }}</td>
-                            <td>{{ $soldeRestantParCommune[$mairie->name] ?? 0 }} FCFA</td>
-                            <td>
-                                <form action="#" method="GET">
-                                    @csrf
-                                    <button style="margin-left:50%" type="submit" ><a href="#" class="edit"><i class="fas fa-edit"></i></a></button>
-                                </form>
-                            </td>
-                            <td>
-                            <form action="#" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet agent ?');" 
-                                style="display: flex; justify-content:center; align-items:center">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="delete"><a href="#" class="delete"><i class="fas fa-trash"></i></button>
-                            </form>
-                        </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="9" class="text-center">Aucune demande effectuée</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
+                  <thead class="text-center">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénoms</th>
+                        <th>Email</th>
+                        <th>Description</th>
+                        <th>Contact</th>
+                        <th>Hôpital</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($sousadmins as $sousadmin)
+                    <tr class="text-center">
+                        <td>{{ $sousadmin->name }}</td>
+                        <td>{{ $sousadmin->prenom }}</td>
+                        <td>{{ $sousadmin->email }}</td>
+                        <td>{{ $sousadmin->description }}</td>
+                        <td>{{ $sousadmin->contact }}</td>
+                        <td>{{ $sousadmin->nomHop }}</td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="6" class="text-center">Aucun docteur trouvé</td>
+                    </tr>
+                    @endforelse
+                </tbody>
                 </table>
             </div>
         </div>

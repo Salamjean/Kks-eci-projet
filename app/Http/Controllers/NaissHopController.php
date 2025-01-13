@@ -36,6 +36,16 @@ class NaissHopController extends Controller
     
         return view('naissHop.index', ['naisshops' => $naisshops]);
     }
+
+    public function superindex() {
+        
+        $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+            ->latest()
+            ->get();
+        $naisshops = NaissHop::all();
+        return view('naissHop.superindex', compact('naisshops','alerts'));
+    }
     public function mairieindex() {
         $alerts = Alert::where('is_read', false)
             ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
@@ -218,6 +228,7 @@ class NaissHopController extends Controller
         $uploadedPaths['CNI_mere'] = $imageBaseLink . "cni/" . $newFileName;
     }
 
+    $sousadmin = Auth::guard('sous_admin')->user();
     // Création dans la base de données
     $naissHop = NaissHop::create([
         'NomM' => $validatedData['NomM'],
@@ -235,6 +246,7 @@ class NaissHopController extends Controller
         'CNI_Pere' => $validatedData['CNI_Pere'],
         'DateNaissance' => $validatedData['DateNaissance'],
         'sexe' => $validatedData['sexe'],
+        'sous_admin_id' => $sousadmin->id, 
     ]);
 
     // Génération des codes

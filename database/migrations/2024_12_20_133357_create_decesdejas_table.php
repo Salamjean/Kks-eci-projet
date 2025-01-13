@@ -17,6 +17,10 @@ return new class extends Migration
             $table->string('numberR');
             $table->string('dateR');
             $table->string('pActe')->nullable();
+            $table->string('CNIdfnt')->nullable();
+            $table->string('CNIdcl')->nullable();
+            $table->string('documentMariage')->nullable();
+            $table->string('RequisPolice')->nullable();
             $table->string('CMU');
             $table->string('commune')->nullable()->after('id');
             $table->string('etat')->default('en attente'); // État par défaut

@@ -26,7 +26,7 @@
                 title: 'Succès',
                 text: '{{ Session::get('success') }}',
                 timer: 3000,
-                showConfirmButton: false,
+                showConfirmButton: true,
             });
         });
     </script>
@@ -114,7 +114,11 @@
                                     labels: labels,
                                     datasets: [{
                                         label: 'Nombre de Demandes',
-                                        data: [{{ $naissancesCount + $naissanceDCount }}, {{ $decesCount + $decesdejaCount }}, {{ $mariageCount }}],
+                                        data: [
+                                            {{ intval($naissancesCount + $naissanceDCount) }}, 
+                                            {{ intval($decesCount + $decesdejaCount) }}, 
+                                            {{ intval($mariageCount) }}
+                                        ],
                                         backgroundColor: [
                                             'rgba(75, 192, 192, 0.2)',
                                             'rgba(153, 102, 255, 0.2)',
@@ -137,7 +141,14 @@
                                     options: {
                                         scales: {
                                             y: {
-                                                beginAtZero: true
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    // Forcer les valeurs à être des entiers
+                                                    callback: function(value) {
+                                                        return Number.isInteger(value) ? value : '';
+                                                    },
+                                                    stepSize: 1 // Espacement des ticks
+                                                }
                                             }
                                         }
                                     }
@@ -148,6 +159,8 @@
                                     config
                                 );
                             </script>
+                            
+                            
                             
                             <!-- Deuxième colonne pour Demande Récentes -->
                             <div class="col-lg-4 d-flex flex-column">
@@ -194,42 +207,4 @@
     </div> <!-- Fin de content-wrapper -->
 </div> <!-- Fin de main-panel -->
 
-<!-- Ajouter les scripts nécessaires pour Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // Préparer les données pour le graphique
-    const demandesCount = {
-        naissances: {{ $totalNaissances }},
-        deces: {{ $totalDeces }},
-        mariages: {{ $mariageCount }},
-    };
-
-    const ctx = document.getElementById('marketingOverview').getContext('2d');
-    
-    const chart = new Chart(ctx, {
-        type: 'line',  // Type de graphique : courbe (line)
-        data: {
-            labels: ['Naissances', 'Décès', 'Mariages'],  // Catégories (groupées)
-            datasets: [{
-                label: 'Nombre de demandes',
-                data: [
-                    demandesCount.naissances,  // Total Naissances et Naissances Différées
-                    demandesCount.deces,       // Total Décès et Décès Déjà Déclarés
-                    demandesCount.mariages     // Nombre de Mariages
-                ],  // Données à afficher sur l'axe Y
-                fill: false,  // Pas de remplissage sous la courbe
-                borderColor: 'rgba(75, 192, 192, 1)',  // Couleur de la ligne
-                tension: 0.1,  // Courbure de la ligne
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true  // Commencer l'axe Y à 0
-                }
-            }
-        }
-    });
-</script>
 @endsection

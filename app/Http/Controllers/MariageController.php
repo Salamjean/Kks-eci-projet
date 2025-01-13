@@ -18,36 +18,8 @@ class MariageController extends Controller
         // Récupérer l'admin connecté
         $admin = Auth::guard('vendor')->user();
 
-        // Initialiser la requête pour Mariage et filtrer par commune de l'admin
-        $query = Mariage::where('commune', $admin->name); // Filtrer par commune de l'admin connecté
-
-        // Vérifier le type de recherche et appliquer le filtre
-        if ($request->filled('searchType') && $request->filled('searchInput')) {
-            if ($request->searchType === 'nomConjoint') {
-                $query->where('nomEpoux', 'like', '%' . $request->searchInput . '%')
-                      ->orWhere('nomEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (nomEpoux, nomEpouse)
-            } elseif ($request->searchType === 'prenomConjoint') {
-                $query->where('prenomEpoux', 'like', '%' . $request->searchInput . '%')
-                      ->orWhere('prenomEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (prenomEpoux, prenomEpouse)
-            } elseif ($request->searchType === 'lieuNaissance') {
-                $query->where('lieuNaissanceEpoux', 'like', '%' . $request->searchInput . '%')
-                      ->orWhere('lieuNaissanceEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (lieuNaissanceEpoux, lieuNaissanceEpouse)
-            }
-        }
-
-        // Récupérer tous les mariages correspondant aux critères de filtrage
-        $mariages = $query->get();
-
-        // Filtrer les mariages où pieceIdentite et extraitMariage sont remplis et la commune est celle de l'admin
-        $mariagesAvecFichiersSeulement = $mariages->filter(function($mariage) use ($admin) {
-            return !is_null($mariage->pieceIdentite) && !is_null($mariage->extraitMariage) && $mariage->commune == $admin->name;
-        });
-
-        // Filtrer les mariages où nomEpoux, prenomEpoux, dateNaissanceEpoux, lieuNaissanceEpoux, commune sont remplis
-        $mariagesComplets = $mariages->filter(function($mariage) {
-            return $mariage->nomEpoux && $mariage->prenomEpoux && $mariage->dateNaissanceEpoux &&
-                   $mariage->lieuNaissanceEpoux && $mariage->commune && $mariage->pieceIdentite && $mariage->extraitMariage;
-        });
+         // Filtrer les naissances selon la commune de l'admin connecté
+        $mariages = Mariage::where('commune', $admin->name)->paginate(10); // Filtrage par commune
 
         // Récupérer toutes les alertes
         $alerts = Alert::where('is_read', false)
@@ -56,7 +28,12 @@ class MariageController extends Controller
         ->get();
 
         // Retourner la vue avec les mariages filtrés et les alertes
-        return view('mariages.index', compact('mariagesAvecFichiersSeulement', 'mariagesComplets', 'mariages', 'alerts'));
+        return view('mariages.index', compact('mariages','alerts'));
+    }
+
+    public function superindex(){
+        $mariages = Mariage::all();
+        return view('mariages.superindex', compact('mariages'));
     }
 
     public function userindex(Request $request)
@@ -71,13 +48,13 @@ class MariageController extends Controller
         if ($request->filled('searchType') && $request->filled('searchInput')) {
             if ($request->searchType === 'nomConjoint') {
                 $query->where('nomEpoux', 'like', '%' . $request->searchInput . '%')
-                      ->orWhere('nomEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (nomEpoux, nomEpouse)
+                      ->orWhere('nomEpouse', 'like', '%' . $request->searchInput . '%'); 
             } elseif ($request->searchType === 'prenomConjoint') {
                 $query->where('prenomEpoux', 'like', '%' . $request->searchInput . '%')
-                      ->orWhere('prenomEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (prenomEpoux, prenomEpouse)
+                      ->orWhere('prenomEpouse', 'like', '%' . $request->searchInput . '%'); 
             } elseif ($request->searchType === 'lieuNaissance') {
                 $query->where('lieuNaissanceEpoux', 'like', '%' . $request->searchInput . '%')
-                      ->orWhere('lieuNaissanceEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (lieuNaissanceEpoux, lieuNaissanceEpouse)
+                      ->orWhere('lieuNaissanceEpouse', 'like', '%' . $request->searchInput . '%'); 
             }
         }
 

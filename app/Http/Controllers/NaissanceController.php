@@ -58,6 +58,21 @@ class NaissanceController extends Controller
     return view('naissances.userindex', compact('naissances', 'alerts', 'naissancesD'));
 }
 
+public function superindex()
+{
+    $alerts = Alert::where('is_read', false)
+    ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  
+    ->latest()
+    ->get();
+
+    // Filtrer les naissances selon l'ID de l'utilisateur connecté
+    $naissances = Naissance::all();
+    $naissancesD = NaissanceD::all();
+
+    // Retourner la vue avec les données
+    return view('naissances.superindex', compact('naissances', 'alerts', 'naissancesD'));
+}
+
     public function agentindex()
 {
     // Récupérer l'admin connecté

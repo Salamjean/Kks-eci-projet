@@ -25,12 +25,13 @@ class NaissHop extends Model
         'DateNaissance',
         'codeDM',
         'codeCMN',
-        'sexe'
+        'sexe',
+        'sous_admin_id',  // Ajout de sous_admin_id
     ];
 
-     // Définir la relation avec le sous-administrateur
-     public function sousAdmin()
+     // Définir la relation avec le docteur
+     public function sous_admin()
      {
-         return $this->belongsTo(SousAdmin::class, 'user_id');
+         return $this->belongsTo(SousAdmin::class);
      }
 }

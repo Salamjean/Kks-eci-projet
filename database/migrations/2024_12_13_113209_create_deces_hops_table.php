@@ -23,6 +23,7 @@ return new class extends Migration
              $table->string('commune');
              $table->string('codeDM')->default('rien')->unique();
              $table->string('codeCMD')->default('rien')->unique();
+             $table->foreignId('sous_admin_id')->constrained()->onDelete('cascade'); // Ajout du docteur_id
             $table->timestamps();
         });
     }

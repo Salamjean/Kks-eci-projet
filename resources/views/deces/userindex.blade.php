@@ -107,11 +107,15 @@
                                     <tr class="text-center" style="font-size: 12px">
                                         <th>Demandeur</th>
                                         <th>Nom et prénoms du défunt</th>
-                                        <th>Numéro du régistre</th>
-                                        <th>Date du régistre</th>
+                                        <th>Numéro du registre</th>
+                                        <th>Date du registre</th>
+                                        <th>Numéro du CMU</th>
                                         <th>Certificat Médical de Décès</th>
-                                        <th>Premier Acte de décès</th>
-                                        <th>Etat Actuel</th>
+                                        <th>CNI-défunt</th>
+                                        <th>CNI-déclarant</th>
+                                        <th>Document de Mariage</th>
+                                        <th>Requisition de Police</th>
+                                        <th>État Actuel</th>
                                         <th>Agent</th>
                                     </tr>
                                 </thead>
@@ -121,19 +125,49 @@
                                         <td>{{ $dece->user ? $dece->user->name : 'Demandeur inconnu' }}</td>
                                         <td>{{ $dece->name }}</td>
                                         <td>{{ $dece->numberR }}</td>
-                                        <td>{{ $dece->dateR }}</td>
-                                        <td>{{ $dece->CMD }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($dece->dateR)->format('d/m/Y') }}</td>
+                                        <td>{{ $dece->CMU }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $dece->pActe) }}" alt="Certificat de déclaration" width="100" height="auto" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            <img src="{{ asset('storage/' . $dece->pActe) }}" alt="Certificat de déclaration" 
+                                                 width="100" height="auto" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <span class="badge {{ $dece->etat == 'en attente' ? 'badge-opacity-warning' : ($dece->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">{{ $dece->etat }}</span>
+                                            <img src="{{ asset('storage/' . $dece->CNIdfnt) }}" alt="CNIdfnt" 
+                                                 width="100" height="auto" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                        </td>
+                                        <td>
+                                            <img src="{{ asset('storage/' . $dece->CNIdcl) }}" alt="CNIdcl" 
+                                                 width="100" height="auto" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                        </td>
+                                        <td>
+                                            <img src="{{ asset('storage/' . $dece->documentMariage) }}" alt="Le défunt(e) n'est pas marié(e)" 
+                                                 width="100" height="auto" 
+                                                 onclick="showImage(this)" 
+                                                 >
+                                        </td>
+                                        <td>
+                                            <img src="{{ asset('storage/' . $dece->RequisPolice) }}" alt="Décédé à l'hôpital" 
+                                                 width="100" height="auto" 
+                                                 onclick="showImage(this)" 
+                                                >
+                                        </td>
+                                        <td>
+                                            <span class="badge {{ $dece->etat == 'en attente' ? 'badge-opacity-warning' : ($dece->etat == 'réçu' ? 
+                                            'badge-opacity-success' : 'badge-opacity-danger') }}">
+                                                {{ ucfirst($dece->etat) }}
+                                            </span>
                                         </td>
                                         <td>{{ $dece->agent ? $dece->agent->name . ' ' . $dece->agent->prenom : 'Non attribué' }}</td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="10" class="text-center">Aucune déclaration trouvée</td>
+                                        <td colspan="12" class="text-center">Aucune déclaration trouvée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>

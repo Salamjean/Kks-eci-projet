@@ -16,6 +16,7 @@ use App\Models\Naissance;
 use App\Models\NaissanceD;
 use App\Models\NaissHop;
 use App\Models\ResetCodePasswordMairie;
+use App\Models\SousAdmin;
 use App\Models\SuperAdmin;
 use App\Models\Vendor;
 use App\Notifications\SendEmailToMairieAfterRegistrationNotification;
@@ -45,6 +46,7 @@ class SuperAdminController extends Controller
         $doctors = Doctor::count();
         $ajoints = Ajoint::count();
         $mairie = Vendor::count();
+        $sousadmin = SousAdmin::count();
         $total = $deces + $decesdeja + $mariage + $naissance + $naissanceD;
         // Solde initial
         $soldeActuel = 300000 * $mairie;
@@ -54,7 +56,7 @@ class SuperAdminController extends Controller
         $soldeRestant = $soldeActuel - $soldeDebite; // Calcul du solde restant
         return view('superadmin.dashboard',compact('alerts','deces','decesdeja','mariage','naissance',
         'naissanceD','total','soldeActuel','soldeDebite','soldeRestant','deceshop','naisshop',
-        'agents','caisses','doctors','mairie','ajoints'));
+        'agents','caisses','doctors','mairie','ajoints','sousadmin'));
     }
 
     public function logout()

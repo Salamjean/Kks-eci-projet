@@ -31,45 +31,46 @@
     <link rel="stylesheet" href="{{ asset('assets4/css/normalize.css') }}">
     <link rel="stylesheet" href="{{ asset('assets4/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets4/css/responsive.css') }}">
-
+    
     <style>
         html, body {
             height: 100%;
             margin: 0;
             display: flex;
             flex-direction: column;
+            background-image: url('{{ asset('assets4/img/avechh.jpg') }}'); /* Remplacez par le chemin de votre image */
+            background-size: cover; 
+            background-position: left; /* Aligner l'image à gauche */
+            background-repeat: no-repeat; 
         }
-
         .main-wrapper {
             flex: 1;
             display: flex;
             align-items: stretch;
         }
-
         .image-container {
             flex: 0 0 30%; 
             background-size: contain; 
             background-position: center;
             background-repeat: no-repeat;
         }
-
         .left-image {
-            background-image: url('{{ asset('assets4/img/fem.png') }}');
+            background-image: url('{{ asset('assets4/img/docu.png') }}');
         }
-
         .right-image {
-            background-image: url('{{ asset('assets4/img/femmeEn.jpeg') }}');
+            background-image: url('{{ asset('assets4/img/docu.png') }}');
         }
-
         .content {
             flex: 2;
             padding: 20px;
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.8); /* Ajoutez un fond semi-transparent pour le contenu */
             text-align: center;
         }
-
         footer {
             margin-top: auto;
+        }
+        p,h4,li{
+            font-size: 20px;
         }
     </style>
 </head>
@@ -128,7 +129,7 @@
                                 <a href="{{ route('login') }}" class="btn" style="background-color: green">Se connecter</a>
                             </div>&emsp;
                             <div class="get-quote">
-                                <a href="{{ route('register') }}" class="btn" style="background-color: green">S'inscrire</a>
+                                <a href="{{ route('register') }}" class="btn" style="background-color: green;">S'inscrire</a>
                             </div>
                         </div>
                     </div>
@@ -137,17 +138,18 @@
         </div>
     </header>
     <!-- End Header Area -->
-    
+    <br><br>
     <!-- Error Page -->
     <div class="main-wrapper">
-        <div class="image-container left-image"></div>
-        <section class="error-page section">
+       
+        <section class="error-page section content">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 offset-lg-3 col-12">
-                        <div class="error-inner">
-                            <h1 style="font-size: 50px; color:black">Extrait avec certificat<span>Vous devez disposer d'un certificat médical de naissance</span></h1>
-                            <p>"Pour faire une demande d'extrait de naissance pour votre enfant, un certificat médical de naissance est nécessaire. Un certificat qui est délivré par l'hôpital, Merci de vous assurer que vous disposez de ce document avant de décider de faire votre demande."</p>
+                    <div class="col-lg-10 offset-lg-1 col-12" >
+                        <div class="error-inner"  >
+                            <br><br><br><h1 style="font-size: 80px; color:black;">Extrait avec certificat<span>Vous devez disposer d'un certificat médical de naissance</span></h1>
+                            <p>Pour faire une demande d'extrait de naissance pour votre enfant, un certificat médical de naissance est nécessaire. Un certificat qui est délivré par l'hôpital, merci de vous assurer que vous 
+                                disposez de ce document avant de décider de faire votre demande.</p>
                             <h4><strong>Comment faire la demande</strong></h4>
                             <p>Pour une demande d'extrait de naissance avec le certificat médical de naissance, <br><br>
                                 il faut :
@@ -159,14 +161,14 @@
                                 <li>Timbre (500 F CFA /Copie)</li>
                             </p>
                             <div class="get-quote">
-                                <a href="{{ route('utilisateur.dashboard') }}" class="btn" style="background-color: green">Faites votre demande</a>
+                                <a href="{{ route('utilisateur.dashboard') }}" class="btn" style="background-color: green; padding:25px; width:300px">Faites votre demande</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
-        <div class="image-container right-image"></div>
+
     </div>
     <!--/ End Error Page -->
     
