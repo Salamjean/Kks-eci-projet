@@ -34,21 +34,21 @@
       <!-- Doctor -->
       <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#schedule" aria-expanded="false" aria-controls="schedule">
-          <span><i class="fas fa-list-alt"></i>Statistique</span>
+          <span><i class="fas fa-list-alt"></i>Directeur</span>
         </a>
         <ul id="schedule" class="collapse" aria-labelledby="schedule" data-parent="#side-nav-accordion">
-          <li> <a href="{{ route('stats.superindex') }}">Statistique</a> </li>
+          <li> <a href="{{ route('directeur.create') }}">Ajouter Directeur</a> </li>
+          
         </ul>
       </li><br><br>
       <!-- /Schedule -->
       <!-- Appointment -->
       <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#appointment" aria-expanded="false" aria-controls="appointment">
-          <span><i class="far fa-check-square"></i>Appointment</span>
+          <span><i class="far fa-check-square"></i>Statistique</span>
         </a>
         <ul id="appointment" class="collapse" aria-labelledby="appointment" data-parent="#side-nav-accordion">
-          <li> <a href="pages/appointment/add-appointment.html">Add Appointment</a> </li>
-          <li> <a href="pages/appointment/appointment-list.html">Appointment List</a> </li>
+          <li> <a href="{{ route('stats.superindex') }}">Statistique</a> </li>
         </ul>
       </li>
       <!-- /Appointment -->

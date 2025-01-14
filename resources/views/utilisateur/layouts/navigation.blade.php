@@ -47,9 +47,12 @@
     <ul class="navbar-nav">
       <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
         <h1 class="welcome-text">Bienvenue, Mlle/Mme/M. <span class="text-black fw-bold">{{ Auth::user()->name }} {{ Auth::user()->prenom }}</span></h1>
-        <h3 style="color: black"><strong>Mairie de {{ strtoupper(Auth::user()->commune) }}</strong></h3>
-        <h3 class="welcome-sub-text">Vous pouvez maintenant effectuer votre demande</h3>
       </li>
+    </ul>
+
+    <ul>
+      <h3 style="color: black; text-align:center"><strong>Mairie de {{ strtoupper(Auth::user()->commune) }}</strong></h3>
+      <h6 class="welcome-sub-text">Vous pouvez maintenant effectuer votre demande</h6>
     </ul>
    
     <ul class="navbar-nav">

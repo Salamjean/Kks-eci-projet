@@ -30,6 +30,30 @@
     </style>
 </head>
 <body>
+<br><br>
+    <h4 class="text-center">Statistiques par mois</h4>
+      <!-- Filtre de Mois -->
+  <form method="GET" action="{{ route('stats.superindex') }}" class="form-inline mb-3 justify-content-center">
+    <div class="form-group mr-2">
+        <select name="month" class="form-control">
+            @for ($m = 1; $m <= 12; $m++)
+                <option value="{{ $m }}" {{ $m == $selectedMonth ? 'selected' : '' }}>
+                    {{ \Carbon\Carbon::create()->month($m)->locale('fr')->translatedFormat('F') }}
+                </option>
+            @endfor
+        </select>
+    </div>
+    <div class="form-group mr-2">
+        <select name="year" class="form-control">
+            @for ($y = date('Y'); $y >= date('Y') - 4; $y--)
+                <option value="{{ $y }}" {{ $y == $selectedYear ? 'selected' : '' }}>
+                    {{ $y }}
+                </option>
+            @endfor
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary mt-0">Filtrer</button>
+</form>
 
 {{-- Les cartes de statistiques --}}
 <div class="row w-full mt-4">
@@ -103,29 +127,6 @@
                 <h6 class="m-0 font-weight-bold text-primary">La progression des déclarations</h6>
             </div>
             <div class="card-body">
-               
-                <!-- Filtre de Mois -->
-                <form method="GET" action="{{ route('stats.superindex') }}" class="form-inline mb-3 justify-content-center">
-                    <div class="form-group mr-2">
-                        <select name="month" class="form-control">
-                            @for ($m = 1; $m <= 12; $m++)
-                                <option value="{{ $m }}" {{ $m == $selectedMonth ? 'selected' : '' }}>
-                                    {{ \Carbon\Carbon::create()->month($m)->locale('fr')->translatedFormat('F') }}
-                                </option>
-                            @endfor
-                        </select>
-                    </div>
-                    <div class="form-group mr-2">
-                        <select name="year" class="form-control">
-                            @for ($y = date('Y'); $y >= date('Y') - 4; $y--)
-                                <option value="{{ $y }}" {{ $y == $selectedYear ? 'selected' : '' }}>
-                                    {{ $y }}
-                                </option>
-                            @endfor
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary mt-0">Filtrer</button>
-                </form>
 
                 <div class="mb-2">
                     <div class="text-gray-500">

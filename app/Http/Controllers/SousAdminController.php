@@ -66,40 +66,47 @@ class SousAdminController extends Controller
             // Compter le total des déclarations de naissance et de décès pour le mois sélectionné
             $naisshop = NaissHop::where('NomEnf', $communeAdmin)
                 ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
+                ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                 ->whereMonth('created_at', $selectedMonth)
                 ->whereYear('created_at', $selectedYear)
                 ->count();
     
             $deceshop = DecesHop::where('nomHop', $communeAdmin)
                 ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
+                ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
                 ->whereMonth('created_at', $selectedMonth)
                 ->whereYear('created_at', $selectedYear)
                 ->count();
-    
+
             // Récupérer les données pour les graphiques
             $naissData = NaissHop::where('NomEnf', $communeAdmin)
                 ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->whereYear('created_at', $selectedYear)
-                ->selectRaw('strftime("%m", created_at) as month, COUNT(*) as count')
+                ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
+                ->selectRaw('CAST(strftime("%m", created_at) AS INTEGER) as month, COUNT(*) as count')
                 ->groupBy('month')
                 ->orderBy('month')
                 ->pluck('count', 'month')->toArray();
-    
-            $decesData = DecesHop::where('nomHop', $communeAdmin)
+
+                // Remplir les données manquantes
+            $naissData = array_replace(array_fill(1, 12, 0), $naissData);
+            $total = $naisshop + $deceshop ;
+                // Récupérer les données de décès
+                $decesData = DecesHop::where('nomHop', $communeAdmin)
                 ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
                 ->whereYear('created_at', $selectedYear)
-                ->selectRaw('strftime("%m", created_at) as month, COUNT(*) as count')
+                ->whereDate('created_at', now()->format('Y-m-d')) // Filtrer par date
+                ->selectRaw('CAST(strftime("%m", created_at) AS INTEGER) as month, COUNT(*) as count')
                 ->groupBy('month')
                 ->orderBy('month')
                 ->pluck('count', 'month')->toArray();
     
-            // Remplir les données manquantes pour chaque mois
-            $naissData = array_replace(array_fill(1, 12, 0), $naissData);
+            // Remplir les données manquantes
             $decesData = array_replace(array_fill(1, 12, 0), $decesData);
-            $total = $naisshop + $deceshop;
-    
+
             // Passer les données à la vue
-            return view('sous_admin.dashboard', compact('naisshop', 'deceshop', 'total', 'selectedMonth', 'selectedYear', 'naissData', 'decesData', 'declarationsRecents', 'decesRecents'));
+            return view('sous_admin.dashboard', compact('naisshop', 'deceshop', 'total', 'selectedMonth', 'selectedYear', 'naissData', 
+            'decesData', 'declarationsRecents', 'decesRecents'));
         } catch (Exception $e) {
             dd($e);
         }

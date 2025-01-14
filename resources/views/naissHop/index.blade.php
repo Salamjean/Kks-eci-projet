@@ -201,7 +201,7 @@
             @endif
         </div>
 
-        <div class="container">
+        <div class="container col-11">
             <h1>Liste Des Naissances Déclarées</h1>
             <div class="header">
                 <div class="search-bar">

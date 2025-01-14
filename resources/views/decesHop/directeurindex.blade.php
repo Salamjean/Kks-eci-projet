@@ -1,4 +1,4 @@
-@extends('sous_admin.layouts.template')
+@extends('directeur.layouts.template')
 
 @section('content')
 <!DOCTYPE html>
@@ -202,14 +202,7 @@
         </div>
 
         <div class="container col-11">
-            <h1>Liste Des Décès Déclarés</h1>
-            <div class="header">
-                <div class="search-bar">
-                    <input type="text" id="search" placeholder="Rechercher une déclaration...">
-                </div>
-                <a href="{{ route('decesHop.create') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter une nouvelle déclaration</a>
-            </div>
-            
+            <h1>Liste des décès déclarés</h1>
             <table id="patients-table" class="display">
                 <thead style="text-align: center">
                     <tr>
@@ -220,8 +213,6 @@
                         <th>Date de Décès</th>
                         <th>Causes du Décès</th>
                         <th>Commune de Décès</th>
-                        <th colspan="3" style="text-align: center">Action</th>
-                        <th colspan="2" style="text-align: center">Télécharger</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -234,31 +225,6 @@
                         <td>{{ $deceshop->DateDeces }}</td>
                         <td>{{ $deceshop->Remarques }}</td>
                         <td>{{ $deceshop->commune }}</td>
-                        <td>
-                            <button class="edit"><a href="{{ route('decesHop.edit', $deceshop->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
-                        </td>
-                        <td>
-                            <button class="delete" onclick="confirmDelete('{{ route('decesHop.delete', $deceshop->id) }}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="eye"><a href="{{ route('decesHop.show', $deceshop->id) }}" class="eye"><i class="fas fa-eye"></i></a></button>
-                        </td>
-                        <td>
-                            <button class="eye">
-                                <a href="{{ route('decesHop.download', $deceshop->id) }}" style="color: #009efb">
-                                    <i class="fas fa-download" style="color: blue"></i><br> Déclaration
-                                </a>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="eye">
-                                <a href="{{ route('decesHop.downloadcontagion', $deceshop->id) }}" style="color: #009efb">
-                                    <i class="fas fa-download" style="color: blue"></i> <br>Contagion
-                                </a>
-                            </button>
-                        </td>
                     </tr>
                     @empty
                     <tr>

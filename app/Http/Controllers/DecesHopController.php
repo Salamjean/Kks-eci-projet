@@ -17,16 +17,31 @@ use Illuminate\Support\Facades\DB;
 
 class DecesHopController extends Controller
 {
-    public function index(){
-         // Récupérer l'administrateur connecté
-         $sousadmin = Auth::guard('sous_admin')->user();
+    public function index() {
+        // Récupérer l'administrateur connecté
+        $sousadmin = Auth::guard('sous_admin')->user();
         
-         // Récupérer la commune de l'administrateur
-         $communeAdmin = $sousadmin->nomHop; 
-     
-         // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
-         $deceshops = DecesHop::where('nomHop', $communeAdmin)->get();
+        // Récupérer la commune de l'administrateur
+        $communeAdmin = $sousadmin->nomHop;
+        $sousAdminId = $sousadmin->id; // Récupérer l'ID du sous-administrateur
+    
+        // Récupérer les déclarations de décès filtrées par la commune de l'administrateur et l'ID du sous-administrateur
+        $deceshops = DecesHop::where('nomHop', $communeAdmin)
+            ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
+            ->get();
+    
         return view('decesHop.index', ['deceshops' => $deceshops]);
+    }
+
+    public function directeurindex() {
+        // Récupérer l'administrateur connecté
+        $directeur = Auth::guard('directeur')->user();
+        // Récupérer la commune de l'administrateur
+        $communeAdmin = $directeur->nomHop;
+        // Récupérer les déclarations de décès filtrées par la commune de l'administrateur et l'ID du sous-administrateur
+        $deceshops = DecesHop::where('nomHop', $communeAdmin)->get();
+    
+        return view('decesHop.directeurindex', ['deceshops' => $deceshops]);
     }
 
     public function superindex(){

@@ -2,6 +2,9 @@
 
 @section('content')
 
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 <style>
     .form-background {
         background-image: url("{{ asset('assets/images/profiles/arriereP.jpg') }}");
@@ -15,6 +18,26 @@
     .modal-image {
         max-width: 100%;
         height: auto;
+    }
+
+    button {
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn-danger {
+        color: white;
+        background-color: #dc3545;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
     }
 </style>
 
@@ -51,6 +74,7 @@
                                         <th class="text-center">Extrait de Mariage</th>
                                         <th class="text-center">Etat Actuel</th>
                                         <th class="text-center">Agent</th>
+                                        <th class="text-center">Supprimer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -79,10 +103,13 @@
                                           </span>
                                       </td>
                                         <td>{{ $mariage->agent ? $mariage->agent->name . ' ' . $mariage->agent->prenom : 'Non attribué' }}</td>
+                                        <td>
+                                            <button style="margin-left:30px" onclick="confirmDelete('{{ route('mariage.delete', $mariage->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                       </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="5" class="text-center">Aucune déclaration trouvée</td>
+                                        <td colspan="6" class="text-center">Aucune déclaration trouvée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -105,12 +132,13 @@
                                         <th class="text-center">Extrait de Mariage</th>
                                         <th class="text-center">Etat Actuel</th>
                                         <th class="text-center">Agent</th>
+                                        <th class="text-center">Supprimer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($mariagesComplets as $mariage)
                                     <tr class="text-center" style="font-size: 12px">
-                                        <td >{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
+                                        <td>{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
                                         <td>{{ $mariage->nomEpoux }}</td>
                                         <td>{{ $mariage->prenomEpoux }}</td>
                                         <td>{{ $mariage->dateNaissanceEpoux }}</td>
@@ -124,7 +152,7 @@
                                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
                                         </td>
                                         <td class="text-center">
-                                            <img src="{{ asset('storage/' . $mariage->extraitMariage) }}" 
+                                            <img src="{{ asset('storage/' . $mariage->extraitMariage) }}"  
                                                  alt="Extrait de mariage" 
                                                  width="100" 
                                                  height="100" 
@@ -137,10 +165,14 @@
                                           </span>
                                         </td>
                                         <td>{{ $mariage->agent ? $mariage->agent->name . ' ' . $mariage->agent->prenom : 'Non attribué' }}</td>
+                                        <td>
+                                            <button style="margin-left:30px" onclick="confirmDelete('{{ route('mariage.delete', $mariage->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                        </td>
                                     </tr>
+
                                     @empty
                                     <tr>
-                                        <td colspan="9" class="text-center">Aucune déclaration trouvée</td>
+                                        <td colspan="10" class="text-center">Aucune déclaration trouvée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -164,13 +196,53 @@
     </div>
 </div>
 
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    function showImage(imageElement) {
-        const modalImage = document.getElementById('modalImage');
-        modalImage.src = imageElement.src;
-        const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
-        imageModal.show();
-    }
+
+function showImage(imageElement) {
+      const modalImage = document.getElementById('modalImage');
+      modalImage.src = imageElement.src;
+      const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+      imageModal.show();
+  }
+  function confirmDelete(url) {
+      Swal.fire({
+          title: 'Êtes-vous sûr ?',
+          text: "Vous ne pourrez pas revenir en arrière !",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Oui, supprimer !',
+          cancelButtonText: 'Annuler'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              window.location.href = url; // Rediriger vers l'URL de suppression
+          }
+      });
+  }
+  // Afficher un pop-up de succès après la suppression
+  @if(session('success'))
+      Swal.fire({
+          title: 'Succès !',
+          text: "{{ session('success') }}",
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+      });
+  @endif
+  // Afficher un pop-up d'erreur en cas d'échec de la suppression
+  @if(session('error'))
+      Swal.fire({
+          title: 'Erreur !',
+          text: "{{ session('error') }}",
+          icon: 'error',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+      });
+  @endif
 </script>
 
 @endsection

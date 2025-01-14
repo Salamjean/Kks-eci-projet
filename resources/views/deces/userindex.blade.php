@@ -2,9 +2,11 @@
 
 @section('content')
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <style>
     .form-background {
@@ -19,6 +21,19 @@
     .modal-image {
         max-width: 100%;
         height: auto;
+    }
+
+    .btn-danger {
+        color: white;
+        background-color: #dc3545;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
     }
 </style>
 
@@ -65,6 +80,7 @@
                                         <th>De par la Loi</th>
                                         <th>Etat Actuel</th>
                                         <th>Agent</th>
+                                        <th>Supprimer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,13 +101,16 @@
                                             <img src="{{ asset('storage/' . $deceD->deParLaLoi) }}" alt="De par la Loi" width="100" height="auto" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <span class="badge {{ $deceD->etat == 'en attente' ? 'badge-opacity-warning' : ($deceD->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">{{ $deceD->etat }}</span>
+                                            <span class="badge {{ $deceD->etat == 'en attente' ? 'badge-opacity-warning' : ($deceD->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}" >{{ $deceD->etat }}</span>
                                         </td>
                                         <td>{{ $deceD->agent ? $deceD->agent->name . ' ' . $deceD->agent->prenom : 'Non attribué' }}</td>
+                                        <td>
+                                            <button style="margin-left:30px" onclick="confirmDelete('{{ route('deces.delete', $deceD->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                        </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="10" class="text-center">Aucune demande effectuée</td>
+                                        <td colspan="11" class="text-center">Aucune demande effectuée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -117,6 +136,7 @@
                                         <th>Requisition de Police</th>
                                         <th>État Actuel</th>
                                         <th>Agent</th>
+                                        <th>Supprimer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -159,15 +179,18 @@
                                         </td>
                                         <td>
                                             <span class="badge {{ $dece->etat == 'en attente' ? 'badge-opacity-warning' : ($dece->etat == 'réçu' ? 
-                                            'badge-opacity-success' : 'badge-opacity-danger') }}">
+                                            'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461">
                                                 {{ ucfirst($dece->etat) }}
                                             </span>
                                         </td>
                                         <td>{{ $dece->agent ? $dece->agent->name . ' ' . $dece->agent->prenom : 'Non attribué' }}</td>
+                                        <td>
+                                            <button style="margin-left:30px" onclick="confirmDelete('{{ route('deces.deletedeja', $dece->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                        </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="12" class="text-center">Aucune déclaration trouvée</td>
+                                        <td colspan="13" class="text-center">Aucune déclaration trouvée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -191,13 +214,52 @@
     </div>
 </div>
 
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
-    function showImage(imageElement) {
-        const modalImage = document.getElementById('modalImage');
-        modalImage.src = imageElement.src;
-        const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
-        imageModal.show();
-    }
+function showImage(imageElement) {
+      const modalImage = document.getElementById('modalImage');
+      modalImage.src = imageElement.src;
+      const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+      imageModal.show();
+  }
+  function confirmDelete(url) {
+      Swal.fire({
+          title: 'Êtes-vous sûr ?',
+          text: "Vous ne pourrez pas revenir en arrière !",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Oui, supprimer !',
+          cancelButtonText: 'Annuler'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              window.location.href = url; // Rediriger vers l'URL de suppression
+          }
+      });
+  }
+  // Afficher un pop-up de succès après la suppression
+  @if(session('success'))
+      Swal.fire({
+          title: 'Succès !',
+          text: "{{ session('success') }}",
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+      });
+  @endif
+  // Afficher un pop-up d'erreur en cas d'échec de la suppression
+  @if(session('error'))
+      Swal.fire({
+          title: 'Erreur !',
+          text: "{{ session('error') }}",
+          icon: 'error',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+      });
+  @endif
 </script>
 
 @endsection

@@ -2,6 +2,12 @@
 
 @section('content')
 
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
 <style>
     .form-background {
         background-image: url("{{ asset('assets/images/profiles/arriereP.jpg') }}");
@@ -15,6 +21,19 @@
     .modal-image {
         max-width: 100%;
         height: auto;
+    }
+
+    .btn-danger {
+        color: white;
+        background-color: #dc3545;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
     }
 </style>
 
@@ -64,6 +83,7 @@
                                         <th>Certificat Médical de Naissance</th>
                                         <th>Etat Actuel</th>
                                         <th>Agent</th>
+                                        <th>Supprimer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,10 +117,13 @@
                                             </span>
                                         </td>
                                         <td>{{ $naissance->agent ? $naissance->agent->name . ' ' . $naissance->agent->prenom : 'Non attribué' }}</td>
+                                        <td>
+                                            <button style="margin-left:30px" onclick="confirmDelete('{{ route('naissance.delete', $naissance->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                       </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="9" class="text-center">Aucune demande effectuée</td>
+                                        <td colspan="11" class="text-center">Aucune demande effectuée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -123,6 +146,7 @@
                                         <th>Pièce d'identité du demandeur</th>
                                         <th>Etat Actuel</th>
                                         <th>Agent</th>
+                                        <th>Supprimer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -148,10 +172,13 @@
                                             </span>
                                         </td>
                                         <td>{{ $naissanceD->agent ? $naissanceD->agent->name . ' ' . $naissanceD->agent->prenom : 'Non attribué' }}</td>
+                                        <td>
+                                            <button style="margin-left:30px" onclick="confirmDelete('{{ route('naissanced.delete', $naissanceD->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                       </td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="6" class="text-center">Aucune demande effectuée</td>
+                                        <td colspan="10" class="text-center">Aucune demande effectuée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -159,7 +186,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -176,6 +202,9 @@
     </div>
 </div>
 
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
     function showImage(imageElement) {
         const modalImage = document.getElementById('modalImage');
@@ -183,6 +212,45 @@
         const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
         imageModal.show();
     }
+
+    function confirmDelete(url) {
+        Swal.fire({
+            title: 'Êtes-vous sûr ?',
+            text: "Vous ne pourrez pas revenir en arrière !",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Oui, supprimer !',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url; // Rediriger vers l'URL de suppression
+            }
+        });
+    }
+
+    // Afficher un pop-up de succès après la suppression
+    @if(session('success'))
+        Swal.fire({
+            title: 'Succès !',
+            text: "{{ session('success') }}",
+            icon: 'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        });
+    @endif
+
+    // Afficher un pop-up d'erreur en cas d'échec de la suppression
+    @if(session('error'))
+        Swal.fire({
+            title: 'Erreur !',
+            text: "{{ session('error') }}",
+            icon: 'error',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
+        });
+    @endif
 </script>
 
 @endsection

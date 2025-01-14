@@ -14,6 +14,7 @@ use App\Models\NaissHop;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -39,6 +40,20 @@ class NaissanceController extends Controller
         // Retourner la vue avec les données
         return view('naissances.index', compact('naissances', 'alerts', 'naissancesD'));
     }
+
+    public function delete(Naissance $naissance)
+    {
+        try {
+            $naissance->delete();
+            return redirect()->route('utilisateur.index')->with('success', 'La demande a été supprimée avec succès.');
+        } catch (Exception $e) {
+            // Log l'erreur pour le débogage
+            Log::error('Erreur lors de la suppression de la demande : ' . $e->getMessage());
+            // Rediriger avec un message d'erreur
+            return redirect()->route('utilisateur.index')->with('error1', 'Une erreur est survenue lors de la suppression de la demande.');
+        }
+    }
+
     public function userindex()
 {
     // Récupérer l'utilisateur connecté
@@ -261,7 +276,7 @@ public function ajointindex()
         'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissance->nomDefunt}.",
     ]);
     
-    return redirect()->route('utilisateur.dashboard')->with('success', 'Votre demande a été traitée avec succès.');
+    return redirect()->route('utilisateur.index')->with('success', 'Votre demande a été traitée avec succès.');
 }
 
 

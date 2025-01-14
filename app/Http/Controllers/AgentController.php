@@ -99,8 +99,6 @@ public function handleLogin(Request $request)
             'email' =>'required|exists:agents,email',
             'password' => 'required|min:8',
         ], [
-            
-            
             'email.required' => 'Le mail est obligatoire.',
             'email.exists' => 'Cette adresse mail n\'existe pas.',
             'password.required' => 'Le mot de passe est obligatoire.',

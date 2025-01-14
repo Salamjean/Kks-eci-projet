@@ -1,4 +1,4 @@
-@extends('sous_admin.layouts.template')
+@extends('directeur.layouts.template')
 
 @section('content')
 <!DOCTYPE html>
@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liste des Patients</title>
+    <title>Liste directeur</title>
     
     <!-- Insertion de SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -202,67 +202,31 @@
         </div>
 
         <div class="container col-11">
-            <h1>Liste Des Décès Déclarés</h1>
-            <div class="header">
-                <div class="search-bar">
-                    <input type="text" id="search" placeholder="Rechercher une déclaration...">
-                </div>
-                <a href="{{ route('decesHop.create') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter une nouvelle déclaration</a>
-            </div>
-            
+            <h1>Liste des naissances déclarées</h1>
             <table id="patients-table" class="display">
                 <thead style="text-align: center">
                     <tr>
-                        <th>N° CMD</th>
-                        <th>Nom du défunt</th>
-                        <th>Prénoms du défunt</th>
+                        <th>N° CMN</th>
+                        <th>Nom de la mère</th>
+                        <th>Nom de l'accompagnateur</th>
+                        <th>Hôpital</th>
+                        <th>N°CMU de la mère</th>
                         <th>Date de Naissance</th>
-                        <th>Date de Décès</th>
-                        <th>Causes du Décès</th>
-                        <th>Commune de Décès</th>
-                        <th colspan="3" style="text-align: center">Action</th>
-                        <th colspan="2" style="text-align: center">Télécharger</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse ($deceshops as $deceshop)
+                    @forelse ($naisshops as $naisshop)
                     <tr>
-                        <td>{{ $deceshop->codeCMD }}</td>
-                        <td>{{ $deceshop->NomM }}</td>
-                        <td>{{ $deceshop->PrM }}</td>
-                        <td>{{ $deceshop->DateNaissance }}</td>
-                        <td>{{ $deceshop->DateDeces }}</td>
-                        <td>{{ $deceshop->Remarques }}</td>
-                        <td>{{ $deceshop->commune }}</td>
-                        <td>
-                            <button class="edit"><a href="{{ route('decesHop.edit', $deceshop->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
-                        </td>
-                        <td>
-                            <button class="delete" onclick="confirmDelete('{{ route('decesHop.delete', $deceshop->id) }}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="eye"><a href="{{ route('decesHop.show', $deceshop->id) }}" class="eye"><i class="fas fa-eye"></i></a></button>
-                        </td>
-                        <td>
-                            <button class="eye">
-                                <a href="{{ route('decesHop.download', $deceshop->id) }}" style="color: #009efb">
-                                    <i class="fas fa-download" style="color: blue"></i><br> Déclaration
-                                </a>
-                            </button>
-                        </td>
-                        <td>
-                            <button class="eye">
-                                <a href="{{ route('decesHop.downloadcontagion', $deceshop->id) }}" style="color: #009efb">
-                                    <i class="fas fa-download" style="color: blue"></i> <br>Contagion
-                                </a>
-                            </button>
-                        </td>
+                        <td>{{ $naisshop->codeCMN }}</td>
+                        <td>{{ $naisshop->NomM . ' ' . $naisshop->PrM }}</td>
+                        <td>{{ $naisshop->NomP . ' ' . $naisshop->PrP }}</td>
+                        <td>{{ $naisshop->NomEnf . ' ' . $naisshop->preEnf }}</td>
+                        <td>{{ $naisshop->codeCMU }}</td>
+                        <td>{{ $naisshop->DateNaissance }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="12" class="text-center">Aucun Décès Déclaré</td>
+                        <td colspan="6" class="text-center">Aucune naissance déclarée</td>
                     </tr>
                     @endforelse
                 </tbody>

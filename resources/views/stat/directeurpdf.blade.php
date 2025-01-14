@@ -3,46 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Statistiques</title>
+    <title>Document</title>
     <style>
         body {
             position: relative;
             margin: 0;
             height: 100vh;
-            overflow: hidden; /* Empêcher le défilement si l'image est trop grande */
         }
-
-        body::before {
-            content: "";
-    position: absolute;
-    max-width: 100%;
-    top: 50%; 
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 50%; 
-    height: 50%;
-    background-image: url('assets/images/profiles/santebn.jpg');
-    background-size: cover; 
-    background-position: center; 
-    opacity: 0.3;
-    z-index: -1; 
-        }
-
         table {
             width: 100%;
             border-collapse: collapse;
         }
-
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
-
         th {
             background-color: #f2f2f2;
         }
-
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3;
+            z-index: -1;
+        }
         .logo1 {
             position: absolute;
             margin-left: 75%;
@@ -50,7 +41,6 @@
             height: 110px;
             left: 40px;
         }
-
         .logo2 {
             height: 130px;
             position: absolute;
@@ -58,12 +48,10 @@
             margin-left: 0;
             margin-top: 0;
         }
-
         .logo {
             display: flex;
             justify-content: space-between;
         }
-
         .tete {
             text-align: center;
             font-family: calisto MT;
@@ -71,7 +59,6 @@
             color: #006;
             font-weight: bold;
         }
-
         .signature {
             position: absolute;
             bottom: 300px;
@@ -79,7 +66,6 @@
             font-size: 15px;
             font-weight: bold;
         }
-
         hr {
             position: absolute;
             bottom: 85px;
@@ -87,7 +73,6 @@
             border: 1px solid black;
             margin-left: 20px;
         }
-
         footer {
             position: absolute;
             bottom: 10px;
@@ -126,7 +111,7 @@
             </tbody>
         </table>
 
-        <h2 style="text-align: center">Les statistiques par Mois</h2>
+        <h2 style="text-align: center">Les statisques par Mois</h2>
         <table>
             <thead>
                 <tr style="text-align: center">

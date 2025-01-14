@@ -8,6 +8,7 @@ use App\Models\NaissanceD;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class NaissanceDeclaController extends Controller
@@ -83,7 +84,20 @@ class NaissanceDeclaController extends Controller
             'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissanceD->name}.",
         ]);
         
-        return redirect()->route('utilisateur.dashboard')->with('success', 'Votre demande a été enregistrée avec succès, Vous pouvez la voir dans la liste.');
+        return redirect()->route('utilisateur.index')->with('success', 'Votre demande a été enregistrée avec succès, Vous pouvez la voir dans la liste.');
+    }
+
+    public function delete(NaissanceD $naissanceD)
+    {
+        try {
+            $naissanceD->delete();
+            return redirect()->route('utilisateur.index')->with('success', 'La demande a été supprimée avec succès.');
+        } catch (Exception $e) {
+            // Log l'erreur pour le débogage
+            Log::error('Erreur lors de la suppression de la demande : ' . $e->getMessage());
+            // Rediriger avec un message d'erreur
+            return redirect()->route('utilisateur.index')->with('error1', 'Une erreur est survenue lors de la suppression de la demande.');
+        }
     }
     
 

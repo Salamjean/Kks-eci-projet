@@ -152,7 +152,20 @@
 
         <div class="input-group">
           <label for="dateDeces">Date du décès</label>
-          <input type="date" id="dateDeces" name="DateDeces" required />
+          <input type="date" id="dateDeces" name="DateDeces" id="dateDeces" style="background-color:#e8e8e8" readonly required />
+          <script>
+            // Récupérer la date du jour
+            const today = new Date();
+        
+            // Formater la date au format YYYY-MM-DD (requis pour les champs de type date)
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+            const day = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+        
+            // Définir la valeur du champ de date
+            document.getElementById('dateDeces').value = formattedDate;
+        </script>
         </div>
       </div>
 

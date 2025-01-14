@@ -1,4 +1,4 @@
-@extends('sous_admin.layouts.template')
+@extends('directeur.layouts.template')
 
 @section('content')
 <!DOCTYPE html>
@@ -13,6 +13,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            text-decoration: none;
         }
         .card {
             border: 1px solid #ccc;
@@ -20,86 +21,101 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             padding: 20px;
             margin: 10px 0;
+            text-decoration: none;
         }
         h6 {
             margin-bottom: 20px;
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
-    <br><br>
-    <h4 class="text-center">Statistiques par mois</h4>
-    <!-- Filtre de Mois -->
-<form method="GET" action="{{ route('stats.index') }}" class="form-inline mb-3 justify-content-center">
-  <div class="form-group mr-2">
-      <select name="month" class="form-control">
-          @for ($m = 1; $m <= 12; $m++)
-              <option value="{{ $m }}" {{ $m == $selectedMonth ? 'selected' : '' }}>
-                  {{ \Carbon\Carbon::create()->month($m)->locale('fr')->translatedFormat('F') }}
-              </option>
-          @endfor
-      </select>
-  </div>
-  <div class="form-group mr-2">
-      <select name="year" class="form-control">
-          @for ($y = date('Y'); $y >= date('Y') - 4; $y--)
-              <option value="{{ $y }}" {{ $y == $selectedYear ? 'selected' : '' }}>
-                  {{ $y }}
-              </option>
-          @endfor
-      </select>
-  </div>
-  <button type="submit" class="btn btn-primary mt-0">Filtrer</button>
+<br><br>
+     <!-- Filtre de Mois -->
+<h4 class="text-center">Les statistiques par mois</h4>
+ <form method="GET" action="{{ route('stats.directeurindex') }}" class="form-inline mb-3 justify-content-center">
+    <div class="form-group mr-2">
+        <select name="month" class="form-control">
+            @for ($m = 1; $m <= 12; $m++)
+                <option value="{{ $m }}" {{ $m == $selectedMonth ? 'selected' : '' }}>
+                    {{ \Carbon\Carbon::create()->month($m)->locale('fr')->translatedFormat('F') }}
+                </option>
+            @endfor
+        </select>
+    </div>
+    <div class="form-group mr-2">
+        <select name="year" class="form-control">
+            @for ($y = date('Y'); $y >= date('Y') - 4; $y--)
+                <option value="{{ $y }}" {{ $y == $selectedYear ? 'selected' : '' }}>
+                    {{ $y }}
+                </option>
+            @endfor
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary mt-0">Filtrer</button>
 </form>
-
 {{-- Les cartes de statistiques --}}
-<div class="ms-content-wrapper">
-    <div class="row" style="justify-content: center">
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <a href="#">
-                <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
-                    <div class="ms-card-body media">
-                        <div class="media-body">
-                            <h6>Total Naissance</h6>
-                            <p class="ms-card-change text-center">{{ $naisshop }}</p>
-                        </div>
+<div class="row w-full mt-4">
+    <div class="col-xl-3 col-md-6 col-sm-6">
+        <a href="#">
+            <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
+                <div class="ms-card-body media">
+                    <div class="media-body">
+                        <h6>Total Docteur</h6>
+                        <p class="ms-card-change">{{ $docteur }}</p>
                     </div>
-                    <i class="fas fa-user ms-icon-mr"></i>
                 </div>
-            </a>
-        </div>
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <a href="#">
-                <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
-                    <div class="ms-card-body media">
-                        <div class="media-body">
-                            <h6>Total Décès</h6>
-                            <p class="ms-card-change text-center">{{ $deceshop }}</p>
-                        </div>
+                <i class="fas fa-stethoscope ms-icon-mr"></i>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xl-3 col-md-6 col-sm-6">
+        <a href="#">
+            <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
+                <div class="ms-card-body media">
+                    <div class="media-body">
+                        <h6>Total Naissance</h6>
+                        <p class="ms-card-change">{{ $naisshop }}</p>
                     </div>
-                    <i class="fa fa-school ms-icon-mr"></i>
                 </div>
-            </a>
-        </div>
-        <div class="col-xl-3 col-md-6 col-sm-6">
-            <a href="#">
-                <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
-                    <div class="ms-card-body media">
-                        <div class="media-body">
-                            <h6>Total Déclaration</h6>
-                            <p class="ms-card-change text-center">{{ $total }}</p>
-                        </div>
+                <i class="fas fa-user ms-icon-mr"></i>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xl-3 col-md-6 col-sm-6">
+        <a href="#">
+            <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
+                <div class="ms-card-body media">
+                    <div class="media-body">
+                        <h6 class="bold">Total Décès</h6>
+                        <p class="ms-card-change">{{ $deceshop }}</p>
                     </div>
-                    <i class="fas fa-briefcase-medical ms-icon-mr"></i>
                 </div>
-            </a>
-        </div>
+                <i class="fa fa-skull ms-icon-mr"></i>
+            </div>
+        </a>
+    </div>
+
+    <div class="col-xl-3 col-md-6 col-sm-6">
+        <a href="#">
+            <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
+                <div class="ms-card-body media">
+                    <div class="media-body">
+                        <h6 class="bold">Total Déclaration</h6>
+                        <p class="ms-card-change">{{ $total }}</p>
+                    </div>
+                </div>
+                <i class="fas fa-briefcase-medical ms-icon-mr"></i>
+            </div>
+        </a>
     </div>
 </div>
   <!-- Boutons de téléchargement -->
   <h6 class="text-center mb-0">Télécharger les statistiques</h6>
   <div class="form-inline mb-3 justify-content-center text-center">
-    <a href="{{ route('stats.download') }}" class="btn btn-danger mx-2"><i class="fas fa-download"></i> PDF</a>
+    <a href="{{ route('stats.directeurdownload') }}" class="btn btn-danger mx-2"><i class="fas fa-download"></i> PDF</a>
     <a href="#" class="btn btn-success mx-2"><i class="fas fa-download"></i> Excel</a>
 </div>
 <div class="row mb-3">
@@ -117,7 +133,8 @@
                     </div>
                     <div class="small text-right"><b>{{ $naisshop }} éléments sur {{ $total }}</b></div> 
                     <div class="progress" style="height: 12px;">
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $total > 0 ? ($naisshop / $total) * 100 : 0 }}%;" aria-valuenow="{{ $naisshop }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $total > 0 ? ($naisshop / $total) * 100 : 0 }}%;" 
+                            aria-valuenow="{{ $naisshop }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -126,7 +143,8 @@
                     </div>
                     <div class="small text-right"><b>{{ $deceshop }} éléments sur {{ $total }}</b></div>
                     <div class="progress" style="height: 12px;">
-                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ $total > 0 ? ($deceshop / $total) * 100 : 0 }}%;" aria-valuenow="{{ $deceshop }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ $total > 0 ? ($deceshop / $total) * 100 : 0 }}%;"
+                            aria-valuenow="{{ $deceshop }}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                 </div>
             </div>

@@ -29,12 +29,28 @@ class NaissHopController extends Controller
         $sousadmin = Auth::guard('sous_admin')->user();
         
         // Récupérer la commune de l'administrateur
-        $communeAdmin = $sousadmin->nomHop; 
+        $communeAdmin = $sousadmin->nomHop;
+        $sousAdminId = $sousadmin->id; // Récupérer l'ID du sous-administrateur
     
-        // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
-        $naisshops = NaissHop::where('NomEnf', $communeAdmin)->get();
+        // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur et l'ID du sous-administrateur
+        $naisshops = NaissHop::where('NomEnf', $communeAdmin)
+            ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
+            ->get();
     
         return view('naissHop.index', ['naisshops' => $naisshops]);
+    }
+
+    public function directeurindex() {
+        // Récupérer l'administrateur connecté
+        $directeur = Auth::guard('directeur')->user();
+        
+        // Récupérer la commune de l'administrateur
+        $communeAdmin = $directeur->nomHop;
+        
+        // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur 
+        $naisshops = NaissHop::where('NomEnf', $communeAdmin)->get();
+        
+        return view('naissHop.directeurindex', ['naisshops' => $naisshops]);
     }
 
     public function superindex() {

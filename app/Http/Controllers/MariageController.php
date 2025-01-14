@@ -9,6 +9,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class MariageController extends Controller
@@ -35,6 +36,20 @@ class MariageController extends Controller
         $mariages = Mariage::all();
         return view('mariages.superindex', compact('mariages'));
     }
+
+    public function delete(Mariage $mariage)
+    {
+        try {
+            $mariage->delete();
+            return redirect()->route('mariage.userindex')->with('success', 'La demande a été supprimée avec succès.');
+        } catch (Exception $e) {
+            // Log l'erreur pour le débogage
+            Log::error('Erreur lors de la suppression de la demande : ' . $e->getMessage());
+            // Rediriger avec un message d'erreur
+            return redirect()->route('mariage.userindex')->with('error1', 'Une erreur est survenue lors de la suppression de la demande.');
+        }
+    }
+
 
     public function userindex(Request $request)
     {
@@ -225,7 +240,7 @@ class MariageController extends Controller
             'message' => "Une nouvelle demande d'extrait de mariage a été enregistrée : {$mariage->nomEpoux} {$mariage->prenomEpoux}.",
         ]);
         
-        return redirect()->route('utilisateur.dashboard')->with('success', 'Votre demande a été traitée avec succès.');
+        return redirect()->route('mariage.userindex')->with('success', 'Votre demande a été traitée avec succès.');
     }
     
 

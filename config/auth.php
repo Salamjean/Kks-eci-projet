@@ -81,6 +81,11 @@ return [
             'provider' => 'super_admins',
         ],
 
+        'directeur' => [
+            'driver' => 'session',
+            'provider' => 'directeurs',
+        ],
+
         'utilisateur' => [
             'driver' => 'session',
             'provider' => 'utilisateurs',
@@ -148,6 +153,11 @@ return [
         'super_admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\SuperAdmin::class
+        ],
+
+        'directeurs' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Director::class
         ],
         'utilisateurs' => [
             'driver' => 'eloquent',

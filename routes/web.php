@@ -7,6 +7,7 @@ use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DecesController;
 use App\Http\Controllers\DecesHopController;
+use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\Doctors\DoctorDashboard;
 use App\Http\Controllers\Doctors\SousDoctorsDashboard;
@@ -205,6 +206,21 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/dashboard', [SousAdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/logout',[SousAdminController::class, 'souslogout'])->name('logout');
     });
+
+    // routes du directeur
+    Route::prefix('directeur')->group(function () {
+        Route::get('/register', [DirectorController::class, 'register'])->name('directeur.register');
+        Route::post('/register', [DirectorController::class, 'handleRegister'])->name('directeur.handleRegister');
+        Route::get('/login', [DirectorController::class, 'login'])->name('directeur.login');
+        Route::post('/login', [DirectorController::class, 'handleLogin'])->name('directeur.handleLogin');
+    });
+    Route::middleware('auth:directeur')->prefix('directeur')->name('directeur.')->group(function(){
+        Route::get('/directeurs-dashboard', [DirectorController::class, 'dashboard'])->name('dashboard');
+        Route::get('/directeur-index',[DirectorController::class, 'directeurindex'])->name('index');
+        Route::get('/index-naissance-directeur',[NaissHopController::class, 'directeurindex'])->name('naissanceindex');
+        Route::get('/index-deces-directeur',[DecesHopController::class, 'directeurindex'])->name('decesindex');
+        Route::get('/logout',[DirectorController::class, 'logout'])->name('logout');
+        });
     
 
     Route::middleware('sous_admin')->prefix('SousDoctor')->group(function(){
@@ -224,17 +240,27 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/validate-ajoint-account/{email}', [AjointController::class, 'submitDefineAccess'])->name('ajoint.validate');
     Route::get('/validate-caisse-account/{email}', [CaisseController::class, 'defineAccess']);
     Route::post('/validate-caisse-account/{email}', [CaisseController::class, 'submitDefineAccess'])->name('caisse.validate');
+    Route::get('/validate-director-account/{email}', [DirectorController::class, 'defineAccess']);
+    Route::post('/validate-director-account/{email}', [DirectorController::class, 'submitDefineAccess'])->name('directeur.validate');
 
 
     //creer un docteurs
 
     Route::middleware('auth:doctor')->prefix('SousDoctor')->group(function () {
+        //les routes du sous-admins(docteurs)
     Route::get('/index',[DoctorController::class, 'index'])->name('doctor.index');
     Route::get('/create',[DoctorController::class, 'create'])->name('doctor.create');
     Route::post('/create',[DoctorController::class, 'store'])->name('doctor.store');
     Route::get('/edit/{sousadmin}',[DoctorController::class, 'edit'])->name('doctor.edit');
     Route::put('/edit/{sousadmin}',[DoctorController::class, 'update'])->name('doctor.update');
     Route::get('/delete/{sousadmin}',[DoctorController::class, 'delete'])->name('doctor.delete');
+
+    // routes des directeurs
+    Route::get('/create-director',[DirectorController::class, 'create'])->name('directeur.create');
+    Route::post('/create-director',[DirectorController::class, 'store'])->name('directeur.store');
+    Route::get('/edit-director/{director}',[DirectorController::class, 'edit'])->name('directeur.edit');
+    Route::put('/edit-director/{director}',[DirectorController::class, 'update'])->name('directeur.update');
+    Route::get('/delete-director/{director}',[DirectorController::class, 'delete'])->name('directeur.delete');
 
     });
 
@@ -247,6 +273,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/create', [NaissanceController::class, 'create'])->name('naissance.create');
         Route::get('/edit/{naissance}', [NaissanceController::class, 'edit'])->name('naissance.edit');
         Route::get('/naissance/{id}', [NaissanceController::class, 'show'])->name('naissance.show');
+        Route::get('/naissance/delete/{naissance}', [NaissanceController::class, 'delete'])->name('naissance.delete');
        
     });
 
@@ -329,7 +356,10 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/', [StatController::class, 'index'])->name('stats.index');
         Route::get('/download', [StatController::class, 'download'])->name('stats.download');
         Route::get('/super', [StatController::class, 'superindex'])->name('stats.superindex');
+        Route::get('/directeur-stats', [StatController::class, 'directeurindex'])->name('stats.directeurindex');
         Route::get('/super/download', [StatController::class, 'superdownload'])->name('stats.superdownload');
+        Route::get('/directeur/download', [StatController::class, 'directeurdownload'])->name('stats.directeurdownload');
+        Route::get('/deces/delete/{deces}', [DecesController::class, 'delete'])->name('deces.delete');
     });
     
 
@@ -341,6 +371,7 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/create', [NaissanceDeclaController::class, 'store'])->name('naissanced.store');
         Route::get('/create', [NaissanceDeclaController::class, 'create'])->name('naissanced.create');
         Route::get('/naissanced/{id}', [NaissanceDeclaController::class, 'show'])->name('naissanced.show');
+        Route::get('/naissanced/delete/{naissanceD}', [NaissanceDeclaController::class, 'delete'])->name('naissanced.delete');
 
     });
     //les routes de deces
@@ -353,7 +384,9 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/deces/{id}', [DecesController::class, 'show'])->name('deces.show');
         Route::get('/create/deja',[DecesController::class,'createdeja'])->name('deces.createdeja');
         Route::post('/create/deja-store',[DecesController::class,'storedeja'])->name('deces.storedeja');
-        Route::get('/create-deja', [DecesController::class, 'indexdeja'])->name('deces.indexdeja');  
+        Route::get('/create-deja', [DecesController::class, 'indexdeja'])->name('deces.indexdeja'); 
+        Route::get('/deces/delete/{deces}', [DecesController::class, 'delete'])->name('deces.delete');
+        Route::get('/decesdeja/delete/{decesdeja}', [DecesController::class, 'deletedeja'])->name('deces.deletedeja'); 
     });
 
     //les routes de mariages
@@ -364,6 +397,7 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/create', [MariageController::class, 'store'])->name('mariage.store');
         Route::get('/create', [MariageController::class, 'create'])->name('mariage.create');
         Route::get('/mariage/{id}', [MariageController::class, 'show'])->name('mariage.show');
+        Route::get('/mariage/delete/{mariage}', [MariageController::class, 'delete'])->name('mariage.delete');
     });
 
     Route::post('/alerts/{id}/mark-as-read', [VendorDashboard::class, 'markAlertAsRead']);

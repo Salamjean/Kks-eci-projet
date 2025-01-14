@@ -75,7 +75,7 @@
                 <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
                     <div class="ms-card-body media">
                         <div class="media-body">
-                            <h6>Total Naissance</h6>
+                            <h6>Naissance/Jour</h6>
                             <p class="ms-card-change text-center">{{ $naisshop }}</p>
                         </div>
                     </div>
@@ -88,7 +88,7 @@
                 <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
                     <div class="ms-card-body media">
                         <div class="media-body">
-                            <h6>Total Décès</h6>
+                            <h6>Décès/Jour</h6>
                             <p class="ms-card-change text-center">{{ $deceshop }}</p>
                         </div>
                     </div>
@@ -101,7 +101,7 @@
                 <div class="ms-card card-gradient-custom ms-widget ms-infographics-widget ms-p-relative">
                     <div class="ms-card-body media">
                         <div class="media-body">
-                            <h6>Total Déclaration</h6>
+                            <h6>Déclaration/jour</h6>
                             <p class="ms-card-change text-center">{{ $total }}</p>
                         </div>
                     </div>
@@ -162,86 +162,119 @@
         </div>
     </div>
 
-    {{-- Les graphiques --}}
-    <div class="row mb-3">
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <h6 class="m-0 font-weight-bold text-primary ">Graphique des Naissances</h6>
-                <canvas id="lineChart1"></canvas>
-            </div>
-        </div>
-        <div class="col-md-6 mb-4">
-            <div class="card">
-                <h6 class="m-0 font-weight-bold text-primary ">Graphique des Décès</h6>
-                <canvas id="lineChart2"></canvas>
-            </div>
+      <!-- Graphiques -->
+  <div class="row mt-4">
+    <div class="col-lg-6">
+        <div class="card shadow">
+            <canvas id="naissChart"></canvas>
         </div>
     </div>
+    <div class="col-lg-6">
+        <div class="card shadow">
+            <canvas id="decesChart"></canvas>
+        </div>
+    </div>
+</div>
+<script>
+    const naissData = @json(array_values($naissData)); 
+    const decesData = @json(array_values($decesData)); 
+    const months = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+    const naissCtx = document.getElementById('naissChart').getContext('2d');
+    const decesCtx = document.getElementById('decesChart').getContext('2d');
 
-    <script>
-        const naissData = @json(array_values($naissData));
-        const decesData = @json(array_values($decesData));
-
-        // Labels pour les mois de l'année en français
-        const allLabels = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Déc'];
-
-        // Configurer le graphique des naissances
-        const ctx1 = document.getElementById('lineChart1').getContext('2d');
-        const lineChart1 = new Chart(ctx1, {
-            type: 'line',
-            data: {
-                labels: allLabels,
-                datasets: [{
-                    label: 'Naissances',
-                    data: naissData,
-                    backgroundColor: 'rgba(173, 216, 230, 0.2)',
-                    borderColor: 'rgba(70, 130, 180, 1)',
-                    borderWidth: 2,
-                    pointRadius: 5,
-                    fill: true,
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
+    // Créer le graphique des naissances
+    const naissChart = new Chart(naissCtx, {
+        type: 'bar',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Naissances',
+                data: naissData,
+                backgroundColor: 'rgba(75, 192, 192, 1)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: Math.max(...naissData), // Max égal au maximum de naissData
+                    ticks: {
+                        stepSize: 1 // Ajustez le stepSize pour que chaque carré représente une unité
+                    },
+                    title: {
+                        display: true,
+                        text: 'Nombre de Naissances'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois'
                     }
                 }
-            }
-        });
-
-        // Configurer le graphique des décès
-        const ctx2 = document.getElementById('lineChart2').getContext('2d');
-        const lineChart2 = new Chart(ctx2, {
-            type: 'line',
-            data: {
-                labels: allLabels,
-                datasets: [{
-                    label: 'Décès',
-                    data: decesData,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 2,
-                    pointRadius: 5,
-                    fill: true,
-                }]
             },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            stepSize: 1
-                        }
-                    }
+            plugins: {
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    formatter: function(value) {
+                        return Math.floor(value); // Affiche les valeurs en entiers
+                    },
+                    color: '#fff',
                 }
             }
-        });
-    </script>
+        }
+    });
+
+    // Créer le graphique des décès
+    const decesChart = new Chart(decesCtx, {
+        type: 'bar',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Décès',
+                data: decesData,
+                backgroundColor: 'rgba(255, 99, 132, 1)',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: Math.max(...decesData), // Max égal au maximum de decesData
+                    ticks: {
+                        stepSize: 1 // Ajustez le stepSize pour que chaque carré représente une unité
+                    },
+                    title: {
+                        display: true,
+                        text: 'Nombre de Décès'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mois'
+                    }
+                }
+            },
+            plugins: {
+                datalabels: {
+                    anchor: 'end',
+                    align: 'end',
+                    formatter: function(value) {
+                        return Math.floor(value); // Affiche les valeurs en entiers
+                    },
+                    color: '#fff',
+                }
+            }
+        }
+    });
+</script>
 </div>
 @endsection

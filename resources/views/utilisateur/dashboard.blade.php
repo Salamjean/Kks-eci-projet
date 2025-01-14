@@ -2,6 +2,7 @@
 
 @section('content')
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -16,35 +17,6 @@
     border-radius: 8px;
 }
 </style>
-
-{{-- Vérification de la session --}}
-@if (Session::has('success'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            Swal.fire({
-                icon: 'success',
-                title: 'Succès',
-                text: '{{ Session::get('success') }}',
-                timer: 3000,
-                showConfirmButton: true,
-            });
-        });
-    </script>
-@endif
-
-@if (Session::has('error'))
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            Swal.fire({
-                icon: 'error',
-                title: 'Erreur',
-                text: '{{ Session::get('error') }}',
-                timer: 3000,
-                showConfirmButton: false,
-            });
-        });
-    </script>
-@endif
 
 <div class="main-panel form-background">
     <div class="content-wrapper">
@@ -206,5 +178,53 @@
         </div> <!-- Fin de row -->
     </div> <!-- Fin de content-wrapper -->
 </div> <!-- Fin de main-panel -->
+
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+      function showImage(imageElement) {
+      const modalImage = document.getElementById('modalImage');
+      modalImage.src = imageElement.src;
+      const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
+      imageModal.show();
+  }
+  function confirmDelete(url) {
+      Swal.fire({
+          title: 'Êtes-vous sûr ?',
+          text: "Vous ne pourrez pas revenir en arrière !",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Oui, supprimer !',
+          cancelButtonText: 'Annuler'
+      }).then((result) => {
+          if (result.isConfirmed) {
+              window.location.href = url; // Rediriger vers l'URL de suppression
+          }
+      });
+  }
+  // Afficher un pop-up de succès après la suppression
+  @if(session('success'))
+      Swal.fire({
+          title: 'Succès !',
+          text: "{{ session('success') }}",
+          icon: 'success',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+      });
+  @endif
+  // Afficher un pop-up d'erreur en cas d'échec de la suppression
+  @if(session('error'))
+      Swal.fire({
+          title: 'Erreur !',
+          text: "{{ session('error') }}",
+          icon: 'error',
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+      });
+  @endif
+</script>
 
 @endsection

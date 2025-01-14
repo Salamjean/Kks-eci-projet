@@ -290,8 +290,22 @@
       <h3 class="fs-subtitle">Complétez les informations du bébé</h3>
       <input type="text" class="text-center" style="background-color:#e8e8e8" name="NomEnf" value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
       <input type="text" class="text-center" style="background-color:#e8e8e8" name="commune" value="{{ Auth::guard('sous_admin')->user()->commune }}" readonly/>
-      <label style="position: relative; right: 30 px;">Entrez la date de naissance</label>
-      <input type="date" class="text-center" name="DateNaissance" />
+      <label style="position: relative; right: 30 px;">Date de naissance</label>
+      <input type="date" class="text-center" style="background-color:#e8e8e8" name="DateNaissance" id="dateNaissance" readonly/>
+
+      <script>
+        // Récupérer la date du jour
+        const today = new Date();
+    
+        // Formater la date au format YYYY-MM-DD (requis pour les champs de type date)
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+        const day = String(today.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+    
+        // Définir la valeur du champ de date
+        document.getElementById('dateNaissance').value = formattedDate;
+    </script>
       <select class="text-center" name="sexe">
         <option value="" disabled selected>Choisissez le sexe</option>
         <option value="masculin">Masculin</option>
