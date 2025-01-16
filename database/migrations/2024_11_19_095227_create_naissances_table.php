@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('identiteDeclarant', 255);
             $table->string('cdnaiss', 255);
             $table->string('acteMariage', 255)->nullable();
-            $table->string('commune')->nullable()->after('id');
+            $table->string('commune')->nullable();
             $table->string('nom');
             $table->string('prenom');
             $table->string('nompere');
