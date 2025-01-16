@@ -142,7 +142,6 @@
 			<!--/ End Header Inner -->
 		</header>
 		<!-- End Header Area -->
-		<br><br><br>
 		<!-- Slider Area -->
 		<section class="slider">
 			<div class="hero-slider">
