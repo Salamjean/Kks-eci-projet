@@ -29,7 +29,7 @@ use App\Models\Vendor;
 use App\Models\Alert;
 use App\Models\Doctor;
 
-Route::get('/E-ci', [GeneralController::class, 'general'])->name('general');
+Route::get('/', [GeneralController::class, 'general'])->name('general');
 Route::get('/E-ci-Naissance', [GeneralController::class, 'naissanceavec'])->name('naissanceavec');
 Route::get('/E-ci-Naissancesans', [GeneralController::class, 'naissancesans'])->name('naissancesans');
 Route::get('/E-ci-deces', [GeneralController::class, 'decesavec'])->name('decesavec');
@@ -119,6 +119,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/index-mairie', [SuperAdminController::class, 'index'])->name('super_admin.index');
         Route::get('/mairie/create', [SuperAdminController::class, 'create'])->name('super_admin.create');
         Route::post('/mairie/store', [SuperAdminController::class, 'store'])->name('super_admin.store');
+        Route::delete('/delete-mairie/{vendor}',[VendorController::class, 'delete'])->name('super_admin.delete');
 
         Route::get('/super-admin-agents', [AgentController::class, 'superindex'])->name('superagent.index');
         Route::get('/super-admin-Ajoints', [AjointController::class, 'superindex'])->name('superajoint.index');

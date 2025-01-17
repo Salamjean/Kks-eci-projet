@@ -161,7 +161,7 @@
                                 <li>Timbre (500 F CFA /Copie)</li>
                             </p>
                             <div class="get-quote">
-                                <a href="{{ route('utilisateur.dashboard') }}" class="btn" style="background-color: green">Faites votre demande</a>
+                                <a href="{{ route('dashboard') }}" class="btn" style="background-color: green">Faites votre demande</a>
                             </div>
                         </div>
                         </div>

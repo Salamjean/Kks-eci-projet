@@ -7,7 +7,7 @@
     </div>
     <div>
       <!-- Logo principal agrandi -->
-      <a class="navbar-brand brand-logo" href="{{ route('utilisateur.dashboard') }}">
+      <a class="navbar-brand brand-logo" href="{{ route('dashboard') }}">
         @if (Auth::user()->commune === 'yopougon')
         <img src="{{ asset('assets/images/profiles/yopougon.png') }}" alt="Logo Yopougon" style="height: 100px; width: auto;" />
         @elseif (Auth::user()->commune === 'marcory')

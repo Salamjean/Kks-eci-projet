@@ -13,6 +13,7 @@ class Vendor extends Authenticatable
         'name',
         'email',
         'password',
+        'archived_at'
     ];
 
      /**
@@ -47,4 +48,9 @@ class Vendor extends Authenticatable
     }
 
     protected $guarded = [];
+
+    public function archive()
+{
+    $this->update(['archived_at' => now()]);
+}
 }

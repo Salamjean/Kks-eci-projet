@@ -181,34 +181,32 @@
                             <th>Nombre d'hôpital</th>
                             <th>Nombre d'ajoint-maire</th>
                             <th>Solde restant</th>
-                            <th colspan="2" class="text-center">Action</th>
+                            <th colspan="1" class="text-center">Action</th>
                         </tr>
                     </thead>
                     
                     <tbody>
-                        @forelse ($mairies as $mairie)
+                        @forelse ($vendors as $vendor)
                         <tr style="font-size: 12px">
-                            <td>{{ strtoupper($mairie->name) }}</td> <!-- Nom de la mairie -->
-                            <td>{{ $mairie->email }}</td> <!-- Email de la mairie -->
-                            <td>{{ $agentsCount[$mairie->name] ?? 0 }}</td>
-                            <td>{{ $caisseCount[$mairie->name] ?? 0 }}</td>
-                            <td>{{ $doctorCount[$mairie->name] ?? 0 }}</td>
-                            <td>{{ $ajointCount[$mairie->name] ?? 0 }}</td>
-                            <td>{{ $soldeRestantParCommune[$mairie->name] ?? 0 }} FCFA</td>
+                            <td>{{ strtoupper($vendor->name) }}</td> <!-- Nom de la vendor -->
+                            <td>{{ $vendor->email }}</td> <!-- Email de la vendor -->
+                            <td>{{ $agentsCount[$vendor->name] ?? 0 }}</td>
+                            <td>{{ $caisseCount[$vendor->name] ?? 0 }}</td>
+                            <td>{{ $doctorCount[$vendor->name] ?? 0 }}</td>
+                            <td>{{ $ajointCount[$vendor->name] ?? 0 }}</td>
+                            <td>{{ $soldeRestantParCommune[$vendor->name] ?? 0 }} FCFA</td>
                             <td>
-                                <form action="#" method="GET">
+                                <form action="{{ route('super_admin.delete', $vendor->id) }}" method="POST"
+                                      onsubmit="return confirm('Voulez-vous vraiment archiver cette mairie ?');"
+                                      style="display: flex; justify-content: center; align-items: center;">
                                     @csrf
-                                    <button style="margin-left:50%" type="submit" ><a href="#" class="edit"><i class="fas fa-edit"></i></a></button>
+                                    @method('DELETE') 
+                                    <button type="submit" class="delete">
+                                        <i class="fas fa-archive"></i> <!-- Icone pour archiver -->
+                                    </button>
                                 </form>
                             </td>
-                            <td>
-                            <form action="#" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cet agent ?');" 
-                                style="display: flex; justify-content:center; align-items:center">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="delete"><a href="#" class="delete"><i class="fas fa-trash"></i></button>
-                            </form>
-                        </td>
+                            
                         </tr>
                         @empty
                         <tr>
