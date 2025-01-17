@@ -215,6 +215,7 @@ class SuperAdminController extends Controller
 
     public function handleLogin(Request $request)
     {
+        
         $request->validate([
             'email' =>'required|exists:super_admins,email',
             'password' => 'required|min:8',

@@ -113,7 +113,7 @@ Route::middleware('auth:web')->group(function () {
 
     Route::middleware('auth:super_admin')->prefix('super-admin')->group(function () {
         // Dashboard
-        Route::get('/dashboard-super', [SuperAdminController::class, 'dashboard'])->name('super_admin.dashboard');
+        Route::get('/super/dashboard', [SuperAdminController::class, 'dashboard'])->name('super_admin.dashboard');
         Route::get('/logout', [SuperAdminController::class, 'logout'])->name('super_admin.logout');
 
         Route::get('/agents', [AgentController::class, 'superindex'])->name('superagent.index');
