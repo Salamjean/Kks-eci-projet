@@ -278,6 +278,16 @@ public function hoptitalstore(Request $request)
     }
 }
 
+public function vendordelete(Vendor $vendor){
+    try {
+        $vendor->delete();
+        return redirect()->route('super_admin.index')->with('success1','Maire supprimé avec succès.');
+    } catch (Exception $e) {
+        // dd($e);
+        throw new Exception('error','Une erreur est survenue lors de la suppression Agent');
+    }
+ }
+
 public function defineAccess($email){
     //Vérification si le sous-admin existe déjà
     $checkSousadminExiste = Doctor::where('email', $email)->first();

@@ -111,27 +111,33 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/login', [SuperAdminController::class, 'handleLogin'])->name('super_admin.handleLogin');
     });
 
-    Route::middleware('auth:super_admin')->group(function () {
+    Route::middleware('auth:super_admin')->prefix('super-admin')->group(function () {
         // Dashboard
-        Route::get('/dashboard-super', [SuperAdminController::class, 'dashboard'])->name('super_admin.dashboard');
+        Route::get('/dashboard', [SuperAdminController::class, 'dashboard'])->name('super_admin.dashboard');
         Route::get('/logout', [SuperAdminController::class, 'logout'])->name('super_admin.logout');
 
-        Route::get('/index-mairie', [SuperAdminController::class, 'index'])->name('super_admin.index');
-        Route::get('/mairie/create', [SuperAdminController::class, 'create'])->name('super_admin.create');
-        Route::post('/mairie/store', [SuperAdminController::class, 'store'])->name('super_admin.store');
-        Route::delete('/delete-mairie/{vendor}',[VendorController::class, 'delete'])->name('super_admin.delete');
+        Route::get('/agents', [AgentController::class, 'superindex'])->name('superagent.index');
+        Route::get('/Ajoints', [AjointController::class, 'superindex'])->name('superajoint.index');
+        Route::get('/hopital', [VendorController::class, 'superindex'])->name('superhopital.index');
+        Route::get('/caisse', [CaisseController::class, 'superindex'])->name('supercaisse.index');
+        Route::get('/naissance', [NaissanceController::class, 'superindex'])->name('supernaissance.index');
+        Route::get('/naisshop', [NaissHopController::class, 'superindex'])->name('supernaisshop.index');
+        Route::get('/deces', [DecesController::class, 'superindex'])->name('superdeces.index');
+        Route::get('/deceshop', [DecesHopController::class, 'superindex'])->name('superdeceshop.index');
+        Route::get('/mariage', [MariageController::class, 'superindex'])->name('supermariage.index');
+        Route::get('/docter', [SousAdminController::class, 'superindex'])->name('superdocteur.index');
 
-        Route::get('/super-admin-agents', [AgentController::class, 'superindex'])->name('superagent.index');
-        Route::get('/super-admin-Ajoints', [AjointController::class, 'superindex'])->name('superajoint.index');
-        Route::get('/super-admin-hopital', [VendorController::class, 'superindex'])->name('superhopital.index');
-        Route::get('/super-admin-caisse', [CaisseController::class, 'superindex'])->name('supercaisse.index');
-        Route::get('/super-admin-naissance', [NaissanceController::class, 'superindex'])->name('supernaissance.index');
-        Route::get('/super-admin-naisshop', [NaissHopController::class, 'superindex'])->name('supernaisshop.index');
-        Route::get('/super-admin-deces', [DecesController::class, 'superindex'])->name('superdeces.index');
-        Route::get('/super-admin-deceshop', [DecesHopController::class, 'superindex'])->name('superdeceshop.index');
-        Route::get('/super-admin-mariage', [MariageController::class, 'superindex'])->name('supermariage.index');
-        Route::get('/super-admin-docter', [SousAdminController::class, 'superindex'])->name('superdocteur.index');
+        
+        
+        
+        
+        
     });        
+    Route::prefix('mairie')->group(function(){
+        Route::get('/index', [SuperAdminController::class, 'index'])->name('super_admin.index');
+        Route::get('/create', [SuperAdminController::class, 'create'])->name('super_admin.create');
+        Route::post('/store', [SuperAdminController::class, 'store'])->name('super_admin.store');
+    });
 
     //Les routes de l'administrator (Mairie)
     Route::prefix('vendors')->group(function () {
@@ -140,6 +146,7 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/register', [VendorController::class, 'handleRegister'])->name('vendor.handleRegister');
     Route::get('/login', [VendorController::class, 'login'])->name('vendor.login');
     Route::post('/login', [VendorController::class, 'handleLogin'])->name('vendor.handleLogin');
+    Route::delete('/{vendor}/delete', [VendorController::class, 'vendordelete'])->name('vendor.delete');
     
     Route::middleware('auth:vendor')->group(function () {
     // Dashboard

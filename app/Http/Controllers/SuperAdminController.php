@@ -69,7 +69,7 @@ class SuperAdminController extends Controller
     public function index()
 {
     // Récupérer uniquement les mairies non archivées
-    $vendors = Vendor::whereNull('archived_at')->get();
+    $vendors = Vendor::all();
 
     // Compter les agents par commune
     $agentsCountByCommune = Agent::select('communeM', DB::raw('count(*) as total'))
@@ -173,15 +173,6 @@ class SuperAdminController extends Controller
     return view('superadmin.mairie.index', compact('vendors', 'agentsCount', 'caisseCount', 'doctorCount', 'ajointCount', 'soldeRestantParCommune'));
 }
 
-    public function delete(Vendor $vendor){
-        try {
-            $vendor->archive();
-            return redirect()->back()->with('success1','Mairie supprimé avec succès.');
-        } catch (Exception $e) {
-            // dd($e);
-            throw new Exception('error','Une erreur est survenue lors de la suppression Mairie');
-        }
-     }
     public function register(){
         return view('superadmin.auth.register');
     }

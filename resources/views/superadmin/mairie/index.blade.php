@@ -116,10 +116,6 @@
 
 <div class="signup-container">
   <div class="ms-panel-body">
-    <form class="needs-validation" method="POST" enctype="multipart/form-data" action="#" novalidate>
-        @csrf
-        @method('POST')
-
         <div class="row">
             @if (Session::get('success1'))
                 <script>
@@ -181,7 +177,8 @@
                             <th>Nombre d'hôpital</th>
                             <th>Nombre d'ajoint-maire</th>
                             <th>Solde restant</th>
-                            <th colspan="1" class="text-center">Action</th>
+                            <th class="text-center">Action</th>
+                            
                         </tr>
                     </thead>
                     
@@ -195,15 +192,13 @@
                             <td>{{ $doctorCount[$vendor->name] ?? 0 }}</td>
                             <td>{{ $ajointCount[$vendor->name] ?? 0 }}</td>
                             <td>{{ $soldeRestantParCommune[$vendor->name] ?? 0 }} FCFA</td>
-                            <td>
-                                <form action="{{ route('super_admin.delete', $vendor->id) }}" method="POST"
-                                      onsubmit="return confirm('Voulez-vous vraiment archiver cette mairie ?');"
-                                      style="display: flex; justify-content: center; align-items: center;">
+                           
+                            <td class="text-center">
+                                <form action="{{ route('vendor.delete', $vendor->id) }}" method="POST" onsubmit="return confirm('Voulez-vous vraiment supprimer cette mairie ?');" 
+                                    style="display: flex; justify-content:center; align-items:center">
                                     @csrf
-                                    @method('DELETE') 
-                                    <button type="submit" class="delete">
-                                        <i class="fas fa-archive"></i> <!-- Icone pour archiver -->
-                                    </button>
+                                    @method('DELETE')
+                                    <button type="submit" class="delete"><i class="fas fa-trash"></i></button>
                                 </form>
                             </td>
                             
