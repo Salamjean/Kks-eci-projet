@@ -18,6 +18,7 @@ class Caisse extends Authenticatable
         'profile_picture',
         'commune',
         'communeM',
+        'archived_at'
     ];
 
     public function naissances()
@@ -60,5 +61,10 @@ class Caisse extends Authenticatable
     }
 
     protected $guarded = [];
+
+    public function archive()
+{
+    $this->update(['archived_at' => now()]);
+}
 }
 

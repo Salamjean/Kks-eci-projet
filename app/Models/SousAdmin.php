@@ -14,6 +14,7 @@ class SousAdmin extends Authenticatable
             'email',
             'password',
             'profile_picture',
+            'archived_at'
         ];
     
          /**
@@ -39,5 +40,10 @@ class SousAdmin extends Authenticatable
         }
     
         protected $guarded = [];
+
+        public function archive()
+        {
+            $this->update(['archived_at' => now()]);
+        }
     }
     

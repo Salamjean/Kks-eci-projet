@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('profile_picture')->nullable();
             $table->string('commune');
             $table->string('communeM');
+            $table->timestamp('archived_at')->nullable();
             $table->dateTime('email_verified_at')->nullable();
             $table->timestamps();
         });

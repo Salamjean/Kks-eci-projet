@@ -82,7 +82,9 @@ class AjointController extends Controller
     public function ajointindex(){
         $admin = Auth::guard('vendor')->user();
         $alerts = Alert::all();
-        $ajoints = Ajoint::where('communeM', $admin->name)->paginate(10);
+        $ajoints = Ajoint::whereNull('archived_at')
+            ->where('communeM', $admin->name)
+            ->paginate(10);
         return view('vendor.ajoint.index', compact('ajoints','alerts'));
      }
 
@@ -114,7 +116,7 @@ class AjointController extends Controller
 
      public function ajointdelete(Ajoint $ajoint){
         try {
-            $ajoint->delete();
+            $ajoint->archive();
             return redirect()->route('ajoint.index')->with('success1','Ajoint supprimé avec succès.');
         } catch (Exception $e) {
             // dd($e);
@@ -243,33 +245,41 @@ class AjointController extends Controller
      public function login(){
         return view('vendor.ajoint.auth.login');
     }
+    
 
     public function handleLogin(Request $request)
-    {
-        $request->validate([
-            'email' =>'required|exists:ajoints,email',
-            'password' => 'required|min:8',
-        ], [
-            
-            
-            'email.required' => 'Le mail est obligatoire.',
-            'email.exists' => 'Cette adresse mail n\'existe pas.',
-            'password.required' => 'Le mot de passe est obligatoire.',
-            'password.min'=> 'Le mot de passe doit avoir au moins 8 caractères.',
-        ]);
+{
+    // Validation des champs du formulaire
+    $request->validate([
+        'email' => 'required|exists:ajoints,email',
+        'password' => 'required|min:8',
+    ], [
+        'email.required' => 'Le mail est obligatoire.',
+        'email.exists' => 'Cette adresse mail n\'existe pas.',
+        'password.required' => 'Le mot de passe est obligatoire.',
+        'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
+    ]);
 
-        try {
-            if(auth('ajoint')->attempt($request->only('email', 'password')))
-            {
-                return redirect()->route('ajoint.dashboard')->with('Bienvenu sur votre page ');
-            }else{
-                return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
-            }
-        } catch (Exception $e) {
-            dd($e);
+    try {
+        // Récupérer l'adjoint par son email
+        $ajoint = Ajoint::where('email', $request->email)->first();
+
+        // Vérifier si l'adjoint est archivé
+        if ($ajoint && $ajoint->archived_at !== null) {
+            return redirect()->back()->with('error', 'Votre compte a été supprimé. Vous ne pouvez pas vous connecter.');
         }
+
+        // Tenter la connexion
+        if (auth('ajoint')->attempt($request->only('email', 'password'))) {
+            return redirect()->route('ajoint.dashboard')->with('success', 'Bienvenue sur votre page.');
+        } else {
+            return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
+        }
+    } catch (Exception $e) {
+        // Gérer les erreurs
+        return redirect()->back()->with('error', 'Une erreur s\'est produite lors de la connexion.');
     }
-    
+}
 
      public function defineAccess($email){
         //Vérification si le sous-admin existe déjà

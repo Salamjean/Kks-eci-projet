@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('commune');
             $table->string('communeM');
             $table->dateTime('email_verified_at')->nullable();
+            $table->timestamp('archived_at')->nullable();
             $table->timestamps();
         });
     }

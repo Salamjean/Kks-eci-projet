@@ -127,17 +127,17 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/mariage', [MariageController::class, 'superindex'])->name('supermariage.index');
         Route::get('/docter', [SousAdminController::class, 'superindex'])->name('superdocteur.index');
 
+        Route::prefix('mairie')->group(function(){
+            Route::get('/index', [SuperAdminController::class, 'index'])->name('super_admin.index');
+            Route::get('/index/archive', [SuperAdminController::class, 'archive'])->name('super_admin.archive');
+            Route::get('/create', [SuperAdminController::class, 'create'])->name('super_admin.create');
+            Route::post('/store', [SuperAdminController::class, 'store'])->name('super_admin.store');
+        });
         
         
         
         
-        
-    });        
-    Route::prefix('mairie')->group(function(){
-        Route::get('/index', [SuperAdminController::class, 'index'])->name('super_admin.index');
-        Route::get('/create', [SuperAdminController::class, 'create'])->name('super_admin.create');
-        Route::post('/store', [SuperAdminController::class, 'store'])->name('super_admin.store');
-    });
+    });       
 
     //Les routes de l'administrator (Mairie)
     Route::prefix('vendors')->group(function () {
@@ -146,6 +146,8 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/register', [VendorController::class, 'handleRegister'])->name('vendor.handleRegister');
     Route::get('/login', [VendorController::class, 'login'])->name('vendor.login');
     Route::post('/login', [VendorController::class, 'handleLogin'])->name('vendor.handleLogin');
+    Route::delete('/{vendor}/archive', [VendorController::class, 'archive'])->name('vendor.archive');
+    Route::put('/mairie/unarchive/{id}', [VendorController::class, 'unarchive'])->name('mairie.unarchive');
     Route::delete('/{vendor}/delete', [VendorController::class, 'vendordelete'])->name('vendor.delete');
     
     Route::middleware('auth:vendor')->group(function () {
@@ -164,6 +166,7 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/store', [AgentController::class, 'agentstore'])->name('agent.store');
         Route::get('/{agent}/edit', [AgentController::class, 'agentedit'])->name('agent.edit');
         Route::put('/{agent}/update', [AgentController::class, 'agentupdate'])->name('agent.update');
+        //Route::delete('/{agent}/archive', [AgentController::class, 'archive'])->name('agent.archive');
         Route::delete('/{agent}/delete', [AgentController::class, 'agentdelete'])->name('agent.delete');
         });
 

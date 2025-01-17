@@ -46,7 +46,7 @@ class DoctorController extends Controller
 
     public function delete(SousAdmin $sousadmin){
         try {
-            $sousadmin->delete();
+            $sousadmin->archive();
             return redirect()->route('doctor.index')->with('success1','Le Docteur a été supprimé avec succès.');
         } catch (Exception $e) {
             // dd($e);
@@ -202,7 +202,9 @@ class DoctorController extends Controller
         $communeAdmin = $sousadmin->nomHop; // Ajustez selon votre logique
     
         // Récupérer les sous-administrateurs filtrés par la commune
-        $sousadmins = SousAdmin::where('nomHop', $communeAdmin)->get();
+        $sousadmins = SousAdmin::whereNull('archived_at')
+            ->where('nomHop', $communeAdmin)
+            ->paginate(10);
     
         return view('doctor.index', compact('sousadmins'));
     }

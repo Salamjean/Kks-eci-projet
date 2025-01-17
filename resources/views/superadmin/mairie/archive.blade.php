@@ -124,7 +124,7 @@
         <script>
           Swal.fire({
             icon: 'success',
-            title: 'Archivage réussi',
+            title: 'Suppression réussie',
             text: '{{ Session::get('success1') }}',
             showConfirmButton: true,
             confirmButtonText: 'OK',
@@ -166,7 +166,7 @@
       <div class="col-lg-12">
         <div class="card mb-4">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Liste de toutes les mairies</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Liste de toutes les mairies archivées</h6>
           </div>
           <div class="table-responsive p-3">
             <input type="text" id="searchInput" class="form-control mb-3" placeholder="Rechercher...">
@@ -180,7 +180,7 @@
                   <th>Nombre d'hôpital</th>
                   <th>Nombre d'ajoint-maire</th>
                   <th>Solde restant</th>
-                  <th class="text-center">Archivé</th>
+                  <th colspan="2" class="text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -194,14 +194,24 @@
                     <td>{{ $ajointCount[$vendor->name] ?? 0 }}</td>
                     <td>{{ $soldeRestantParCommune[$vendor->name] ?? 0 }} FCFA</td>
                     <td class="text-center">
-                      <button type="button" class="delete" onclick="confirmArchive('{{ $vendor->id }}')">
-                        <i class="fas fa-folder"></i>
+                      <button type="button" class="delete" onclick="confirmDelete('{{ $vendor->id }}')">
+                        <i class="fas fa-trash"></i>
                       </button>
-                      <form id="archive-form-{{ $vendor->id }}" action="{{ route('vendor.archive', $vendor->id) }}" method="POST" style="display: none;">
+                      <form id="delete-form-{{ $vendor->id }}" action="{{ route('vendor.delete', $vendor->id) }}" method="POST" style="display: none;">
                         @csrf
                         @method('DELETE')
                       </form>
                     </td>
+
+                    <td class="text-center">
+                        <button type="button" class="delete" onclick="confirmUnarchive('{{ $vendor->id }}')">
+                          <i class="fas fa-folder-open"></i>
+                        </button>
+                        <form id="unarchive-form-{{ $vendor->id }}" action="{{ route('mairie.unarchive', $vendor->id) }}" method="POST" style="display: none;">
+                          @csrf
+                          @method('PUT')
+                        </form>
+                      </td>
                   </tr>
                 @empty
                   <tr>
@@ -218,7 +228,7 @@
 </div>
 
 <script>
-  function confirmArchive(vendorId) {
+  function confirmDelete(vendorId) {
     Swal.fire({
       title: 'Êtes-vous sûr?',
       text: "Vous ne pourrez pas revenir en arrière!",
@@ -226,14 +236,31 @@
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Oui, archiver!',
+      confirmButtonText: 'Oui, supprimer!',
       cancelButtonText: 'Annuler'
     }).then((result) => {
       if (result.isConfirmed) {
-        document.getElementById('archive-form-' + vendorId).submit();
+        document.getElementById('delete-form-' + vendorId).submit();
       }
     });
   }
+
+  function confirmUnarchive(vendorId) {
+  Swal.fire({
+    title: 'Êtes-vous sûr?',
+    text: "Vous ne pourrez pas revenir en arrière!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Oui, Desarchiver!',
+    cancelButtonText: 'Annuler'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.getElementById('unarchive-form-' + vendorId).submit();
+    }
+  });
+}
 
   // Fonction de recherche
   document.getElementById('searchInput').addEventListener('keyup', function() {

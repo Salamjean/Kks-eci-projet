@@ -45,7 +45,7 @@ class SuperAdminController extends Controller
         $caisses = Caisse::count();
         $doctors = Doctor::count();
         $ajoints = Ajoint::count();
-        $mairie = Vendor::count();
+        $mairie = Vendor::whereNull('archived_at')->count();
         $sousadmin = SousAdmin::count();
         $total = $deces + $decesdeja + $mariage + $naissance + $naissanceD;
         // Solde initial
@@ -69,7 +69,7 @@ class SuperAdminController extends Controller
     public function index()
 {
     // Récupérer uniquement les mairies non archivées
-    $vendors = Vendor::all();
+    $vendors = Vendor::whereNull('archived_at')->get();
 
     // Compter les agents par commune
     $agentsCountByCommune = Agent::select('communeM', DB::raw('count(*) as total'))
@@ -332,6 +332,98 @@ public function submitDefineAccess(Request $request){
     } catch (Exception $e) {
         return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
     }
+}
+
+public function archive(){
+     // Récupérer uniquement les mairies non archivées
+ $vendors = Vendor::whereNotNull('archived_at')->get();
+ // Compter les agents par commune
+ $agentsCountByCommune = Agent::select('communeM', DB::raw('count(*) as total'))
+     ->groupBy('communeM')
+     ->get();
+ $agentsCount = [];
+ foreach ($agentsCountByCommune as $item) {
+     $agentsCount[$item->communeM] = $item->total;
+ }
+ // Compter les caisses par commune
+ $caisseCountByCommune = Caisse::select('communeM', DB::raw('count(*) as total'))
+     ->groupBy('communeM')
+     ->get();
+ $caisseCount = [];
+ foreach ($caisseCountByCommune as $item) {
+     $caisseCount[$item->communeM] = $item->total;
+ }
+ // Compter les hôpitaux par commune
+ $doctorCountByCommune = Doctor::select('commune', DB::raw('count(*) as total'))
+     ->groupBy('commune')
+     ->get();
+ $doctorCount = [];
+ foreach ($doctorCountByCommune as $item) {
+     $doctorCount[$item->commune] = $item->total;
+ }
+ $ajointCountByCommune = Ajoint::select('communeM', DB::raw('count(*) as total'))
+     ->groupBy('communeM')
+     ->get();
+ $ajointCount = [];
+ foreach ($ajointCountByCommune as $item) {
+     $ajointCount[$item->communeM] = $item->total;
+ }
+ // Compter les demandes par commune
+ $naissanceCountByCommune = Naissance::select('commune', DB::raw('count(*) as total'))
+     ->groupBy('commune')
+     ->get();
+ $naissanceCount = [];
+ foreach ($naissanceCountByCommune as $item) {
+     $naissanceCount[$item->commune] = $item->total;
+ }
+ $naissanceDCountByCommune = NaissanceD::select('commune', DB::raw('count(*) as total'))
+     ->groupBy('commune')
+     ->get();
+ $naissanceDCount = [];
+ foreach ($naissanceDCountByCommune as $item) {
+     $naissanceDCount[$item->commune] = $item->total;
+ }
+ $decesCountByCommune = Deces::select('commune', DB::raw('count(*) as total'))
+     ->groupBy('commune')
+     ->get();
+ $decesCount = [];
+ foreach ($decesCountByCommune as $item) {
+     $decesCount[$item->commune] = $item->total;
+ }
+ $decesdejaCountByCommune = Decesdeja::select('commune', DB::raw('count(*) as total'))
+     ->groupBy('commune')
+     ->get();
+ $decesdejaCount = [];
+ foreach ($decesdejaCountByCommune as $item) {
+     $decesdejaCount[$item->commune] = $item->total;
+ }
+ $mariageCountByCommune = Mariage::select('commune', DB::raw('count(*) as total'))
+     ->groupBy('commune')
+     ->get();
+ $mariageCount = [];
+ foreach ($mariageCountByCommune as $item) {
+     $mariageCount[$item->commune] = $item->total;
+ }
+ // Calculer le solde restant par commune
+ $soldeRestantParCommune = [];
+ $soldeActuel = 300000; // Solde actuel
+ $debit = 500; // Montant à déduire pour chaque demande
+ foreach ($vendors as $vendor) {
+     // Compter les demandes pour cette commune
+     $totalDemandesCount = (
+         ($naissanceCount[$vendor->name] ?? 0) +
+         ($naissanceDCount[$vendor->name] ?? 0) +
+         ($decesCount[$vendor->name] ?? 0) +
+         ($decesdejaCount[$vendor->name] ?? 0) +
+         ($mariageCount[$vendor->name] ?? 0)
+     );
+     // Calculer le solde restant pour cette commune
+     $soldeDebite = $totalDemandesCount * $debit;
+     $soldeRestant = $soldeActuel - $soldeDebite;
+     // Stocker dans le tableau associatif
+     $soldeRestantParCommune[$vendor->name] = $soldeRestant;
+ }
+ return view('superadmin.mairie.archive', compact('vendors', 'agentsCount', 'caisseCount', 'doctorCount', 'ajointCount', 'soldeRestantParCommune'));
 }
 
 }

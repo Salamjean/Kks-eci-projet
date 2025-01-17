@@ -30,7 +30,9 @@ class CaisseController extends Controller
      public function caisseindex(){
         $admin = Auth::guard('vendor')->user();
         $alerts = Alert::all();
-        $caisses = Caisse::where('communeM', $admin->name)->paginate(10);
+        $caisses = Caisse::whereNull('archived_at')
+            ->where('communeM', $admin->name)
+            ->paginate(10);
         return view('vendor.caisse.index', compact('caisses','alerts'));
      }
 
@@ -121,7 +123,7 @@ class CaisseController extends Controller
 
      public function caissedelete(Caisse $caisse){
         try {
-            $caisse->delete();
+            $caisse->archive();
             return redirect()->route('caisse.index')->with('success1','Caissié supprimé avec succès.');
         } catch (Exception $e) {
             // dd($e);
@@ -169,29 +171,38 @@ class CaisseController extends Controller
     }
 
     public function handleLogin(Request $request)
-    {
-        $request->validate([
-            'email' =>'required|exists:caisses,email',
-            'password' => 'required|min:8',
-        ], [
-            
-            
-            'email.required' => 'Le mail est obligatoire.',
-            'email.exists' => 'Cette adresse mail n\'existe pas.',
-            'password.required' => 'Le mot de passe est obligatoire.',
-            'password.min'=> 'Le mot de passe doit avoir au moins 8 caractères.',
-        ]);
-        try {
-            if(auth('caisse')->attempt($request->only('email', 'password')))
-            {
-                return redirect()->route('caisse.dashboard')->with('Bienvenu sur votre page ');
-            }else{
-                return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
-            }
-        } catch (Exception $e) {
-            dd($e);
+{
+    // Validation des champs du formulaire
+    $request->validate([
+        'email' => 'required|exists:caisses,email',
+        'password' => 'required|min:8',
+    ], [
+        'email.required' => 'Le mail est obligatoire.',
+        'email.exists' => 'Cette adresse mail n\'existe pas.',
+        'password.required' => 'Le mot de passe est obligatoire.',
+        'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
+    ]);
+
+    try {
+        // Récupérer la caisse par son email
+        $caisse = Caisse::where('email', $request->email)->first();
+
+        // Vérifier si la caisse est archivée
+        if ($caisse && $caisse->archived_at !== null) {
+            return redirect()->back()->with('error', 'Votre compte a été suprrimé. Vous ne pouvez pas vous connecter.');
         }
+
+        // Tenter la connexion
+        if (auth('caisse')->attempt($request->only('email', 'password'))) {
+            return redirect()->route('caisse.dashboard')->with('success', 'Bienvenue sur votre page.');
+        } else {
+            return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
+        }
+    } catch (Exception $e) {
+        // Gérer les erreurs
+        return redirect()->back()->with('error', 'Une erreur s\'est produite lors de la connexion.');
     }
+}
 
     public function defineAccess($email){
         //Vérification si le sous-admin existe déjà

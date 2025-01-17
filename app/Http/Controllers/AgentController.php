@@ -92,43 +92,57 @@ class AgentController extends Controller
     return view('vendor.agent.auth.login');
 }
 
-
 public function handleLogin(Request $request)
-    {
-        $request->validate([
-            'email' =>'required|exists:agents,email',
-            'password' => 'required|min:8',
-        ], [
-            'email.required' => 'Le mail est obligatoire.',
-            'email.exists' => 'Cette adresse mail n\'existe pas.',
-            'password.required' => 'Le mot de passe est obligatoire.',
-            'password.min'=> 'Le mot de passe doit avoir au moins 8 caractères.',
-        ]);
+{
+    // Validation des champs du formulaire
+    $request->validate([
+        'email' => 'required|exists:agents,email',
+        'password' => 'required|min:8',
+    ], [
+        'email.required' => 'Le mail est obligatoire.',
+        'email.exists' => 'Cette adresse mail n\'existe pas.',
+        'password.required' => 'Le mot de passe est obligatoire.',
+        'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
+    ]);
 
-        try {
-            if(auth('agent')->attempt($request->only('email', 'password')))
-            {
-                return redirect()->route('agent.vue')->with('Bienvenu sur votre page ');
-            }else{
-                return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
-            }
-        } catch (Exception $e) {
-            dd($e);
+    try {
+        // Récupérer l'agent par son email
+        $agent = Agent::where('email', $request->email)->first();
+
+        // Vérifier si l'agent est archivé
+        if ($agent && $agent->archived_at !== null) {
+            return redirect()->back()->with('error', 'Votre compte a été supprimé. Vous ne pouvez pas vous connecter.');
         }
+
+        // Tenter la connexion
+        if (auth('agent')->attempt($request->only('email', 'password'))) {
+            return redirect()->route('agent.vue')->with('success', 'Bienvenue sur votre page.');
+        } else {
+            return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
+        }
+    } catch (Exception $e) {
+        // Gérer les erreurs
+        return redirect()->back()->with('error', 'Une erreur s\'est produite lors de la connexion.');
     }
+}
 
     public function logout(){
         Auth::guard('agent')->logout();
         return redirect()->route('agent.login');
     }
-
- public function agentindex(){
+    public function agentindex()
+{
+   
     $admin = Auth::guard('vendor')->user();
-    $alerts = Alert::all();
-    $agents = Agent::where('communeM', $admin->name)->paginate(10);
-    return view('vendor.agent.index', compact('agents','alerts'));
- }
 
+    $alerts = Alert::all();
+    $agents = Agent::whereNull('archived_at')
+        ->where('communeM', $admin->name)
+        ->paginate(10);
+
+    // Retourner la vue avec les données
+    return view('vendor.agent.index', compact('agents', 'alerts'));
+}
  public function agentedit(Agent $agent){
     $alerts = Alert::all();
     return view('vendor.agent.edit', compact('agent','alerts'));
@@ -152,7 +166,7 @@ public function handleLogin(Request $request)
 
  public function agentdelete(Agent $agent){
     try {
-        $agent->delete();
+        $agent->archive();
         return redirect()->route('agent.index')->with('success1','Agent supprimé avec succès.');
     } catch (Exception $e) {
         // dd($e);

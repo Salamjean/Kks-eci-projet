@@ -78,6 +78,7 @@
         <h6 class="collapse-header">Gestion des Mairies</h6>
         <a class="collapse-item" href="{{ route('super_admin.create') }}">Ajout d'une mairie</a>
         <a class="collapse-item" href="{{ route('super_admin.index') }}">Toutes les mairies</a>
+        <a class="collapse-item" href="{{ route('super_admin.archive') }}">Archives</a>
       </div>
     </div>
   </li>

@@ -278,15 +278,40 @@ public function hoptitalstore(Request $request)
     }
 }
 
-public function vendordelete(Vendor $vendor){
+public function archive(Vendor $vendor){
     try {
-        $vendor->delete();
-        return redirect()->route('super_admin.index')->with('success1','Maire supprimé avec succès.');
+        $vendor->archive();
+        return redirect()->route('super_admin.index')->with('success1','Maire archivé avec succès.');
     } catch (Exception $e) {
         // dd($e);
-        throw new Exception('error','Une erreur est survenue lors de la suppression Agent');
+        throw new Exception('error','Une erreur est survenue lors de la archivation mairie');
     }
  }
+
+ public function vendordelete(Vendor $vendor){
+    try {
+        $vendor->delete();
+        return redirect()->route('super_admin.archive')->with('success1','Maire supprimée avec succès.');
+    } catch (Exception $e) {
+        // dd($e);
+        throw new Exception('error','Une erreur est survenue lors de la suppression mairie');
+    }
+ }
+
+ public function unarchive($id)
+{
+    $vendor = Vendor::find($id);
+
+    if ($vendor && $vendor->archived_at) {
+        $vendor->archived_at = null;
+        $vendor->save();
+
+        return redirect()->route('super_admin.index')->with('success', 'L\'élément a été désarchivé avec succès.');
+    }
+
+    // Si l'élément n'existe pas ou n'est pas archivé, rediriger avec un message d'erreur
+    return redirect()->back()->with('error', 'L\'élément n\'a pas pu être désarchivé.');
+}
 
 public function defineAccess($email){
     //Vérification si le sous-admin existe déjà
