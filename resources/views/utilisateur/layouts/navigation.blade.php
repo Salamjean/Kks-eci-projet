@@ -64,7 +64,9 @@
                        ? asset('storage/' . Auth::user()->profile_picture) 
                        : asset('assets/images/profiles/useriii.jpeg') }}" 
                alt="Profile Picture">
+                  <strong> {{ Auth::user()->name }} {{ Auth::user()->prenom }}</strong>
       </a>
+     
       
         <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
           <div class="dropdown-header text-center">

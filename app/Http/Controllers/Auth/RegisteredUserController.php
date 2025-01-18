@@ -35,12 +35,23 @@ class RegisteredUserController extends Controller
     {
         // Validation des données
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required',
             'prenom' => 'required',
             'email' => 'required|email|unique:users,email',
             'commune' => 'required',
-            'password' => 'required|string|min:8|confirmed',
-            'profile_picture'=>'required',
+            'CMU' => 'required',
+            'password' => 'required|min:8|confirmed',
+        ],[
+            'name.required' => 'Le nom est obligatoire.',
+            'prenom.required' => 'Le prénom est obligatoire.',
+            'email.required' => 'L\'adresse e-mail est obligatoire.',
+            'email.email' => 'L\'adresse e-mail n\'est pas valide.',
+            'email.unique' => 'Cette adresse e-mail est déjà associé a un compte.',
+            'commune.required' => 'La commune de naissance est obligatoire.',
+            'password.required' => 'Le mot de passe est obligatoire.',
+            'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
+            'password.confirmed' => 'Les mots de passe ne correspondent pas.',
+            'CMU.required' => 'Le numéro CMU est obligatoire.',
         ]);
     
         // Création de l'utilisateur
