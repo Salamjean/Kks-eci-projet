@@ -91,9 +91,19 @@ return [
             'provider' => 'cnps',
         ],
 
+        'cgrae' => [
+            'driver' => 'session',
+            'provider' => 'cgraes',
+        ],
+
         'cnpsagent' => [
             'driver' => 'session',
             'provider' => 'cnpsagents',
+        ],
+
+        'cgraeagent' => [
+            'driver' => 'session',
+            'provider' => 'cgraeagents',
         ],
 
         'utilisateur' => [
@@ -175,9 +185,19 @@ return [
             'model' => App\Models\Cnps::class
         ],
 
+        'cgraes' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Cgrae::class
+        ],
+
         'cnpsagents' => [
             'driver' => 'eloquent',
             'model' => App\Models\CnpsAgent::class
+        ],
+
+        'cgraeagents' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\CgraeAgent::class
         ],
         
         'utilisateurs' => [

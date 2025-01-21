@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AjointController;
 use App\Http\Controllers\CaisseController;
+use App\Http\Controllers\CgraeAgentController;
+use App\Http\Controllers\CgraeController;
 use App\Http\Controllers\CnpsAgentController;
 use App\Http\Controllers\CnpsController;
 use App\Http\Controllers\DashboardController;
@@ -142,9 +144,43 @@ Route::middleware('auth:web')->group(function () {
             Route::get('cnps/index/archive', [CnpsController::class, 'archive'])->name('cnps.indexarchive');
             Route::get('cnps/create', [CnpsController::class, 'create'])->name('cnps.create');
             Route::post('cnps/store', [CnpsController::class, 'store'])->name('cnps.store');
-});
-    
 
+        //Les routes de la CGRAE dans le super-admin 
+            Route::get('cgrae/index', [CgraeController::class, 'index'])->name('cgrae.index');
+            Route::get('cgrae/index/archive', [CgraeController::class, 'archive'])->name('cgrae.indexarchive');
+            Route::get('cgrae/create', [CgraeController::class, 'create'])->name('cgrae.create');
+            Route::post('cgrae/store', [CgraeController::class, 'store'])->name('cgrae.store');
+});
+
+
+    //Les routes de la CGRAE dans le super-admin
+    Route::prefix('cgraes')->group(function () {
+        // Routes pour l'authentification
+    Route::get('/register', [CgraeController::class, 'register'])->name('cgraes.register');
+    Route::post('/register', [CgraeController::class, 'handleRegister'])->name('cgraes.handleRegister');
+    Route::get('/login', [CgraeController::class, 'login'])->name('cgraes.login');
+    Route::post('/login', [CgraeController::class, 'handleLogin'])->name('cgraes.handleLogin');
+    Route::delete('/{cgraes}/archive', [CgraeController::class, 'cgraesarchive'])->name('cgraes.archive');
+    Route::put('/cgraes/unarchive/{id}', [CgraeController::class, 'unarchive'])->name('cgraes.unarchive');
+    Route::delete('/{cgraes}/delete', [CgraeController::class, 'cgraesdelete'])->name('cgraes.delete');
+    Route::middleware('auth:cgrae')->group(function () {
+        // Dashboard
+        Route::get('/dashboard', [CgraeController::class, 'dashboard'])->name('cgraes.dashboard');
+        Route::get('/logout', [CgraeController::class, 'logout'])->name('cgraes.logout');
+         // creation de l'agent de la cnps
+        Route::prefix('cgrae/agents')->group(function () {
+            Route::get('/', [CgraeAgentController::class, 'index'])->name('cgraeagent.index');
+            Route::get('/create', [CgraeAgentController::class, 'create'])->name('cgraeagent.create');
+            Route::post('/store', [CgraeAgentController::class, 'store'])->name('cgraeagent.store');
+            Route::get('/{agent}/edit', [CgraeAgentController::class, 'edit'])->name('cgraeagent.edit');
+            Route::put('/{agent}/update', [CgraeAgentController::class, 'update'])->name('cgraeagent.update');
+            Route::delete('/{agent}/archive', [CgraeAgentController::class, 'archive'])->name('cgraeagent.archive');
+            //Route::delete('/{agent}/delete', [CgraeAgentController::class, 'delete'])->name('cgraeagent.delete');
+            });
+        
+        
+    });
+    });
     //Les routes de la cnps dans le super-admin
     Route::prefix('cnps')->group(function () {
         // Routes pour l'authentification
@@ -296,6 +332,10 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/validate-cnps-account/{email}', [CnpsController::class, 'submitDefineAccess'])->name('cnps.validate');
     Route::get('/validate-cnps-agent-account/{email}', [CnpsAgentController::class, 'defineAccess']);
     Route::post('/validate-cnps-agent-account/{email}', [CnpsAgentController::class, 'submitDefineAccess'])->name('cnpsagent.validate');
+    Route::get('/validate-cgrae-account/{email}', [CgraeController::class, 'defineAccess']);
+    Route::post('/validate-cgrae-account/{email}', [CgraeController::class, 'submitDefineAccess'])->name('cgrae.validate');
+    Route::get('/validate-cgrae-agent-account/{email}', [CgraeAgentController::class, 'defineAccess']);
+    Route::post('/validate-cgrae-agent-account/{email}', [CgraeAgentController::class, 'submitDefineAccess'])->name('cgraeagent.validate');
 
 
     //creer un docteurs
@@ -345,6 +385,11 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/login', [CnpsAgentController::class, 'handleLogin'])->name('cnpsagent.handleLogin');
     });
 
+    Route::prefix('cgrae/agent')->group(function() {
+        Route::get('/login', [CgraeAgentController::class, 'login'])->name('cgraeagent.login');
+        Route::post('/login', [CgraeAgentController::class, 'handleLogin'])->name('cgraeagent.handleLogin');
+    });
+
     Route::prefix('ajoint-maire')->group(function() {
         Route::get('/login', [AjointController::class, 'login'])->name('ajoint.login');
         Route::post('/login', [AjointController::class, 'handleLogin'])->name('ajoint.handleLogin');
@@ -363,6 +408,11 @@ Route::middleware('auth:web')->group(function () {
     Route::middleware('cnpsagent')->prefix('cnps/agent')->group(function(){
         Route::get('/dashboard', [CnpsAgentController::class, 'dashboard'])->name('cnpsagent.dashboard');
         Route::get('/logout', [CnpsAgentController::class, 'logout'])->name('cnpsagent.logout');
+    });
+
+    Route::middleware('cgraeagent')->prefix('cgrae/agent')->group(function(){
+        Route::get('/dashboard', [CgraeAgentController::class, 'dashboard'])->name('cgraeagent.dashboard');
+        Route::get('/logout', [CgraeAgentController::class, 'logout'])->name('cgraeagent.logout');
     });
 
     Route::middleware('ajoint')->prefix('ajoint')->group(function(){

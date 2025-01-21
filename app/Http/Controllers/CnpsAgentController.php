@@ -29,7 +29,7 @@ class CnpsAgentController extends Controller
         $request->validate([
            'name' => 'required|string|max:255',
            'prenom' => 'required|string|max:255',
-           'email' => 'required|email|unique:agents,email',
+           'email' => 'required|email|unique:cnps_agents,email',
            'contact' => 'required|string|min:10',
            'commune' => 'required|string|max:255',
            'profile_picture' => 'nullable|image|max:2048',
@@ -65,7 +65,7 @@ class CnpsAgentController extends Controller
            ]);
            Notification::route('mail', $agent->email)
                ->notify(new SendEmailToCnpsAgentAfterRegistrationNotification($code, $agent->email));
-           return redirect()->back()
+           return redirect()->route('cnpsagent.index')
                ->with('success', 'Agent enregistré avec succès.');
        } catch (\Exception $e) {
            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);

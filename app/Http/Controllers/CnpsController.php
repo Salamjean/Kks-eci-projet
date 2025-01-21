@@ -217,7 +217,7 @@ public function handleLogin(Request $request)
     if($checkSousadminExiste){
         return view('superadmin.cnps.auth.validate', compact('email'));
     }else{
-        return redirect()->route('vendor.login');
+        return redirect()->route('cnps.login');
     };
 }
 

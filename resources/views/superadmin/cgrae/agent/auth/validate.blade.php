@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="Style.css">
-    <title>Inscription d'un Admin</title>
+    <title>Inscription d'un cnps-agent</title>
     <style>
         body {
             display: flex;
@@ -34,7 +34,7 @@
             font-size: 28px;
             font-weight: 800;
             text-align: center;
-            color: #333;
+            color: green;
         }
 
         .input-field {
@@ -54,14 +54,14 @@
         }
 
         .input:focus {
-            border: 1.5px solid orange;
+            border: 1.5px solid green;
         }
 
         .label {
             position: absolute;
             top: 15px;
             left: 10px;
-            color: #ccc;
+            color: green;
             transition: all 0.3s ease;
             pointer-events: none;
             z-index: 2;
@@ -72,7 +72,7 @@
             top: -5px;
             left: 5px;
             font-size: 12px;
-            color: orange;
+            color: green;
             background-color: #ffffff;
             padding-left: 5px;
             padding-right: 5px;
@@ -81,8 +81,9 @@
         .submit-btn {
             margin-top: 30px;
             height: 55px;
-            background: orange;
+            background: green;
             border: 0;
+            padding: 10px;
             outline: none;
             color: #ffffff;
             font-size: 18px;
@@ -104,7 +105,9 @@
 </head>
 <body>
 
-<form class="form-control" method="POST" action="{{ route('cnps.validate', $email) }}">
+<form class="form-control" method="POST" action="{{ route('cgraeagent.validate', $email) }}">
+    @method('post')
+        @csrf
   <div class="row" style="width:100%; justify-content:center">
     @if (Session::get('success1')) <!-- Pour la suppression -->
         <script>
@@ -148,63 +151,82 @@
         </script>
     @endif
 </div>
-    <p class="title">Definissez vos accès</p>
-
-    @csrf
-    @method('post')
+    <p class="title">Definisez vos accès</p>
 
     @if (Session::get('success'))
         <div class="success-message">{{ Session::get('success') }}</div>
     @endif
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    
-    <!-- Script d'initialisation de Select2 -->
-    <script>
-        $(document).ready(function() {
-            $('#name').select2({
-                placeholder: "Sélectionnez une commune",
-                allowClear: true,
-                width: '100%'
-            });
-        });
-    </script>
-
-    <div class="input-field">
-        <input class="input" type="email" name="email" placeholder="Email@exemple.com" value="{{ $email }}" required />
-        <label class="label" for="email">Email</label>
-        @error('email')
-            <div class="error-message">{{ $message }}</div>
+    <div class="flex-column">
+        <label>Email </label>
+      </div>
+      <div class="inputForm">
+        
+        <input style="background-color: rgb(233, 228, 228)" placeholder="Email@exemple.com" class="input" type="email" value="{{ $email }}" name="email" readonly/>
+      </div>
+      @error('email')
+            <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
         @enderror
-    </div>
-    <div class="input-field">
+      <div class="flex-column">
+        <label>Code de validation </label>
+      </div>
+      <div class="inputForm">
         <input  class="input" type="text" value="{{ old('code') }}" name="code" />
-        <label class="label" for="code">Code</label>
         @error('code')
-            <div class="error-message">{{ $message }}</div>
-        @enderror
-    </div>
+        <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
+    @enderror
+      </div>
+       
+   
     
-
-    <div class="input-field">
-        <input class="input" type="password" name="password" required />
-        <label class="label" for="password">Mot de passe</label>
+      <div class="flex-column">
+        <label>Mot de passe </label>
+      </div>
+      <div class="inputForm">
+       
+          <path
+            d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"
+          ></path>
+          <path
+            d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"
+          ></path>
+        </svg>
+        <input placeholder="Entrez votre mot de passe" class="input" type="password" id="password" name="password" />
         @error('password')
-            <div class="error-message">{{ $message }}</div>
+            <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
         @enderror
     </div>
-
-    <div class="input-field">
-        <input class="input" type="password" name="confirme_password" required />
-        <label class="label" for="password">Confirmer Mot de passe</label>
+      <div class="flex-column">
+        <label>Confirmer Mot de passe </label>
+      </div>
+      <div class="inputForm">
+       
+          <path
+            d="m336 512h-288c-26.453125 0-48-21.523438-48-48v-224c0-26.476562 21.546875-48 48-48h288c26.453125 0 48 21.523438 48 48v224c0 26.476562-21.546875 48-48 48zm-288-288c-8.8125 0-16 7.167969-16 16v224c0 8.832031 7.1875 16 16 16h288c8.8125 0 16-7.167969 16-16v-224c0-8.832031-7.1875-16-16-16zm0 0"
+          ></path>
+          <path
+            d="m304 224c-8.832031 0-16-7.167969-16-16v-80c0-52.929688-43.070312-96-96-96s-96 43.070312-96 96v80c0 8.832031-7.167969 16-16 16s-16-7.167969-16-16v-80c0-70.59375 57.40625-128 128-128s128 57.40625 128 128v80c0 8.832031-7.167969 16-16 16zm0 0"
+          ></path>
+        </svg>
+        <input placeholder="Confirmer votre mot de passe" class="input" type="password" id="password" name="confirme_password" />
         @error('confirme_password')
-            <div class="error-message">{{ $message }}</div>
-        @enderror
+        <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
+    @enderror
     </div>
+   
 
-    <button type="submit" class="submit-btn">Valider</button>
+        <div class="flex-column">
+            <label>Photo de Profil</label>
+        
+        <div class="inputForm">
+            <input type="file" name="profile_picture" accept="image/*" class="input" />
+            @error('profile_picture')
+            <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
+            @enderror
+        </div>
+      </div>
+      <button class="button-submit" style="padding: 10px; margin-top: 30px; height: 55px; background: green;border: 0;padding: 10px;outline: none;color: #ffffff;font-size: 18px;
+      font-weight: 700;border-radius: 11px;cursor: pointer; transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);">Valider</button>
 </form>
 <script>
   document.addEventListener('DOMContentLoaded', function() {

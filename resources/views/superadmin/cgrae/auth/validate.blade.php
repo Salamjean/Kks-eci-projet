@@ -54,7 +54,7 @@
         }
 
         .input:focus {
-            border: 1.5px solid orange;
+            border: 1.5px solid green;
         }
 
         .label {
@@ -72,7 +72,7 @@
             top: -5px;
             left: 5px;
             font-size: 12px;
-            color: orange;
+            color: green;
             background-color: #ffffff;
             padding-left: 5px;
             padding-right: 5px;
@@ -81,7 +81,7 @@
         .submit-btn {
             margin-top: 30px;
             height: 55px;
-            background: orange;
+            background: green;
             border: 0;
             outline: none;
             color: #ffffff;
@@ -104,7 +104,7 @@
 </head>
 <body>
 
-<form class="form-control" method="POST" action="{{ route('cnps.validate', $email) }}">
+<form class="form-control" method="POST" action="{{ route('cgrae.validate', $email) }}">
   <div class="row" style="width:100%; justify-content:center">
     @if (Session::get('success1')) <!-- Pour la suppression -->
         <script>
