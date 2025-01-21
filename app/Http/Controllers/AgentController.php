@@ -164,6 +164,15 @@ public function handleLogin(Request $request)
     }
  }
 
+//  public function archive(Agent $agent){
+    // try {
+        // $agent->archive();
+        // return redirect()->route('super_admin.index')->with('success1','Maire archivé avec succès.');
+    // } catch (Exception $e) {
+        // dd($e);
+        // throw new Exception('error','Une erreur est survenue lors de la archivation mairie');
+    // }
+//  }
  public function agentdelete(Agent $agent){
     try {
         $agent->archive();

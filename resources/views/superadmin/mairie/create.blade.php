@@ -133,7 +133,7 @@
             <div class="col-md-6">
               <label for="validationCustom002" class="form-label">Sélectionnez une commune</label>
               <select id="validationCustom002" name="name" class="form-control" required>
-                <option value="">Sélectionnez une commune</option>
+                <option value="{{ old('name') }}">Sélectionnez une commune...</option>
                 <option value="abobo">Abobo</option>
                 <option value="adjame">Adjamé</option>
                 <option value="attiecoube">Attécoubé</option>
@@ -208,11 +208,17 @@
                 <option value="bofora">Bofora</option>
                 <option value="zagoua">Zagoua</option>
               </select>
+              @error('name')
+              <div class="text-danger text-center">{{ $message }}</div>
+              @enderror
             </div>
 
             <div class="col-md-6">
               <label for="validationCustom004" class="form-label">Email</label>
-              <input type="email" class="form-control" name="email" id="validationCustom004" placeholder="Entrez son email" required>
+              <input type="email" class="form-control" name="email" id="validationCustom004" value="{{ old('email') }}" placeholder="Entrez son email" required>
+              @error('email')
+              <div class="text-danger text-center">{{ $message }}</div>
+              @enderror
           </div>
         </div>
 

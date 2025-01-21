@@ -146,7 +146,7 @@
 		<section class="slider">
 			<div class="hero-slider">
 				<!-- Start Single Slider -->
-				<div class="single-slider " style="background-image:url({{ asset('assets4/img/bebeslide.jpeg') }}); height: 90vh; background-size:cover; background-position:center">
+				<div class="single-slider " style="background-image:url({{ asset('assets4/img/bebebe.jpeg') }}); height: 90vh; background-size:cover; background-position:center">
 					<div class="container">
 						<div class="row">
 							<div class="col-lg-7" style="margin-top: 110px ">
@@ -217,7 +217,7 @@
 									<div class="single-content" >
 										<span>Vous pouvez faire votre demande à :</span>
 										<h4>SOCOCE</h4>
-										<p>Vous pouvez désormais faire une demande d’acte à SOCOCE rapidement et facilement.
+										<p>Vous pouvez désormais faire une demande d’acte à SOCOCE rapidement et facilement sur les bornes administratives tactiles.
 										</p>
 										<a href="#"> N’attendez plus !<i class="fa fa-long-arrow-right"></i></a>
 									</div>
@@ -234,7 +234,7 @@
 									<div class="single-content">
 										<span>Vous pouvez faire votre demande à :</span>
 										<h4>CAP NORD</h4>
-										<p>Vous pouvez désormais faire une demande d’acte à CAP NORD rapidement et facilement.
+										<p>Vous pouvez désormais faire une demande d’acte à CAP NORD rapidement et facilement sur les bornes administratives tactiles.
 										</p>
 										<a href="#"> N’attendez plus !<i class="fa fa-long-arrow-right"></i></a>
 									</div>
@@ -251,7 +251,7 @@
 									<div class="single-content">
 										<span>Vous pouvez faire votre demande à :</span>
 										<h4>CAP SUD</h4>
-										<p>Vous pouvez désormais faire une demande d’acte à CAP SUD rapidement et facilement.
+										<p>Vous pouvez désormais faire une demande d’acte à CAP SUD rapidement et facilement sur les bornes administratives tactiles.
 										</p>
 										<a href="#"> N’attendez plus !<i class="fa fa-long-arrow-right"></i></a>
 									</div>

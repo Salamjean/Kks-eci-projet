@@ -86,6 +86,16 @@ return [
             'provider' => 'directeurs',
         ],
 
+        'cnps' => [
+            'driver' => 'session',
+            'provider' => 'cnps',
+        ],
+
+        'cnpsagent' => [
+            'driver' => 'session',
+            'provider' => 'cnpsagents',
+        ],
+
         'utilisateur' => [
             'driver' => 'session',
             'provider' => 'utilisateurs',
@@ -159,6 +169,17 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Director::class
         ],
+
+        'cnps' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Cnps::class
+        ],
+
+        'cnpsagents' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\CnpsAgent::class
+        ],
+        
         'utilisateurs' => [
             'driver' => 'eloquent',
             'model' => App\Models\Utilisateur::class,

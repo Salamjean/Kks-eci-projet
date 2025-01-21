@@ -13,6 +13,7 @@ use App\Models\Naissance;
 use App\Models\NaissanceD;
 use App\Models\ResetCodePasswordAgent;
 use App\Models\ResetCodePasswordCaisse;
+use App\Models\Vendor;
 use App\Notifications\SendEmailToCaisseAfterRegistrationNotification;
 use Exception;
 use Illuminate\Http\Request;
@@ -130,38 +131,55 @@ class CaisseController extends Controller
             throw new Exception('error','Une erreur est survenue lors de la suppression ajoint');
         }
      }    
-     public function dashboard() {
-        $admin = Auth::guard('caisse')->user();
-        $alerts = Alert::all();
-        $caisses = Caisse::where('communeM', $admin->communeM)->paginate(10);
-        $decesnombre = Deces::where('commune', $admin->communeM)->count();
-        $decesdejanombre = Decesdeja::where('commune', $admin->communeM)->count();
-        $mariagenombre = Mariage::where('commune', $admin->communeM)->count();
-        $naissancenombre = Naissance::where('commune', $admin->communeM)->count();
-        $naissanceDnombre = NaissanceD::where('commune', $admin->communeM)->count();
-        $total = $decesnombre + $decesdejanombre + $naissancenombre + $naissanceDnombre + $mariagenombre;
-    
-        // Solde initial
-        $soldeActuel = 300000;
-    
-        // Déduction pour chaque nouvelle demande
-        $debit = 500; // Montant à déduire pour chaque demande
-        $soldeDebite = $total * $debit; // Total débité basé sur le nombre de demandes
-        $soldeRestant = $soldeActuel - $soldeDebite; // Calcul du solde restant
-    
-        // Récupérer les demandes récentes
-        $demandesNaissance1 = Naissance::where('commune', $admin->communeM)->latest()->take(3)->get();
-        $demandesNaissanceD = NaissanceD::where('commune', $admin->communeM)->latest()->take(2)->get();
-        $demandesNaissance = $demandesNaissance1->concat($demandesNaissanceD);
-        $demandesDeces1 = Deces::where('commune', $admin->communeM)->latest()->take(5)->get();
-        $demandesDecesdeja = Decesdeja::where('commune', $admin->communeM)->latest()->take(5)->get();
-        $demandesDeces = $demandesDeces1->concat($demandesDecesdeja);
-        $demandesMariage = Mariage::where('commune', $admin->communeM)->latest()->take(5)->get();
-    
-        return view('vendor.caisse.dashboard', compact('alerts', 'total', 'soldeActuel', 'soldeDebite', 'soldeRestant',
-            'decesnombre', 'decesdejanombre', 'naissancenombre', 'naissanceDnombre', 'mariagenombre', 
-            'demandesNaissance', 'demandesDeces', 'demandesMariage'));
-    }
+
+     public function dashboard()
+{
+    // Récupérer l'utilisateur connecté
+    $admin = Auth::guard('caisse')->user();
+
+    // Récupérer les alertes
+    $alerts = Alert::all();
+
+    // Récupérer les caisses de la commune de l'utilisateur
+    $caisses = Caisse::where('communeM', $admin->communeM)->paginate(10);
+
+    // Compter les demandes par type pour la commune de l'utilisateur
+    $decesnombre = Deces::where('commune', $admin->communeM)->count();
+    $decesdejanombre = Decesdeja::where('commune', $admin->communeM)->count();
+    $mariagenombre = Mariage::where('commune', $admin->communeM)->count();
+    $naissancenombre = Naissance::where('commune', $admin->communeM)->count();
+    $naissanceDnombre = NaissanceD::where('commune', $admin->communeM)->count();
+    $total = $decesnombre + $decesdejanombre + $naissancenombre + $naissanceDnombre + $mariagenombre;
+
+    // Récupérer le solde total des mairies de la commune de l'utilisateur
+    $soldeCommune = Vendor::where('name', $admin->communeM)
+        ->whereNull('archived_at')
+        ->sum('solde');
+
+    // Solde initial (solde total de la commune)
+    $soldeActuel = $soldeCommune;
+
+    // Déduction pour chaque nouvelle demande
+    $debit = 500; // Montant à déduire pour chaque demande
+    $soldeDebite = $total * $debit; // Total débité basé sur le nombre de demandes
+    $soldeRestant = $soldeActuel - $soldeDebite; // Calcul du solde restant
+
+    // Récupérer les demandes récentes
+    $demandesNaissance1 = Naissance::where('commune', $admin->communeM)->latest()->take(3)->get();
+    $demandesNaissanceD = NaissanceD::where('commune', $admin->communeM)->latest()->take(2)->get();
+    $demandesNaissance = $demandesNaissance1->concat($demandesNaissanceD);
+    $demandesDeces1 = Deces::where('commune', $admin->communeM)->latest()->take(5)->get();
+    $demandesDecesdeja = Decesdeja::where('commune', $admin->communeM)->latest()->take(5)->get();
+    $demandesDeces = $demandesDeces1->concat($demandesDecesdeja);
+    $demandesMariage = Mariage::where('commune', $admin->communeM)->latest()->take(5)->get();
+
+    return view('vendor.caisse.dashboard', compact(
+        'alerts', 'total', 'soldeActuel', 'soldeDebite', 'soldeRestant',
+        'decesnombre', 'decesdejanombre', 'naissancenombre', 'naissanceDnombre', 'mariagenombre',
+        'demandesNaissance', 'demandesDeces', 'demandesMariage', 'soldeCommune'
+    ));
+}
+
      public function logout(){
         Auth::guard('caisse')->logout();
         return redirect()->route('caisse.login');

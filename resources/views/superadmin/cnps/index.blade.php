@@ -174,90 +174,32 @@
       <div class="col-lg-12">
           <div class="card mb-4">
               <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Liste de toutes les mairies</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Liste de toutes les CNPS</h6>
               </div>
               <div class="table-responsive p-3">
-                  <!-- Formulaire pour sélectionner une mairie, saisir le montant et la recherche -->
-                  <form method="POST" action="{{ route('super_admin.add_solde') }}" style="margin-left: 100px" class="mb-3">
-                    @csrf <!-- Ajoutez ceci pour la protection CSRF -->
-                    <div class="row">
-                        <!-- Barre de recherche -->
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="searchInput">Rechercher :</label>
-                                <input type="text" id="searchInput" name="searchInput" class="form-recherche" placeholder="Rechercher...">
-                            </div>
-                        </div>
-                        <!-- Sélection de la mairie -->
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="mairie_selectionnee">Sélectionner une mairie :</label>
-                                <select id="mairie_selectionnee" name="mairie_selectionnee" class="form-control" required>
-                                   
-                                    @foreach ($vendors as $vendor)
-                                        <option value="{{ $vendor->id }}" {{ $mairieSelectionnee == $vendor->id ? 'selected' : '' }}>
-                                            {{ $vendor->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <!-- Montant à ajouter ou retirer -->
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="ajout_solde">Montant :</label>
-                                <input type="number" id="ajout_solde" name="ajout_solde" class="form-control" value="{{ $ajoutSolde }}">
-                            </div>
-                        </div>
-
-                        <!-- Bouton -->
-                        <div class="col-md-4">
-                            <div class="form-group d-flex">
-                              <div class="col-md-3 d-flex gap-2" style="margin-top: 30px; margin-left:30px">
-                                <label>
-                                  Ajouter<input type="radio" name="action" value="ajouter" checked> 
-                                </label>
-                                <label>
-                                  Retirer<input type="radio" name="action" value="retirer"> 
-                                </label>
-                            </div>
-                                <label></label> <!-- Espace pour aligner le bouton -->
-                                <button type="submit" class="btn btn-primary btn-block h-100 mt-10">Appliquer</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                
-  
                   <!-- Tableau des mairies -->
                   <table class="table align-items-center table-flush" id="dataTable">
                       <thead class="bg-navbar text-white">
                           <tr style="font-size: 12px">
-                              <th>Mairie</th>
-                              <th>Mails</th>
+                              <th>Institution</th>
+                              <th>Siège</th>
                               <th>Nombres d'agents</th>
-                              <th>Nombre de caissié</th>
-                              <th>Nombre d'hôpital</th>
-                              <th>Nombre d'ajoint-maire</th>
-                              <th>Solde restant</th>
+                              <th>Mail</th>
                               <th class="text-center">Archivé</th>
                           </tr>
                       </thead>
                       <tbody>
-                          @forelse ($vendors as $vendor)
+                          @forelse ($cnps as $cnp)
                               <tr style="font-size: 12px">
-                                  <td>{{ strtoupper($vendor->name) }}</td>
-                                  <td>{{ $vendor->email }}</td>
-                                  <td>{{ $agentsCount[$vendor->name] ?? 0 }}</td>
-                                  <td>{{ $caisseCount[$vendor->name] ?? 0 }}</td>
-                                  <td>{{ $doctorCount[$vendor->name] ?? 0 }}</td>
-                                  <td>{{ $ajointCount[$vendor->name] ?? 0 }}</td>
-                                  <td>{{ $soldeRestantParCommune[$vendor->name] ?? 0 }} FCFA</td>
+                                  <td>{{ $cnp->name }}</td>
+                                  <td>{{ strtoupper($cnp->siege) }}</td>
+                                  <td>{{ $agentsCount[$cnp->siege] ?? 0 }}</td>
+                                  <td>{{ $cnp->email }}</td>
                                   <td class="text-center">
-                                      <button type="button" class="delete" onclick="confirmArchive('{{ $vendor->id }}')">
+                                      <button type="button" class="delete" onclick="confirmArchive('{{ $cnp->id }}')">
                                           <i class="fas fa-folder"></i>
                                       </button>
-                                      <form id="archive-form-{{ $vendor->id }}" action="{{ route('vendor.archive', $vendor->id) }}" method="POST" style="display: none;">
+                                      <form id="archive-form-{{ $cnp->id }}" action="{{ route('cnps.archive', $cnp->id) }}" method="POST" style="display: none;">
                                           @csrf
                                           @method('DELETE')
                                       </form>

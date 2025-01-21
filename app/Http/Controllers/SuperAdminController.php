@@ -32,32 +32,43 @@ use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
 class SuperAdminController extends Controller
 {
     public function dashboard()
-    {
-        $alerts = Alert::all();
-        $deces = Deces::count();
-        $decesdeja = Decesdeja::count();
-        $mariage = Mariage::count();
-        $naissance = Naissance::count();
-        $naissanceD = NaissanceD::count();
-        $naisshop = NaissHop::count();
-        $deceshop = DecesHop::count();
-        $agents = Agent::count();
-        $caisses = Caisse::count();
-        $doctors = Doctor::count();
-        $ajoints = Ajoint::count();
-        $mairie = Vendor::whereNull('archived_at')->count();
-        $sousadmin = SousAdmin::count();
-        $total = $deces + $decesdeja + $mariage + $naissance + $naissanceD;
-        // Solde initial
-        $soldeActuel = 300000 * $mairie;
-        // Déduction pour chaque nouvelle demande
-        $debit = 500; // Montant à déduire pour chaque demande
-        $soldeDebite = $total * $debit; // Total débité basé sur le nombre de demandes
-        $soldeRestant = $soldeActuel - $soldeDebite; // Calcul du solde restant
-        return view('superadmin.dashboard',compact('alerts','deces','decesdeja','mariage','naissance',
-        'naissanceD','total','soldeActuel','soldeDebite','soldeRestant','deceshop','naisshop',
-        'agents','caisses','doctors','mairie','ajoints','sousadmin'));
-    }
+{
+    $alerts = Alert::all();
+    $deces = Deces::count();
+    $decesdeja = Decesdeja::count();
+    $mariage = Mariage::count();
+    $naissance = Naissance::count();
+    $naissanceD = NaissanceD::count();
+    $naisshop = NaissHop::count();
+    $deceshop = DecesHop::count();
+    $agents = Agent::count();
+    $caisses = Caisse::count();
+    $doctors = Doctor::count();
+    $ajoints = Ajoint::count();
+    $mairie = Vendor::whereNull('archived_at')->count();
+    $sousadmin = SousAdmin::count();
+    $total = $deces + $decesdeja + $mariage + $naissance + $naissanceD;
+
+
+      // Récupérer le solde total de toutes les mairies
+    $soldeTotalMairies = Vendor::whereNull('archived_at')->sum('solde');
+    // Solde initial
+    $soldeActuel =  $soldeTotalMairies;
+
+    // Déduction pour chaque nouvelle demande
+    $debit = 500; // Montant à déduire pour chaque demande
+    $soldeDebite = $total * $debit; // Total débité basé sur le nombre de demandes
+    $soldeRestant = $soldeActuel - $soldeDebite; // Calcul du solde restant
+
+  
+
+    return view('superadmin.dashboard', compact(
+        'alerts', 'deces', 'decesdeja', 'mariage', 'naissance',
+        'naissanceD', 'total', 'soldeActuel', 'soldeDebite', 'soldeRestant',
+        'deceshop', 'naisshop', 'agents', 'caisses', 'doctors', 'mairie',
+        'ajoints', 'sousadmin', 'soldeTotalMairies'
+    ));
+}
 
     public function logout()
     {
@@ -65,8 +76,7 @@ class SuperAdminController extends Controller
         return redirect()->route('super_admin.login');
     }
 
-
-    public function index()
+    public function index(Request $request)
 {
     // Récupérer uniquement les mairies non archivées
     $vendors = Vendor::whereNull('archived_at')->get();
@@ -98,6 +108,7 @@ class SuperAdminController extends Controller
         $doctorCount[$item->commune] = $item->total;
     }
 
+    // Compter les adjoints par commune
     $ajointCountByCommune = Ajoint::select('communeM', DB::raw('count(*) as total'))
         ->groupBy('communeM')
         ->get();
@@ -147,30 +158,56 @@ class SuperAdminController extends Controller
         $mariageCount[$item->commune] = $item->total;
     }
 
-    // Calculer le solde restant par commune
-    $soldeRestantParCommune = [];
-    $soldeActuel = 300000; // Solde actuel
-    $debit = 500; // Montant à déduire pour chaque demande
+    // Récupérer la mairie sélectionnée et le montant saisi
+    $mairieSelectionnee = $request->input('mairie_selectionnee');
+    $ajoutSolde = $request->input('ajout_solde', 0); // Par défaut, 0 si non renseigné
 
-    foreach ($vendors as $vendor) {
-        // Compter les demandes pour cette commune
-        $totalDemandesCount = (
-            ($naissanceCount[$vendor->name] ?? 0) +
-            ($naissanceDCount[$vendor->name] ?? 0) +
-            ($decesCount[$vendor->name] ?? 0) +
-            ($decesdejaCount[$vendor->name] ?? 0) +
-            ($mariageCount[$vendor->name] ?? 0)
-        );
-
-        // Calculer le solde restant pour cette commune
-        $soldeDebite = $totalDemandesCount * $debit;
-        $soldeRestant = $soldeActuel - $soldeDebite;
-
-        // Stocker dans le tableau associatif
-        $soldeRestantParCommune[$vendor->name] = $soldeRestant;
+    // Mettre à jour le solde de la mairie sélectionnée
+    if ($mairieSelectionnee && $ajoutSolde) {
+        $vendor = Vendor::find($mairieSelectionnee);
+        if ($vendor) {
+            $vendor->solde += $ajoutSolde; // Ajouter le montant saisi au solde actuel
+            $vendor->save(); // Sauvegarder les modifications
+        }
     }
 
-    return view('superadmin.mairie.index', compact('vendors', 'agentsCount', 'caisseCount', 'doctorCount', 'ajointCount', 'soldeRestantParCommune'));
+    // Récupérer les soldes mis à jour
+    $soldeRestantParCommune = [];
+    foreach ($vendors as $vendor) {
+        $soldeRestantParCommune[$vendor->name] = $vendor->solde;
+    }
+
+    return view('superadmin.mairie.index', compact('vendors', 'agentsCount', 'caisseCount', 'doctorCount', 
+    'ajointCount', 'soldeRestantParCommune', 'ajoutSolde', 'mairieSelectionnee'));
+}
+
+public function addSolde(Request $request)
+{
+    // Valider les entrées
+    $request->validate([
+        'mairie_selectionnee' => 'required|exists:vendors,id',
+        'ajout_solde' => 'required|numeric|min:0',
+        'action' => 'required|in:ajouter,retirer', // Assurez-vous que l'action est soit 'ajouter' soit 'retirer'
+    ]);
+
+    // Récupérer la mairie sélectionnée, le montant saisi et l'action
+    $mairieSelectionnee = $request->input('mairie_selectionnee');
+    $ajoutSolde = $request->input('ajout_solde');
+    $action = $request->input('action');
+
+    // Mettre à jour le solde de la mairie sélectionnée
+    $vendor = Vendor::find($mairieSelectionnee);
+    if ($vendor) {
+        if ($action === 'ajouter') {
+            $vendor->solde += $ajoutSolde; // Ajouter le montant saisi au solde actuel
+        } elseif ($action === 'retirer') {
+            $vendor->solde -= $ajoutSolde; // Retirer le montant saisi du solde actuel
+        }
+        $vendor->save(); // Sauvegarder les modifications
+    }
+
+    // Rediriger vers la page précédente avec un message de succès
+    return redirect()->route('super_admin.index')->with('success', 'Le montant a été ' . ($action === 'ajouter' ? 'ajouté' : 'retiré') . ' avec succès.');
 }
 
     public function register(){
@@ -249,8 +286,15 @@ class SuperAdminController extends Controller
 {
     // Validation des données
     $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:doctors,email',
+        'name' => 'required|string|unique:vendors,name',
+        'email' => 'required|email|unique:vendors,email',
+    ],[
+        'name.required' => 'Le nom est obligatoire.',
+        'name.unique' => 'Cette mairie est déjà inscrite.',
+        'name.max' => 'Le nom ne doit pas dépasser 255 caractères.',
+        'email.required' => 'L\'adresse e-mail est obligatoire.',
+        'email.email' => 'Veuillez fournir une adresse e-mail valide.',
+        'email.unique' => 'Cette adresse e-mail existe déjà.',
     ]);
 
     try {
@@ -405,25 +449,45 @@ public function archive(){
  foreach ($mariageCountByCommune as $item) {
      $mariageCount[$item->commune] = $item->total;
  }
- // Calculer le solde restant par commune
- $soldeRestantParCommune = [];
- $soldeActuel = 300000; // Solde actuel
- $debit = 500; // Montant à déduire pour chaque demande
- foreach ($vendors as $vendor) {
-     // Compter les demandes pour cette commune
-     $totalDemandesCount = (
-         ($naissanceCount[$vendor->name] ?? 0) +
-         ($naissanceDCount[$vendor->name] ?? 0) +
-         ($decesCount[$vendor->name] ?? 0) +
-         ($decesdejaCount[$vendor->name] ?? 0) +
-         ($mariageCount[$vendor->name] ?? 0)
-     );
-     // Calculer le solde restant pour cette commune
-     $soldeDebite = $totalDemandesCount * $debit;
-     $soldeRestant = $soldeActuel - $soldeDebite;
-     // Stocker dans le tableau associatif
-     $soldeRestantParCommune[$vendor->name] = $soldeRestant;
- }
+
+ // Initialisation du tableau pour stocker le solde restant par commune
+$soldeRestantParCommune = [];
+
+// Récupérer le solde total de toutes les mairies non archivées
+$soldeTotalMairies = Vendor::whereNull('archived_at')->sum('solde');
+
+// Solde actuel initial
+$soldeActuel = $soldeTotalMairies;
+
+// Montant à déduire pour chaque demande
+$debit = 500;
+
+// Parcourir chaque vendeur (commune)
+foreach ($vendors as $vendor) {
+    // Compter le total des demandes pour cette commune
+    $totalDemandesCount = (
+        ($naissanceCount[$vendor->name] ?? 0) +
+        ($naissanceDCount[$vendor->name] ?? 0) +
+        ($decesCount[$vendor->name] ?? 0) +
+        ($decesdejaCount[$vendor->name] ?? 0) +
+        ($mariageCount[$vendor->name] ?? 0)
+    );
+
+    // Calculer le solde débité pour cette commune
+    $soldeDebite = $totalDemandesCount * $debit;
+
+    // Calculer le solde restant pour cette commune
+    $soldeRestant = $soldeActuel - $soldeDebite;
+
+    // Stocker le solde restant dans le tableau associatif
+    $soldeRestantParCommune[$vendor->name] = $soldeRestant;
+}
+
+// Calculer le solde total restant après toutes les déductions
+$totalDemandes = array_sum($naissanceCount) + array_sum($naissanceDCount) + array_sum($decesCount) + array_sum($decesdejaCount) + array_sum($mariageCount);
+$soldeDebiteTotal = $totalDemandes * $debit;
+$soldeRestantTotal = $soldeActuel - $soldeDebiteTotal;
+
  return view('superadmin.mairie.archive', compact('vendors', 'agentsCount', 'caisseCount', 'doctorCount', 'ajointCount', 'soldeRestantParCommune'));
 }
 

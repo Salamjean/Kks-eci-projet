@@ -38,7 +38,7 @@
   <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForm" aria-expanded="true"
       aria-controls="collapseForm">
-      <i class="fa fa-school"></i>
+      <i class="fa fa-church"></i>
       <span>Décès</span>
     </a>
     <div id="collapseForm" class="collapse" aria-labelledby="headingForm" data-parent="#accordionSidebar">
@@ -57,20 +57,17 @@
     </a>
   </li>
 
-
   <hr class="sidebar-divider">
-  <hr class="sidebar-divider">
+<hr class="sidebar-divider">
+<div class="sidebar-heading" style="font-size: 15px; text-align:center">
+  Institution
+</div>
 
-  <div class="sidebar-heading" style="font-size: 15px; text-align:center">
-    Le Personnel
-  </div>
-
-
-  <!-- Section Mairie -->
+   <!-- Section Mairie -->
   <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMairie"
       aria-expanded="true" aria-controls="collapseMairie">
-      <i class="fa fa-user"></i>
+      <i class="fa fa-school"></i>
       <span>Mairie</span>
     </a>
     <div id="collapseMairie" class="collapse" aria-labelledby="headingMairie" data-parent="#accordionSidebar">
@@ -82,6 +79,67 @@
       </div>
     </div>
   </li>
+
+   <!-- Section CAGRAE -->
+<li class="nav-item">
+  <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCnps"
+    aria-expanded="true" aria-controls="collapseCnps">
+    <i class="fa fa-school"></i>
+    <span>CNPS</span>
+  </a>
+  <div id="collapseCnps" class="collapse" aria-labelledby="headingCnps" data-parent="#accordionSidebar">
+    <div class="bg-white py-2 collapse-inner rounded">
+      <h6 class="collapse-header">Gestion de la cnps</h6>
+      <a class="collapse-item" href="{{ route('cnps.create') }}">Ajout CNPS</a>
+      <a class="collapse-item" href="{{ route('cnps.index') }}">CNPS enregistrée</a>
+      <a class="collapse-item" href="{{ route('cnps.indexarchive') }}">CNPS archivés</a>
+    </div>
+  </div>
+</li>
+
+   <!-- Section CAGRAE -->
+   <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCAGRAE"
+      aria-expanded="true" aria-controls="collapseCAGRAE">
+      <i class="fa fa-school"></i>
+      <span>CAGRAE</span>
+    </a>
+    <div id="collapseCAGRAE" class="collapse" aria-labelledby="headingCAGRAE" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Gestion de la CAGRAE</h6>
+        <a class="collapse-item" href="#">Ajout CAGRAE</a>
+        <a class="collapse-item" href="#">CAGRAE enregistrée</a>
+        <a class="collapse-item" href="#">CAGRAE archivés</a>
+      </div>
+    </div>
+  </li>
+
+
+     <!-- Section Ministere -->
+     <li class="nav-item">
+      <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMinistere"
+        aria-expanded="true" aria-controls="collapseMinistere">
+        <i class="fa fa-school"></i>
+        <span>Ministère de la santé</span>
+      </a>
+      <div id="collapseMinistere" class="collapse" aria-labelledby="headingMinistere" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+          <h6 class="collapse-header">Gestion de la ministère</h6>
+          <a class="collapse-item" href="#">Ajout du ministère</a>
+          <a class="collapse-item" href="#">Ministère enregistré</a>
+          <a class="collapse-item" href="#">Ministère archivés</a>
+        </div>
+      </div>
+    </li>
+  
+
+  <hr class="sidebar-divider">
+  <hr class="sidebar-divider">
+
+  <div class="sidebar-heading" style="font-size: 15px; text-align:center">
+    Le Personnel
+  </div>
+
 
      <!-- Section Agent -->
  <li class="nav-item">
