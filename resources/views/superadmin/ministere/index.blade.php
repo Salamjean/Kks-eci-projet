@@ -174,7 +174,7 @@
       <div class="col-lg-12">
           <div class="card mb-4">
               <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Liste de toutes les CGRAE</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">Liste des sièges du ministere de la santé</h6>
               </div>
               <div class="table-responsive p-3">
                   <!-- Tableau des mairies -->
@@ -189,18 +189,18 @@
                           </tr>
                       </thead>
                       <tbody>
-                          @forelse ($cgraes as $cgrae)
+                          @forelse ($ministeres as $ministere)
                               <tr style="font-size: 12px">
-                                  <td>{{ $cgrae->name }}</td>
-                                  <td>{{ strtoupper($cgrae->siege) }}</td>
-                                  <td>{{ $agentsCount[$cgrae->siege] ?? 0 }}</td>
-                                  {{-- <td>{{ $agentsCount[$cgrae->siege] ?? 0 }}</td> --}}
-                                  <td>{{ $cgrae->email }}</td>
+                                  <td>{{ $ministere->name }}</td>
+                                  <td>{{ strtoupper($ministere->siege) }}</td>
+                                  <td>{{ $agentsCount[$ministere->siege] ?? 0 }}</td>
+                                  {{-- <td>{{ $agentsCount[$ministere->siege] ?? 0 }}</td> --}}
+                                  <td>{{ $ministere->email }}</td>
                                   <td class="text-center">
-                                      <button type="button" class="delete" onclick="confirmArchive('{{ $cgrae->id }}')">
+                                      <button type="button" class="delete" onclick="confirmArchive('{{ $ministere->id }}')">
                                           <i class="fas fa-folder"></i>
                                       </button>
-                                      <form id="archive-form-{{ $cgrae->id }}" action="{{ route('cgraes.archive', $cgrae->id) }}" method="POST" style="display: none;">
+                                      <form id="archive-form-{{ $ministere->id }}" action="{{ route('ministere.archive', $ministere->id) }}" method="POST" style="display: none;">
                                           @csrf
                                           @method('DELETE')
                                       </form>

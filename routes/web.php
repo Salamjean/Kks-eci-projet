@@ -18,6 +18,8 @@ use App\Http\Controllers\Doctors\SousDoctorsDashboard;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\Vendor\VendorDashboard;
 use App\Http\Controllers\MariageController;
+use App\Http\Controllers\MinistereAgentController;
+use App\Http\Controllers\MinistereController;
 use App\Http\Controllers\NaissanceController;
 use App\Http\Controllers\NaissanceDeclaController;
 use App\Http\Controllers\NaissHopController;
@@ -32,6 +34,7 @@ use App\Models\Naissance;
 use App\Models\Vendor;
 use App\Models\Alert;
 use App\Models\Doctor;
+use App\Models\Ministere;
 
 Route::get('/', [GeneralController::class, 'general'])->name('general');
 Route::get('/E-ci-Naissance', [GeneralController::class, 'naissanceavec'])->name('naissanceavec');
@@ -150,6 +153,12 @@ Route::middleware('auth:web')->group(function () {
             Route::get('cgrae/index/archive', [CgraeController::class, 'archive'])->name('cgrae.indexarchive');
             Route::get('cgrae/create', [CgraeController::class, 'create'])->name('cgrae.create');
             Route::post('cgrae/store', [CgraeController::class, 'store'])->name('cgrae.store');
+
+        //Les routes du ministère de la santé dans le super-admin 
+            Route::get('ministere/index', [MinistereController::class, 'index'])->name('ministere.index');
+            Route::get('ministere/index/archive', [MinistereController::class, 'archive'])->name('ministere.indexarchive');
+            Route::get('ministere/create', [MinistereController::class, 'create'])->name('ministere.create');
+            Route::post('ministere/store', [MinistereController::class, 'store'])->name('ministere.store');
 });
 
 
@@ -166,7 +175,7 @@ Route::middleware('auth:web')->group(function () {
     Route::middleware('auth:cgrae')->group(function () {
         // Dashboard
         Route::get('/dashboard', [CgraeController::class, 'dashboard'])->name('cgraes.dashboard');
-        Route::get('/logout', [CgraeController::class, 'logout'])->name('cgraes.logout');
+        Route::get('/logout', [CgraeController::class, 'logout'])->name('cgrae.logout');
          // creation de l'agent de la cnps
         Route::prefix('cgrae/agents')->group(function () {
             Route::get('/', [CgraeAgentController::class, 'index'])->name('cgraeagent.index');
@@ -177,9 +186,7 @@ Route::middleware('auth:web')->group(function () {
             Route::delete('/{agent}/archive', [CgraeAgentController::class, 'archive'])->name('cgraeagent.archive');
             //Route::delete('/{agent}/delete', [CgraeAgentController::class, 'delete'])->name('cgraeagent.delete');
             });
-        
-        
-    });
+        });
     });
     //Les routes de la cnps dans le super-admin
     Route::prefix('cnps')->group(function () {
@@ -206,13 +213,42 @@ Route::middleware('auth:web')->group(function () {
             Route::put('/{agent}/update', [CnpsAgentController::class, 'update'])->name('cnpsagent.update');
             Route::delete('/{agent}/archive', [CnpsAgentController::class, 'archive'])->name('cnpsagent.archive');
             //Route::delete('/{agent}/delete', [CnpsAgentController::class, 'delete'])->name('cnpsagent.delete');
+                });         
             });
-       
-         
 
-    });
+        });
 
-    });
+     //Les routes du Ministere dans le super-admin
+        Route::prefix('ministere')->group(function () {
+                // Routes pour l'authentification
+            Route::get('/register', [MinistereController::class, 'register'])->name('ministere.register');
+            Route::post('/register', [MinistereController::class, 'handleRegister'])->name('ministere.handleRegister');
+            Route::get('/login', [MinistereController::class, 'login'])->name('ministere.login');
+            Route::post('/login', [MinistereController::class, 'handleLogin'])->name('ministere.handleLogin');
+            Route::delete('/{ministere}/archive', [MinistereController::class, 'ministerearchive'])->name('ministere.archive');
+            Route::put('/ministere/unarchive/{id}', [MinistereController::class, 'unarchive'])->name('ministere.unarchive');
+            Route::delete('/{ministere}/delete', [MinistereController::class, 'ministeredelete'])->name('ministere.delete');
+            Route::middleware('auth:ministere')->group(function () {
+                // Dashboard
+                Route::get('/dashboard', [MinistereController::class, 'dashboard'])->name('ministere.dashboard');
+                Route::get('/logout', [MinistereController::class, 'logout'])->name('ministere.logout');
+
+                 // creation de l'agent de la cnps
+                Route::prefix('ministere/agents')->group(function () {
+                    Route::get('/', [MinistereAgentController::class, 'index'])->name('ministereagent.index');
+                    Route::get('/create', [MinistereAgentController::class, 'create'])->name('ministereagent.create');
+                    Route::post('/store', [MinistereAgentController::class, 'store'])->name('ministereagent.store');
+                    Route::get('/{agent}/edit', [MinistereAgentController::class, 'edit'])->name('ministereagent.edit');
+                    Route::put('/{agent}/update', [MinistereAgentController::class, 'update'])->name('ministereagent.update');
+                    Route::delete('/{agent}/archive', [MinistereAgentController::class, 'archive'])->name('ministereagent.archive');
+                    //Route::delete('/{agent}/delete', [MinistereAgentController::class, 'delete'])->name('ministereagent.delete');
+                   
+                    });
+                });
+        });
+    Route::get('ministere/download/{id}', [MinistereAgentController::class, 'download'])->name('ministereagent.download');
+    Route::get('cnps/download/{id}', [CnpsAgentController::class, 'download'])->name('cnpsagent.download');
+    Route::get('cgrae/download/{id}', [CgraeAgentController::class, 'download'])->name('cgraeagent.download');
 
     //Les routes de l'administrator (Mairie)
     Route::prefix('vendors')->group(function () {
@@ -336,6 +372,10 @@ Route::middleware('auth:web')->group(function () {
     Route::post('/validate-cgrae-account/{email}', [CgraeController::class, 'submitDefineAccess'])->name('cgrae.validate');
     Route::get('/validate-cgrae-agent-account/{email}', [CgraeAgentController::class, 'defineAccess']);
     Route::post('/validate-cgrae-agent-account/{email}', [CgraeAgentController::class, 'submitDefineAccess'])->name('cgraeagent.validate');
+    Route::get('/validate-ministere-account/{email}', [MinistereController::class, 'defineAccess']);
+    Route::post('/validate-ministere-account/{email}', [MinistereController::class, 'submitDefineAccess'])->name('ministere.validate');
+    Route::get('/validate-ministere-agent-account/{email}', [MinistereAgentController::class, 'defineAccess']);
+    Route::post('/validate-ministere-agent-account/{email}', [MinistereAgentController::class, 'submitDefineAccess'])->name('ministereagent.validate');
 
 
     //creer un docteurs
@@ -390,6 +430,11 @@ Route::middleware('auth:web')->group(function () {
         Route::post('/login', [CgraeAgentController::class, 'handleLogin'])->name('cgraeagent.handleLogin');
     });
 
+    Route::prefix('ministere/agent')->group(function() {
+        Route::get('/login', [MinistereAgentController::class, 'login'])->name('ministereagent.login');
+        Route::post('/login', [MinistereAgentController::class, 'handleLogin'])->name('ministereagent.handleLogin');
+    });
+
     Route::prefix('ajoint-maire')->group(function() {
         Route::get('/login', [AjointController::class, 'login'])->name('ajoint.login');
         Route::post('/login', [AjointController::class, 'handleLogin'])->name('ajoint.handleLogin');
@@ -415,6 +460,10 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/logout', [CgraeAgentController::class, 'logout'])->name('cgraeagent.logout');
     });
 
+    Route::middleware('ministereagent')->prefix('ministere/agent')->group(function(){
+        Route::get('/dashboard', [MinistereAgentController::class, 'dashboard'])->name('ministereagent.dashboard');
+        Route::get('/logout', [MinistereAgentController::class, 'logout'])->name('ministereagent.logout');
+    });
     Route::middleware('ajoint')->prefix('ajoint')->group(function(){
         Route::get('/vue', [AjointController::class, 'ajointvue'])->name('ajoint.dashboard');
         Route::get('/logout', [AjointController::class, 'logout'])->name('ajoint.logout');

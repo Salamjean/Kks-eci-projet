@@ -4,11 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Alert;
-use App\Models\Cgrae;
-use App\Models\CgraeAgent;
 use App\Models\DecesHop;
-use App\Models\ResetCodePasswordCgrae;
-use App\Notifications\SendEmailToCgraeAfterRegistrationNotification;
+use App\Models\Ministere;
+use App\Models\MinistereAgent;
+use App\Models\ResetCodePasswordMinistere;
+use App\Notifications\SendEmailToMinistereAfterRegistrationNotification;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 
-class CgraeController extends Controller
+class MinistereController extends Controller
 {
     public function dashboard(Request $request)
     {
@@ -41,22 +41,21 @@ class CgraeController extends Controller
         $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
     
         // Retourner la vue avec les résultats de la recherche
-        return view('superadmin.cgrae.dashboard', compact('defunts', 'searchTerm', 'found', 'hasSearchTerm'));
+        return view('superadmin.ministere.dashboard', compact('defunts', 'searchTerm', 'found', 'hasSearchTerm'));
     }
     public function create(){
         $alerts = Alert::all();
         $admin = Auth::guard('super_admin')->user();
-        return view('superadmin.cgrae.create', compact('alerts'));
+        return view('superadmin.ministere.create', compact('alerts'));
     }
-
     public function store(Request $request)
     {
         // Validation des données
         $request->validate([
-            'siege' => 'required|unique:cgraes,siege',
-            'email' => 'required|email|unique:cgraes,email',
+            'siege' => 'required|unique:ministeres,siege',
+            'email' => 'required|email|unique:ministeres,email',
         ],[
-            'siege.unique' => 'Cet siège de la cnps existe déjà verifier dans l\'archive',
+            'siege.unique' => 'Cet siège du ministere de la santé existe déjà verifier dans l\'archive',
             'siege.required' => 'Le nom est obligatoire.',
             'email.required' => 'L\'adresse e-mail est obligatoire.',
             'email.email' => 'Veuillez fournir une adresse e-mail valide.',
@@ -72,27 +71,27 @@ class CgraeController extends Controller
             }
     
             // Création du docteur
-            $cgrae = new Cgrae();
-            $cgrae->name = $request->name;
-            $cgrae->siege = $request->siege;
-            $cgrae->email = $request->email;
-            $cgrae->password = Hash::make('password');
-            $cgrae->save();
+            $ministere = new Ministere();
+            $ministere->name = $request->name;
+            $ministere->siege = $request->siege;
+            $ministere->email = $request->email;
+            $ministere->password = Hash::make('password');
+            $ministere->save();
     
             // Envoi de l'e-mail de vérification
-            ResetCodePasswordCgrae::where('email', $cgrae->email)->delete();
+            ResetCodePasswordMinistere::where('email', $ministere->email)->delete();
             $code = rand(10000, 40000);
     
-            ResetCodePasswordCgrae::create([
+            ResetCodePasswordMinistere::create([
                 'code' => $code,
-                'email' => $cgrae->email,
+                'email' => $ministere->email,
             ]);
     
-            Notification::route('mail', $cgrae->email)
-                ->notify(new SendEmailToCgraeAfterRegistrationNotification($code, $cgrae->email));
+            Notification::route('mail', $ministere->email)
+                ->notify(new SendEmailToMinistereAfterRegistrationNotification($code, $ministere->email));
     
-            return redirect()->route('cgrae.index')
-                ->with('success', 'CGRAE enregistré avec succès.');
+            return redirect()->route('ministere.index')
+                ->with('success', 'Le ministère de la santé est enregistré avec succès.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
         }
@@ -101,24 +100,24 @@ class CgraeController extends Controller
     public function index(Request $request)
     {
         // Récupérer uniquement les mairies non archivées
-        $cgraes = Cgrae::whereNull('archived_at')->get();
-    
+        $ministeres = Ministere::whereNull('archived_at')->get();
+
         // Compter les agents par commune
-        // $agentsCountByCommune = CnpsAgent::select('communeM', DB::raw('count(*) as total'))
-            // ->groupBy('communeM')
-            // ->get();
-        // $agentsCount = [];
-        // foreach ($agentsCountByCommune as $item) {
-            // $agentsCount[$item->communeM] = $item->total;
-        // }
-    
-        return view('superadmin.cgrae.index', compact('cgraes'));
+        $agentsCountByCommune = MinistereAgent::select('communeM', DB::raw('count(*) as total'))
+        ->groupBy('communeM')
+        ->get();
+    $agentsCount = [];
+    foreach ($agentsCountByCommune as $item) {
+        $agentsCount[$item->communeM] = $item->total;
     }
 
-    public function cgraesarchive(Cgrae $cgraes){
+        return view('superadmin.ministere.index', compact('ministeres','agentsCount'));
+    }
+
+    public function ministerearchive(Ministere $ministere){
         try {
-            $cgraes->archive();
-            return redirect()->route('cgrae.indexarchive')->with('success1','CGRAE archivé avec succès.');
+            $ministere->archive();
+            return redirect()->route('ministere.indexarchive')->with('success1','Ministère de la santé archivé avec succès.');
         } catch (Exception $e) {
             // dd($e);
             throw new Exception('error','Une erreur est survenue lors de la archivation CGRAE');
@@ -127,58 +126,58 @@ class CgraeController extends Controller
 
      public function archive(){
         // Récupérer uniquement les mairies non archivées
-        $cgraes = Cgrae::whereNotNull('archived_at')->get();
+        $ministeres = Ministere::whereNotNull('archived_at')->get();
         // Compter les agents par commune
-        $agentsCountByCommune = CgraeAgent::select('communeM', DB::raw('count(*) as total'))
-        ->groupBy('communeM')
-        ->get();
-        $agentsCount = [];
-        foreach ($agentsCountByCommune as $item) {
-        $agentsCount[$item->communeM] = $item->total;
-    }
+        // $agentsCountByCommune = Agent::select('communeM', DB::raw('count(*) as total'))
+            // ->groupBy('communeM')
+            // ->get();
+        // $agentsCount = [];
+        // foreach ($agentsCountByCommune as $item) {
+            // $agentsCount[$item->communeM] = $item->total;
+        // }
         // Calculer le solde total restant après toutes les déductions
         
-    return view('superadmin.cgrae.archive', compact('cgraes','agentsCount'));
+    return view('superadmin.ministere.archive', compact('ministeres'));
    }
 
    public function unarchive($id)
-{
-    $cgraes = Cgrae::find($id);
-   
-    if ($cgraes && $cgraes->archived_at) {
-        $cgraes->archived_at = null;
-        $cgraes->save();
-   
-        return redirect()->route('cgrae.index')->with('success', 'L\'élément a été désarchivé avec succès.');
-    }
-   
-    // Si l'élément n'existe pas ou n'est pas archivé, rediriger avec un message d'erreur
-    return redirect()->back()->with('error', 'L\'élément n\'a pas pu être désarchivé.');
-}
+   {
+       $ministeres = Ministere::find($id);
+      
+       if ($ministeres && $ministeres->archived_at) {
+           $ministeres->archived_at = null;
+           $ministeres->save();
+      
+           return redirect()->route('ministere.index')->with('success', 'L\'élément a été désarchivé avec succès.');
+       }
+      
+       // Si l'élément n'existe pas ou n'est pas archivé, rediriger avec un message d'erreur
+       return redirect()->back()->with('error', 'L\'élément n\'a pas pu être désarchivé.');
+   }
 
-public function cgraesdelete(Cgrae $cgraes){
+   public function ministeredelete(Ministere $ministere){
     try {
-        $cgraes->delete();
-        return redirect()->route('cgrae.indexarchive')->with('success1','CGRAE supprimée avec succès.');
+        $ministere->delete();
+        return redirect()->route('ministere.indexarchive')->with('success1','ministère de la santé supprimée avec succès.');
     } catch (Exception $e) {
         // dd($e);
-        throw new Exception('error','Une erreur est survenue lors de la suppression CGRAE');
+        throw new Exception('error','Une erreur est survenue lors de la suppression du ministère ');
     }
  }
 
  public function register(){
-    return view('superadmin.cgrae.auth.validate');
+    return view('superadmin.ministere.auth.validate');
 }
 
 public function login(){
-    return view('superadmin.cgrae.auth.login');
+    return view('superadmin.ministere.auth.login');
 }
 
 
 public function handleLogin(Request $request)
 {
     $request->validate([
-        'email' =>'required|exists:cgraes,email',
+        'email' =>'required|exists:ministeres,email',
         'password' => 'required|min:8',
     ], [
         
@@ -189,9 +188,9 @@ public function handleLogin(Request $request)
         'password.min'=> 'Le mot de passe doit avoir au moins 8 caractères.',
     ]);
     try {
-        if(auth('cgrae')->attempt($request->only('email', 'password')))
+        if(auth('ministere')->attempt($request->only('email', 'password')))
         {
-            return redirect()->route('cgraes.dashboard')->with('Bienvenu sur votre page ');
+            return redirect()->route('ministere.dashboard')->with('Bienvenu sur votre page ');
         }else{
             return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
         }
@@ -201,20 +200,18 @@ public function handleLogin(Request $request)
 }
 
 public function logout(){
-    Auth::guard('cgrae')->logout();
-    return redirect()->route('cgraes.login');
+    Auth::guard('ministere')->logout();
+    return redirect()->route('ministere.login');
 }
 
- // definissons les acces de la cnps 
-
- public function defineAccess($email){
+public function defineAccess($email){
     //Vérification si le sous-admin existe déjà
-    $checkSousadminExiste = Cgrae::where('email', $email)->first();
+    $checkSousadminExiste = Ministere::where('email', $email)->first();
 
     if($checkSousadminExiste){
-        return view('superadmin.cgrae.auth.validate', compact('email'));
+        return view('superadmin.ministere.auth.validate', compact('email'));
     }else{
-        return redirect()->route('cgraes.login');
+        return redirect()->route('ministere.login');
     };
 }
 
@@ -222,7 +219,7 @@ public function submitDefineAccess(Request $request){
 
     // Validation des données
     $request->validate([
-            'code'=>'required|exists:reset_code_password_cgraes,code',
+            'code'=>'required|exists:reset_code_password_ministeres,code',
             'password' => 'required|same:confirme_password',
             'confirme_password' => 'required|same:password',
         ], [
@@ -231,29 +228,29 @@ public function submitDefineAccess(Request $request){
             'confirme_password.same' => 'Les mots de passe doivent être identiques.',
     ]);
     try {
-        $cgrae = Cgrae::where('email', $request->email)->first();
+        $ministere = Ministere::where('email', $request->email)->first();
 
-        if ($cgrae) {
+        if ($ministere) {
             // Mise à jour du mot de passe
-            $cgrae->password = Hash::make($request->password);
-            $cgrae->update();
+            $ministere->password = Hash::make($request->password);
+            $ministere->update();
 
-            if($cgrae){
-               $existingcodehop =  ResetCodePasswordCgrae::where('email', $cgrae->email)->count();
+            if($ministere){
+               $existingcodehop =  ResetCodePasswordMinistere::where('email', $ministere->email)->count();
 
                if($existingcodehop > 1){
-                ResetCodePasswordCgrae::where('email', $cgrae->email)->delete();
+                ResetCodePasswordMinistere::where('email', $ministere->email)->delete();
                }
             }
 
-            return redirect()->route('cgraes.login')->with('success', 'Compte mis à jour avec succès');
+            return redirect()->route('ministere.login')->with('success', 'Compte mis à jour avec succès');
         } else {
-            return redirect()->route('cgraes.login')->with('error', 'Email inconnu');
+            return redirect()->route('ministere.login')->with('error', 'Email inconnu');
         }
     } catch (Exception $e) {
         return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
     }
 }
 
-
+   
 }

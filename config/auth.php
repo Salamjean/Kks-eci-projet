@@ -106,6 +106,15 @@ return [
             'provider' => 'cgraeagents',
         ],
 
+        'ministere' => [
+            'driver' => 'session',
+            'provider' => 'ministeres',
+        ],
+        'ministereagent' => [
+            'driver' => 'session',
+            'provider' => 'ministereagents',
+        ],
+
         'utilisateur' => [
             'driver' => 'session',
             'provider' => 'utilisateurs',
@@ -199,6 +208,16 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\CgraeAgent::class
         ],
+        
+        'ministeres' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Ministere::class
+        ],
+
+        'ministereagents' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\MinistereAgent::class
+],
         
         'utilisateurs' => [
             'driver' => 'eloquent',

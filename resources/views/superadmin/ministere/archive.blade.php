@@ -62,25 +62,18 @@
     font-size: 1.1rem;
   }
 
-  .form-recherche{
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #f8f9fa;
-    width: 250px;
-    font-size: 14px;
-    transition: background-color 0.3s;
+  /* Style pour les erreurs de validation */
+  .was-validated .form-control:invalid {
+    border-color: #dc3545;
   }
 
-  /* Style pour les erreurs de validation */
+  .was-validated .form-control:valid {
+    border-color: #28a745;
+  }
+
   .invalid-feedback {
     display: block;
     font-size: 0.875rem;
-  }
-
-  .btn-primary{
-    margin-top: 30px;
   }
 
   button {
@@ -131,7 +124,7 @@
         <script>
           Swal.fire({
             icon: 'success',
-            title: 'Archivage réussi',
+            title: 'Suppression réussie',
             text: '{{ Session::get('success1') }}',
             showConfirmButton: true,
             confirmButtonText: 'OK',
@@ -169,57 +162,67 @@
         </script>
       @endif
     </div>
-    
     <div class="row">
       <div class="col-lg-12">
-          <div class="card mb-4">
-              <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Liste de toutes les CGRAE</h6>
-              </div>
-              <div class="table-responsive p-3">
-                  <!-- Tableau des mairies -->
-                  <table class="table align-items-center table-flush" id="dataTable">
-                      <thead class="bg-navbar text-white">
-                          <tr style="font-size: 12px">
-                              <th>Institution</th>
-                              <th>Siège</th>
-                              <th>Nombres d'agents</th>
-                              <th>Mail</th>
-                              <th class="text-center">Archivé</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          @forelse ($cgraes as $cgrae)
-                              <tr style="font-size: 12px">
-                                  <td>{{ $cgrae->name }}</td>
-                                  <td>{{ strtoupper($cgrae->siege) }}</td>
-                                  <td>{{ $agentsCount[$cgrae->siege] ?? 0 }}</td>
-                                  {{-- <td>{{ $agentsCount[$cgrae->siege] ?? 0 }}</td> --}}
-                                  <td>{{ $cgrae->email }}</td>
-                                  <td class="text-center">
-                                      <button type="button" class="delete" onclick="confirmArchive('{{ $cgrae->id }}')">
-                                          <i class="fas fa-folder"></i>
-                                      </button>
-                                      <form id="archive-form-{{ $cgrae->id }}" action="{{ route('cgraes.archive', $cgrae->id) }}" method="POST" style="display: none;">
-                                          @csrf
-                                          @method('DELETE')
-                                      </form>
-                                  </td>
-                              </tr>
-                          @empty
-                              <tr>
-                                  <td colspan="9" class="text-center">Aucune demande effectuée</td>
-                              </tr>
-                          @endforelse
-                      </tbody>
-                  </table>
-              </div>
+        <div class="card mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Liste de tous les sièges du ministère de la santé archivées</h6>
           </div>
+          <div class="table-responsive p-3">
+            <input type="text" id="searchInput" class="form-control mb-3" placeholder="Rechercher...">
+            <table class="table align-items-center table-flush" id="dataTable">
+              <thead class="bg-navbar text-white">
+                  <tr style="font-size: 12px">
+                      <th>Institution</th>
+                      <th>Siège</th>
+                      <th>Nombres d'agents</th>
+                      <th>Mail</th>
+                      <th colspan="2" class="text-center">Archivé</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  @forelse ($ministeres as $ministere)
+                      <tr style="font-size: 12px">
+                          <td>{{ $ministere->name }}</td>
+                          <td>{{ strtoupper($ministere->siege) }}</td>
+                          <td>0</td>
+                          <td>{{ $ministere->email }}</td>
+                          <td class="text-center">
+                              <button type="button" class="delete" onclick="confirmUnarchive('{{ $ministere->id }}')">
+                                <i class="fas fa-folder-open"></i>
+                              </button>
+                              <form id="unarchive-form-{{ $ministere->id }}" action="{{ route('ministere.unarchive', $ministere->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('PUT')
+                              </form>
+                            </td>
+                            <td class="text-center">
+                              <button type="button" class="delete" onclick="confirmDelete('{{ $ministere->id }}')">
+                                <i class="fas fa-trash"></i>
+                              </button>
+                              <form id="delete-form-{{ $ministere->id }}" action="{{ route('ministere.delete', $ministere->id) }}" method="POST" style="display: none;">
+                                @csrf
+                                @method('DELETE')
+                              </form>
+                            </td>
+                        </tr>
+                      </tr>
+                  @empty
+                      <tr>
+                          <td colspan="9" class="text-center">Aucune demande effectuée</td>
+                      </tr>
+                  @endforelse
+              </tbody>
+          </table>
+          </div>
+        </div>
       </div>
+    </div>
   </div>
+</div>
 
 <script>
-  function confirmArchive(vendorId) {
+  function confirmDelete(vendorId) {
     Swal.fire({
       title: 'Êtes-vous sûr?',
       text: "Vous ne pourrez pas revenir en arrière!",
@@ -227,14 +230,31 @@
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Oui, archiver!',
+      confirmButtonText: 'Oui, supprimer!',
       cancelButtonText: 'Annuler'
     }).then((result) => {
       if (result.isConfirmed) {
-        document.getElementById('archive-form-' + vendorId).submit();
+        document.getElementById('delete-form-' + vendorId).submit();
       }
     });
   }
+
+  function confirmUnarchive(vendorId) {
+  Swal.fire({
+    title: 'Êtes-vous sûr?',
+    text: "Vous ne pourrez pas revenir en arrière!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Oui, Desarchiver!',
+    cancelButtonText: 'Annuler'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      document.getElementById('unarchive-form-' + vendorId).submit();
+    }
+  });
+}
 
   // Fonction de recherche
   document.getElementById('searchInput').addEventListener('keyup', function() {

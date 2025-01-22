@@ -75,4 +75,9 @@ public function index(Request $request)
     ));
 }
 
+public function logout(){
+    Auth::guard('doctor')->logout();
+    return redirect()->route('doctor.login');
+}
+
 }

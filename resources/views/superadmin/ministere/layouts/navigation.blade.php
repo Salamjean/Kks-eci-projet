@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top" style="background-color: green">
+<nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top" style="background-color: rgba(0, 229, 255, 0.801)">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Bouton Sidebar -->
 
@@ -13,12 +13,12 @@
          aria-haspopup="true" aria-expanded="false">
         <!-- Image selon la ville -->
         @php
-          $user = Auth::guard('cgrae')->user();
+          $user = Auth::guard('ministere')->user();
         @endphp
         <div class="profile-picture">
-          <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/cgrae.jpg') }}" alt="Profile Image">
+          <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/sante.jpg') }}" alt="Profile Image">
       </div>
-        <span class="ml-2 d-none d-lg-inline text-black small" style="color: white !important;"><strong>Siège : {{ $user->siege }}</strong></span>
+        <span class="ml-2 d-none d-lg-inline text-black small" style="color: black !important;"><strong>Siège : {{ $user->siege }}</strong></span>
       </a>
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
         <a class="dropdown-item" href="#">
@@ -28,7 +28,7 @@
           <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Paramètres
         </a>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="{{ route('cgrae.logout') }}">
+        <a class="dropdown-item" href="{{ route('ministere.logout') }}">
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Déconnexion
         </a>
       </div>

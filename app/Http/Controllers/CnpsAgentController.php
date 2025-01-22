@@ -10,6 +10,7 @@ use App\Models\DecesHop;
 use App\Models\ResetCodePasswordCnpsAgent;
 use App\Notifications\SendEmailToCnpsAgentAfterRegistrationNotification;
 use Exception;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -239,4 +240,30 @@ class CnpsAgentController extends Controller
             return redirect()->back()->with('error', 'Une erreur s\'est produite lors de la connexion.');
         }
     }
+
+    public function download($id)
+{
+    // Récupérer l'objet DecesHop
+    $decesHop = DecesHop::findOrFail($id);
+
+    // Récupérer les informations du sous-admin connecté (celui qui télécharge le PDF)
+    $cnpsagent = Auth::guard('cnpsagent')->user();
+
+    if (!$cnpsagent) {
+        return back()->withErrors(['error' => 'Agent non authentifié.']);
+    }
+
+    // Récupérer les informations du docteur (sous_admin) qui a fait la déclaration
+    $sousadmin = $decesHop->sous_admin; // Utilisez la relation "sousAdmin" définie dans le modèle DecesHop
+
+    if (!$sousadmin) {
+        return back()->withErrors(['error' => 'Docteur non trouvé.']);
+    }
+
+    // Générer le PDF avec les données
+    $pdf = PDF::loadView('superadmin.cnps.agent.pdf', compact('decesHop', 'sousadmin', 'cnpsagent'));
+
+    // Retourner le PDF pour téléchargement direct
+    return $pdf->download("statistique_ministerielle_{$decesHop->id}.pdf");
+}
 }

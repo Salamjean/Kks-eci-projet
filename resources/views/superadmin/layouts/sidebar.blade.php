@@ -125,9 +125,9 @@
       <div id="collapseMinistere" class="collapse" aria-labelledby="headingMinistere" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
           <h6 class="collapse-header">Gestion de la ministère</h6>
-          <a class="collapse-item" href="#">Ajout du ministère</a>
-          <a class="collapse-item" href="#">Ministère enregistré</a>
-          <a class="collapse-item" href="#">Ministère archivés</a>
+          <a class="collapse-item" href="{{ route('ministere.create') }}">Ajout du ministère</a>
+          <a class="collapse-item" href="{{ route('ministere.index') }}">Ministère enregistré</a>
+          <a class="collapse-item" href="{{ route('ministere.indexarchive') }}">Ministère archivés</a>
         </div>
       </div>
     </li>

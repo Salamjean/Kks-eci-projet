@@ -58,6 +58,7 @@
                     <th>Nom de l'hôpital</th>
                     <th>Cause du décès</th>
                     <th>Nom du docteur déclarant</th>
+                    <th>Télécharger le certificat</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,6 +73,13 @@
                         <td>{{ $defunt->nomHop }}</td>
                         <td>{{ $defunt->Remarques }}</td>
                         <td>Dr. {{ $defunt->sous_admin ? $defunt->sous_admin->name . ' ' . $defunt->sous_admin->prenom : 'Demandeur inconnu' }}</td>
+                        <td>
+                            <a href="{{ route('cnpsagent.download', $defunt->id) }}" style="color: #009efb">
+                                <button class="eye">
+                                        <i class="fas fa-download" style="color: blue"></i><br> Télécharger
+                                </button>
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>

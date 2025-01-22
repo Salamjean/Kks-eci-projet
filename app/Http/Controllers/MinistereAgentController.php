@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateAgentRequest;
 use App\Models\Alert;
-use App\Models\CgraeAgent;
 use App\Models\DecesHop;
-use App\Models\ResetCodePasswordCgraeAgent;
-use App\Notifications\SendEmailToCgraeAgentAfterRegistrationNotification;
+use App\Models\MinistereAgent;
+use App\Models\ResetCodePasswordMinistereAgent;
+use App\Notifications\SendEmailToMinistereAgentAfterRegistrationNotification;
 use Exception;
 use PDF;
 use Illuminate\Http\Request;
@@ -17,11 +17,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
-class CgraeAgentController extends Controller
-{
+class MinistereAgentController extends Controller
+    {
         public function create(){
             $alerts = Alert::all();
-            return view('superadmin.cgrae.agent.create', compact('alerts'));
+            return view('superadmin.ministere.agent.create', compact('alerts'));
          }
          public function store(Request $request){
             // Validation des données
@@ -29,7 +29,7 @@ class CgraeAgentController extends Controller
             $request->validate([
                'name' => 'required|string|max:255',
                'prenom' => 'required|string|max:255',
-               'email' => 'required|email|unique:cgrae_agents,email',
+               'email' => 'required|email|unique:ministere_agents,email',
                'contact' => 'required|string|min:10',
                'commune' => 'required|string|max:255',
                'profile_picture' => 'nullable|image|max:2048',
@@ -37,12 +37,12 @@ class CgraeAgentController extends Controller
            ]);
            try {
                // Récupérer le vendor connecté
-               $cgrae = Auth::guard('cgrae')->user();
-               if (!$cgrae || !$cgrae->siege) {
+               $ministere = Auth::guard('ministere')->user();
+               if (!$ministere || !$ministere->siege) {
                    return redirect()->back()->withErrors(['error' => 'Impossible de récupérer les informations du vendor.']);
                }
                // Création du docteur
-               $agent = new CgraeAgent();
+               $agent = new MinistereAgent();
                $agent->name = $request->name;
                $agent->prenom = $request->prenom;
                $agent->email = $request->email;
@@ -53,43 +53,42 @@ class CgraeAgentController extends Controller
                    $agent->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
                }
                $agent->commune = $request->commune;
-               $agent->communeM = $cgrae->siege;
+               $agent->communeM = $ministere->siege;
                
                $agent->save();
                // Envoi de l'e-mail de vérification
-               ResetCodePasswordCgraeAgent::where('email', $agent->email)->delete();
+               ResetCodePasswordMinistereAgent::where('email', $agent->email)->delete();
                $code = rand(100000, 400000);
-               ResetCodePasswordCgraeAgent::create([
+               ResetCodePasswordMinistereAgent::create([
                    'code' => $code,
                    'email' => $agent->email,
                ]);
                Notification::route('mail', $agent->email)
-                   ->notify(new SendEmailToCgraeAgentAfterRegistrationNotification($code, $agent->email));
-               return redirect()->route('cgraeagent.index')->with('success', 'Agent enregistré avec succès.');
+                   ->notify(new SendEmailToMinistereAgentAfterRegistrationNotification($code, $agent->email));
+               return redirect()->route('ministereagent.index')->with('success', 'Agent enregistré avec succès.');
            } catch (\Exception $e) {
                return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
            }
         }
-
         public function index()
         {
-            $admin = Auth::guard('cgrae')->user();
+            $admin = Auth::guard('ministere')->user();
         
             $alerts = Alert::all();
-            $agents = CgraeAgent::whereNull('archived_at')
+            $agents = MinistereAgent::whereNull('archived_at')
                 ->where('communeM', $admin->siege)
                 ->paginate(10);
         
             // Retourner la vue avec les données
-            return view('superadmin.cgrae.agent.index', compact('agents', 'alerts'));
+            return view('superadmin.ministere.agent.index', compact('agents', 'alerts'));
         }
 
-        public function edit(CgraeAgent $agent){
+    
+        public function edit(MinistereAgent $agent){
             $alerts = Alert::all();
-            return view('superadmin.cgrae.agent.edit', compact('agent','alerts'));
+            return view('superadmin.ministere.agent.edit', compact('agent','alerts'));
          }
-
-         public function update(UpdateAgentRequest $request ,CgraeAgent $agent){
+         public function update(UpdateAgentRequest $request ,MinistereAgent $agent){
             try {
                 $agent->name = $request->name;
                 $agent->prenom = $request->prenom;
@@ -97,31 +96,30 @@ class CgraeAgentController extends Controller
                 $agent->contact = $request->contact;
                 $agent->commune = $request->commune;
                 $agent->update();
-                return redirect()->route('cgraeagent.index')->with('success','Les informations agent mises à jour avec succès.');
+                return redirect()->route('ministereagent.index')->with('success','Les informations agent mises à jour avec succès.');
             } catch (Exception $e) {
                 // dd($e);
-                throw new Exception('error','Une erreur est survenue lors de la modification de l\'agent de la cnps');
+                throw new Exception('error','Une erreur est survenue lors de la modification de l\'agent de la ministere');
             }
          }
 
-         public function archive(CgraeAgent $agent){
+         public function archive(MinistereAgent $agent){
             try {
                 $agent->archive();
-                return redirect()->route('cgraeagent.index')->with('success1','Agent archivé avec succès.');
+                return redirect()->route('ministereagent.index')->with('success1','Agent archivé avec succès.');
             } catch (Exception $e) {
                 dd($e);
                 throw new Exception('error','Une erreur est survenue lors de la archivation agent');
             }
          }
 
-
          public function defineAccess($email){
-            //Vérification si le l'agent existe déjà
-            $checkSousadminExiste = CgraeAgent::where('email', $email)->first();
+            //Vérification si l'agent existe déjà
+            $checkSousadminExiste = MinistereAgent::where('email', $email)->first();
             if($checkSousadminExiste){
-                return view('superadmin.cgrae.agent.auth.validate', compact('email'));
+                return view('superadmin.ministere.agent.auth.validate', compact('email'));
             }else{
-                return redirect()->route('cgraeagent.login');
+                return redirect()->route('ministereagent.login');
             };
         }
     
@@ -129,7 +127,7 @@ class CgraeAgentController extends Controller
     
             // Validation des données
             $request->validate([
-                    'code'=>'required|exists:reset_code_password_cgrae_agents,code',
+                    'code'=>'required|exists:reset_code_password_ministere_agents,code',
                     'password' => 'required|same:confirme_password',
                     'confirme_password' => 'required|same:password',
                 ], [
@@ -141,7 +139,7 @@ class CgraeAgentController extends Controller
                     'confirme_password.required' => 'Le mot de passe de confirmation est obligatoire.',
             ]);
             try {
-                $agent = CgraeAgent::where('email', $request->email)->first();
+                $agent = MinistereAgent::where('email', $request->email)->first();
         
                 if ($agent) {
                     // Mise à jour du mot de passe
@@ -161,22 +159,21 @@ class CgraeAgentController extends Controller
                     $agent->update();
         
                     if($agent){
-                       $existingcodeagent =  ResetCodePasswordCgraeAgent::where('email', $agent->email)->count();
+                       $existingcodeagent =  ResetCodePasswordMinistereAgent::where('email', $agent->email)->count();
         
                        if($existingcodeagent > 1){
-                        ResetCodePasswordCgraeAgent::where('email', $agent->email)->delete();
+                        ResetCodePasswordMinistereAgent::where('email', $agent->email)->delete();
                        }
                     }
         
-                    return redirect()->route('cgraeagent.dashboard')->with('success', 'Compte mis à jour avec succès');
+                    return redirect()->route('ministereagent.dashboard')->with('success', 'Compte mis à jour avec succès');
                 } else {
-                    return redirect()->route('cgraeagent.dashboard')->with('error', 'Email inconnu');
+                    return redirect()->route('ministereagent.dashboard')->with('error', 'Email inconnu');
                 }
             } catch (Exception $e) {
                 return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
             }
         }
-
 
         public function dashboard(Request $request){
             // Récupérer le terme de recherche depuis la requête
@@ -195,21 +192,21 @@ class CgraeAgentController extends Controller
                 // Déterminer si des résultats ont été trouvés
                 $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
                 $alerts = Alert::all();
-        return view('superadmin.cgrae.agent.dashboard', compact('alerts','defunts', 'searchTerm', 'found', 'hasSearchTerm'));
+        return view('superadmin.ministere.agent.dashboard', compact('alerts','defunts', 'searchTerm', 'found', 'hasSearchTerm'));
     }
     public function logout(){
-        Auth::guard('cgraeagent')->logout();
-        return redirect()->route('cgraeagent.login');
+        Auth::guard('ministereagent')->logout();
+        return redirect()->route('ministereagent.login');
     }
     public function login(){
-        return view('superadmin.cgrae.agent.auth.login');
+        return view('superadmin.ministere.agent.auth.login');
     }
     
     public function handleLogin(Request $request)
     {
         // Validation des champs du formulaire
         $request->validate([
-            'email' => 'required|exists:cgrae_agents,email',
+            'email' => 'required|exists:ministere_agents,email',
             'password' => 'required|min:8',
         ], [
             'email.required' => 'Le mail est obligatoire.',
@@ -220,7 +217,7 @@ class CgraeAgentController extends Controller
     
         try {
             // Récupérer l'agent par son email
-            $agent = CgraeAgent::where('email', $request->email)->first();
+            $agent = MinistereAgent::where('email', $request->email)->first();
     
             // Vérifier si l'agent est archivé
             if ($agent && $agent->archived_at !== null) {
@@ -228,8 +225,8 @@ class CgraeAgentController extends Controller
             }
     
             // Tenter la connexion
-            if (auth('cgraeagent')->attempt($request->only('email', 'password'))) {
-                return redirect()->route('cgraeagent.dashboard')->with('success', 'Bienvenue sur votre page.');
+            if (auth('ministereagent')->attempt($request->only('email', 'password'))) {
+                return redirect()->route('ministereagent.dashboard')->with('success', 'Bienvenue sur votre page.');
             } else {
                 return redirect()->back()->with('error', 'Votre mot de passe ou votre adresse mail est incorrect.');
             }
@@ -238,30 +235,30 @@ class CgraeAgentController extends Controller
             return redirect()->back()->with('error', 'Une erreur s\'est produite lors de la connexion.');
         }
     }
-
     public function download($id)
-    {
-        // Récupérer l'objet DecesHop
-        $decesHop = DecesHop::findOrFail($id);
-    
-        // Récupérer les informations du sous-admin connecté (celui qui télécharge le PDF)
-        $cgraeagent = Auth::guard('cgraeagent')->user();
-    
-        if (!$cgraeagent) {
-            return back()->withErrors(['error' => 'Agent non authentifié.']);
-        }
-    
-        // Récupérer les informations du docteur (sous_admin) qui a fait la déclaration
-        $sousadmin = $decesHop->sous_admin; // Utilisez la relation "sousAdmin" définie dans le modèle DecesHop
-    
-        if (!$sousadmin) {
-            return back()->withErrors(['error' => 'Docteur non trouvé.']);
-        }
-    
-        // Générer le PDF avec les données
-        $pdf = PDF::loadView('superadmin.cgrae.agent.pdf', compact('decesHop', 'sousadmin', 'cgraeagent'));
-    
-        // Retourner le PDF pour téléchargement direct
-        return $pdf->download("statistique_ministerielle_{$decesHop->id}.pdf");
+{
+    // Récupérer l'objet DecesHop
+    $decesHop = DecesHop::findOrFail($id);
+
+    // Récupérer les informations du sous-admin connecté (celui qui télécharge le PDF)
+    $ministreagent = Auth::guard('ministereagent')->user();
+
+    if (!$ministreagent) {
+        return back()->withErrors(['error' => 'Agent non authentifié.']);
     }
+
+    // Récupérer les informations du docteur (sous_admin) qui a fait la déclaration
+    $sousadmin = $decesHop->sous_admin; // Utilisez la relation "sousAdmin" définie dans le modèle DecesHop
+
+    if (!$sousadmin) {
+        return back()->withErrors(['error' => 'Docteur non trouvé.']);
+    }
+
+    // Générer le PDF avec les données
+    $pdf = PDF::loadView('superadmin.ministere.agent.pdf', compact('decesHop', 'sousadmin', 'ministreagent'));
+
+    // Retourner le PDF pour téléchargement direct
+    return $pdf->download("statistique_ministerielle_{$decesHop->id}.pdf");
 }
+}
+

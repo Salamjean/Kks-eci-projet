@@ -1,4 +1,4 @@
-<nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
+<nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row navbar-orange">
   <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
     <div class="me-3">
       <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
@@ -25,7 +25,7 @@
         @elseif (Auth::user()->commune === 'attécoubé')
         <img src="{{ asset('assets/images/profiles/attecoube.png') }}" alt="Logo Attécoubé" style="height: 100px; width: auto;" />
         @elseif (Auth::user()->commune === 'adjame')
-        <img src="{{ asset('assets/images/profiles/cocody.png') }}" alt="Logo Adjamé" style="height: 100px; width: auto;" />
+        <img src="{{ asset('assets/images/profiles/adjame.jpg') }}" alt="Logo Adjamé" style="height: 100px; width: auto;" />
         @elseif (Auth::user()->commune === 'songon')
         <img src="{{ asset('assets/images/profiles/songon.png') }}" alt="Logo Songon" style="height: 100px; width: auto;" />
         @else

@@ -1,4 +1,4 @@
-@extends('superadmin.cgrae.agent.layouts.template')
+@extends('superadmin.ministere.agent.layouts.template')
 
 @section('content')
 <style>
@@ -24,12 +24,12 @@
         <!-- En-tête -->
         <div class="text-center mb-0">
             <h2 class="font-semibold text-xl text-gray-800" style="font-weight:bold">
-                Caisse N° {{ Auth::guard('cgraeagent')->user()->id }}, Visualisé par : {{ Auth::guard('cgraeagent')->user()->name .' '.Auth::guard('cgraeagent')->user()->prenom }}
+                Caisse N° {{ Auth::guard('ministereagent')->user()->id }}, Visualisé par : {{ Auth::guard('ministereagent')->user()->name .' '.Auth::guard('ministereagent')->user()->prenom }}
             </h2>
         </div>
 
         <!-- Formulaire de recherche -->
-        <form action="{{ route('cgraeagent.dashboard') }}" class="d-flex flex-column align-items-center" method="GET">
+        <form action="{{ route('ministereagent.dashboard') }}" class="d-flex flex-column align-items-center" method="GET">
             <!-- Champ de recherche -->
             <div class="form-group col-6 mb-3">
                 <input type="text" name="search" class="form-control p-3 text-center" placeholder="Rechercher par nom, prénom ou code CMD" value="{{ $searchTerm ?? '' }}">
@@ -37,8 +37,8 @@
 
             <!-- Boutons de recherche et d'actualisation -->
             <div class="d-flex justify-content-between col-3 gap-3">
-                <button type="submit" class="btn btn-primary p-3 flex-grow-1" style="background-color: green; color: white;">Rechercher</button>
-                <a href="{{ route('cgraeagent.dashboard') }}" class="btn btn-primary p-3 flex-grow-1" style="background-color: green; color: white; text-decoration: none;">Actualiser</a>
+                <button type="submit" class="btn btn-primary p-3 flex-grow-1" style="background-color: rgba(0, 229, 255, 0.801); color: black;">Rechercher</button>
+                <a href="{{ route('ministereagent.dashboard') }}" class="btn btn-primary p-3 flex-grow-1" style="background-color: rgba(0, 229, 255, 0.801); color: black; text-decoration: none;">Actualiser</a>
             </div>
         </form>
 
@@ -74,11 +74,11 @@
                         <td>{{ $defunt->Remarques }}</td>
                         <td>Dr. {{ $defunt->sous_admin ? $defunt->sous_admin->name . ' ' . $defunt->sous_admin->prenom : 'Demandeur inconnu' }}</td>
                         <td>
-                            <a href="{{ route('cgraeagent.download', $defunt->id) }}" style="color: #009efb">
-                                <button class="eye">
-                                        <i class="fas fa-download" style="color: blue"></i><br> Télécharger
-                                </button>
-                            </a>
+                            <button class="eye">
+                                <a href="{{ route('ministereagent.download', $defunt->id) }}" style="color: #009efb">
+                                    <i class="fas fa-download" style="color: blue"></i><br> Télécharger
+                                </a>
+                            </button>
                         </td>
                     </tr>
                 @endforeach
