@@ -62,10 +62,4 @@
       </div>
     </div>
   </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{{ route('ministere.recherche') }}">
-      <i class="fab fa-fw fa-wpforms"></i>
-      <span>Historique des recherches</span>
-    </a>
-  </li>
 </ul>

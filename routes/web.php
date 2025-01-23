@@ -237,7 +237,6 @@ Route::middleware('auth:web')->group(function () {
                 Route::get('/dashboard', [MinistereController::class, 'dashboard'])->name('ministere.dashboard');
                 Route::get('/ministere/index-naissance', [MinistereController::class, 'naissancedeclaration'])->name('ministere.naissancedashboard');
                 Route::get('/ministere/index-deces', [MinistereController::class, 'decesclaration'])->name('ministere.decesdashboard');
-                Route::get('/ministere/recherche', [MinistereController::class, 'recherche'])->name('ministere.recherche');
                 Route::get('/logout', [MinistereController::class, 'logout'])->name('ministere.logout');
 
                  // creation de l'agent de la cnps
