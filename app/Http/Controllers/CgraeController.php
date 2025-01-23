@@ -7,6 +7,7 @@ use App\Models\Alert;
 use App\Models\Cgrae;
 use App\Models\CgraeAgent;
 use App\Models\DecesHop;
+use App\Models\NaissHop;
 use App\Models\ResetCodePasswordCgrae;
 use App\Notifications\SendEmailToCgraeAfterRegistrationNotification;
 use Exception;
@@ -19,30 +20,41 @@ use Illuminate\Support\Facades\Notification;
 class CgraeController extends Controller
 {
     public function dashboard(Request $request)
-    {
-        // Récupérer le terme de recherche depuis la requête
-        $searchTerm = $request->input('search');
-    
-        // Vérifier si un terme de recherche est présent
-        $hasSearchTerm = !empty($searchTerm);
-    
-        // Initialiser la variable pour stocker les résultats
-        $defunts = [];
-    
-        // Si un terme de recherche est présent, effectuer la recherche
-        if ($hasSearchTerm) {
-            $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
-                ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
-                ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
-                ->get();
-        }
-    
-        // Déterminer si des résultats ont été trouvés
-        $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
-    
-        // Retourner la vue avec les résultats de la recherche
-        return view('superadmin.cgrae.dashboard', compact('defunts', 'searchTerm', 'found', 'hasSearchTerm'));
+{
+    $admin = Auth::guard('cgrae')->user();
+    $cgraeagent = CgraeAgent::where('communeM', $admin->siege)->count();
+    $deceshops = DecesHop::count();
+
+    // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CGRAE
+    $searchHistory = session('cgrae_search_history', []);
+    $searchHistory = array_slice($searchHistory, -5);
+
+    return view('superadmin.cgrae.dashboard', compact(
+        'cgraeagent',
+        'deceshops',
+        'searchHistory'
+    ));
+}
+
+ public function recherche(Request $request){
+        $admin = Auth::guard('cgrae')->user();
+        $cgraeagent = CgraeAgent::where('communeM', $admin->siege)->count();
+        $deceshops = DecesHop::count();
+        // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CGRAE
+        $searchHistory = session('cgrae_search_history', []);
+    return view('superadmin.cgrae.recherche', compact(
+            'cgraeagent',
+            'deceshops',
+            'searchHistory'
+));
+ }
+
+    function indexdeclaration(){
+        $deceshops = DecesHop::all();
+        return view('superadmin.cgrae.cgraeindex', compact('deceshops'));
     }
+    
+    
     public function create(){
         $alerts = Alert::all();
         $admin = Auth::guard('super_admin')->user();

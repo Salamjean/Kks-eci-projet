@@ -56,7 +56,7 @@
         }
 
         .input:focus {
-            border: 1.5px solid rgba(0, 229, 255, 0.801);
+            border: 1.5px solid #2797d6;
         }
 
         .label {
@@ -74,7 +74,7 @@
             top: -5px;
             left: 5px;
             font-size: 12px;
-            color: rgba(0, 229, 255, 0.801); 
+            color: #2797d6; 
             background-color: #ffffff;
             padding-left: 5px;
             padding-right: 5px;
@@ -83,10 +83,10 @@
         .submit-btn {
             margin-top: 30px;
             height: 55px;
-            background: rgba(0, 229, 255, 0.801); 
+            background: #2797d6; 
             border: 0;
             outline: none;
-            color: black;
+            color: white;
             font-size: 18px;
             font-weight: 700;
             border-radius: 11px;

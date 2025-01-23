@@ -1,9 +1,9 @@
 <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar" >
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('ministere.dashboard') }}"  style="background-color:rgba(0, 229, 255, 0.822)">
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('ministere.dashboard') }}"  style="background-color:#0b70aa">
     <div>
       <img src="{{ asset('assets/images/profiles/E-ci-logo.png') }}" style="height:70px" class="mr-7">
     </div>
-    <div class="sidebar-brand-text mx-3" style="font-size: 30px; color:black">E-CI</div>
+    <div class="sidebar-brand-text mx-3" style="font-size: 30px; color:white">E-CI</div>
   </a>
   <hr class="sidebar-divider my-0">
 
@@ -38,21 +38,34 @@
   <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForm" aria-expanded="true"
       aria-controls="collapseForm">
-      <i class="fa fa-school"></i>
+      <i class="fa fa-church"></i>
       <span>Décès</span>
     </a>
     <div id="collapseForm" class="collapse" aria-labelledby="headingForm" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Décès</h6>
-        <a class="collapse-item" href="#">Extrait-Décès</a>
+        <a class="collapse-item" href="{{ route('ministere.decesdashboard') }}">Déclaration-Décès</a>
       </div>
     </div>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="#">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAgent" aria-expanded="true"
+      aria-controls="collapseAgent">
+      <i class="fa fa-baby"></i>
+      <span>Naissance</span>
+    </a>
+    <div id="collapseAgent" class="collapse" aria-labelledby="headingAgent" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Décès</h6>
+        <a class="collapse-item" href="{{ route('ministere.naissancedashboard') }}">Déclaration-Naissance</a>
+      </div>
+    </div>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('ministere.recherche') }}">
       <i class="fab fa-fw fa-wpforms"></i>
-      <span>Acte de mariage</span>
+      <span>Historique des recherches</span>
     </a>
   </li>
 </ul>

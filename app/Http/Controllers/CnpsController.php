@@ -23,29 +23,39 @@ class CnpsController extends Controller
 
     public function dashboard(Request $request)
 {
-    // Récupérer le terme de recherche depuis la requête
-    $searchTerm = $request->input('search');
+    $admin = Auth::guard('cnps')->user();
+    $cnpsagent = CnpsAgent::where('communeM', $admin->siege)->count();
+    $deceshops = DecesHop::count();
 
-    // Vérifier si un terme de recherche est présent
-    $hasSearchTerm = !empty($searchTerm);
+    // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CNPS
+    $searchHistory = session('cnps_search_history', []);
+    $searchHistory = array_slice($searchHistory, -5);
 
-    // Initialiser la variable pour stocker les résultats
-    $defunts = [];
-
-    // Si un terme de recherche est présent, effectuer la recherche
-    if ($hasSearchTerm) {
-        $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
-            ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
-            ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
-            ->get();
-    }
-
-    // Déterminer si des résultats ont été trouvés
-    $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
-
-    // Retourner la vue avec les résultats de la recherche
-    return view('superadmin.cnps.dashboard', compact('defunts', 'searchTerm', 'found', 'hasSearchTerm'));
+    return view('superadmin.cnps.dashboard', compact(
+        'cnpsagent',
+        'deceshops',
+        'searchHistory'
+    ));
 }
+
+public function recherche(Request $request)
+{
+    $admin = Auth::guard('cnps')->user();
+    $cnpsagent = CnpsAgent::where('communeM', $admin->siege)->count();
+    $deceshops = DecesHop::count();
+    // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CNPS
+    $searchHistory = session('cnps_search_history', []);
+
+    return view('superadmin.cnps.recherche', compact(
+        'cnpsagent',
+        'deceshops',
+        'searchHistory'
+    ));
+}
+    function indexdeclaration(){
+        $deceshops = DecesHop::all();
+        return view('superadmin.cnps.cnpsindex', compact('deceshops'));
+    }
 
     public function create(){
         $alerts = Alert::all();

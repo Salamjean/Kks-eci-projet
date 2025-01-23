@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
-    <title>Connexion d'un Admin</title>
+    <title>Connexion-ministere</title>
     <style>
         body {
             background-image: url({{ asset('assets/images/profiles/Bguser.jpg') }});
@@ -56,7 +56,7 @@
         }
 
         .input:focus {
-            border: 1.5px solid cyan; 
+            border: 1.5px solid #2797d6; 
         }
 
         .label {
@@ -74,7 +74,7 @@
             top: -5px;
             left: 5px;
             font-size: 12px;
-            color: green; 
+            color: #2797d6; 
             background-color: #ffffff;
             padding-left: 5px;
             padding-right: 5px;
@@ -83,10 +83,10 @@
         .submit-btn {
             margin-top: 30px;
             height: 55px;
-            background: cyan; 
+            background: #2797d6; 
             border: 0;
             outline: none;
-            color: black;
+            color: white;
             font-size: 18px;
             font-weight: 700;
             border-radius: 11px;

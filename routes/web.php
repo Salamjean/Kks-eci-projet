@@ -175,6 +175,8 @@ Route::middleware('auth:web')->group(function () {
     Route::middleware('auth:cgrae')->group(function () {
         // Dashboard
         Route::get('/dashboard', [CgraeController::class, 'dashboard'])->name('cgraes.dashboard');
+        Route::get('/cgrae/index-declaration', [CgraeController::class, 'indexdeclaration'])->name('cgraes.indexdashboard');
+        Route::get('/cgrae/recherche', [CgraeController::class, 'recherche'])->name('cgrae.recherche');
         Route::get('/logout', [CgraeController::class, 'logout'])->name('cgrae.logout');
          // creation de l'agent de la cnps
         Route::prefix('cgrae/agents')->group(function () {
@@ -202,6 +204,8 @@ Route::middleware('auth:web')->group(function () {
     Route::middleware('auth:cnps')->group(function () {
         // Dashboard
         Route::get('/dashboard', [CnpsController::class, 'dashboard'])->name('cnps.dashboard');
+        Route::get('/cnps/index-declaration', [CnpsController::class, 'indexdeclaration'])->name('cnps.indexdashboard');
+        Route::get('/cnps/recherche', [CnpsController::class, 'recherche'])->name('cnps.recherche');
         Route::get('/logout', [CnpsController::class, 'logout'])->name('cnps.logout');
 
          // creation de l'agent de la cnps
@@ -231,6 +235,9 @@ Route::middleware('auth:web')->group(function () {
             Route::middleware('auth:ministere')->group(function () {
                 // Dashboard
                 Route::get('/dashboard', [MinistereController::class, 'dashboard'])->name('ministere.dashboard');
+                Route::get('/ministere/index-naissance', [MinistereController::class, 'naissancedeclaration'])->name('ministere.naissancedashboard');
+                Route::get('/ministere/index-deces', [MinistereController::class, 'decesclaration'])->name('ministere.decesdashboard');
+                Route::get('/ministere/recherche', [MinistereController::class, 'recherche'])->name('ministere.recherche');
                 Route::get('/logout', [MinistereController::class, 'logout'])->name('ministere.logout');
 
                  // creation de l'agent de la cnps
@@ -246,7 +253,8 @@ Route::middleware('auth:web')->group(function () {
                     });
                 });
         });
-    Route::get('ministere/download/{id}', [MinistereAgentController::class, 'download'])->name('ministereagent.download');
+    Route::get('ministere/deces/download/{id}', [MinistereAgentController::class, 'decesdownload'])->name('ministereagent.decesdownload');
+    Route::get('ministere/naiss/download/{id}', [MinistereAgentController::class, 'naissdownload'])->name('ministereagent.naissdownload');
     Route::get('cnps/download/{id}', [CnpsAgentController::class, 'download'])->name('cnpsagent.download');
     Route::get('cgrae/download/{id}', [CgraeAgentController::class, 'download'])->name('cgraeagent.download');
 

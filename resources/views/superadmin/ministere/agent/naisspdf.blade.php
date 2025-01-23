@@ -17,10 +17,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url(assets/images/profiles/deces11.jpg);
+            background-image: url(assets/images/profiles/femme.png);
             background-size: cover;
             background-position: center;
-            opacity: 0.1;
+            opacity: 0.3;
             z-index: -1;
         }
         .logo1 {
@@ -47,7 +47,6 @@
             font-size: 25px;
             color: #006;
             font-weight: bold;
-            text-transform: uppercase;
         }
         .signature {
             position: absolute;
@@ -78,32 +77,31 @@
             </div>
         </div>
         <br><br><br><br><br><br><br><br>
-        <h1 class="tete">CERTIFICAT MÉDICAL DE décès</h1>
+        <h1 class="tete">CERTIFICAT MÉDICAL DE NAISSANCE</h1>
     </header>
     <main>
         <div class="InfoNor">
-            <p><strong>Formation Sanitaire :</strong> {{ $sousadmin->nomHop }}</p>
-            <p><strong>Ville/Commune de Naissance :</strong> {{ $decesHop->commune }}</p>
-            <p><strong>Date et Heure de Déclaration :</strong> {{ $decesHop->created_at }}</p>
-            <p><strong>Numéro de Déclaration :</strong> {{ $decesHop->codeCMD }}</p>
+            <p><strong>Sanitaire :</strong> {{ $sousadmin->nomHop }}</p>
+            <p><strong>Ville/Commune de Naissance :</strong> {{ $naissance->commune }}</p>
+            <p><strong>Date et Heure de Déclaration :</strong> {{ $naissance->created_at }}</p>
+            <p><strong>Numéro de Déclaration :</strong> {{ $naissance->codeCMN }}</p>
         </div>
 
         <div class="InfoImp">
-            <p>Moi Dr {{ $sousadmin->name }} {{ $sousadmin->prenom }},</p>
-            <p>Je certifie que Mme/M. : {{ $decesHop->NomM }} {{ $decesHop->PrM }},</p>
-            <p>est bien décédé dans notre établissement sanitaire le : {{ $decesHop->DateDeces }}.</p>
-            <p>Suite à une {{ $decesHop->Remarques }}</p>
-            
+            <p>Je soussigné(e) : Dr {{ $sousadmin->name }} {{ $sousadmin->prenom }},</p>
+            <p>Certifie que Mme : {{ $naissance->NomM }} {{ $naissance->PrM }},</p>
+            <p>a bien accouché dans notre établissement sanitaire le : {{ $naissance->DateNaissance }}.</p>
+            <p>De 1 enfant vivant, de sexe {{ $naissance->sexe }}</p>
         </div>
-
+       
         <div class="signature">
-            <p>Fait à {{ $decesHop->commune }}, Le {{ $decesHop->created_at }}</p>
+            <p>Fait à Abobo. Le {{ $naissance->created_at }}</p>
             <p>Le Médecin :</p>
             <p>{{ $sousadmin->name }} {{ $sousadmin->prenom }}</p>
         </div>
-        <!-- Afficher le QR code -->
-        <div style="margin: 70px 0 0 10px">
-            <img src="{{ public_path('storage/deces_hops/qrcode_' . $decesHop->id . '.png') }}" alt="QR Code" style="width: 150px; height: auto;">
+         <!-- Afficher le QR code -->
+         <div style=" margin:70px 0 0 10px">
+            <img src="{{ public_path('storage/naiss_hops/qrcode_' . $naissance->id . '.png') }}" alt="QR Code" style="width: 150px; height: auto;">
         </div>
     </main>
     <hr>

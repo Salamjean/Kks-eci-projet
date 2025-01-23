@@ -44,15 +44,16 @@
     <div id="collapseForm" class="collapse" aria-labelledby="headingForm" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Décès</h6>
-        <a class="collapse-item" href="#">Extrait-Décès</a>
+        <a class="collapse-item" href="{{ route('cgraes.indexdashboard') }}">Déclaration-Décès</a>
       </div>
     </div>
   </li>
 
   <li class="nav-item">
-    <a class="nav-link" href="#">
+    <a class="nav-link" href="{{ route('cgrae.recherche') }}">
       <i class="fab fa-fw fa-wpforms"></i>
-      <span>Acte de mariage</span>
+      <span>Historique des recherches</span>
     </a>
   </li>
+
 </ul>

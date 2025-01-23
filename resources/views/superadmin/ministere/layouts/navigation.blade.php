@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top" style="background-color: rgba(0, 229, 255, 0.801)">
+<nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top" style="background-color: #2797d6">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Bouton Sidebar -->
 
@@ -18,7 +18,7 @@
         <div class="profile-picture">
           <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/sante.jpg') }}" alt="Profile Image">
       </div>
-        <span class="ml-2 d-none d-lg-inline text-black small" style="color: black !important;"><strong>Siège : {{ $user->siege }}</strong></span>
+        <span class="ml-2 d-none d-lg-inline text-black small" style="color: white !important;"><strong>Siège : {{ $user->siege }}</strong></span>
       </a>
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
         <a class="dropdown-item" href="#">

@@ -178,25 +178,69 @@ class CgraeAgentController extends Controller
         }
 
 
-        public function dashboard(Request $request){
-            // Récupérer le terme de recherche depuis la requête
-                $searchTerm = $request->input('search');
-            // Vérifier si un terme de recherche est présent
-                $hasSearchTerm = !empty($searchTerm);
-            // Initialiser la variable pour stocker les résultats
-                $defunts = [];
-            // Si un terme de recherche est présent, effectuer la recherche
-                if ($hasSearchTerm) {
-                    $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
-                        ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
-                        ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
-                        ->get();
-                }
-                // Déterminer si des résultats ont été trouvés
-                $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
-                $alerts = Alert::all();
-        return view('superadmin.cgrae.agent.dashboard', compact('alerts','defunts', 'searchTerm', 'found', 'hasSearchTerm'));
+        public function dashboard(Request $request)
+{
+    // Récupérer le terme de recherche depuis la requête
+    $searchTerm = $request->input('search');
+
+    // Vérifier si un terme de recherche est présent
+    $hasSearchTerm = !empty($searchTerm);
+
+    // Initialiser la variable pour stocker les résultats
+    $defunts = [];
+
+    // Si un terme de recherche est présent, effectuer la recherche
+    if ($hasSearchTerm) {
+        $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
+            ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
+            ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
+            ->get();
     }
+
+    // Déterminer si des résultats ont été trouvés
+    $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
+
+    // Récupérer le nom et prénom de l'agent connecté
+    $agentName = auth('cgraeagent')->user()->name; // Nom de l'agent
+    $agentPrenom = auth('cgraeagent')->user()->prenom; // Prénom de l'agent
+
+    // Récupérer le nom et prénom du premier défunt trouvé (si des résultats existent)
+    $defuntNom = $found ? $defunts->first()->NomM : null;
+    $defuntPrenom = $found ? $defunts->first()->PrM : null;
+
+    // Stocker les informations de recherche dans la session avec une clé spécifique à la CGRAE
+    if ($hasSearchTerm) {
+        // Récupérer l'historique des recherches depuis la session
+        $searchHistory = session('cgrae_search_history', []);
+
+        // Ajouter la nouvelle recherche à l'historique
+        $searchHistory[] = [
+            'agent_name' => $agentName,
+            'agent_prenom' => $agentPrenom,
+            'defunt_nom' => $defuntNom,
+            'defunt_prenom' => $defuntPrenom,
+            'codeCMD' => $found ? $defunts->first()->codeCMD : null,
+        ];
+        // Mettre à jour la session avec le nouvel historique
+        session(['cgrae_search_history' => $searchHistory]);
+    }
+
+    // Récupérer les alertes
+    $alerts = Alert::all();
+
+    // Passer les données à la vue
+    return view('superadmin.cgrae.agent.dashboard', compact(
+        'alerts',
+        'defunts',
+        'searchTerm',
+        'found',
+        'hasSearchTerm',
+        'agentName',
+        'agentPrenom',
+        'defuntNom',
+        'defuntPrenom'
+    ));
+}
     public function logout(){
         Auth::guard('cgraeagent')->logout();
         return redirect()->route('cgraeagent.login');

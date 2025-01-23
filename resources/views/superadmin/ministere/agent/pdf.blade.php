@@ -77,8 +77,8 @@
                 <img src="assets/images/profiles/gouv_ci.png" class="logo1" alt="Logo">
             </div>
         </div>
-        <br><br><br><br><br><br>
-        <h1 class="tete">Ministere de la sante</h1>
+        <br><br><br><br><br><br><br><br>
+        <h1 class="tete">CERTIFICAT MÉDICAL DE décès</h1>
     </header>
     <main>
         <div class="InfoNor">
@@ -87,32 +87,22 @@
             <p><strong>Date et Heure de Déclaration :</strong> {{ $decesHop->created_at }}</p>
             <p><strong>Numéro de Déclaration :</strong> {{ $decesHop->codeCMD }}</p>
         </div>
+
         <div class="InfoImp">
             <p>Moi Dr {{ $sousadmin->name }} {{ $sousadmin->prenom }},</p>
             <p>Je certifie que Mme/M. : {{ $decesHop->NomM }} {{ $decesHop->PrM }},</p>
             <p>est bien décédé dans notre établissement sanitaire le : {{ $decesHop->DateDeces }}.</p>
             <p>Suite à une {{ $decesHop->Remarques }}</p>
+            
         </div>
-        <div class="agent" >
-            <div class="column">
-                <p><strong>Vous avez été reçu par :</strong> {{ $ministreagent->name .' '. $ministreagent->prenom }}</p>
-                <p><small>Qui réside à :</small> {{ $ministreagent->commune }}</p>
-            </div>
-            <div class="column">
-                <p><small>Joignable au :</small> {{ $ministreagent->contact }}</p>
-                <p><strong>Travaillant au  :</strong> MINISTERE DE LA SANTE</p>
-            </div>
-            <div class="full-width">
-                <p><strong>Siège de :</strong> {{ $ministreagent->communeM }}</p>
-            </div>
-        </div>
+
         <div class="signature">
             <p>Fait à {{ $decesHop->commune }}, Le {{ $decesHop->created_at }}</p>
             <p>Le Médecin :</p>
             <p>{{ $sousadmin->name }} {{ $sousadmin->prenom }}</p>
         </div>
         <!-- Afficher le QR code -->
-        <div style="margin: 30px 0 0 10px">
+        <div style="margin: 70px 0 0 10px">
             <img src="{{ public_path('storage/deces_hops/qrcode_' . $decesHop->id . '.png') }}" alt="QR Code" style="width: 150px; height: auto;">
         </div>
     </main>

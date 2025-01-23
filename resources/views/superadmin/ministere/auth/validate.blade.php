@@ -54,7 +54,7 @@
         }
 
         .input:focus {
-            border: 1.5px solid cyan;
+            border: 1.5px solid #2797d6;
         }
 
         .label {
@@ -81,7 +81,7 @@
         .submit-btn {
             margin-top: 30px;
             height: 55px;
-            background: cyan;
+            background: #2797d6;
             border: 0;
             outline: none;
             color: black;

@@ -21,45 +21,7 @@
     }
 </style>
 <div class="dashboard-background">
-    <h1 class="text-center text-black mb-4">Bienvenue sur le tableau de bord</h1>
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-10">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row mt-4">
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title text-center" style="font-size: 20px;">Nombre total d'agent</h3>
-                                        <div class="text-center">
-                                            <i class="fa fa-user d-block" style="font-size: 30px; color:orange"></i>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h1 class="display-4  text-center">{{ $cnpsagent }}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title text-center" style="font-size: 20px;">Nombre total de déclaration</h3>
-                                        <div class="text-center">
-                                            <i class="fa fa-church d-block" style="font-size: 30px; color:orange"></i>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <h1 class="display-4 text-center">{{ $deceshops }}</h1>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div><br><br>
+    <h1 class="text-center text-black mb-4">Historiques de recherches effectués par les agents</h1>
     <div class="container col-12">
         <div class="row justify-content-center">
             <div class="col-md-12">
@@ -67,14 +29,14 @@
                     <div class="card-body">
                           <!-- Afficher les informations de la dernière recherche dans un tableau avec ombre -->
                           @if(!empty($searchHistory))
-                          <h3 class="text-center text-black mb-3">Les recherches récentes</h3>
+                          <h3 class="text-center text-black mb-3">Historique des recherches</h3>
                           <div class="shadow-table">
                               <table class="table table-bordered mb-0">
                                   <thead style="background-color: orange !important; color: white;">
                                       <tr>
                                           <th class="text-center">Agent</th>
-                                          <th class="text-center">Défunt recherché</th>
-                                          <th class="text-center">N° CMD du défunt</th>
+                                          <th class="text-center">Défunt récherché</th>
+                                          <th class="text-center">Numéro du CMD</th>
                                       </tr>
                                   </thead>
                                   <tbody>

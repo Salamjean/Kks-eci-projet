@@ -122,14 +122,14 @@ button {
       <div class="col-lg-12">
         <div class="card mb-4">
           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold " style="color:rgba(0, 229, 255, 0.801)">Informations des agents</h6>
+            <h6 class="m-0 font-weight-bold " style="color:#2797d6">Informations des agents</h6>
           </div>
           <div class="table-responsive p-3">
             <!-- Champ de recherche -->
             <input type="text" id="searchInput" class="form-control mb-3" placeholder="Rechercher...">
         
             <table class="table align-items-center table-flush" id="dataTable">
-                <thead class="bg-navbar text-black" style="background-color: rgba(0, 229, 255, 0.801)">
+                <thead class="bg-navbar text-white" style="background-color: #2797d6">
                     <tr style="font-size: 12px">
                         <th>Nom</th>
                         <th>Prénoms</th>

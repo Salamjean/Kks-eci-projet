@@ -164,7 +164,7 @@
             </div>
         </div>
 
-        <button class="btn btn-primary" type="submit" style="background-color: rgba(0, 229, 255, 0.801); color: black;">Créer le compte</button>
+        <button class="btn btn-primary" type="submit" style="background-color: #2797d6; color: white;">Créer le compte</button>
     </form>
   </div>
 </div>

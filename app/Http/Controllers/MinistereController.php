@@ -7,8 +7,10 @@ use App\Models\Alert;
 use App\Models\DecesHop;
 use App\Models\Ministere;
 use App\Models\MinistereAgent;
+use App\Models\NaissHop;
 use App\Models\ResetCodePasswordMinistere;
 use App\Notifications\SendEmailToMinistereAfterRegistrationNotification;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,30 +21,154 @@ use Illuminate\Support\Facades\Notification;
 class MinistereController extends Controller
 {
     public function dashboard(Request $request)
-    {
-        // Récupérer le terme de recherche depuis la requête
-        $searchTerm = $request->input('search');
-    
-        // Vérifier si un terme de recherche est présent
-        $hasSearchTerm = !empty($searchTerm);
-    
-        // Initialiser la variable pour stocker les résultats
-        $defunts = [];
-    
-        // Si un terme de recherche est présent, effectuer la recherche
-        if ($hasSearchTerm) {
+{
+    $admin = Auth::guard('ministere')->user();
+    $selectedMonth = $request->input('month', Carbon::now()->month);
+    $selectedYear = $request->input('year', Carbon::now()->year);
+    $deceshops = DecesHop::count();
+    $naisshops = NaissHop::count();
+
+    // Récupérer les données pour les graphiques (Naissances)
+    $naissData = NaissHop::whereYear('created_at', $selectedYear)
+        ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+        ->groupBy('month')
+        ->orderBy('month')
+        ->pluck('count', 'month')->toArray();
+
+    // Remplir les données manquantes pour les naissances
+    $naissData = array_replace(array_fill(1, 12, 0), $naissData);
+
+    // Récupérer les données pour les graphiques (Décès)
+    $decesData = DecesHop::whereYear('created_at', $selectedYear)
+        ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+        ->groupBy('month')
+        ->orderBy('month')
+        ->pluck('count', 'month')->toArray();
+
+    // Remplir les données manquantes pour les décès
+    $decesData = array_replace(array_fill(1, 12, 0), $decesData);
+
+    // Récupérer l'historique des recherches depuis la session avec une clé spécifique au ministère
+    $searchHistory = session('ministere_search_history', []);
+
+    // Compter les agents du ministère
+    $ministereagent = MinistereAgent::where('communeM', $admin->siege)->count();
+
+    return view('superadmin.ministere.dashboard', compact(
+        'ministereagent',
+        'naissData',
+        'decesData',
+        'deceshops',
+        'naisshops',
+        'searchHistory'
+    ));
+}
+
+public function recherche(Request $request){
+    // Récupérer toutes les déclarations
+    $naissancesCount = NaissHop::count();
+    $decesCount = DecesHop::count();
+    $total = $naissancesCount + $decesCount;
+
+    // Récupérer le terme de recherche et le type de recherche depuis la requête
+    $searchTerm = $request->input('search');
+    $searchType = $request->input('search_type'); // 'naissance' ou 'deces'
+
+    // Vérifier si un terme de recherche est présent
+    $hasSearchTerm = !empty($searchTerm);
+
+    // Initialiser les variables pour stocker les résultats
+    $defunts = [];
+    $naissances = [];
+
+    // Variables pour déterminer si des résultats ont été trouvés
+    $foundDefunts = false;
+    $foundNaissances = false;
+
+    // Si un terme de recherche est présent, effectuer la recherche en fonction du type choisi
+    if ($hasSearchTerm) {
+        if ($searchType === 'deces') {
+            // Recherche sur les décès
             $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
                 ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
                 ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
                 ->get();
+
+            $foundDefunts = $defunts->count() > 0;
+        } elseif ($searchType === 'naissance') {
+            // Recherche sur les naissances
+            $naissances = NaissHop::where('NomM', 'like', '%' . $searchTerm . '%')
+                ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
+                ->orWhere('codeCMN', 'like', '%' . $searchTerm . '%')
+                ->get();
+
+            $foundNaissances = $naissances->count() > 0;
         }
-    
-        // Déterminer si des résultats ont été trouvés
-        $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
-    
-        // Retourner la vue avec les résultats de la recherche
-        return view('superadmin.ministere.dashboard', compact('defunts', 'searchTerm', 'found', 'hasSearchTerm'));
     }
+
+    // Récupérer le nom et prénom de l'agent connecté
+    $agentName = auth('ministereagent')->user()->name; // Nom de l'agent
+    $agentPrenom = auth('ministereagent')->user()->prenom; // Prénom de l'agent
+
+    // Récupérer les informations du défunt ou de la naissance
+    $defuntNom = $foundDefunts ? $defunts->first()->NomM : null;
+    $defuntPrenom = $foundDefunts ? $defunts->first()->PrM : null;
+    $naissanceNom = $foundNaissances ? $naissances->first()->NomM : null;
+    $naissancePrenom = $foundNaissances ? $naissances->first()->PrM : null;
+
+    // Stocker les informations de recherche dans la session avec une clé spécifique au ministère
+    if ($hasSearchTerm) {
+        // Récupérer l'historique des recherches depuis la session
+        $searchHistory = session('ministere_search_history', []);
+
+        // Ajouter la nouvelle recherche à l'historique
+        $searchHistory[] = [
+            'agent_name' => $agentName,
+            'agent_prenom' => $agentPrenom,
+            'defunt_nom' => $defuntNom,
+            'defunt_prenom' => $defuntPrenom,
+            'naissance_nom' => $naissanceNom,
+            'naissance_prenom' => $naissancePrenom,
+            'codeCMD' => $foundDefunts ? $defunts->first()->codeCMD : null,
+            'codeCMN' => $foundNaissances ? $naissances->first()->codeCMN : null,
+            'search_type' => $searchType,
+        ];
+
+        // Garder seulement les 5 dernières recherches
+        $searchHistory = array_slice($searchHistory, -5);
+
+        // Mettre à jour la session avec le nouvel historique
+        session(['ministere_search_history' => $searchHistory]);
+    }
+
+    // Récupérer les alertes
+    $alerts = Alert::all();
+
+    // Retourner la vue avec les données
+    return view('superadmin.ministere.recherche', compact(
+        'alerts',
+        'defunts',
+        'naissances',
+        'searchTerm',
+        'searchType',
+        'foundDefunts',
+        'foundNaissances',
+        'hasSearchTerm',
+        'total',
+        'decesCount',
+        'naissancesCount',
+        'agentName',
+        'agentPrenom'
+    ));
+}
+function decesclaration(){
+    $deceshops = DecesHop::all();
+    return view('superadmin.ministere.decesindex', compact('deceshops'));
+}
+function naissancedeclaration(){
+    $naisshops = NaissHop::all();
+    return view('superadmin.ministere.naissindex', compact('naisshops'));
+}
     public function create(){
         $alerts = Alert::all();
         $admin = Auth::guard('super_admin')->user();
