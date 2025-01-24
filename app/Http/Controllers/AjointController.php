@@ -125,7 +125,7 @@ class AjointController extends Controller
      }
      public function ajointvue(Request $request) {
             // Récupérer l'admin connecté
-        $admin = Auth::guard('ajoint')->user();
+        $admin = Auth::user();
 
         // Récupérer le mois et l'année sélectionnés pour les naissances, décès et mariages
         $selectedMonth = $request->input('month', date('m'));
