@@ -531,7 +531,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/directeur-stats', [StatController::class, 'directeurindex'])->name('stats.directeurindex');
         Route::get('/super/download', [StatController::class, 'superdownload'])->name('stats.superdownload');
         Route::get('/directeur/download', [StatController::class, 'directeurdownload'])->name('stats.directeurdownload');
-        Route::get('/deces/delete/{deces}', [DecesController::class, 'delete'])->name('deces.delete');
+        Route::get('/deces/delete/{deces}', [DecesController::class, 'delete'])->name('deces.statdelete');
     });
     
 
