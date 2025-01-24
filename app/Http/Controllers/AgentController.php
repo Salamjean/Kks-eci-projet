@@ -261,7 +261,7 @@ public function superindex() {
 
 
 
-public function agentvue(Agent $agent, Request $request) {
+public function agentvue(Request $request) {
     // Récupérer l'admin connecté
     $admin = Auth::guard('agent')->user();
 
