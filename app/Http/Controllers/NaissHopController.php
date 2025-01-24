@@ -306,8 +306,7 @@ class NaissHopController extends Controller
     $qrCode = QrCode::create($qrCodeData)
         ->setSize(300)
         ->setMargin(10);
-    
-    // Écrire le QR code dans un fichier
+        
     // Générer le QR code
     $writer = new PngWriter();
     $result = $writer->write($qrCode);
@@ -317,7 +316,7 @@ class NaissHopController extends Controller
     $qrCodePath = "naiss_hops/{$qrCodeFileName}"; // Chemin relatif dans le dossier 'naiss_hops'
     
     // Utiliser le système de stockage de Laravel pour enregistrer le fichier
-Storage::disk('public')->put($qrCodePath, $result->getString());
+    Storage::disk('public')->put($qrCodePath, $result->getString());
     
     // Récupérer les informations du sous-admin
     $sousadmin = Auth::guard('sous_admin')->user();

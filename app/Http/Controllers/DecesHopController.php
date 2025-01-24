@@ -14,6 +14,7 @@ use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\QrCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class DecesHopController extends Controller
 {
@@ -158,12 +159,17 @@ class DecesHopController extends Controller
         ->setMargin(10);
 
     // Écrire le QR code dans un fichier
+        // Générer le QR code
     $writer = new PngWriter();
     $result = $writer->write($qrCode);
+    
+    // Sauvegarder l'image du QR code
+    $qrCodeFileName = "qrcode_{$decesHop->id}.png"; // Nom du fichier
+    $qrCodePath = "naiss_hops/{$qrCodeFileName}"; // Chemin relatif dans le dossier 'naiss_hops'
+    
+    // Utiliser le système de stockage de Laravel pour enregistrer le fichier
+    Storage::disk('public')->put($qrCodePath, $result->getString());
 
-    // Sauvegarder l'image
-    $qrCodePath = storage_path("app/public/deces_hops/qrcode_{$decesHop->id}.png");
-    $result->saveToFile($qrCodePath);
 
     // Récupérer les informations du sous-admin
     $sousadmin = Auth::guard('sous_admin')->user();
