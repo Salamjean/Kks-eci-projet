@@ -10,7 +10,7 @@
 
         <div class="form-group">
             <label for="nomDefunt">Nom du demandeur</label>
-            <input type="text" class="form-control" id="nomDefunt" value="{{ $deces->nomDefunt }}" disabled>
+            <input type="text" class="form-control" id="nomDefunt" value="{{ $deces->user ? $deces->user->name .' '.$deces->user->prenom : 'Demandeur inconnu' }}" disabled>
         </div>
 
         <div class="form-group">

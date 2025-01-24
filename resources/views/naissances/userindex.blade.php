@@ -35,6 +35,12 @@
     .btn-danger:hover {
         background-color: #c82333;
     }
+
+    .disabled-btn {
+        opacity: 0.6;
+        cursor: not-allowed;
+        pointer-events: all; /* Permet au bouton de recevoir des événements de clic */
+    }
 </style>
 
 <div class="row flex-grow form-background">
@@ -112,14 +118,18 @@
                                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <span class="badge {{ $naissance->etat == 'en attente' ? 'badge-opacity-warning' : ($naissance->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}">
+                                            <span class="badge {{ $naissance->etat == 'en attente' ? 'badge-opacity-warning' : ($naissance->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461" >
                                                 {{ $naissance->etat }}
                                             </span>
                                         </td>
                                         <td>{{ $naissance->agent ? $naissance->agent->name . ' ' . $naissance->agent->prenom : 'Non attribué' }}</td>
                                         <td>
-                                            <button style="margin-left:30px" onclick="confirmDelete('{{ route('naissance.delete', $naissance->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
-                                       </td>
+                                            @if ($naissance->etat !== 'réçu' && $naissance->etat !== 'terminé')
+                                                <button style="margin-left:30px" onclick="confirmDelete('{{ route('naissance.delete', $naissance->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                            @else
+                                                <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
+                                            @endif
+                                        </td>
                                     </tr>
                                     @empty
                                     <tr>
@@ -138,7 +148,7 @@
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center" style="font-size: 12px">
                                         <th>Demandeur</th>
-                                        <th>Type de demande</th>
+                                        <th>Type de copie</th>
                                         <th>Nom sur l'extrait</th>
                                         <th>Numéro de régistre</th>
                                         <th>Date de régistre</th>
@@ -154,7 +164,7 @@
                                     <tr class="text-center">
                                         <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
                                         <td>{{ $naissanceD->type }}</td>
-                                        <td>{{ $naissanceD->name.' '.$naissanceD->prenom }}</td>
+                                        <td>{{ $naissanceD->name.' '.$naissanceD->prenom.' '.'('.($naissanceD->pour).')'}}</td>
                                         <td>{{ $naissanceD->number }}</td>
                                         <td>{{ $naissanceD->DateR }}</td>
                                         <td>{{ $naissanceD->CMU }}</td>
@@ -167,14 +177,18 @@
                                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                         </td>
                                         <td>
-                                            <span class="badge {{ $naissanceD->etat == 'en attente' ? 'badge-opacity-warning' : ($naissanceD->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}">
+                                            <span class="badge {{ $naissanceD->etat == 'en attente' ? 'badge-opacity-warning' : ($naissanceD->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461" >
                                                 {{ $naissanceD->etat }}
                                             </span>
                                         </td>
                                         <td>{{ $naissanceD->agent ? $naissanceD->agent->name . ' ' . $naissanceD->agent->prenom : 'Non attribué' }}</td>
                                         <td>
-                                            <button style="margin-left:30px" onclick="confirmDelete('{{ route('naissanced.delete', $naissanceD->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
-                                       </td>
+                                            @if ($naissanceD->etat !== 'réçu' && $naissanceD->etat !== 'terminé')
+                                                <button style="margin-left:30px" onclick="confirmDelete('{{ route('naissanced.delete', $naissanceD->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                            @else
+                                                <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
+                                            @endif
+                                        </td>
                                     </tr>
                                     @empty
                                     <tr>
@@ -227,6 +241,16 @@
             if (result.isConfirmed) {
                 window.location.href = url; // Rediriger vers l'URL de suppression
             }
+        });
+    }
+
+    function showDisabledMessage() {
+        Swal.fire({
+            title: 'Action impossible',
+            text: 'Vous ne pouvez pas supprimer cette demande car elle est en cours de traitement ou déjà terminée.',
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK'
         });
     }
 

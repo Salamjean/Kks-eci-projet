@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateAgentRequest;
 use App\Models\Agent;
 use App\Models\Alert;
 use App\Models\Deces;
+use App\Models\Decesdeja;
 use App\Models\Doctor;
 use App\Models\Mariage;
 use App\Models\Naissance;
@@ -177,6 +178,33 @@ class VendorController extends Controller
     // Mise à jour de l'état
     $deces->etat = $request->etat;
     $deces->save();
+    
+    return redirect()->route('deces.agentindex')->with('success', 'Etat de la demande a été mis à jour.');
+}
+
+//Deces edit 
+public function edit4($id)
+{
+    $alerts = Alert::all();
+    $decesdeja = Decesdeja::findOrFail($id);
+
+    // Les états possibles à afficher dans le formulaire
+    $etats = ['en attente', 'réçu', 'terminé'];
+
+    return view('deces.editdeja', compact('decesdeja', 'etats','alerts'));
+}
+    public function updateEtat4(Request $request, $id)
+{
+    $decesdeja = Decesdeja::findOrFail($id);
+    
+    // Validation de l'état (si nécessaire)
+    $request->validate([
+        'etat' => 'required|string|in:en attente,réçu,terminé', // Ajouter les états possibles
+    ]);
+
+    // Mise à jour de l'état
+    $decesdeja->etat = $request->etat;
+    $decesdeja->save();
     
     return redirect()->route('deces.agentindex')->with('success', 'Etat de la demande a été mis à jour.');
 }

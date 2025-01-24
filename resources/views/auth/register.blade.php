@@ -166,10 +166,6 @@
     <div class="form-container sign-in-container">
       <form method="POST" action="{{ route('login') }}">
         @csrf
-
-        @if (Session::get('success'))
-        <div style="text-align:center; color:green ">
-            {{ Session::get('success') }}
         </div>
         @endif
         @error('CMU')
@@ -188,9 +184,9 @@
         <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
         @enderror
         <h1>Se connecter</h1>
-        <input type="email" name="email" placeholder="Email" required />
+        <input type="email" name="email" placeholder="Email"  />
        
-        <input type="password" name="password" placeholder="Mot de passe" required />
+        <input type="password" name="password" placeholder="Mot de passe"  />
        
         <a href="{{ route('password.request') }}">Mot de passe oublié?</a>
         <button type="submit">Connexion</button>

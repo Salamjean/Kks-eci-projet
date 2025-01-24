@@ -322,6 +322,9 @@ Route::middleware('auth:web')->group(function () {
  Route::get('/deces/{id}/edit', [VendorController::class, 'edit2'])->name('deces.edit');
  Route::post('/deces/{id}/update-etat', [VendorController::class, 'updateEtat2'])->name('deces.updateEtat');
 
+ Route::get('/decesdeja/{id}/edit', [VendorController::class, 'edit4'])->name('decesdeja.edit');
+Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat4'])->name('decesdeja.updateEtat');
+
  //edit de l'etat de mariage 
  Route::get('/mariage/{id}/edit', [VendorController::class, 'edit3'])->name('mariage.edit');
  Route::post('/mariage/{id}/update-etat', [VendorController::class, 'updateEtat3'])->name('mariage.updateEtat');

@@ -30,7 +30,7 @@
             text-align: center;
             color: #1a5c58;
             margin-bottom: 1rem;
-            font-size: 40px;
+            font-size: 40px; /* Taille par défaut pour les grands écrans */
         }
 
         label {
@@ -78,6 +78,30 @@
 
         .hidden {
             display: none;
+        }
+
+        /* Styles pour les écrans de tablettes (768px à 1024px) */
+        @media (max-width: 1024px) {
+            h2 {
+                margin: 50px 0 0 0;
+                font-size: 32px; /* Taille réduite pour les tablettes */
+            }
+        }
+
+        /* Styles pour les écrans de mobiles (moins de 768px) */
+        @media (max-width: 767.98px) {
+            h2 {
+                margin: 70px 0 0 0;
+                font-size: 24px; /* Taille réduite pour les mobiles */
+            }
+        }
+
+        /* Styles pour les écrans d'ordinateurs plus petits (1024px à 1280px) */
+        @media (min-width: 1024px) and (max-width: 1280px) {
+            h2 {
+                margin: 50px 0 0 0;
+                font-size: 36px; /* Taille légèrement réduite pour les petits écrans d'ordinateurs */
+            }
         }
     </style>
 
@@ -175,8 +199,8 @@
                     <label for="CMU">Numéro CMU</label>
                     <input type="text" id="CMU" value="{{ Auth::user()->CMU }}" name="CMU" placeholder="Entrez votre numéro CMU" class="form-control" required>
                 </div>
-           
-        </div>
+            </div>
+
             <button type="submit">Soumettre</button>
         </form>
     </div>

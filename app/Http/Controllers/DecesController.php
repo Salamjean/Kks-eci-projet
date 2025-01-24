@@ -80,38 +80,49 @@ class DecesController extends Controller
         return view('deces.userindex', compact('deces', 'decesdeja', 'alerts'));
     }
     public function agentindex(Request $request)
-    {
-        // Récupérer l'admin connecté
-        $admin = Auth::guard('agent')->user();
+{
+    // Récupérer l'admin connecté
+    $admin = Auth::guard('agent')->user();
 
-        // Récupérer les alertes
-        $alerts = Alert::where('is_read', false)
-            ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])
-            ->latest()
-            ->get();
+    // Récupérer les alertes
+    $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])
+        ->latest()
+        ->get();
 
-        // Construire la requête pour Deces en filtrant par commune
-        $query = Deces::where('commune', $admin->communeM)
-            ->where('agent_id', $admin->id); // Filtrage par agent
-        $query = Decesdeja::where('commune', $admin->communeM)
-            ->where('agent_id', $admin->id); // Filtrage par agent
+    // Requête pour Deces
+    $decesQuery = Deces::where('commune', $admin->communeM)
+        ->where('agent_id', $admin->id); // Filtrage par agent
 
-        // Vérifier le type de recherche et appliquer le filtre
-        if ($request->filled('searchType') && $request->filled('searchInput')) {
-            if ($request->searchType === 'nomDefunt') {
-                $query->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
-            } elseif ($request->searchType === 'nomHopital') {
-                $query->where('nomHopital', 'like', '%' . $request->searchInput . '%');
-            }
+    // Requête pour Decesdeja
+    $decesdejaQuery = Decesdeja::where('commune', $admin->communeM)
+        ->where('agent_id', $admin->id); // Filtrage par agent
+
+    // Appliquer les filtres de recherche pour Deces
+    if ($request->filled('searchType') && $request->filled('searchInput')) {
+        if ($request->searchType === 'nomDefunt') {
+            $decesQuery->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
+        } elseif ($request->searchType === 'nomHopital') {
+            $decesQuery->where('nomHopital', 'like', '%' . $request->searchInput . '%');
         }
-
-        // Paginer les résultats
-        $deces = $query->paginate(10);
-        $decesdeja = $query->paginate(10);
-
-        // Passer les données à la vue
-        return view('deces.agentindex', compact('deces', 'decesdeja', 'alerts'));
     }
+
+    // Appliquer les filtres de recherche pour Decesdeja
+    if ($request->filled('searchType') && $request->filled('searchInput')) {
+        if ($request->searchType === 'nomDefunt') {
+            $decesdejaQuery->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
+        } elseif ($request->searchType === 'nomHopital') {
+            $decesdejaQuery->where('nomHopital', 'like', '%' . $request->searchInput . '%');
+        }
+    }
+
+    // Paginer les résultats
+    $deces = $decesQuery->paginate(10);
+    $decesdeja = $decesdejaQuery->paginate(10);
+
+    // Passer les données à la vue
+    return view('deces.agentindex', compact('deces', 'decesdeja', 'alerts'));
+}
 
 
     public function ajointindex(Request $request)
@@ -240,7 +251,7 @@ class DecesController extends Controller
 
         // Liste des fichiers à traiter
         $filesToUpload = [
-            'pActe' => 'acte', // Pas de sous-dossier
+            'pActe' => '', // Pas de sous-dossier
             'CNIdfnt' => 'cnid/', // Sous-dossier pour CNIdfnt
             'CNIdcl' => 'cnid/', // Sous-dossier pour CNIdcl
             'documentMariage' => 'mariage/', // Sous-dossier pour documentMariage

@@ -222,9 +222,11 @@
                         <thead class="bg-navbar text-white">
                             <tr style="font-size: 12px">
                                 <th>Demandeur</th>
-                                <th>Type de demande</th>
-                                <th>Pièce Du Parent</th>
-                                <th>Certificat De Déclaration</th>
+                                <th>Type de copie</th>
+                                <th>Nom sur l'extrait</th>
+                                <th>Numéro de régistre</th>
+                                <th>Date de régistre</th>
+                                <th>CNI-Demandeur</th>
                                 <th>Etat Actuel</th>
                                 <th>Action</th>
                             </tr>
@@ -232,10 +234,19 @@
                         <tbody>
                             @forelse ($naissancesD as $naissanceD)
                                 <tr style="font-size: 12px">
-                                    <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
+                                    <td>{{ $naissanceD->user ? $naissanceD->user->name .' '.$naissanceD->user->prenom : 'Demandeur inconnu' }}</td>
                                     <td>{{ $naissanceD->type }}</td>
-                                    <td>{{ $naissanceD->name }}</td>
+                                    <td>{{ $naissanceD->name.' '.$naissanceD->prenom .' '.'('.($naissanceD->pour).')'}}</td>
                                     <td>{{ $naissanceD->number }}</td>
+                                    <td>{{ $naissanceD->DateR }}</td>
+                                    <td>
+                                        <img src="{{ asset('storage/' . $naissanceD->CNI) }}" 
+                                             alt="Certificat de déclaration" 
+                                             width="100" 
+                                             height="auto" 
+                                             onclick="showImage(this)" 
+                                             onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                    </td>
                                     <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                         {{ $naissanceD->etat }}
                                     </td>

@@ -191,7 +191,7 @@
                         <!-- Sélection de la mairie -->
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label for="mairie_selectionnee">Sélectionner une mairie :</label>
+                                <label for="mairie_selectionnee">Mairie :</label>
                                 <select id="mairie_selectionnee" name="mairie_selectionnee" class="form-control" required>
                                    
                                     @foreach ($vendors as $vendor)
