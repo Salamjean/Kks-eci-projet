@@ -159,18 +159,16 @@ class DecesHopController extends Controller
         ->setMargin(10);
 
     // Écrire le QR code dans un fichier
-        // Générer le QR code
     $writer = new PngWriter();
     $result = $writer->write($qrCode);
     
-    // Sauvegarder l'image du QR code
-    $qrCodeFileName = "qrcode_{$decesHop->id}.png"; // Nom du fichier
-    $qrCodePath = "naiss_hops/{$qrCodeFileName}"; // Chemin relatif dans le dossier 'naiss_hops'
+    // Générer un nom de fichier unique (optionnel)
+    $qrCodeFileName = "qrcode_{$decesHop->id}.png"; // Nom du fichier basé sur l'ID
+    $qrCodePath = "deces_hops/{$qrCodeFileName}"; // Chemin relatif dans le dossier 'deces_hops'
     
     // Utiliser le système de stockage de Laravel pour enregistrer le fichier
     Storage::disk('public')->put($qrCodePath, $result->getString());
-
-
+    
     // Récupérer les informations du sous-admin
     $sousadmin = Auth::guard('sous_admin')->user();
 
