@@ -15,6 +15,7 @@ use PDF;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
@@ -307,12 +308,16 @@ class NaissHopController extends Controller
         ->setMargin(10);
     
     // Écrire le QR code dans un fichier
+    // Générer le QR code
     $writer = new PngWriter();
     $result = $writer->write($qrCode);
     
-    // Sauvegarder l'image
-    $qrCodePath = storage_path("/naiss_hops/qrcode_{$naissHop->id}.png");
-    $result->saveToFile($qrCodePath);
+    // Sauvegarder l'image du QR code
+    $qrCodeFileName = "qrcode_{$naissHop->id}.png"; // Nom du fichier
+    $qrCodePath = "naiss_hops/{$qrCodeFileName}"; // Chemin relatif dans le dossier 'naiss_hops'
+    
+    // Utiliser le système de stockage de Laravel pour enregistrer le fichier
+Storage::disk('public')->put($qrCodePath, $result->getString());
     
     // Récupérer les informations du sous-admin
     $sousadmin = Auth::guard('sous_admin')->user();
