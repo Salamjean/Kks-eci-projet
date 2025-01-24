@@ -311,7 +311,7 @@ class NaissHopController extends Controller
     $result = $writer->write($qrCode);
     
     // Sauvegarder l'image
-    $qrCodePath = storage_path("app/public/naiss_hops/qrcode_{$naissHop->id}.png");
+    $qrCodePath = storage_path("/var/www/e-ci-projet/app/public/naiss_hops/qrcode_{$naissHop->id}.png");
     $result->saveToFile($qrCodePath);
     
     // Récupérer les informations du sous-admin
