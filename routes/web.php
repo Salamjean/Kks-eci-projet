@@ -455,7 +455,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::post('/login', [CaisseController::class, 'handleLogin'])->name('caisse.handleLogin');
     });
 
-    Route::middleware('agent')->prefix('agent')->group(function(){
+    Route::middleware('auth:agent')->prefix('agent')->group(function(){
         Route::get('/dashboard', [AgentController::class, 'agentdashboard'])->name('agent.dashboard');
         Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
         Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');

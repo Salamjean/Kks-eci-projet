@@ -263,11 +263,7 @@ public function superindex() {
 public function agentvue(Request $request) {
     // Récupérer l'admin connecté
     $admin = Auth::guard('agent')->user();
-
-    if (!$admin) {
-        return abort(403, 'Accès non autorisé'); // Pour éviter une erreur si aucun agent n'est connecté
-    }
-
+    
     // Récupérer le mois et l'année sélectionnés
     $selectedMonth = $request->input('month', date('m'));
     $selectedYear = $request->input('year', date('Y'));
