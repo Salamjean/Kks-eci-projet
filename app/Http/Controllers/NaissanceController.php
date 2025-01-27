@@ -110,7 +110,7 @@ public function superindex()
         ->paginate(10); // Pagination
 
     // Retourner la vue avec les données
-    return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD','naisshops'));
+    return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD','naisshop'));
 }
 
 public function ajointindex()
