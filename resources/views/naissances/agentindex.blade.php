@@ -101,7 +101,7 @@
                         <th>Lieu De Naissance</th>
                         <th>Pièce Du Parent</th>
                         <th>Certificat De Déclaration</th>
-                        <th>Acte De Mariage</th>
+                        <th>Pièce de la mère</th>
                         <th>Etat Actuel</th>
                         <th>Action</th>
                     </tr>
@@ -137,7 +137,7 @@
                         </td>
                         <td>
                             <div style="position: relative; width: 100px; height: 100px;">
-                                <img src="{{ asset('storage/' . $naissance->acteMariage) }}" 
+                                <img src="{{ asset('storage/' . $naisshop->CNI_mere) }}" 
                                      alt="Acte de mariage" 
                                      width="100" 
                                      height=auto
