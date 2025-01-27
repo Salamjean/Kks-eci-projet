@@ -92,7 +92,7 @@ public function superindex()
 {
     // Récupérer l'admin connecté
     $admin = Auth::guard('agent')->user();
-    $naisshops = NaissHop::all();
+    $naisshop = NaissHop::first();
     // Récupérer les alertes
     $alerts = Alert::where('is_read', false)
         ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  

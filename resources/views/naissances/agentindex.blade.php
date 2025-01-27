@@ -135,21 +135,12 @@
                                  onclick="showImage(this)" 
                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                         </td>
-                        <td>
-                            <div style="position: relative; width: 100px; height: 100px;">
-                                <img src="{{ asset('storage/' . $naisshops->CNI_mere) }}" 
-                                     alt="Acte de mariage" 
-                                     width="100" 
-                                     height=auto
-                                     data-bs-toggle="modal" 
-                                     data-bs-target="#imageModal" 
-                                     onclick="showImage(this)" 
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                    Aucun fichier
-                                </span>
-                            </div>
-                        </td>
+                        @if($naisshop)
+                        <img src="{{ asset('storage/' . $naisshop->CNI_mere) }}" alt="Acte de naissance" width="100">
+                        @else
+                            <span>Aucune image disponible</span>
+                        @endif
+
                         <td class="{{ $naissance->etat == 'en attente' ? 'bg-warning' : ($naissance->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                             {{ $naissance->etat }}
                         </td>
