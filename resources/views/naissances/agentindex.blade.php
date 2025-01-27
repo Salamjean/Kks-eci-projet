@@ -136,7 +136,17 @@
                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                         </td>
                         @if($naisshop)
-                        <img src="{{ asset('storage/' . $naisshop->CNI_mere) }}" alt="Acte de naissance" width="100">
+                        <td>
+                             <img src="{{ asset('storage/' . $naisshop->CNI_mere) }}"
+                                 alt="Certificat de déclaration" 
+                                 width="100" 
+                                 height=auto
+                                 data-bs-toggle="modal" 
+                                 data-bs-target="#imageModal" 
+                                 onclick="showImage(this)" 
+                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                        </td>
+                       
                         @else
                             <span>Aucune image disponible</span>
                         @endif
