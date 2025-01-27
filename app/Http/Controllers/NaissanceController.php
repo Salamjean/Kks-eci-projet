@@ -92,7 +92,7 @@ public function superindex()
 {
     // Récupérer l'admin connecté
     $admin = Auth::guard('agent')->user();
-
+    $naissance = NaissHop::all();
     // Récupérer les alertes
     $alerts = Alert::where('is_read', false)
         ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  
@@ -110,7 +110,7 @@ public function superindex()
         ->paginate(10); // Pagination
 
     // Retourner la vue avec les données
-    return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD'));
+    return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD','naissance'));
 }
 
 public function ajointindex()
