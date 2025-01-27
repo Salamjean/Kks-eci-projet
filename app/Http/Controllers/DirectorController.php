@@ -50,22 +50,22 @@ class DirectorController extends Controller
         
         // Récupérer les données pour les graphiques
         $naissData = NaissHop::where('NomEnf', $communeAdmin)
-            ->whereYear('created_at', $selectedYear)
-            ->selectRaw('CAST(strftime("%m", created_at) AS INTEGER) as month, COUNT(*) as count')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('count', 'month')->toArray();
+           ->whereYear('created_at', $selectedYear)
+           ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+           ->groupBy('month')
+           ->orderBy('month')
+           ->pluck('count', 'month')->toArray();
         
         // Remplir les données manquantes
         $naissData = array_replace(array_fill(1, 12, 0), $naissData);
         $total = $naisshop + $deceshop ;
         // Récupérer les données de décès
         $decesData = DecesHop::where('nomHop', $communeAdmin)
-            ->whereYear('created_at', $selectedYear)
-            ->selectRaw('CAST(strftime("%m", created_at) AS INTEGER) as month, COUNT(*) as count')
-            ->groupBy('month')
-            ->orderBy('month')
-            ->pluck('count', 'month')->toArray();
+           ->whereYear('created_at', $selectedYear)
+           ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+           ->groupBy('month')
+           ->orderBy('month')
+           ->pluck('count', 'month')->toArray();
         
         // Remplir les données manquantes
         $decesData = array_replace(array_fill(1, 12, 0), $decesData);
