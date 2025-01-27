@@ -1,4 +1,4 @@
-@extends('vendor.agent.layouts.template')
+td@extends('vendor.agent.layouts.template')
 
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -242,11 +242,13 @@
                                     <td>{{ $naissanceD->DateR }}</td>
                                     <td>
                                         <img src="{{ asset('storage/' . $naissanceD->CNI) }}" 
-                                             alt="Certificat de déclaration" 
-                                             width="100" 
-                                             height="auto" 
-                                             onclick="showImage(this)" 
-                                             onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                        alt="Certificat de déclaration" 
+                                        width="100" 
+                                        height=auto
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#imageModal" 
+                                        onclick="showImage(this)" 
+                                        onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                     </td>
                                     <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                         {{ $naissanceD->etat }}
