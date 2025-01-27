@@ -460,7 +460,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
         Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');
     });
-    Route::middleware('auth:cnpsagent')->prefix('cnps/agent')->group(function(){
+    Route::middleware('cnpsagent')->prefix('cnps/agent')->group(function(){
         Route::get('/dashboard', [CnpsAgentController::class, 'dashboard'])->name('cnpsagent.dashboard');
         Route::get('/logout', [CnpsAgentController::class, 'logout'])->name('cnpsagent.logout');
     });
