@@ -181,7 +181,7 @@ class CaisseController extends Controller
 }
 
      public function logout(){
-        Auth::guard('caisse')->logout();
+        Auth::guard('auth:caisse')->logout();
         return redirect()->route('caisse.login');
     }
     public function login(){

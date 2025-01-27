@@ -479,8 +479,8 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/logout', [AjointController::class, 'logout'])->name('ajoint.logout');
     });
 
-    Route::middleware('caisse')->prefix('caisse')->group(function(){
-        Route::get('/vue', [CaisseController::class, 'dashboard'])->name('caisse.dashboard');
+    Route::middleware('auth:caisse')->prefix('caisse')->group(function(){
+        Route::get('/dahboard', [CaisseController::class, 'dashboard'])->name('caisse.dashboard');
         Route::get('/logout', [CaisseController::class, 'logout'])->name('caisse.logout');
     });
 
