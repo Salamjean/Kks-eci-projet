@@ -137,7 +137,7 @@ class VendorController extends Controller
     // Les états possibles à afficher dans le formulaire
     $etats = ['en attente', 'réçu', 'terminé'];
 
-    return view('naissanced.edit', compact('naissanced', 'etats','alerts'));
+    return view('naissanceD.edit', compact('naissanced', 'etats','alerts'));
 }
     public function updateEtat1(Request $request, $id)
 {
