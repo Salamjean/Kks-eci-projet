@@ -465,7 +465,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/logout', [CnpsAgentController::class, 'logout'])->name('cnpsagent.logout');
     });
 
-    Route::middleware('cgraeagent')->prefix('cgrae/agent')->group(function(){
+    Route::middleware('auth:cgraeagent')->prefix('cgrae/agent')->group(function(){
         Route::get('/dashboard', [CgraeAgentController::class, 'dashboard'])->name('cgraeagent.dashboard');
         Route::get('/logout', [CgraeAgentController::class, 'logout'])->name('cgraeagent.logout');
     });

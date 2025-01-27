@@ -201,8 +201,8 @@ class CgraeAgentController extends Controller
     $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
 
     // Récupérer le nom et prénom de l'agent connecté
-    $agentName = auth('cgraeagent')->user()->name; // Nom de l'agent
-    $agentPrenom = auth('cgraeagent')->user()->prenom; // Prénom de l'agent
+    $agentName = Auth::guard('cgraeagent')->user()->name; // Nom de l'agent
+    $agentPrenom = Auth::guard('cgraeagent')->user()->prenom; // Prénom de l'agent
 
     // Récupérer le nom et prénom du premier défunt trouvé (si des résultats existent)
     $defuntNom = $found ? $defunts->first()->NomM : null;
