@@ -200,8 +200,8 @@ class CnpsAgentController extends Controller
     $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
 
     // Récupérer le nom et prénom de l'agent connecté
-    $agentName = Auth::guard('agent')->user()->name; // Nom de l'agent
-    $agentPrenom = Auth::guard('agent')->user()->prenom; // Prénom de l'agent
+    $agentName = Auth::guard('cnpsagent')->user()->name; // Nom de l'agent
+    $agentPrenom = Auth::guard('cnpsagent')->user()->prenom; // Prénom de l'agent
 
     // Récupérer le nom et prénom du premier défunt trouvé (si des résultats existent)
     $defuntNom = $found ? $defunts->first()->NomM : null;
