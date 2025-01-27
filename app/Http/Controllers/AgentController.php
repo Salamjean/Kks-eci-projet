@@ -190,7 +190,7 @@ public function handleLogin(Request $request)
     if($checkSousadminExiste){
         return view('vendor.agent.auth.register', compact('email'));
     }else{
-        return redirect()->route('doctor.login');
+        return redirect()->route('agent.login');
     };
 }
 
@@ -239,9 +239,9 @@ public function submitDefineAccess(Request $request){
                }
             }
 
-            return redirect()->route('agent.vue')->with('success', 'Compte mis à jour avec succès');
+            return redirect()->route('agent.dashboard')->with('success', 'Compte mis à jour avec succès');
         } else {
-            return redirect()->route('agent.vue')->with('error', 'Email inconnu');
+            return redirect()->route('agent.dashboard')->with('error', 'Email inconnu');
         }
     } catch (Exception $e) {
         return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
