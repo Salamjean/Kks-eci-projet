@@ -112,7 +112,7 @@ Route::middleware('auth:web')->group(function () {
     //les routes du super admin
     Route::prefix('super-admin')->group(function () {
         // Routes pour l'authentification
-    Route::get('/register', [SuperAdminController::class, 'register'])->name('super_admin.register');
+    Route::get('/kks/technologies/register', [SuperAdminController::class, 'register'])->name('super_admin.register');
     Route::post('/register', [SuperAdminController::class, 'handleRegister'])->name('super_admin.handleRegister');
     Route::get('/login', [SuperAdminController::class, 'login'])->name('super_admin.login');
     Route::post('/login', [SuperAdminController::class, 'handleLogin'])->name('super_admin.handleLogin');
