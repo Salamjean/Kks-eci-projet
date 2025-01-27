@@ -51,7 +51,7 @@
                             <td>{{ $naisshop->DateNaissance }}</td>
                             <td>{{ $naisshop->created_at }}</td>
                             <td>
-                                <img src="{{ asset('storage/images/naissances/cni/' . $naisshop->CNI_mere) }}" 
+                                <img src="{{ asset('storage/' . $naisshop->CNI_mere) }}" 
                                 alt="Pièce du parent" 
                                 width="100" 
                                 height="auto"

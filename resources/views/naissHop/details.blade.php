@@ -210,20 +210,6 @@
                     <td>{{ $naisshop->contP }}</td>
                 </tr>
                 <tr>
-                    <th>Identité de l'accompagnateur (CNI)</th>
-                    <td>
-                        @if ($naisshop->CNI_Pere)
-                            <img src="{{ asset('storage/' . $naisshop->CNI_Pere) }}" 
-                                 alt="CNI Père" 
-                                 width="100" 
-                                 height="100" 
-                                 class="rounded">
-                        @else
-                            Aucun fichier disponible
-                        @endif
-                    </td>
-                </tr>
-                <tr>
                     <th>Hôpital de Naissance</th>
                     <td>{{ $naisshop->NomEnf }}</td>
                 </tr>
