@@ -239,7 +239,7 @@ public function submitDefineAccess(Request $request){
                }
             }
 
-            return redirect()->route('agent')->with('success', 'Compte mis à jour avec succès');
+            return redirect()->route('agent.dashboard')->with('success', 'Compte mis à jour avec succès');
         } else {
             return redirect()->route('agent.dashboard')->with('error', 'Email inconnu');
         }
