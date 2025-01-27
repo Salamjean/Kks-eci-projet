@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -23,6 +22,90 @@
   <!-- endinject -->
   <link rel="shortcut icon" href="images/favicon.png" />
 </head>
+<style>
+   @media (max-width: 768px) {
+            .form-background {
+                padding: 10px;
+            }
+
+            .card-title-dash {
+                font-size: 1.2rem;
+            }
+
+            .btn-lg {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .table th, .table td {
+                font-size: 0.75rem;
+                padding: 0.2rem;
+            }
+
+            .table img {
+                width: 50px;
+            }
+
+            /* Important : Gestion de l'alignement des boutons */
+            .d-sm-flex {
+                flex-direction: column !important;
+                align-items: start !important;
+            }
+
+            .d-sm-flex > div:last-child {
+                margin-top: 10px;
+            }
+
+            .nav-tabs .nav-link {
+                padding: 0.5rem 0.7rem;
+            }
+        }
+
+        /* Ajustement des images dans les tableaux pour les petits écrans */
+        .table img {
+            max-width: 70px;
+            height: auto;
+        }
+        
+         /* Modification de la modal pour un affichage vertical sur mobile */
+       
+       @media (max-width: 768px) {
+        .modal.fade .modal-dialog {
+            transform: translateY(-50%); /* Déplace vers le haut */
+            transition: transform 0.3s ease-out; /* Applique la transition */
+              top: 15%; /* Position verticale initial de la modal */
+          }
+      
+         .modal.show .modal-dialog {
+            transform: translateY(0); /* Ramène la modal à sa position visible */
+           
+         }
+        .modal-dialog {
+           display: flex;
+           align-items: flex-start;
+           
+       }
+        .modal-content {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+        }
+        .modal-body {
+            flex: 1 1 auto;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+        .modal-header {
+            flex: 0 0 auto;
+            padding: 1rem;
+        }
+        .modal-footer {
+            flex: 0 0 auto;
+            padding: 1rem;
+        }
+    }
+    /* Fin de la modification de la modal pour un affichage vertical sur mobile */
+</style>
 <body>
     <!-- partial:partials/_navbar.html -->
    @include('utilisateur.layouts.navigation')

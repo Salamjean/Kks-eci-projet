@@ -474,7 +474,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/dashboard', [MinistereAgentController::class, 'dashboard'])->name('ministereagent.dashboard');
         Route::get('/logout', [MinistereAgentController::class, 'logout'])->name('ministereagent.logout');
     });
-    Route::middleware('ajoint')->prefix('ajoint')->group(function(){
+    Route::middleware('auth:ajoint')->prefix('ajoint')->group(function(){
         Route::get('/vue', [AjointController::class, 'ajointvue'])->name('ajoint.dashboard');
         Route::get('/logout', [AjointController::class, 'logout'])->name('ajoint.logout');
     });
