@@ -42,6 +42,10 @@ Utilisateurs/layouts/Template.blade :
             margin-left: -240px;
         }
 
+        h1, h3, h4, h5, h6 {
+          font-size: 30px;
+        }
+
          .sidebar-offcanvas.active {
           margin-left: 0;
         }
