@@ -169,9 +169,9 @@ class CnpsAgentController extends Controller
                    }
                 }
     
-                return redirect()->route('cnpsagent.dashboard')->with('success', 'Compte mis à jour avec succès');
+                return redirect()->route('cnpsagent.login')->with('success', 'Compte mis à jour avec succès');
             } else {
-                return redirect()->route('cnpsagent.dashboard')->with('error', 'Email inconnu');
+                return redirect()->route('cnpsagent.login')->with('error', 'Email inconnu');
             }
         } catch (Exception $e) {
             return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
