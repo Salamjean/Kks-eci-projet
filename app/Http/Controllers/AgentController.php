@@ -239,9 +239,9 @@ public function submitDefineAccess(Request $request){
                }
             }
 
-            return redirect()->route('agent.dashboard')->with('success', 'Compte mis à jour avec succès');
+            return redirect()->route('agent.login')->with('success', 'Compte mis à jour avec succès');
         } else {
-            return redirect()->route('agent.dashboard')->with('error', 'Email inconnu');
+            return redirect()->route('agent.login')->with('error', 'Email inconnu');
         }
     } catch (Exception $e) {
         return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
