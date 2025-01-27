@@ -186,7 +186,6 @@ public function handleLogin(Request $request)
  public function defineAccess($email){
     //Vérification si le sous-admin existe déjà
     $checkSousadminExiste = Agent::where('email', $email)->first();
-
     if($checkSousadminExiste){
         return view('vendor.agent.auth.register', compact('email'));
     }else{
@@ -263,7 +262,7 @@ public function superindex() {
 
 public function agentvue(Request $request) {
     // Récupérer l'admin connecté
-    $admin = Auth::guard('agent')->user();
+    $admin = Agent::Auth()->user();
 
     // Récupérer le mois et l'année sélectionnés
     $selectedMonth = $request->input('month', date('m'));
