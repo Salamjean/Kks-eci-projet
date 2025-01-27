@@ -168,9 +168,9 @@ class MinistereAgentController extends Controller
                        }
                     }
         
-                    return redirect()->route('ministereagent.dashboard')->with('success', 'Compte mis à jour avec succès');
+                    return redirect()->route('ministereagent.login')->with('success', 'Compte mis à jour avec succès');
                 } else {
-                    return redirect()->route('ministereagent.dashboard')->with('error', 'Email inconnu');
+                    return redirect()->route('ministereagent.login')->with('error', 'Email inconnu');
                 }
             } catch (Exception $e) {
                 return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
@@ -221,8 +221,8 @@ class MinistereAgentController extends Controller
     }
 
     // Récupérer le nom et prénom de l'agent connecté
-    $agentName = auth('ministereagent')->user()->name; // Nom de l'agent
-    $agentPrenom = auth('ministereagent')->user()->prenom; // Prénom de l'agent
+    $agentName = Auth::guard('ministereagent')->user()->name; // Nom de l'agent
+    $agentPrenom = Auth::guard('ministereagent')->user()->prenom; // Prénom de l'agent
 
     // Récupérer les informations du défunt ou de la naissance
     $defuntNom = $foundDefunts ? $defunts->first()->NomM : null;

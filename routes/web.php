@@ -470,7 +470,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/logout', [CgraeAgentController::class, 'logout'])->name('cgraeagent.logout');
     });
 
-    Route::middleware('ministereagent')->prefix('ministere/agent')->group(function(){
+    Route::middleware('auth:ministereagent')->prefix('ministere/agent')->group(function(){
         Route::get('/dashboard', [MinistereAgentController::class, 'dashboard'])->name('ministereagent.dashboard');
         Route::get('/logout', [MinistereAgentController::class, 'logout'])->name('ministereagent.logout');
     });
