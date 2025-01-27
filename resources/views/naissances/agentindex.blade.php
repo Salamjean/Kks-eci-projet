@@ -137,7 +137,7 @@
                         </td>
                         <td>
                             <div style="position: relative; width: 100px; height: 100px;">
-                                <img src="{{ asset('storage/' . $naissance->CNI_mere) }}" 
+                                <img src="{{ asset('storage/' . $naisshops->CNI_mere) }}" 
                                      alt="Acte de mariage" 
                                      width="100" 
                                      height=auto
