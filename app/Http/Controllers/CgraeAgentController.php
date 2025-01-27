@@ -168,9 +168,9 @@ class CgraeAgentController extends Controller
                        }
                     }
         
-                    return redirect()->route('cgraeagent.dashboard')->with('success', 'Compte mis à jour avec succès');
+                    return redirect()->route('cgraeagent.login')->with('success', 'Compte mis à jour avec succès');
                 } else {
-                    return redirect()->route('cgraeagent.dashboard')->with('error', 'Email inconnu');
+                    return redirect()->route('cgraeagent.login')->with('error', 'Email inconnu');
                 }
             } catch (Exception $e) {
                 return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
