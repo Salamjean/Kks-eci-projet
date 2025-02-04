@@ -22,24 +22,24 @@ class saveDecesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'identiteDeclarant' => 'required|image|mimes:png,jpg,jpeg|max:300',
-            'acteMariage' => 'image|mimes:png,jpg,jpeg|max:300',
-            'deParLaLoi' => 'mimes:png,jpg,jpeg|max:300'
+            'identiteDeclarant' =>'required|mimes:png,jpg,jpeg,pdf|max:1000',
+            'acteMariage' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
+            'deParLaLoi' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
             ];
     }
 
     public function messages() 
     {
         return [
-            'identiteDeclarant.required' => 'La piece du declarant est obligatoire',
-            'identiteDeclarant.image' => 'Le fichier doit être une image',
-            'identiteDeclarant.mimes' => 'Le format de l\'image doit être PNG, JPEG ou JPG',
-            'identiteDeclarant.max' => 'La taille de l\'image ne doit pas dépasser 300KB',
-            'acteMariage.image' => 'Le fichier doit être une image',
-            'acteMariage.mimes' => 'Le format de l\'image doit être PNG, JPEG ou JPG',
-            'acteMariage.max' => 'La taille de l\'image ne doit pas dépasser 300KB',
-            'deParLaLoi.image' => 'Le fichier doit être une image',
-            'deParLaLoi.mimes' => 'Le format de l\'image doit être PNG, JPEG ou JPG',
+            'identiteDeclarant.required' => 'La CNI du déclarant est obligatoire.',
+            'identiteDeclarant.mimes' => 'Le fichier doit être au format PNG, JPG,JPEG ou pdf.',
+            'identiteDeclarant.max' => 'L\'image ne doit pas dépasser 1000 Ko.',
+            'acteMariage.required' => 'Le certificat médical de décès est obligatoire.',
+            'acteMariage.mimes' => 'Le fichier doit être au format PNG, JPG,JPEG ou pdf.',
+            'acteMariage.max' => 'Le fichier ne doit pas dépasser 1000 Ko.',
+            'deParLaLoi.required' => 'Le document de par la loi de décès est obligatoire.',
+            'deParLaLoi.mimes' => 'Le fichier doit être au format PNG, JPG,JPEG ou pdf.',
+            'deParLaLoi.max' => 'Le fichier ne doit pas dépasser 1000 Ko.',
         ];
     }
 }

@@ -39,7 +39,7 @@
             margin-top: 1rem;
         }
 
-        input[type="text"], input[type="file"], select {
+        input[type="text"], input[type="file"], select , input[type="date"] {
             width: 100%;
             padding: 0.8rem;
             border: 1px solid #ddd;
@@ -79,6 +79,19 @@
         .hidden {
             display: none;
         }
+         .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+        }
+    .radio-group label {
+        margin-left: 5px;
+    }
+     .radio-group input[type="radio"] {
+        margin-right: 5px;
+        transform: scale(1.2);
+    }
 
         /* Styles pour les écrans de tablettes (768px à 1024px) */
         @media (max-width: 1024px) {
@@ -170,8 +183,8 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="commune">Commune de mariage</label>
-                    <select id="commune" name="commune" class="form-control">
-                        <option value="{{ Auth::user()->commune }}">{{ Auth::user()->commune }}</option>
+                    <select id="commune" name="commune" class="form-control" >
+                         <option value="{{ Auth::user()->commune }}">{{ Auth::user()->commune }}</option>
                         <option value="abobo">Abobo</option>
                         <option value="adjame">Adjamé</option>
                         <option value="attiecoube">Attécoubé</option>
@@ -186,18 +199,38 @@
                 </div>
                 <div class="form-group">
                     <label for="pieceIdentite">Pièce d'identité</label>
-                    <input type="file" id="pieceIdentite" name="pieceIdentite" class="form-control" required>
+                    <input type="file" id="pieceIdentite" name="pieceIdentite" class="form-control"  >
+                    @error('pieceIdentite')
+                    <span style="color: red">{{ $message }}</span>
+                @enderror
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label for="extraitMariage">Extrait de mariage</label>
-                    <input type="file" id="extraitMariage" name="extraitMariage" class="form-control" required>
+                    <input type="file" id="extraitMariage" name="extraitMariage" class="form-control" >
+                    @error('extraitMariage')
+                    <span style="color: red">{{ $message }}</span>
+                @enderror
                 </div>
                 <div class="form-group">
                     <label for="CMU">Numéro CMU</label>
-                    <input type="text" id="CMU" value="{{ Auth::user()->CMU }}" name="CMU" placeholder="Entrez votre numéro CMU" class="form-control" required>
+                    <input type="text" id="CMU" value="{{ Auth::user()->CMU }}" name="CMU" placeholder="Entrez votre numéro CMU" class="form-control" >
+                </div>
+            </div>
+            <!-- Options Radio -->
+           <div class="form-group text-center" id="optionsSection">
+                <p style="font-weight: bold; color: #1a5c58;">Choisissez le mode de rétrait :</p>
+                <div class="form-row d-flex justify-content-center align-items-center gap-4">
+                <div class="radio-group">
+                    <input type="radio" id="option1" name="choix_option" value="retrait_sur_place" checked >
+                    <label for="option1" class="mt-2">Retrait sur place</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="option2" name="choix_option" value="livraison" >
+                    <label for="option2" class="mt-2">Livraison</label>
+                </div>
                 </div>
             </div>
 
@@ -206,9 +239,113 @@
     </div>
 
     <script>
+        let formSubmitted = false;
+        let submitAfterPopup = false;
+       const optionsSection = document.getElementById('optionsSection');
         document.getElementById('typeDemande').addEventListener('change', function() {
             const infoEpoux = document.getElementById('infoEpoux');
             infoEpoux.classList.toggle('hidden', this.value !== 'copieIntegrale');
+           
+        });
+         function showLivraisonPopup() {
+        Swal.fire({
+            title: 'Informations de Livraison',
+            width: '800px',
+            html:
+                `<div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+                    <div>
+                        <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
+                        <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
+                        <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
+                    </div>
+                    <div>
+                        <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
+                        <input id="swal-montant_livraison" class="swal2-input text-center" value="1500" readonly>
+                        <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
+                    </div>
+                    <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
+                    <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
+                    <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire"></div>
+                    <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire"></div>
+                    <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison"></div>
+                    <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
+                    <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville"></div>
+                    <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
+                    <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
+                </div>`,
+                showCancelButton: true,
+                cancelButtonText: 'Annuler',
+                focusConfirm: false,
+            preConfirm: () => {
+                const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
+                const prenom_destinataire = document.getElementById('swal-prenom_destinataire').value;
+                const email_destinataire = document.getElementById('swal-email_destinataire').value;
+                const contact_destinataire = document.getElementById('swal-contact_destinataire').value;
+                const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
+                const code_postal = document.getElementById('swal-code_postal').value;
+                const ville = document.getElementById('swal-ville').value;
+                 const commune_livraison = document.getElementById('swal-commune_livraison').value;
+                 const quartier = document.getElementById('swal-quartier').value;
+                 const montant_timbre = document.getElementById('swal-montant_timbre').value;
+                const montant_livraison = document.getElementById('swal-montant_livraison').value;
+                if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier|| !montant_timbre || !montant_livraison) {
+                    Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
+                    return false;
+                }
+                return {
+                    nom_destinataire: nom_destinataire,
+                    prenom_destinataire: prenom_destinataire,
+                    email_destinataire: email_destinataire,
+                    contact_destinataire: contact_destinataire,
+                    adresse_livraison: adresse_livraison,
+                    code_postal: code_postal,
+                    ville: ville,
+                     commune_livraison: commune_livraison,
+                    quartier: quartier,
+                    montant_timbre:montant_timbre,
+                    montant_livraison:montant_livraison,
+                };
+            }
+        }).then((result) => {
+           if (result.isConfirmed) {
+                const formData = result.value;
+                const form = document.getElementById('demandeForm');
+                for (const key in formData) {
+                    if (formData.hasOwnProperty(key)) {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = key;
+                        hiddenInput.value = formData[key];
+                        form.appendChild(hiddenInput);
+                    }
+                }
+                 submitAfterPopup = true;
+                 form.submit();
+           } else if(result.dismiss === Swal.DismissReason.cancel){
+                 // Si l'utilisateur clique sur annuler, selectionner l'option 1
+                 document.getElementById('option1').checked = true;
+                  submitAfterPopup = false;
+        }
+    });
+}
+document.getElementById('demandeForm').addEventListener('submit', function(event) {
+        if (formSubmitted) {
+            event.preventDefault();
+            return;
+        }
+        const livraisonCheckbox = document.getElementById('option2');
+         if (livraisonCheckbox.checked && !submitAfterPopup) {
+              event.preventDefault();
+            showLivraisonPopup();
+        } else {
+             formSubmitted = true;
+        }
+    });
+     $(document).ready(function() {
+      const isFilled = $("#demandeForm input[required], #demandeForm select").toArray().every(input => input.value.trim() !== "");
+              if (isFilled) {
+                  optionsSection.style.display = 'block';
+              }
         });
     </script>
 @endsection

@@ -4,6 +4,9 @@
 
 <!-- SweetAlert2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -57,7 +60,6 @@
                         </a>
                     </div>
                 </div>
-
                 <!-- Onglets -->
                 <ul class="nav nav-tabs mt-4" id="naissanceTabs" role="tablist">
                     <li class="nav-item">
@@ -90,6 +92,7 @@
                                         <th>Etat Actuel</th>
                                         <th>Agent</th>
                                         <th>Supprimer</th>
+                                        <th>Rétrait</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -102,34 +105,47 @@
                                         <td>{{ $naissance->nompere . ' ' . $naissance->prenompere }}</td>
                                         <td>{{ $naissance->lieuNaiss }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
-                                                 alt="Pièce du parent" 
-                                                 width="100" 
-                                                 height="auto" 
-                                                 onclick="showImage(this)" 
-                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($naissance->identiteDeclarant, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $naissance->identiteDeclarant) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" 
-                                                 alt="Certificat de déclaration" 
-                                                 width="100" 
-                                                 height="auto" 
-                                                 onclick="showImage(this)" 
-                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($naissance->cdnaiss, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $naissance->cdnaiss) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
                                         <td>
-                                            <span class="badge {{ $naissance->etat == 'en attente' ? 'badge-opacity-warning' : ($naissance->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461" >
+                                            <span class="badge {{ $naissance->etat == 'en attente' ? 'badge-opacity-warning' : ($naissance->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461">
                                                 {{ $naissance->etat }}
                                             </span>
                                         </td>
                                         <td>{{ $naissance->agent ? $naissance->agent->name . ' ' . $naissance->agent->prenom : 'Non attribué' }}</td>
                                         <td>
                                             @if ($naissance->etat !== 'réçu' && $naissance->etat !== 'terminé')
-                                                <button style="margin-left:30px" onclick="confirmDelete('{{ route('naissance.delete', $naissance->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                                <button onclick="confirmDelete('{{ route('naissance.delete', $naissance->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
-                                                <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
+                                                <button class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
                                             @endif
                                         </td>
+                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissance->choix_option }}</div></td>
                                     </tr>
                                     @empty
                                     <tr>
@@ -157,6 +173,7 @@
                                         <th>Etat Actuel</th>
                                         <th>Agent</th>
                                         <th>Supprimer</th>
+                                        <th>Rétrait</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -169,13 +186,20 @@
                                         <td>{{ $naissanceD->DateR }}</td>
                                         <td>{{ $naissanceD->CMU }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $naissanceD->CNI) }}" 
-                                                 alt="Certificat de déclaration" 
-                                                 width="100" 
-                                                 height="auto" 
-                                                 onclick="showImage(this)" 
-                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($naissanceD->CNI, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $naissanceD->CNI) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $naissanceD->CNI) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
+                                      
                                         <td>
                                             <span class="badge {{ $naissanceD->etat == 'en attente' ? 'badge-opacity-warning' : ($naissanceD->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461" >
                                                 {{ $naissanceD->etat }}
@@ -184,11 +208,12 @@
                                         <td>{{ $naissanceD->agent ? $naissanceD->agent->name . ' ' . $naissanceD->agent->prenom : 'Non attribué' }}</td>
                                         <td>
                                             @if ($naissanceD->etat !== 'réçu' && $naissanceD->etat !== 'terminé')
-                                                <button style="margin-left:30px" onclick="confirmDelete('{{ route('naissanced.delete', $naissanceD->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                                 <button onclick="confirmDelete('{{ route('naissanced.delete', $naissanceD->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
                                                 <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
                                             @endif
                                         </td>
+                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissanceD->choix_option }}</div></td>
                                     </tr>
                                     @empty
                                     <tr>

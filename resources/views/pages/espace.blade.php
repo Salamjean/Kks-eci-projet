@@ -63,7 +63,6 @@
 		    display: flex;
 		    flex-direction: column;
 			}
-			
 		</style>
     </head>
     <body>
@@ -127,11 +126,11 @@
 									</div>
 								<!--/ End Main Menu -->
 							</div>
-							<div class="col-lg-2 col-12 d-flex gap-4">
-								<div class="get-quote">
+							<div class="col-lg-2 col-12 d-flex gap-4 ">
+								<div class="get-quote bouton dropdown">
 									<a href="{{ route('login') }}" class="btn" style="background-color: green">Se connecter</a>
 								</div>&emsp;
-								<div class="get-quote">
+								<div class="get-quote bouton dropdown">
 									<a href="{{ route('register') }}" class="btn" style="background-color: green">S'inscrire</a>
 								</div>
 							</div>

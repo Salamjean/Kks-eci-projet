@@ -1,4 +1,4 @@
-@extends('superadmin.cnps.layouts.template')
+@extends('superadmin.agences.cnps.layouts.template')
 
 @section('content')
 
@@ -111,7 +111,7 @@ button {
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Listes des agents</h1>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('cnps.dashboard') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('cnpsagences.dashboard') }}">Accueil</a></li>
         <li class="breadcrumb-item">Listes</li>
       </ol>
     </div>

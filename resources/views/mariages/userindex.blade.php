@@ -4,6 +4,9 @@
 
 <!-- SweetAlert2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
     .form-background {
@@ -155,40 +158,53 @@
                         <thead class="bg-navbar text-white">
                             <tr style="font-size: 12px">
                                 <th class="text-center">Nom du demandeur</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">Nom de l'Époux</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">Prénom de l'Époux</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">Date de Naissance</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">Lieu de Naissance</th>
-                                <th class="text-center">Pièce d'Identité</th>
+                                <th class="text-center d-none-tablet d-none-small-pc">Nom du conjoint(e)</th>
+                                <th class="text-center d-none-tablet d-none-small-pc">Prénoms du conjoint(e)</th>
+                                <th class="text-center d-none-tablet d-none-small-pc">Date de Naissance du conjoint(e)</th>
+                                <th class="text-center d-none-tablet d-none-small-pc">Lieu de Naissance du conjoint(e)</th>
+                                <th class="text-center">Pièce d'Identité du conjoint(e)</th>
                                 <th class="text-center">Extrait de Mariage</th>
                                 <th class="text-center">Etat Actuel</th>
                                 <th class="text-center">Agent</th>
                                 <th class="text-center">Supprimer</th>
+                                <th class="text-center">Rétrait</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($allMariages as $mariage)
                             <tr class="text-center" style="font-size: 12px">
                                 <td data-label="Demandeur">{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
-                                <td data-label="Nom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->nomEpoux }}</td>
-                                <td data-label="Prénom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->prenomEpoux }}</td>
-                                <td data-label="Date de Naissance" class="d-none-tablet d-none-small-pc">{{ $mariage->dateNaissanceEpoux }}</td>
-                                <td data-label="Lieu de Naissance" class="d-none-tablet d-none-small-pc">{{ $mariage->lieuNaissanceEpoux }}</td>
-                                <td data-label="Pièce d'Identité" class="text-center">
-                                    <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 
-                                         alt="Pièce d'identité" 
-                                         width="100" 
-                                         height="100" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                <td data-label="Nom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->nomEpoux ? : 'copie-simple' }}</td>
+                                <td data-label="Prénom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->prenomEpoux ? : 'copie-simple' }}</td>
+                                <td data-label="Date de Naissance" class="d-none-tablet d-none-small-pc">{{ $mariage->dateNaissanceEpoux ? : 'copie-simple' }}</td>
+                                <td data-label="Lieu de Naissance" class="d-none-tablet d-none-small-pc">{{ $mariage->lieuNaissanceEpoux ? : 'copie-simple' }}</td>
+                                <td>
+                                    @if (pathinfo($mariage->pieceIdentite, PATHINFO_EXTENSION) === 'pdf')
+                                        <a href="{{ asset('storage/' . $mariage->pieceIdentite) }}" target="_blank">
+                                            <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                        </a>
+                                    @else
+                                        <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 
+                                             alt="Pièce du parent" 
+                                             width="100" 
+                                             height="auto" 
+                                             onclick="showImage(this)" 
+                                             onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                    @endif
                                 </td>
-                                <td data-label="Extrait de Mariage" class="text-center">
-                                    <img src="{{ asset('storage/' . $mariage->extraitMariage) }}"  
-                                         alt="Extrait de mariage" 
-                                         width="100" 
-                                         height="100" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                <td>
+                                    @if (pathinfo($mariage->extraitMariage, PATHINFO_EXTENSION) === 'pdf')
+                                        <a href="{{ asset('storage/' . $mariage->extraitMariage) }}" target="_blank">
+                                            <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                        </a>
+                                    @else
+                                        <img src="{{ asset('storage/' . $mariage->extraitMariage) }}" 
+                                             alt="Pièce du parent" 
+                                             width="100" 
+                                             height="auto" 
+                                             onclick="showImage(this)" 
+                                             onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                    @endif
                                 </td>
                                 <td data-label="Etat Actuel">
                                     <span class="badge {{ $mariage->etat == 'en attente' ? 'badge-opacity-warning' : ($mariage->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}">
@@ -198,11 +214,15 @@
                                 <td data-label="Agent">{{ $mariage->agent ? $mariage->agent->name . ' ' . $mariage->agent->prenom : 'Non attribué' }}</td>
                                 <td data-label="Supprimer">
                                     @if ($mariage->etat !== 'réçu' && $mariage->etat !== 'terminé')
-                                        <button style="margin-left:30px" onclick="confirmDelete('{{ route('mariage.delete', $mariage->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                    <button onclick="confirmDelete('{{ route('mariage.delete', $mariage->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                     @else
-                                        <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
+                                         <button style="margin-left: 30px;" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">
+                                             <i class="fas fa-trash"></i>
+                                         </button>
                                     @endif
+
                                 </td>
+                                <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $mariage->choix_option }}</div></td>
                             </tr>
                             @empty
                             <tr>

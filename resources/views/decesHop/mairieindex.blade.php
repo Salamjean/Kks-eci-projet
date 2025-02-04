@@ -23,7 +23,7 @@
         
             <table class="table align-items-center table-flush" id="dataTable">
                 <thead class="bg-navbar text-white">
-                    <tr style="font-size: 12px">
+                    <tr style="font-size: 12px" class="text-center">
                         <th>N° CMD</th>
                         <th>Hôpital</th>
                         <th>Commune</th>
@@ -31,12 +31,13 @@
                         <th>Date de naissance</th>
                         <th>Date de décès</th>
                         <th>Date et Heure de déclaration</th>
+                        <th>Nom du docteur déclarant</th>
                     </tr>
                 </thead>
                 
                 <tbody>
                     @forelse ($deceshops as $deceshop)
-                    <tr style="font-size: 12px">
+                    <tr style="font-size: 12px" class="text-center">
                         <td>{{ $deceshop->codeCMD }}</td>
                         <td>{{ $deceshop->nomHop }}</td>
                         <td>{{ $deceshop->commune }}</td>
@@ -44,6 +45,7 @@
                         <td>{{ $deceshop->DateNaissance }}</td>
                         <td>{{ $deceshop->DateDeces }}</td>
                         <td>{{ $deceshop->created_at }}</td>
+                        <td>Dr. {{ $deceshop->sous_admin ? $deceshop->sous_admin->name . ' ' . $deceshop->sous_admin->prenom : 'Demandeur inconnu' }}</td>
                     </tr>
                     @empty
                     <tr>

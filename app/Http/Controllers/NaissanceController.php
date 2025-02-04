@@ -26,6 +26,7 @@ class NaissanceController extends Controller
     {
         // Récupérer l'admin connecté
         $admin = Auth::guard('vendor')->user();
+        $naisshop = NaissHop::first();
     
         // Récupérer les alertes
         $alerts = Alert::where('is_read', false)
@@ -38,7 +39,7 @@ class NaissanceController extends Controller
         $naissancesD = NaissanceD::where('commune', $admin->name)->paginate(10); // Filtrage par commune
     
         // Retourner la vue avec les données
-        return view('naissances.index', compact('naissances', 'alerts', 'naissancesD'));
+        return view('naissances.index', compact('naissances', 'alerts', 'naissancesD','naisshop'));
     }
 
     public function delete(Naissance $naissance)
@@ -88,7 +89,7 @@ public function superindex()
     return view('naissances.superindex', compact('naissances', 'alerts', 'naissancesD'));
 }
 
-    public function agentindex()
+public function agentindex()
 {
     // Récupérer l'admin connecté
     $admin = Auth::guard('agent')->user();
@@ -103,16 +104,17 @@ public function superindex()
     // et l'agent connecté pour les demandes traitées par cet agent
     $naissances = Naissance::where('commune', $admin->communeM)
         ->where('agent_id', $admin->id) // Filtrage par agent
+        ->with('user') // Récupérer l'utilisateur
         ->paginate(10); // Pagination
 
     $naissancesD = NaissanceD::where('commune', $admin->communeM)
         ->where('agent_id', $admin->id) // Filtrage par agent
+        ->with('user') // Récupérer l'utilisateur
         ->paginate(10); // Pagination
 
     // Retourner la vue avec les données
     return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD','naisshop'));
 }
-
 public function ajointindex()
 {
     // Récupérer l'admin connecté
@@ -214,6 +216,7 @@ public function ajointindex()
 
 
     public function create(){
+        \Log::info('Store method called');
         $naisshop = NaissHop::all();
         return view('naissances.create', compact('naisshop'));
     }
@@ -223,60 +226,99 @@ public function ajointindex()
         return view('naissances.edit', compact('naissance'));
     }
 
-
     public function store(saveNaissanceRequest $request)
-{
-    $imageBaseLink = '/images/naissances/';
-    
-    // Liste des fichiers à traiter
-    $filesToUpload = [
-        'identiteDeclarant' => 'parent/',
-        'cdnaiss' => 'cdn/',
-        'acteMariage' => 'actemariage/',
-    ];
-    
-    $uploadedPaths = []; // Contiendra les chemins des fichiers uploadés
-    
-    foreach ($filesToUpload as $fileKey => $subDir) {
-        if ($request->hasFile($fileKey)) {
-            $file = $request->file($fileKey);
-            $extension = $file->getClientOriginalExtension();
-            $newFileName = (string) Str::uuid() . '.' . $extension;
-            $file->storeAs("public/images/naissances/$subDir", $newFileName);
-    
-            // Ajouter le chemin public à $uploadedPaths
-            $uploadedPaths[$fileKey] = $imageBaseLink . "$subDir" . $newFileName;
+    {
+        \Log::info('Store method called', $request->all());
+        $imageBaseLink = '/images/naissances/';
+        
+        // Liste des fichiers à traiter
+        $filesToUpload = [
+            'identiteDeclarant' => 'parent/',
+            'cdnaiss' => 'cdn/',
+            'acteMariage' => 'actemariage/',
+        ];
+        
+        $uploadedPaths = []; // Contiendra les chemins des fichiers uploadés
+        
+        foreach ($filesToUpload as $fileKey => $subDir) {
+            if ($request->hasFile($fileKey)) {
+                $file = $request->file($fileKey);
+                $extension = $file->getClientOriginalExtension();
+                $newFileName = (string) Str::uuid() . '.' . $extension;
+                $file->storeAs("public/images/naissances/$subDir", $newFileName);
+        
+                // Ajouter le chemin public à $uploadedPaths
+                $uploadedPaths[$fileKey] = $imageBaseLink . "$subDir" . $newFileName;
+            }
         }
+        
+        // Récupérer l'utilisateur connecté
+        $user = Auth::user();
+        
+        // Enregistrement de l'objet Naissance
+        $naissance = new Naissance();
+        $naissance->nomHopital = $request->nomHopital;
+        $naissance->nomDefunt = $request->nomDefunt;
+        $naissance->dateNaiss = $request->dateNaiss;
+        $naissance->lieuNaiss = $request->lieuNaiss;
+        $naissance->identiteDeclarant = $uploadedPaths['identiteDeclarant'] ?? null;
+        $naissance->cdnaiss = $uploadedPaths['cdnaiss'] ?? null;
+        $naissance->acteMariage = $uploadedPaths['acteMariage'] ?? null;
+        $naissance->commune = $user->commune;
+        $naissance->nom = $request->nom;
+        $naissance->prenom = $request->prenom;
+        $naissance->choix_option = $request->choix_option;
+        $naissance->nompere = $request->nompere;
+        $naissance->prenompere = $request->prenompere;
+        $naissance->datepere = $request->datepere;
+        $naissance->etat = 'en attente';
+        $naissance->user_id = $user->id;  // Lier la demande à l'utilisateur connecté
+
+       // Ajout des informations de livraison si option livraison est choisie
+       if ($request->input('choix_option') === 'livraison') {
+             $naissance->montant_timbre = $request->input('montant_timbre');
+             $naissance->montant_livraison = $request->input('montant_livraison');
+             $naissance->nom_destinataire = $request->input('nom_destinataire');
+             $naissance->prenom_destinataire = $request->input('prenom_destinataire');
+             $naissance->email_destinataire = $request->input('email_destinataire');
+             $naissance->contact_destinataire = $request->input('contact_destinataire');
+             $naissance->adresse_livraison = $request->input('adresse_livraison');
+             $naissance->code_postal = $request->input('code_postal');
+             $naissance->ville = $request->input('ville');
+            $naissance->commune_livraison = $request->input('commune_livraison');
+            $naissance->quartier = $request->input('quartier');
+         }
+        
+        $naissance->save();
+        Alert::create([
+            'type' => 'naissance',
+            'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissance->nomDefunt}.",
+        ]);
+        
+        return redirect()->route('utilisateur.index')->with('success', 'Votre demande a été traitée avec succès.');
     }
-    
-    // Récupérer l'utilisateur connecté
-    $user = Auth::user();
-    
-    // Enregistrement de l'objet Naissance
-    $naissance = new Naissance();
-    $naissance->nomHopital = $request->nomHopital;
-    $naissance->nomDefunt = $request->nomDefunt;
-    $naissance->dateNaiss = $request->dateNaiss;
-    $naissance->lieuNaiss = $request->lieuNaiss;
-    $naissance->identiteDeclarant = $uploadedPaths['identiteDeclarant'] ?? null;
-    $naissance->cdnaiss = $uploadedPaths['cdnaiss'] ?? null;
-    $naissance->acteMariage = $uploadedPaths['acteMariage'] ?? null;
-    $naissance->commune = $user->commune;
-    $naissance->nom = $request->nom;
-    $naissance->prenom = $request->prenom;
-    $naissance->nompere = $request->nompere;
-    $naissance->prenompere = $request->prenompere;
-    $naissance->datepere = $request->datepere;
-    $naissance->etat = 'en attente';
-    $naissance->user_id = $user->id;  // Lier la demande à l'utilisateur connecté
-    
-    $naissance->save();
-    Alert::create([
-        'type' => 'naissance',
-        'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissance->nomDefunt}.",
+
+
+public function updateLivraison(Request $request, $id)
+{
+    // Valider les données
+    $request->validate([
+        'adresse_livraison' => 'required|string|max:255',
+        'telephone_livraison' => 'required|string|max:20',
+        'email_livraison' => 'required|email|max:255',
     ]);
-    
-    return redirect()->route('utilisateur.index')->with('success', 'Votre demande a été traitée avec succès.');
+
+    // Trouver la demande de naissance
+    $naissance = Naissance::findOrFail($id);
+
+    // Mettre à jour les informations de livraison
+    $naissance->adresse_livraison = $request->adresse_livraison;
+    $naissance->telephone_livraison = $request->telephone_livraison;
+    $naissance->email_livraison = $request->email_livraison;
+    $naissance->save();
+
+    // Retourner une réponse JSON
+    return response()->json(['success' => true]);
 }
 
 

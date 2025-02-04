@@ -1,4 +1,4 @@
-@extends('superadmin.cnps.layouts.template')
+@extends('superadmin.agences.cnps.layouts.template')
 
 @section('content')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -78,7 +78,7 @@
 </style>
 
 <div class="signup-container">
-  <h6 style="color:orange">Inscrire un agent pour la CNPS de {{ Auth::guard('cnps')->user()->siege }}</h6>
+  <h6 style="color:orange">Inscrire un agent pour la CNPS de {{ Auth::guard('agencecnps')->user()->siege }}</h6>
   <div class="ms-panel-body">
     <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('cnpsagent.store') }}" novalidate>
         @csrf

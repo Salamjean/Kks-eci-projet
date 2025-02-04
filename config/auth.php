@@ -115,6 +115,16 @@ return [
             'provider' => 'ministereagents',
         ],
 
+        'agencecnps' => [
+            'driver' => 'session',
+            'provider' => 'agencecnps',
+        ],
+
+        'agencecgrae' => [
+            'driver' => 'session',
+            'provider' => 'agencecgraes',
+        ],
+
         'utilisateur' => [
             'driver' => 'session',
             'provider' => 'utilisateurs',
@@ -204,6 +214,17 @@ return [
             'model' => App\Models\CnpsAgent::class
         ],
 
+        'agencecnps' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AgenceCnps::class
+        ],
+
+        'agencecgraes' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\AgenceCgrae::class
+        ,
+        ],
+
         'cgraeagents' => [
             'driver' => 'eloquent',
             'model' => App\Models\CgraeAgent::class
@@ -217,7 +238,7 @@ return [
         'ministereagents' => [
             'driver' => 'eloquent',
             'model' => App\Models\MinistereAgent::class
-],
+        ],
         
         'utilisateurs' => [
             'driver' => 'eloquent',
@@ -228,6 +249,7 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
     ],
 
     /*
@@ -271,5 +293,6 @@ return [
     */
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
+
 
 ];

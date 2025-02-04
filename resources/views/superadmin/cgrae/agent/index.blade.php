@@ -1,4 +1,4 @@
-@extends('superadmin.cgrae.layouts.template')
+@extends('superadmin.agences.cgrae.layouts.template')
 
 @section('content')
 
@@ -6,7 +6,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <style>
   .etat-en-attente {
-    background-color: orange;
+    background-color: green;
     color: black;
 }
 
@@ -111,7 +111,7 @@ button {
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Listes des agents</h1>
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('cnps.dashboard') }}">Accueil</a></li>
+        <li class="breadcrumb-item"><a href="{{ route('cgraeagences.dashboard') }}">Accueil</a></li>
         <li class="breadcrumb-item">Listes</li>
       </ol>
     </div>

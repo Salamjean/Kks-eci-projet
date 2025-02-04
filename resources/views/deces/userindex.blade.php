@@ -4,6 +4,10 @@
 
 <!-- SweetAlert2 CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -92,6 +96,7 @@
                                         <th>Etat Actuel</th>
                                         <th>Agent</th>
                                         <th>Supprimer</th>
+                                        <th>Rétrait</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -103,13 +108,49 @@
                                         <td>{{ $deceD->dateNaiss }}</td>
                                         <td>{{ $deceD->dateDces }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $deceD->identiteDeclarant) }}" alt="Pièce du parent" width="100" height="auto" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($deceD->identiteDeclarant, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $deceD->identiteDeclarant) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $deceD->identiteDeclarant) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
+                                        
                                         <td>
-                                            <img src="{{ asset('storage/' . $deceD->acteMariage) }}" alt="Certificat de déclaration" width="100" height="auto" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($deceD->acteMariage, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $deceD->acteMariage) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $deceD->acteMariage) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
+                                        
+                                                                                
                                         <td>
-                                            <img src="{{ asset('storage/' . $deceD->deParLaLoi) }}" alt="De par la Loi" width="100" height="auto" onclick="showImage(this)" onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($deceD->deParLaLoi, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $deceD->deParLaLoi) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $deceD->deParLaLoi) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
                                         <td>
                                             <span class="badge {{ $deceD->etat == 'en attente' ? 'badge-opacity-warning' : ($deceD->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461" >{{ $deceD->etat }}</span>
@@ -117,11 +158,12 @@
                                         <td>{{ $deceD->agent ? $deceD->agent->name . ' ' . $deceD->agent->prenom : 'Non attribué' }}</td>
                                         <td>
                                             @if ($deceD->etat !== 'réçu' && $deceD->etat !== 'terminé')
-                                                <button style="margin-left:30px" onclick="confirmDelete('{{ route('deces.deletedeja', $deceD->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                                <button onclick="confirmDelete('{{ route('deces.delete', $deceD->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
                                                 <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
                                             @endif
                                         </td>
+                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $deceD->choix_option }}</div></td>
                                     </tr>
                                     @empty
                                     <tr>
@@ -152,6 +194,7 @@
                                         <th>État Actuel</th>
                                         <th>Agent</th>
                                         <th>Supprimer</th>
+                                        <th>Rétrait</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -163,34 +206,74 @@
                                         <td>{{ \Carbon\Carbon::parse($dece->dateR)->format('d/m/Y') }}</td>
                                         <td>{{ $dece->CMU }}</td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $dece->pActe) }}" alt="Certificat de déclaration" 
-                                                 width="100" height="auto" 
-                                                 onclick="showImage(this)" 
-                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($dece->pActe, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $dece->pActe) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $dece->pActe) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $dece->CNIdfnt) }}" alt="CNIdfnt" 
-                                                 width="100" height="auto" 
-                                                 onclick="showImage(this)" 
-                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($dece->CNIdfnt, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $dece->CNIdfnt) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $dece->CNIdfnt) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $dece->CNIdcl) }}" alt="CNIdcl" 
-                                                 width="100" height="auto" 
-                                                 onclick="showImage(this)" 
-                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($dece->CNIdcl, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $dece->CNIdcl) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $dece->CNIdcl) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $dece->documentMariage) }}" alt="Le défunt(e) n'est pas marié(e)" 
-                                                 width="100" height="auto" 
-                                                 onclick="showImage(this)" 
-                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($dece->documentMariage, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $dece->documentMariage) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $dece->documentMariage) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
                                         <td>
-                                            <img src="{{ asset('storage/' . $dece->RequisPolice) }}" alt="Décédé à l'hôpital" 
-                                                 width="100" height="auto" 
-                                                 onclick="showImage(this)" 
-                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @if (pathinfo($dece->RequisPolice, PATHINFO_EXTENSION) === 'pdf')
+                                                <a href="{{ asset('storage/' . $dece->RequisPolice) }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                                </a>
+                                            @else
+                                                <img src="{{ asset('storage/' . $dece->RequisPolice) }}" 
+                                                     alt="Pièce du parent" 
+                                                     width="100" 
+                                                     height="auto" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                            @endif
                                         </td>
                                         <td>
                                             <span class="badge {{ $dece->etat == 'en attente' ? 'badge-opacity-warning' : ($dece->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461">
@@ -200,11 +283,12 @@
                                         <td>{{ $dece->agent ? $dece->agent->name . ' ' . $dece->agent->prenom : 'Non attribué' }}</td>
                                         <td>
                                             @if ($dece->etat !== 'réçu' && $dece->etat !== 'terminé')
-                                                <button style="margin-left:30px" onclick="confirmDelete('{{ route('deces.deletedeja', $dece->id) }}')" class="btn btn-danger btn-sm">Supprimer</button>
+                                            <button onclick="confirmDelete('{{ route('deces.deletedeja', $dece->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
-                                                <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
+                                                <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
                                             @endif
                                         </td>
+                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $dece->choix_option }}</div></td>
                                     </tr>
                                     @empty
                                     <tr>

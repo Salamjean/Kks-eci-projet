@@ -9,7 +9,7 @@
                 <ol class="breadcrumb pl-0">
                     <li class="breadcrumb-item">
                         <a href="{{ route('doctor.dashboard') }}">
-                            <i class="material-icons">home</i> Dashboard
+                            <i class="material-icons">home</i> Tableau de bord
                         </a>
                     </li>
                     <li class="breadcrumb-item">

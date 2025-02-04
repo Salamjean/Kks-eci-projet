@@ -31,60 +31,67 @@ class NaissanceDeclaController extends Controller
         return view('naissanceD.index');
     }
 
-    public function store(saveNaissanceDRequest $request)
+    public function store(SaveNaissancedRequest $request)
     {
+         Log::info('Store method called', $request->all());
+        $imageBaseLink = '/images/naissanceds/';
 
-        $imageBaseLink = '/images/naissances/';
-    
         $filesToUpload = [
-            'CNI' => 'cni/', 
-        ];
-        
-        $uploadedPaths = []; 
-        
-        foreach ($filesToUpload as $fileKey => $subDir) {
-            if ($request->hasFile($fileKey)) {
-                $file = $request->file($fileKey);
-                $extension = $file->getClientOriginalExtension();
-                $newFileName = (string) Str::uuid() . '.' . $extension;
-                $file->storeAs("public/images/naissances/$subDir", $newFileName);
-        
-                // Ajouter le chemin public à $uploadedPaths
-                $uploadedPaths[$fileKey] = $imageBaseLink . "$subDir" . $newFileName;
+           'CNI' => 'cni/',
+       ];
+       
+       $uploadedPaths = [];
+       
+       foreach ($filesToUpload as $fileKey => $subDir) {
+          if ($request->hasFile($fileKey)) {
+               $file = $request->file($fileKey);
+               $extension = $file->getClientOriginalExtension();
+              $newFileName = (string) Str::uuid() . '.' . $extension;
+                $file->storeAs("public/images/naissanceds/$subDir", $newFileName);
+
+               $uploadedPaths[$fileKey] = $imageBaseLink . "$subDir" . $newFileName;
             }
-        }
-        
-        // Récupérer l'utilisateur connecté
-        $user = Auth::user();
-        
-        // Vérifier si une commune est spécifiée dans la requête
-        $commune = $request->has('commune') && !empty($request->commune) 
-            ? $request->commune 
-            : $user->commune;
-    
-        // Enregistrement de l'objet NaissanceD
-        $naissanceD = new NaissanceD();
-        $naissanceD->type = $request->type; 
-        $naissanceD->pour = $request->pour; 
-        $naissanceD->name = $request->name;
-        $naissanceD->prenom = $request->prenom;
-        $naissanceD->number = $request->number; 
-        $naissanceD->DateR = $request->DateR; 
-        $naissanceD->CNI = $uploadedPaths['CNI'] ?? null;
-        $naissanceD->CMU = $request->CMU; 
-        $naissanceD->commune = $commune;
-        $naissanceD->etat = 'en attente'; 
-        $naissanceD->is_read = false; 
-        $naissanceD->user_id = $user->id;
-    
-        $naissanceD->save();
-    
-        Alert::create([
-            'type' => 'naissance',
-            'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissanceD->name}.",
-        ]);
-        
-        return redirect()->route('utilisateur.index')->with('success', 'Votre demande a été enregistrée avec succès, Vous pouvez la voir dans la liste.');
+       }
+       
+      $user = Auth::user();
+
+       $naissanced = new Naissanced();
+       $naissanced->pour = $request->pour;
+       $naissanced->type = $request->type;
+        $naissanced->name = $request->name;
+        $naissanced->prenom = $request->prenom;
+       $naissanced->number = $request->number;
+        $naissanced->DateR = $request->DateR;
+       $naissanced->commune = $request->commune;
+       $naissanced->CNI = $uploadedPaths['CNI'] ?? null;
+       $naissanced->CMU = $request->CMU;
+       $naissanced->choix_option = $request->choix_option;
+       $naissanced->user_id = $user->id;
+       $naissanced->etat = 'en attente';
+
+
+           // Ajout des informations de livraison si option livraison est choisie
+               // Ajout des informations de livraison si option livraison est choisie
+    if ($request->input('choix_option') === 'livraison') {
+        $naissanced->montant_timbre = $request->input('montant_timbre');
+        $naissanced->montant_livraison = $request->input('montant_livraison');
+        $naissanced->nom_destinataire = $request->input('nom_destinataire');
+        $naissanced->prenom_destinataire = $request->input('prenom_destinataire');
+        $naissanced->email_destinataire = $request->input('email_destinataire');
+        $naissanced->contact_destinataire = $request->input('contact_destinataire');
+        $naissanced->adresse_livraison = $request->input('adresse_livraison');
+        $naissanced->code_postal = $request->input('code_postal');
+        $naissanced->ville = $request->input('ville');
+       $naissanced->commune_livraison = $request->input('commune_livraison');
+       $naissanced->quartier = $request->input('quartier');
+    }
+      $naissanced->save();
+      Alert::create([
+        'type' => 'extrait_naissance',
+        'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissanced->name} {$naissanced->prenom}.",
+    ]);
+
+       return redirect()->route('utilisateur.index')->with('success', 'Votre demande a été traitée avec succès.');
     }
 
     public function delete(NaissanceD $naissanceD)

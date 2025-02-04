@@ -93,15 +93,15 @@
         
             <table class="table align-items-center table-flush" id="dataTable">
                 <thead class="bg-navbar text-white">
-                    <tr style="font-size: 12px">
+                    <tr style="font-size: 12px" class="text-center">
                         <th>Demandeur</th>
                         <th>Hôpital</th>
-                        <th>Nom et Prénoms de la mère</th>
-                        <th>Nom et Prénoms (choisir) du né</th>
-                        <th>Nom et Prénoms du père</th>
-                        <th>Date de Naissance de l'enfant</th>
-                        <th>CNI du père</th>
-                        <th>Certificat Médical de Naissance</th>
+                        <th>Nom Du Nouveau Né</th>
+                        <th>Date De Naissance</th>
+                        <th>Lieu De Naissance</th>
+                        <th>Pièce Du Parent</th>
+                        <th>Certificat De Déclaration</th>
+                        <th>Pièce de la mère</th>
                         <th>Etat Actuel</th>
                         <th>Agent</th>
                     </tr>
@@ -109,43 +109,95 @@
                 
                 <tbody>
                     @forelse ($naissances as $naissance)
-                    <tr style="font-size: 12px">
-                        <td>{{ $naissance->user ? $naissance->user->name : 'Demandeur inconnu' }}</td>
+                    <tr style="font-size: 12px" class="text-center">
+                        <td>{{ $naissance->user->name.' '.$naissance->user->prenom }}</td>
                         <td>{{ $naissance->nomHopital }}</td>
                         <td>{{ $naissance->nomDefunt }}</td>
-                        <td>{{ $naissance->nom . ' ' . $naissance->prenom }}</td>
-                        <td>{{ $naissance->nompere . ' ' . $naissance->prenompere }}</td>
+                        <td>{{ $naissance->dateNaiss }}</td>
                         <td>{{ $naissance->lieuNaiss }}</td>
                         <td>
-                            <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
-                                 alt="Pièce du parent" 
-                                 width="100" 
-                                 height=auto
-                                 data-bs-toggle="modal" 
-                                 data-bs-target="#imageModal" 
-                                 onclick="showImage(this)" 
-                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                            @if($naissance->identiteDeclarant)
+                                @php
+                                    $identiteDeclarantPath = asset('storage/' . $naissance->identiteDeclarant);
+                                    $isIdentiteDeclarantPdf = strtolower(pathinfo($identiteDeclarantPath, PATHINFO_EXTENSION)) === 'pdf';
+                                @endphp
+                                @if ($isIdentiteDeclarantPdf)
+                                    <a href="{{ $identiteDeclarantPath }}" target="_blank">
+                                        <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                    </a>
+                                @else
+                                    <img src="{{ $identiteDeclarantPath }}" 
+                                        alt="Pièce du parent" 
+                                        width="50" 
+                                        height=50
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#imageModal" 
+                                        onclick="showImage(this)" 
+                                        onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                @endif
+                            @else
+                                <p>Non disponible</p>
+                            @endif
                         </td>
-                        <td>
-                            <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" 
-                                 alt="Certificat de déclaration" 
-                                 width="100" 
-                                 height=auto
-                                 data-bs-toggle="modal" 
-                                 data-bs-target="#imageModal" 
-                                 onclick="showImage(this)" 
-                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                         <td>
+                            @if($naissance->cdnaiss)
+                                @php
+                                    $cdnaissPath = asset('storage/' . $naissance->cdnaiss);
+                                    $isCdnaissPdf = strtolower(pathinfo($cdnaissPath, PATHINFO_EXTENSION)) === 'pdf';
+                                @endphp
+                                @if ($isCdnaissPdf)
+                                    <a href="{{ $cdnaissPath }}" target="_blank">
+                                       <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                    </a>
+                                @else
+                                    <img src="{{ $cdnaissPath }}" 
+                                        alt="Certificat de déclaration" 
+                                        width="50" 
+                                        height=50
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#imageModal" 
+                                        onclick="showImage(this)" 
+                                        onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                @endif
+                            @else
+                                <p>Non disponible</p>
+                            @endif
                         </td>
-                        <td class="{{ $naissance->etat == 'en attente' ? 'bg-warning' : ($naissance->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
-                            {{ $naissance->etat }}
-                        </td>
-                        <td>{{ $naissance->agent ? $naissance->agent->name . ' ' . $naissance->agent->prenom : 'Non attribué' }}</td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="9" class="text-center">Aucune demande effectuée</td>
-                    </tr>
+                        
+                        @if($naisshop && $naisshop->CNI_mere)
+                            @php
+                                $cniMerePath = asset('storage/' . $naisshop->CNI_mere);
+                                $isCniMerePdf = strtolower(pathinfo($cniMerePath, PATHINFO_EXTENSION)) === 'pdf';
+                            @endphp
+                            <td>
+                                @if ($isCniMerePdf)
+                                    <a href="{{ $cniMerePath }}" target="_blank">
+                                        <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                    </a>
+                                @else
+                                    <img src="{{ $cniMerePath }}"
+                                        alt="Certificat de déclaration" 
+                                        width="50" 
+                                        height=50
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#imageModal" 
+                                        onclick="showImage(this)" 
+                                        onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                @endif
+                            </td>
+                            <td class="{{ $naissance->etat == 'en attente' ? 'bg-warning' : ($naissance->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
+                                {{ $naissance->etat }}
+                            </td>
+                            <td>{{ $naissance->agent ? $naissance->agent->name . ' ' . $naissance->agent->prenom : 'Non attribué' }}</td>
+                        @else
+                             <td><span>Aucune image disponible</span></td>
+                        @endif
+                        @empty
+                        <tr>
+                            <td colspan="9" class="text-center">Aucune demande effectuée</td>
+                        </tr>
                     @endforelse
+               
                 </tbody>
             </table>
         </div>
@@ -225,15 +277,29 @@
                                 <td>{{ $naissanceD->number }}</td>
                                 <td>{{ $naissanceD->DateR }}</td>
                                 <td>
-                                    <img src="{{ asset('storage/' . $naissanceD->CNI) }}" 
-                                         alt="Certificat de déclaration" 
-                                         width="100" 
-                                         height=auto
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
-                                </td>
+                                    @if($naissanceD->CNI)
+                                       @php
+                                           $CNIPath = asset('storage/' . $naissanceD->CNI);
+                                           $isCNIPdf = strtolower(pathinfo($CNIPath, PATHINFO_EXTENSION)) === 'pdf';
+                                       @endphp
+                                       @if ($isCNIPdf)
+                                           <a href="{{ $CNIPath }}" target="_blank">
+                                               <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                           </a>
+                                       @else
+                                           <img src="{{ $CNIPath }}"
+                                                alt="Certificat de déclaration" 
+                                                width="100" 
+                                                height=auto
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#imageModal" 
+                                                onclick="showImage(this)" 
+                                                onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                       @endif
+                                   @else
+                                       <p>Non disponible</p>
+                                   @endif
+                               </td>
                                 <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                     {{ $naissanceD->etat }}
                                 </td>

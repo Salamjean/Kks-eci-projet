@@ -22,18 +22,35 @@ class saveNaissanceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'identiteDeclarant' => 'required|image|mimes:png,jpg,jpeg|max:300',
-            
+           'identiteDeclarant' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
+           'cdnaiss' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
+           'acteMariage' => 'mimes:png,jpg,jpeg,pdf|max:1000',
+           'nom' => 'required',
+           'prenom' => 'required',
+           'nompere' => 'required',
+           'prenompere' => 'required',
+           'datepere' => 'required',
+
         ];
     }
 
     public function messages() 
     {
         return [
-            'identiteDeclarant.required' => 'L\'image de votre naissance est obligatoire.',
-            'identiteDeclarant.image' => 'L\'image doit être une image.',
-            'identiteDeclarant.mimes' => 'L\'image doit être au format PNG, JPG, ou JPEG.',
-            'identiteDeclarant.max' => 'L\'image ne doit pas dépasser 300 Ko.',
+            'identiteDeclarant.required' => 'La CNI du père est obligatoire.',
+            'identiteDeclarant.mimes' => 'Le fichier doit être au format PNG, JPG,JPEG ou pdf.',
+            'identiteDeclarant.max' => 'L\'image ne doit pas dépasser 1000 Ko.',
+            'cdnaiss.required' => 'Le Certificat est obligatoire.',
+            'cdnaiss.mimes' => 'Le fichier doit être au format PNG, JPG,JPEG ou pdf.',
+            'cdnaiss.max' => 'Le fichier ne doit pas dépasser 1000 Ko.',
+            'acteMariage.required' => 'le recto/verso de CNI est obligatoire.',
+            'acteMariage.mimes' => 'Le fichier doit être au format PNG, JPG,JPEG ou pdf.',
+            'acteMariage.max' => 'L\'image ne doit pas dépasser 1000 Ko.',
+            'nom.required' => 'Le nom de l\'enfant est obligatoire.',
+            'prenom.required' => 'Le prénom de l\'enfant est obligatoire.',
+            'nompere.required' => 'Le nom du père est obligatoire.',
+            'prenompere.required' => 'Le prénom du père est obligatoire.',
+            'datepere.required' => 'La date de naissance du père est obligatoire.',
         ];
     }
 }

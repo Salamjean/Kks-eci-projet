@@ -22,23 +22,20 @@ class saveMariageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'pieceIdentite' => 'required|image|mimes:png,jpg,jpeg|max:300',
-            'extraitMariage' => 'required|image|mimes:png,jpg,jpeg|max:300',
+            'pieceIdentite' => ' required|mimes:png,jpg,jpeg,pdf|max:1000',
+            'extraitMariage' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
             ];
     }
 
     public function messages() 
     {
         return [
-            'pieceIdentite.required' => 'Le champ est obligatoire.',
-            'extraitMariage.required' => 'Le champ est obligatoire.',
-            'pieceIdentite.image' => 'Le champ doit être une image.',
+            'pieceIdentite.required' => 'La CNI est obligatoire.',
+            'extraitMariage.required' => 'L\'extrait de mariage obligatoire.',
             'pieceIdentite.mimes' => 'Le format de l\'image doit être PNG, JPG ou JPEG.',
-            'pieceIdentite.max' => 'La taille de l\'image ne doit pas dépasser 300Ko.',
-            'extraitMariage.image' => 'Le champ doit être une image.',
+            'pieceIdentite.max' => 'La taille de l\'image ne doit pas dépasser 1000Ko.',
             'extraitMariage.mimes' => 'Le format de l\'image doit être PNG, JPG ou JPEG.',
-            'extraitMariage.max' => 'La taille de l\'image ne doit pas dépasser 300Ko.',
-            
+            'extraitMariage.max' => 'La taille de l\'image ne doit pas dépasser 1000Ko.',
         ];
     }
 }

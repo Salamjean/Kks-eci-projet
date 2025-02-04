@@ -37,8 +37,8 @@ class CgraeAgentController extends Controller
            ]);
            try {
                // Récupérer le vendor connecté
-               $cgrae = Auth::guard('cgrae')->user();
-               if (!$cgrae || !$cgrae->siege) {
+               $cgraeagence = Auth::guard('agencecgrae')->user();
+               if (!$cgraeagence || !$cgraeagence->agence_name) {
                    return redirect()->back()->withErrors(['error' => 'Impossible de récupérer les informations du vendor.']);
                }
                // Création du docteur
@@ -53,7 +53,7 @@ class CgraeAgentController extends Controller
                    $agent->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
                }
                $agent->commune = $request->commune;
-               $agent->communeM = $cgrae->siege;
+               $agent->communeM = $cgraeagence->agence_name;
                
                $agent->save();
                // Envoi de l'e-mail de vérification
@@ -73,11 +73,11 @@ class CgraeAgentController extends Controller
 
         public function index()
         {
-            $admin = Auth::guard('cgrae')->user();
+            $admin = Auth::guard('agencecgrae')->user();
         
             $alerts = Alert::all();
             $agents = CgraeAgent::whereNull('archived_at')
-                ->where('communeM', $admin->siege)
+                ->where('communeM', $admin->agence_name)
                 ->paginate(10);
         
             // Retourner la vue avec les données

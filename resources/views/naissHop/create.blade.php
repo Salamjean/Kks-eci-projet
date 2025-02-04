@@ -256,19 +256,19 @@
 
     <fieldset>
       <h2 class="fs-title">Déclaration de naissance</h2>
-      <h3 class="fs-subtitle">Informations sur la compagnateur</h3>
+      <h3 class="fs-subtitle">Informations sur l'accompagnateur</h3>
       <div class="form-group">
-      <input type="text" name="NomP" placeholder="Entrez le nom de la compagnateur" />
+      <input type="text" name="NomP" placeholder="Entrez le nom de l'accompagnateur" />
       @error('NomP')
       <div class="text-danger text-center">{{ $message }}</div>
       @enderror
-          <input type="text" name="PrP" placeholder="Entrez le prénom de la compagnateur" />
+          <input type="text" name="PrP" placeholder="Entrez le prénom l'accompagnateur" />
           @error('PrP')
           <div class="text-danger text-center">{{ $message }}</div>
       @enderror
       </div>
       <div class="form-group">
-          <input type="text" name="contP" placeholder="Entrez le numéro de la compagnateur"><br>
+          <input type="text" name="contP" placeholder="Entrez le numéro l'accompagnateur"><br>
           @error('contP')
           <div class="text-danger text-center">{{ $message }}</div>
           @enderror

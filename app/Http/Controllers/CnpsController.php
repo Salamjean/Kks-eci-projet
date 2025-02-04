@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgenceCnps;
 use App\Models\Alert;
 use App\Models\Cnps;
 use App\Models\CnpsAgent;
@@ -26,6 +27,7 @@ class CnpsController extends Controller
     $admin = Auth::guard('cnps')->user();
     $cnpsagent = CnpsAgent::where('communeM', $admin->siege)->count();
     $deceshops = DecesHop::count();
+    $agences = AgenceCnps::count();
 
     // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CNPS
     $searchHistory = session('cnps_search_history', []);
@@ -34,7 +36,8 @@ class CnpsController extends Controller
     return view('superadmin.cnps.dashboard', compact(
         'cnpsagent',
         'deceshops',
-        'searchHistory'
+        'searchHistory',
+        'agences'
     ));
 }
 
@@ -56,6 +59,12 @@ public function recherche(Request $request)
         $deceshops = DecesHop::all();
         return view('superadmin.cnps.cnpsindex', compact('deceshops'));
     }
+
+    function agentslistes(){
+        $agents = CnpsAgent::all();
+        return view('superadmin.cnps.indexagent', compact('agents'));
+    }
+    
 
     public function create(){
         $alerts = Alert::all();

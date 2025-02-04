@@ -88,53 +88,49 @@ class MariageController extends Controller
     // Retourner la vue avec les mariages fusionnés et les alertes
     return view('mariages.userindex', compact('allMariages', 'alerts'));
 }
-    public function agentindex(Request $request)
-    {
-        // Récupérer l'admin connecté
-        $admin = Auth::guard('agent')->user();
 
-        // Initialiser la requête pour Mariage et filtrer par commune de l'admin
-        $query = Mariage::where('commune', $admin->communeM)
-        ->where('agent_id', $admin->id); // Filtrer par commune de l'admin connecté
+public function agentindex(Request $request)
+{
+    // Récupérer l'admin connecté
+    $admin = Auth::guard('agent')->user();
 
-        // Vérifier le type de recherche et appliquer le filtre
-        if ($request->filled('searchType') && $request->filled('searchInput')) {
-            if ($request->searchType === 'nomConjoint') {
-                $query->where('nomEpoux', 'like', '%' . $request->searchInput . '%')
-                      ->orWhere('nomEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (nomEpoux, nomEpouse)
-            } elseif ($request->searchType === 'prenomConjoint') {
-                $query->where('prenomEpoux', 'like', '%' . $request->searchInput . '%')
-                      ->orWhere('prenomEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (prenomEpoux, prenomEpouse)
-            } elseif ($request->searchType === 'lieuNaissance') {
-                $query->where('lieuNaissanceEpoux', 'like', '%' . $request->searchInput . '%')
-                      ->orWhere('lieuNaissanceEpouse', 'like', '%' . $request->searchInput . '%'); // Recherche dans les deux colonnes (lieuNaissanceEpoux, lieuNaissanceEpouse)
-            }
+    // Initialiser la requête pour Mariage et filtrer par commune de l'admin
+    $query = Mariage::where('commune', $admin->communeM)
+        ->where('agent_id', $admin->id)
+        ->with('user'); // Ajout de la récupération de la relation 'user'
+
+    // Vérifier le type de recherche et appliquer le filtre
+    if ($request->filled('searchType') && $request->filled('searchInput')) {
+        if ($request->searchType === 'nomConjoint') {
+            $query->where(function($q) use ($request) {
+                $q->where('nomEpoux', 'like', '%' . $request->searchInput . '%')
+                    ->orWhere('nomEpouse', 'like', '%' . $request->searchInput . '%');
+            });
+        } elseif ($request->searchType === 'prenomConjoint') {
+            $query->where(function($q) use ($request) {
+               $q->where('prenomEpoux', 'like', '%' . $request->searchInput . '%')
+                   ->orWhere('prenomEpouse', 'like', '%' . $request->searchInput . '%');
+            });
+        } elseif ($request->searchType === 'lieuNaissance') {
+            $query->where(function($q) use ($request) {
+                $q->where('lieuNaissanceEpoux', 'like', '%' . $request->searchInput . '%')
+                    ->orWhere('lieuNaissanceEpouse', 'like', '%' . $request->searchInput . '%');
+            });
         }
+    }
+    
+    // Récupérer tous les mariages correspondant aux critères de filtrage
+    $mariages = $query->paginate(10);
 
-        // Récupérer tous les mariages correspondant aux critères de filtrage
-        $mariages = $query->paginate(10);
-
-        // Filtrer les mariages où pieceIdentite et extraitMariage sont remplis et la commune est celle de l'admin
-        $mariagesAvecFichiersSeulement = $mariages->filter(function($mariage) use ($admin) {
-            return !is_null($mariage->pieceIdentite) && !is_null($mariage->extraitMariage) && $mariage->commune == $admin->communeM;
-        });
-
-        // Filtrer les mariages où nomEpoux, prenomEpoux, dateNaissanceEpoux, lieuNaissanceEpoux, commune sont remplis
-        $mariagesComplets = $mariages->filter(function($mariage) {
-            return $mariage->nomEpoux && $mariage->prenomEpoux && $mariage->dateNaissanceEpoux &&
-                   $mariage->lieuNaissanceEpoux && $mariage->commune && $mariage->pieceIdentite && $mariage->extraitMariage;
-        });
-
-        // Récupérer toutes les alertes
-        $alerts = Alert::where('is_read', false)
-        ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
+    // Récupérer toutes les alertes
+    $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'naissanceD', 'mariage', 'deces', 'decesHop', 'naissHop'])
         ->latest()
         ->get();
 
-        // Retourner la vue avec les mariages filtrés et les alertes
-        return view('mariages.agentindex', compact('mariagesAvecFichiersSeulement', 'mariagesComplets', 'mariages', 'alerts'));
-    }
-
+    // Retourner la vue avec les mariages filtrés et les alertes
+    return view('mariages.agentindex', compact('mariages', 'alerts'));
+}
     public function ajointindex(Request $request)
 {
     // Récupérer l'admin connecté
@@ -221,9 +217,24 @@ class MariageController extends Controller
         $mariage->pieceIdentite = $uploadedPaths['pieceIdentite'] ?? null;
         $mariage->extraitMariage = $uploadedPaths['extraitMariage'] ?? null;
         $mariage->commune = $commune; // Utilisation de la commune spécifiée
+        $mariage->choix_option = $request->choix_option;
         $mariage->CMU = $request->CMU;
         $mariage->etat = 'en attente';
         $mariage->user_id = $user->id;  // Lier la demande à l'utilisateur connecté
+
+        if ($request->input('choix_option') === 'livraison') {
+            $mariage->montant_timbre = $request->input('montant_timbre');
+            $mariage->montant_livraison = $request->input('montant_livraison');
+            $mariage->nom_destinataire = $request->input('nom_destinataire');
+            $mariage->prenom_destinataire = $request->input('prenom_destinataire');
+            $mariage->email_destinataire = $request->input('email_destinataire');
+            $mariage->contact_destinataire = $request->input('contact_destinataire');
+            $mariage->adresse_livraison = $request->input('adresse_livraison');
+            $mariage->code_postal = $request->input('code_postal');
+            $mariage->ville = $request->input('ville');
+            $mariage->commune_livraison = $request->input('commune_livraison');
+            $mariage->quartier = $request->input('quartier');
+        }
         
         $mariage->save();
         

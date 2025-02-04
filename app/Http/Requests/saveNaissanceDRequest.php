@@ -24,7 +24,12 @@ class saveNaissanceDRequest extends FormRequest
         return [
             'type' => 'required',
             'name' => 'required',
+            'prenom' => 'required',
             'number' => 'required',
+            'DateR' => 'required',
+            'CMU' => 'required',
+            'commune' => 'required',
+            'CNI' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
             
         ];
     }
@@ -34,7 +39,14 @@ class saveNaissanceDRequest extends FormRequest
         return [
             'type.required' => 'le type d\'extrait que vous-voulez demander est obligatoire',
             'name.required' => 'Le nom est obligatoire',
-            'number.required' => 'Le numéro de ton extrait est obligatoire est obligatoire',
+            'prenom.required' => 'Le prénom est obligatoire',
+            'number.required' => 'Le numéro de registre sur l\'extrait est obligatoire',
+            'DateR.required' => 'La date de registre est obligatoire',
+            'CMU.required' => 'Le numéro de CMU est obligatoire',
+            'commune.required' => 'La commune est obligatoire',
+            'CNI.required' => 'Le champ CNI est obligatoire',
+            'CNI.mimes' => 'Le format du fichier doit être PNG, JPG, JPEG ou PDF',
+            'CNI.max' => 'Le fichier ne doit pas dépasser 1Mo',
         ];
     }
 }

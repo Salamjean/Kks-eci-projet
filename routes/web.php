@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AgenceCgraeController;
+use App\Http\Controllers\AgenceCnpsController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AjointController;
 use App\Http\Controllers\CaisseController;
@@ -8,6 +10,7 @@ use App\Http\Controllers\CgraeAgentController;
 use App\Http\Controllers\CgraeController;
 use App\Http\Controllers\CnpsAgentController;
 use App\Http\Controllers\CnpsController;
+use App\Http\Controllers\CompteDemandeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DecesController;
 use App\Http\Controllers\DecesHopController;
@@ -23,6 +26,7 @@ use App\Http\Controllers\MinistereController;
 use App\Http\Controllers\NaissanceController;
 use App\Http\Controllers\NaissanceDeclaController;
 use App\Http\Controllers\NaissHopController;
+use App\Http\Controllers\PaiemntConfigController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SousAdminController;
 use App\Http\Controllers\StatController;
@@ -53,6 +57,8 @@ Route::get('/admin/login', function () {
 Route::prefix('utilisateur')->group(function () {
     // Dashboard
     Route::middleware('utilisateur')->get('/dashboard', [DashboardController::class, 'index'])->name('utilisateur.dashboard');
+    Route::get('/demandes/livraison/{id}', [CompteDemandeController::class, 'initPaiment'])->name('demandes.livraison');
+    //Route::post('/compte_demandes', [CompteDemandeController::class, 'updateLivraison'])->name('naissances.livraison');
     Route::get('/index', [NaissanceController::class, 'userindex'])->name('utilisateur.index');
     Route::get('/deces-index', [DecesController::class, 'userindex'])->name('decesutilisateur.index');
     Route::get('/mariage-index', [MariageController::class, 'userindex'])->name('mariage.userindex');
@@ -134,6 +140,9 @@ Route::middleware('auth:web')->group(function () {
         Route::get('super-admin/mariage', [MariageController::class, 'superindex'])->name('supermariage.index');
         Route::get('super-admin/docter', [SousAdminController::class, 'superindex'])->name('superdocteur.index');
 
+        Route::get('paiement-configuration',[PaiemntConfigController::class,'getAccountInfo'])->name('paiement-configuration');
+        Route::post('paiement-configuration',[PaiemntConfigController::class,'handleUpdateInfo'])->name('paiement.UpdateConfiguration');
+
 
         //Les routes de la mairies dans le super-admin 
             Route::get('mairie/index', [SuperAdminController::class, 'index'])->name('super_admin.index');
@@ -172,23 +181,48 @@ Route::middleware('auth:web')->group(function () {
     Route::delete('/{cgraes}/archive', [CgraeController::class, 'cgraesarchive'])->name('cgraes.archive');
     Route::put('/cgraes/unarchive/{id}', [CgraeController::class, 'unarchive'])->name('cgraes.unarchive');
     Route::delete('/{cgraes}/delete', [CgraeController::class, 'cgraesdelete'])->name('cgraes.delete');
+
     Route::middleware('auth:cgrae')->group(function () {
         // Dashboard
         Route::get('/dashboard', [CgraeController::class, 'dashboard'])->name('cgraes.dashboard');
+        Route::get('/agents/listes', [CgraeController::class, 'agentslistes'])->name('cgraes.agentlistes');
         Route::get('/cgrae/index-declaration', [CgraeController::class, 'indexdeclaration'])->name('cgraes.indexdashboard');
         Route::get('/cgrae/recherche', [CgraeController::class, 'recherche'])->name('cgrae.recherche');
         Route::get('/logout', [CgraeController::class, 'logout'])->name('cgrae.logout');
-         // creation de l'agent de la cnps
-        Route::prefix('cgrae/agents')->group(function () {
-            Route::get('/', [CgraeAgentController::class, 'index'])->name('cgraeagent.index');
-            Route::get('/create', [CgraeAgentController::class, 'create'])->name('cgraeagent.create');
-            Route::post('/store', [CgraeAgentController::class, 'store'])->name('cgraeagent.store');
-            Route::get('/{agent}/edit', [CgraeAgentController::class, 'edit'])->name('cgraeagent.edit');
-            Route::put('/{agent}/update', [CgraeAgentController::class, 'update'])->name('cgraeagent.update');
-            Route::delete('/{agent}/archive', [CgraeAgentController::class, 'archive'])->name('cgraeagent.archive');
-            //Route::delete('/{agent}/delete', [CgraeAgentController::class, 'delete'])->name('cgraeagent.delete');
+
+            Route::prefix('/agences')->group(function () {
+                Route::get('/', [AgenceCgraeController::class, 'index'])->name('cgraeagences.index');
+                Route::get('/create', [AgenceCgraeController::class, 'create'])->name('cgraeagences.create');
+                Route::post('/store', [AgenceCgraeController::class, 'store'])->name('cgraeagences.store');
+                Route::get('/{agence}/edit', [AgenceCgraeController::class, 'edit'])->name('cgraeagences.edit');
+                Route::put('/{agence}/update', [AgenceCgraeController::class, 'update'])->name('cgraeagences.update');
+                Route::delete('/{agence}/archive', [AgenceCgraeController::class, 'archive'])->name('cgraeagences.archive');
+                //Route::delete('/{agent}/delete', [AgenceCgraeController::class, 'delete'])->name('cgraeagences.delete');
+                });         
             });
-        });
+    });
+
+      // creation de l'agent de la cnps
+    Route::middleware('auth:agencecgrae')->prefix('cgrae/agents')->group(function () {
+    Route::get('/', [CgraeAgentController::class, 'index'])->name('cgraeagent.index');
+    Route::get('/create', [CgraeAgentController::class, 'create'])->name('cgraeagent.create');
+    Route::post('/store', [CgraeAgentController::class, 'store'])->name('cgraeagent.store');
+    Route::get('/cgrae/index-declaration', [AgenceCgraeController::class, 'indexdeclaration'])->name('cgraeagences.indexdashboard');
+    Route::get('/{agent}/edit', [CgraeAgentController::class, 'edit'])->name('cgraeagent.edit');
+    Route::put('/{agent}/update', [CgraeAgentController::class, 'update'])->name('cgraeagent.update');
+    Route::delete('/{agent}/archive', [CgraeAgentController::class, 'archive'])->name('cgraeagent.archive');
+    //Route::delete('/{agent}/delete', [CgraeAgentController::class, 'delete'])->name('cgraeagent.delete');
+    });
+
+    Route::middleware('auth:agencecnps')->prefix('cnps/agents')->group(function () {
+        Route::get('/', [CnpsAgentController::class, 'index'])->name('cnpsagent.index');
+        Route::get('/create', [CnpsAgentController::class, 'create'])->name('cnpsagent.create');
+        Route::post('/store', [CnpsAgentController::class, 'store'])->name('cnpsagent.store');
+        Route::get('/cnps/index-declaration', [AgenceCnpsController::class, 'indexdeclaration'])->name('cnpsagences.indexdashboard');
+        Route::get('/{agent}/edit', [CnpsAgentController::class, 'edit'])->name('cnpsagent.edit');
+        Route::put('/{agent}/update', [CnpsAgentController::class, 'update'])->name('cnpsagent.update');
+        Route::delete('/{agent}/archive', [CnpsAgentController::class, 'archive'])->name('cnpsagent.archive');
+        //Route::delete('/{agent}/delete', [CnpsAgentController::class, 'delete'])->name('cnpsagent.delete');
     });
     //Les routes de la cnps dans le super-admin
     Route::prefix('cnps')->group(function () {
@@ -204,19 +238,20 @@ Route::middleware('auth:web')->group(function () {
     Route::middleware('auth:cnps')->group(function () {
         // Dashboard
         Route::get('/dashboard', [CnpsController::class, 'dashboard'])->name('cnps.dashboard');
+        Route::get('/agents/listes', [CnpsController::class, 'agentslistes'])->name('cnps.agentlistes');
         Route::get('/cnps/index-declaration', [CnpsController::class, 'indexdeclaration'])->name('cnps.indexdashboard');
         Route::get('/cnps/recherche', [CnpsController::class, 'recherche'])->name('cnps.recherche');
         Route::get('/logout', [CnpsController::class, 'logout'])->name('cnps.logout');
 
-         // creation de l'agent de la cnps
-        Route::prefix('cnps/agents')->group(function () {
-            Route::get('/', [CnpsAgentController::class, 'index'])->name('cnpsagent.index');
-            Route::get('/create', [CnpsAgentController::class, 'create'])->name('cnpsagent.create');
-            Route::post('/store', [CnpsAgentController::class, 'store'])->name('cnpsagent.store');
-            Route::get('/{agent}/edit', [CnpsAgentController::class, 'edit'])->name('cnpsagent.edit');
-            Route::put('/{agent}/update', [CnpsAgentController::class, 'update'])->name('cnpsagent.update');
-            Route::delete('/{agent}/archive', [CnpsAgentController::class, 'archive'])->name('cnpsagent.archive');
-            //Route::delete('/{agent}/delete', [CnpsAgentController::class, 'delete'])->name('cnpsagent.delete');
+         // creation de l'agence de la cnps
+        Route::prefix('/agences')->group(function () {
+            Route::get('/', [AgenceCnpsController::class, 'index'])->name('cnpsagences.index');
+            Route::get('/create', [AgenceCnpsController::class, 'create'])->name('cnpsagences.create');
+            Route::post('/store', [AgenceCnpsController::class, 'store'])->name('cnpsagences.store');
+            Route::get('/{agence}/edit', [AgenceCnpsController::class, 'edit'])->name('cnpsagences.edit');
+            Route::put('/{agence}/update', [AgenceCnpsController::class, 'update'])->name('cnpsagences.update');
+            Route::delete('/{agence}/archive', [AgenceCnpsController::class, 'archive'])->name('cnpsagences.archive');
+            //Route::delete('/{agent}/delete', [AgenceCnpsController::class, 'delete'])->name('cnpsagences.delete');
                 });         
             });
 
@@ -378,6 +413,11 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     Route::post('/validate-cnps-account/{email}', [CnpsController::class, 'submitDefineAccess'])->name('cnps.validate');
     Route::get('/validate-cnps-agent-account/{email}', [CnpsAgentController::class, 'defineAccess']);
     Route::post('/validate-cnps-agent-account/{email}', [CnpsAgentController::class, 'submitDefineAccess'])->name('cnpsagent.validate');
+
+    Route::get('/validate-cnps-agence-account/{email}', [AgenceCnpsController::class, 'defineAccess']);
+    Route::post('/validate-cnps-agence-account/{email}', [AgenceCnpsController::class, 'submitDefineAccess'])->name('cnpsagences.validate');
+    Route::get('/validate-cgrae-agence-account/{email}', [AgenceCgraeController::class, 'defineAccess']);
+    Route::post('/validate-cgrae-agence-account/{email}', [AgenceCgraeController::class, 'submitDefineAccess'])->name('cgraeagences.validate');
     Route::get('/validate-cgrae-account/{email}', [CgraeController::class, 'defineAccess']);
     Route::post('/validate-cgrae-account/{email}', [CgraeController::class, 'submitDefineAccess'])->name('cgrae.validate');
     Route::get('/validate-cgrae-agent-account/{email}', [CgraeAgentController::class, 'defineAccess']);
@@ -430,14 +470,24 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::post('/login', [AgentController::class, 'handleLogin'])->name('agent.handleLogin');
     });
 
-    Route::prefix('cnps/agent')->group(function() {
-        Route::get('/login', [CnpsAgentController::class, 'login'])->name('cnpsagent.login');
-        Route::post('/login', [CnpsAgentController::class, 'handleLogin'])->name('cnpsagent.handleLogin');
+    Route::prefix('cnps/agences')->group(function() {
+        Route::get('/login', [AgenceCnpsController::class, 'login'])->name('cnpsagences.login');
+        Route::post('/login', [AgenceCnpsController::class, 'handleLogin'])->name('cnpsagences.handleLogin');
+    });
+
+    Route::prefix('cgrae/agences')->group(function() {
+        Route::get('/login', [AgenceCgraeController::class, 'login'])->name('cgraeagences.login');
+        Route::post('/login', [AgenceCgraeController::class, 'handleLogin'])->name('cgraeagences.handleLogin');
     });
 
     Route::prefix('cgrae/agent')->group(function() {
         Route::get('/login', [CgraeAgentController::class, 'login'])->name('cgraeagent.login');
         Route::post('/login', [CgraeAgentController::class, 'handleLogin'])->name('cgraeagent.handleLogin');
+    });
+
+    Route::prefix('cnps/agent')->group(function() {
+        Route::get('/login', [CnpsAgentController::class, 'login'])->name('cnpsagent.login');
+        Route::post('/login', [CnpsAgentController::class, 'handleLogin'])->name('cnpsagent.handleLogin');
     });
 
     Route::prefix('ministere/agent')->group(function() {
@@ -460,14 +510,24 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
         Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');
     });
-    Route::middleware('auth:cnpsagent')->prefix('cnps/agent')->group(function(){
-        Route::get('/dashboard', [CnpsAgentController::class, 'dashboard'])->name('cnpsagent.dashboard');
-        Route::get('/logout', [CnpsAgentController::class, 'logout'])->name('cnpsagent.logout');
+    Route::middleware('auth:agencecnps')->prefix('cnps/agences')->group(function(){
+        Route::get('/dashboard', [AgenceCnpsController::class, 'dashboard'])->name('cnpsagences.dashboard');
+        Route::get('/logout', [AgenceCnpsController::class, 'logout'])->name('cnpsagences.logout');
+    });
+
+    Route::middleware('auth:agencecgrae')->prefix('cgrae/agences')->group(function(){
+        Route::get('/dashboard', [AgenceCgraeController::class, 'dashboard'])->name('cgraeagences.dashboard');
+        Route::get('/logout', [AgenceCgraeController::class, 'logout'])->name('cgraeagences.logout');
     });
 
     Route::middleware('auth:cgraeagent')->prefix('cgrae/agent')->group(function(){
         Route::get('/dashboard', [CgraeAgentController::class, 'dashboard'])->name('cgraeagent.dashboard');
         Route::get('/logout', [CgraeAgentController::class, 'logout'])->name('cgraeagent.logout');
+    });
+
+    Route::middleware('auth:cnpsagent')->prefix('cnps/agent')->group(function(){
+        Route::get('/dashboard', [CnpsAgentController::class, 'dashboard'])->name('cnpsagent.dashboard');
+        Route::get('/logout', [CnpsAgentController::class, 'logout'])->name('cnpsagent.logout');
     });
 
     Route::middleware('auth:ministereagent')->prefix('ministere/agent')->group(function(){

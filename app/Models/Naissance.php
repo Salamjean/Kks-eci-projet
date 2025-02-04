@@ -35,4 +35,8 @@ class Naissance extends Model
     {
         return $this->belongsTo(Agent::class, 'agent_id');
     }
+    public function compteDemandes()
+{
+    return $this->hasMany(CompteDemande::class);
+}
 }

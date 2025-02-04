@@ -6,46 +6,38 @@
 
 <style>
     body {
-        background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}'); /* Remplacez par le chemin de votre image */
-        background-size: cover; /* Pour couvrir l'ensemble de la zone */
-        background-position: center; /* Centre l'image */
-        min-height: 100vh; /* Hauteur minimale pour remplir la page */
+        background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}');
+        background-size: cover;
+        background-position: center;
+        min-height: 100vh;
     }
-
-    /* Styles pour le formulaire */
     .conteneurInfo {
-        background: rgba(255, 255, 255, 0.8); /* Fond blanc avec transparence */
+        background: rgba(255, 255, 255, 0.8);
         padding: 30px 40px;
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        max-width: 800px; /* Augmenté pour la nouvelle colonne */
+        max-width: 1000px;
         margin: auto;
         animation: fadeIn 0.6s ease-in-out;
     }
-
     @keyframes fadeIn {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
-
     h1 {
         text-align: center;
         color: #1a5c58;
         margin-bottom: 1rem;
         font-size: 40px;
     }
-
+    h4 {
+        font-weight: bold;
+    }
     label {
         font-weight: bold;
         color: #1a5c58;
-        margin-top: 1rem;
     }
-
-    input[type="text"], input[type="file"], input[type="date"] {
+    .form-control, select, input[type="text"], input[type="file"], input[type="date"] {
         width: 100%;
         padding: 0.8rem;
         border: 1px solid #ddd;
@@ -53,7 +45,6 @@
         background: #f9f9f9;
         outline: none;
     }
-
     button {
         width: 100%;
         padding: 1rem;
@@ -66,38 +57,38 @@
         cursor: pointer;
         margin-top: 2rem;
     }
-
     button:hover {
         background-color: #144d4b;
     }
-
     .hidden {
         display: none;
     }
-
     .form-row {
         display: flex;
         flex-wrap: wrap;
-        margin: -0.5rem;
     }
-
     .form-group {
         padding: 0.5rem;
-        flex: 1; /* Prend tout l'espace disponible */
+        flex: 1;
     }
-
     .form-group.half-width {
-        flex: 0 0 50%; /* 50% de la largeur pour deux colonnes */
+        flex: 0 0 50%;
+    }
+    .radio-group {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
     }
 
-    @media (max-width: 768px) {
-        .form-group.half-width {
-            flex: 0 0 100%; /* 100% de la largeur sur mobile */
-        }
+    .radio-group label {
+        margin-left: 5px;
+    }
+     .radio-group input[type="radio"] {
+        margin-right: 5px;
+        transform: scale(1.2);
     }
 </style>
 
-<!-- Afficher les messages SweetAlert -->
 @if (Session::get('success'))
 <script>
     Swal.fire({
@@ -122,22 +113,19 @@
 </script>
 @endif
 
-<!-- Contenu du formulaire -->
 <div class="conteneurInfo">
     <h1>Demande d'acte de Naissance</h1>
     <form id="naissanceForm" method="POST" action="{{ route('naissance.store') }}" enctype="multipart/form-data">
         @csrf
 
-        <!-- Saisie du numéro de dossier médical -->
-        <div class="form-group" class="text-center">
+        <div class="form-group text-center">
             <label for="dossierNum">Numéro de Dossier Médical</label>
-            <input class="text-center" type="text" id="dossierNum" name="dossierNum" value="{{ old('dossierNum') }}" placeholder="Ex: CMN1411782251">
+            <input class="text-center" type="text" id="dossierNum" name="dossierNum" value="{{ old('dossierNum') }}" placeholder="Ex: CMN1411782251" required>
             @error('dossierNum')
             <span style="color: red">{{ $message }}</span>
             @enderror
         </div>
 
-        <!-- Section masquée avec les informations récupérées -->
         <div id="infoDefunt" class="hidden">
             <div class="form-group text-center">
                 <label for="nomHopital">Nom de l'Hôpital</label>
@@ -148,7 +136,6 @@
                     <label for="nomDefunt">Nom et Prénom de la Mère</label>
                     <input type="text" id="nomDefunt" name="nomDefunt" readonly>
                 </div>
-
                 <div class="form-group">
                     <label for="dateNaiss">Nom et Prénom de l'accompagnateur</label>
                     <input type="text" id="dateNaiss" name="dateNaiss" readonly>
@@ -162,11 +149,17 @@
                 </div>
                 <div class="form-group half-width">
                     <label for="nom">Nom du nouveau né</label>
-                    <input type="text" id="nom" name="nom" placeholder="Entrez le nom du nouveau né">
+                    <input type="text" id="nom" name="nom" placeholder="Entrez le nom du nouveau né" >
+                    @error('nom')
+                    <span style="color: red">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label for="prenom">Prénoms du nouveau né</label>
-                    <input type="text" id="prenom" name="prenom" placeholder="Entrez les prénoms du nouveau né">
+                    <input type="text" id="prenom" name="prenom" placeholder="Entrez les prénoms du nouveau né" >
+                    @error('prenom')
+                    <span style="color: red">{{ $message }}</span>
+                    @enderror
                 </div>
             </div>
 
@@ -174,19 +167,28 @@
             <div class="form-row">
                 <div class="form-group half-width">
                     <label for="nompere">Nom du père</label>
-                    <input type="text" id="nompere" name="nompere" placeholder="Entrez le nom du père">
+                    <input type="text" id="nompere" name="nompere" placeholder="Entrez le nom du père" >
+                    @error('nompere')
+                    <span style="color: red">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group half-width">
                     <label for="prenompere">Prénoms du père</label>
-                    <input type="text" id="prenompere" name="prenompere" placeholder="Entrez les prénoms du père">
+                    <input type="text" id="prenompere" name="prenompere" placeholder="Entrez les prénoms du père" >
+                    @error('identiteDeclarant')
+                    <span style="color: red">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group half-width">
                     <label for="datepere">Date de naissance du père</label>
-                    <input type="date" id="datepere" name="datepere">
+                    <input type="date" id="datepere" name="datepere" >
+                    @error('identiteDeclarant')
+                    <span style="color: red">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group half-width">
                     <label for="identiteDeclarant">Pièce d'Identité du Père</label>
-                    <input type="file" id="identiteDeclarant" name="identiteDeclarant">
+                    <input type="file" id="identiteDeclarant" name="identiteDeclarant" accept=".pdf, .jpg, .jpeg, .png, .gif" >
                     @error('identiteDeclarant')
                     <span style="color: red">{{ $message }}</span>
                     @enderror
@@ -195,11 +197,26 @@
 
             <div class="form-group text-center">
                 <label for="cdnaiss">Certificat de Déclaration de Naissance</label>
-                <input type="file" id="cdnaiss" name="cdnaiss">
+                <input type="file" id="cdnaiss" name="cdnaiss" accept=".pdf, .jpg, .jpeg, .png, .gif" >
                 @error('cdnaiss')
                 <span style="color: red">{{ $message }}</span>
                 @enderror
             </div>
+
+            <!-- Options Radio -->
+            <div class="form-group text-center" id="optionsSection">
+                <p style="font-weight: bold; color: #1a5c58;">Choisissez le mode de rétrait :</p>
+                <div class="form-row d-flex justify-content-center align-items-center gap-4">
+                  <div class="radio-group">
+                    <input type="radio" id="option1" name="choix_option" value="retrait_sur_place" checked required>
+                    <label for="option1" class="mt-2">Retrait sur place</label>
+                  </div>
+                  <div class="radio-group">
+                    <input type="radio" id="option2" name="choix_option" value="livraison" required>
+                    <label for="option2" class="mt-2">Livraison</label>
+                  </div>
+                </div>
+              </div>
         </div>
 
         <!-- Boutons -->
@@ -209,13 +226,45 @@
 </div>
 
 <script>
+    $(document).ready(function() {
+        // Cacher la section des options par défaut
+        $("#optionsSection").hide();
+
+        // Fonction pour vérifier si tous les champs obligatoires sont remplis
+        function checkFields() {
+            const isFilled = $("#naissanceForm input[required]").toArray().every(input => input.value.trim() !== "");
+            if (isFilled) {
+                $("#optionsSection").fadeIn(); // Afficher avec effet
+            } else {
+                $("#optionsSection").hide(); // Cacher si des champs sont vides
+            }
+        }
+
+        // Écoutez les changements dans les champs du formulaire
+        $("#naissanceForm input").on("input change", checkFields);
+
+        // Appel de la fonction initiale pour vérifier l'état des champs
+        checkFields();
+
+         // Gestion de la soumission du formulaire
+         $("#naissanceForm").submit(function(event) {
+            event.preventDefault(); // Empêcher la soumission standard du formulaire
+
+            if ($('input[name="choix_option"]:checked').val() === 'livraison') {
+              showLivraisonPopup();
+            }else{
+                this.submit();
+            }
+        });
+    });
+
     function validerFormulaire() {
         const dossierNum = $("#dossierNum").val();
         if (!dossierNum.trim()) {
             Swal.fire({
                 icon: 'error',
                 title: 'Erreur',
-                text: 'Veuillez entrer un numéro de dossier médical.',
+                text: 'Veuillez entrer un numéro de certificat médical de naissance.',
             });
             return;
         }
@@ -237,11 +286,13 @@
                     $("#infoDefunt").removeClass("hidden");
                     $("#btnSuivant").addClass("hidden");
                     $("#btnValider").removeClass("hidden");
+                    checkFields(); // Vérifiez les champs après la réponse
+
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Erreur',
-                        text: 'Numéro de dossier incorrect.',
+                        text: 'Ce numéro <' + dossierNum + '> n\'existe pas.',
                     });
                 }
             },
@@ -254,5 +305,88 @@
             }
         });
     }
+function showLivraisonPopup() {
+    Swal.fire({
+        title: 'Informations de Livraison',
+        width: '800px',
+        html:
+            `<div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+                <div>
+                    <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
+                    <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
+                    <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
+                </div>
+                <div>
+                    <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
+                    <input id="swal-montant_livraison" class="swal2-input text-center" value="1500" readonly>
+                    <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
+                </div>
+                <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
+                <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
+                <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire"></div>
+                <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire"></div>
+                <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison"></div>
+                <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
+                <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville"></div>
+                <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
+                <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
+            </div>`,
+         showCancelButton: true,
+        cancelButtonText: 'Annuler',
+        focusConfirm: false,
+        preConfirm: () => {
+            const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
+            const prenom_destinataire = document.getElementById('swal-prenom_destinataire').value;
+            const email_destinataire = document.getElementById('swal-email_destinataire').value;
+            const contact_destinataire = document.getElementById('swal-contact_destinataire').value;
+            const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
+            const code_postal = document.getElementById('swal-code_postal').value;
+            const ville = document.getElementById('swal-ville').value;
+            const commune_livraison = document.getElementById('swal-commune_livraison').value;
+            const quartier = document.getElementById('swal-quartier').value;
+            const montant_timbre = document.getElementById('swal-montant_timbre').value;
+            const montant_livraison = document.getElementById('swal-montant_livraison').value;
+
+            if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier|| !montant_timbre || !montant_livraison) {
+                Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
+                return false;
+            }
+            return {
+                nom_destinataire: nom_destinataire,
+                prenom_destinataire: prenom_destinataire,
+                email_destinataire: email_destinataire,
+                contact_destinataire: contact_destinataire,
+                adresse_livraison: adresse_livraison,
+                code_postal: code_postal,
+                ville: ville,
+                commune_livraison: commune_livraison,
+                quartier: quartier,
+                montant_timbre:montant_timbre,
+                montant_livraison:montant_livraison,
+            };
+        }
+    }).then((result) => {
+         if (result.isConfirmed) {
+            // Ajout des données de livraison au formulaire
+            const formData = result.value;
+            const form = document.getElementById('naissanceForm');
+            for (const key in formData) {
+                if (formData.hasOwnProperty(key)) {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = key;
+                    hiddenInput.value = formData[key];
+                    form.appendChild(hiddenInput)
+                }
+            }
+            // Soumission du formulaire
+            form.submit();
+        }else if(result.dismiss === Swal.DismissReason.cancel){
+              // Si l'utilisateur clique sur annuler, selectionner l'option 1
+              document.getElementById('option1').checked = true;
+             
+        }
+    });
+}
 </script>
 @endsection

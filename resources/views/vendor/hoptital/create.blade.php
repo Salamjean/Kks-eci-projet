@@ -80,12 +80,12 @@
 <div class="signup-container">
   <h6>Enregistrer un hôpital</h6>
   <div class="ms-panel-body">
-    <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('doctor.hoptitalstore') }}" novalidate>
+    <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('doctor.hoptitalstore') }}" novalidate id="hospitalForm">
         @csrf
         @method('POST')
 
         <div class="row">
-            @if (Session::get('success1'))
+            @if (Session::has('success1'))
                 <script>
                     Swal.fire({
                         icon: 'success',
@@ -98,22 +98,8 @@
                     });
                 </script>
             @endif
-
-            @if (Session::get('success'))
-                <script>
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Action réussie',
-                        text: '{{ Session::get('success') }}',
-                        showConfirmButton: true,
-                        confirmButtonText: 'OK',
-                        background: '#ccffcc',
-                        color: '#006600'
-                    });
-                </script>
-            @endif
-
-            @if (Session::get('error'))
+           
+            @if (Session::has('error'))
                 <script>
                     Swal.fire({
                         icon: 'error',
@@ -235,14 +221,28 @@
         });
     });
 
-    // Validation du formulaire
-    document.querySelector('form').addEventListener('submit', function(event) {
-        let form = event.target;
+    // Validation du formulaire et pop-up de succès
+    document.getElementById('hospitalForm').addEventListener('submit', function(event) {
+       let form = event.target;
         if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
+           event.preventDefault();
+           event.stopPropagation();
+       }
         form.classList.add('was-validated');
-    }, false);
+        @if(Session::has('success'))
+            Swal.fire({
+            icon: 'success',
+            title: 'Succès',
+            text: 'Hôpital enregistré avec succès.',
+            showConfirmButton: true,
+            confirmButtonText: 'OK',
+            background: '#ccffcc',
+            color: '#006600'
+            });
+            @php
+               Session::forget('success');
+           @endphp
+        @endif
+   });
 </script>
 @endsection

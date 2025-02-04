@@ -24,17 +24,22 @@
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
       aria-expanded="true" aria-controls="collapseBootstrap">
       <i class="far fa-fw fa-user"></i>
-      <span>Agent</span>
+      <span>Agence</span>
     </a>
     <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">Agent-Cnps</h6>
-        <a class="collapse-item" href="{{ route('cnpsagent.create') }}">Ajout d'un agent</a>
-        <a class="collapse-item" href="{{ route('cnpsagent.index') }}">Listes des agents</a>
+        <h6 class="collapse-header">Agence-Cnps</h6>
+        <a class="collapse-item" href="{{ route('cnpsagences.create') }}">Ajout d'une agence</a>
+        <a class="collapse-item" href="{{ route('cnpsagences.index') }}">Listes des agences</a>
       </div>
     </div>
   </li>
-
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('cnps.agentlistes') }}">
+      <i class="fa fa-users"></i>
+      <span>Listes des agents</span>
+    </a>
+  </li>
   <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseForm" aria-expanded="true"
       aria-controls="collapseForm">
@@ -54,5 +59,5 @@
       <span>Historique des recherches</span>
     </a>
   </li>
-
+  
 </ul>

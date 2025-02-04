@@ -38,8 +38,8 @@ class CnpsAgentController extends Controller
        ]);
        try {
            // Récupérer le vendor connecté
-           $cnps = Auth::guard('cnps')->user();
-           if (!$cnps || !$cnps->siege) {
+           $agencecnps = Auth::guard('agencecnps')->user();
+           if (!$agencecnps || !$agencecnps->agence_name) {
                return redirect()->back()->withErrors(['error' => 'Impossible de récupérer les informations du vendor.']);
            }
            // Création du docteur
@@ -54,7 +54,7 @@ class CnpsAgentController extends Controller
                $agent->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
            }
            $agent->commune = $request->commune;
-           $agent->communeM = $cnps->siege;
+           $agent->communeM = $agencecnps->agence_name;
            
            $agent->save();
            // Envoi de l'e-mail de vérification
@@ -75,11 +75,11 @@ class CnpsAgentController extends Controller
 
     public function index()
     {
-        $admin = Auth::guard('cnps')->user();
+        $admin = Auth::guard('agencecnps')->user();
     
         $alerts = Alert::all();
         $agents = CnpsAgent::whereNull('archived_at')
-            ->where('communeM', $admin->siege)
+            ->where('communeM', $admin->agence_name)
             ->paginate(10);
     
         // Retourner la vue avec les données

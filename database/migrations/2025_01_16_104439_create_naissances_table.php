@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('nomDefunt');
             $table->string('dateNaiss');
             $table->string('lieuNaiss');
-            $table->string('identiteDeclarant', 255);
-            $table->string('cdnaiss', 255);
+            $table->string('identiteDeclarant', 255)->nullable();
+            $table->string('cdnaiss', 255)->nullable();
             $table->string('acteMariage', 255)->nullable();
             $table->string('commune')->nullable();
             $table->string('nom');
@@ -30,6 +30,20 @@ return new class extends Migration
             $table->string('etat')->default('en attente'); // État par défaut
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Ajout de user_id
             $table->foreignId('agent_id')->nullable()->constrained('agents')->onDelete('set null'); // Ajout de agent_id
+
+            //informations de livraison 
+            $table->string('montant_timbre')->nullable();
+            $table->string('montant_livraison')->nullable();
+            $table->string('nom_destinataire')->nullable();
+            $table->string('prenom_destinataire')->nullable();
+            $table->string('email_destinataire')->nullable();
+            $table->string('contact_destinataire')->nullable();
+            $table->string('adresse_livraison')->nullable();
+            $table->string('choix_option');
+            $table->string('code_postal')->nullable();
+            $table->string('ville')->nullable();
+            $table->string('commune_livraison')->nullable();
+            $table->string('quartier')->nullable();
             $table->timestamps();
         });
     }

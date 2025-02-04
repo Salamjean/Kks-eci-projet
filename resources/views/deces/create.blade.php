@@ -82,6 +82,19 @@
     .half-width:last-child {
         margin-right: 0; 
     }
+     .radio-group {
+        display: flex;
+        align-items: center;
+        margin-top: 10px;
+    }
+
+    .radio-group label {
+        margin-left: 5px;
+    }
+     .radio-group input[type="radio"] {
+        margin-right: 5px;
+        transform: scale(1.2);
+    }
 </style>
 
 @if (Session::get('success'))
@@ -174,6 +187,20 @@
                     @enderror
                 </div>
             </div>
+              <!-- Options Radio -->
+              <div class="form-group text-center" id="optionsSection">
+                <p style="font-weight: bold; color: #1a5c58;">Choisissez le mode de rétrait :</p>
+                <div class="form-row d-flex justify-content-center align-items-center gap-4">
+                  <div class="radio-group">
+                    <input type="radio" id="option1" name="choix_option" value="retrait_sur_place" checked required>
+                    <label for="option1" class="mt-2">Retrait sur place</label>
+                  </div>
+                  <div class="radio-group">
+                    <input type="radio" id="option2" name="choix_option" value="livraison" required>
+                    <label for="option2" class="mt-2">Livraison</label>
+                  </div>
+                </div>
+              </div>
         </div>
 
         <button type="button" id="btnSuivant" onclick="validerFormulaire()">Suivant</button>
@@ -183,7 +210,9 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function validerFormulaire() {
+    let formSubmitted = false;
+    let submitAfterPopup = false;
+     function validerFormulaire() {
         const dossierNum = document.getElementById("dossierNum").value;
         const infoDefunt = document.getElementById("infoDefunt");
         const btnSuivant = document.getElementById("btnSuivant");
@@ -194,7 +223,7 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Erreur',
-                text: 'Veuillez entrer un numéro de dossier médical.',
+                text: 'Veuillez entrer un numéro de certificat médical de décès.',
             });
             return;
         }
@@ -229,12 +258,16 @@
                     infoDefunt.classList.remove("hidden");
                     btnSuivant.classList.add("hidden");
                     btnValider.classList.remove("hidden");
+                     const isFilled = $("#declarationForm input[required]").toArray().every(input => input.value.trim() !== "");
+                    if (isFilled) {
+                    $("#optionsSection").fadeIn(); // Afficher avec effet
+                    }
                 } else {
                     // Si le code n'existe pas, afficher une alerte d'erreur
                     Swal.fire({
                         icon: 'error',
                         title: 'Erreur',
-                        text: 'Numéro de dossier incorrect.',
+                        text: 'Ce numéro <' + dossierNum + '> n\'existe pas.',
                     });
                 }
             },
@@ -249,6 +282,118 @@
             }
         });
     }
+
+    function showLivraisonPopup() {
+        Swal.fire({
+            title: 'Informations de Livraison',
+            width: '800px',
+            html:
+                `<div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+                    <div>
+                        <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
+                        <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
+                        <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
+                    </div>
+                    <div>
+                        <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
+                        <input id="swal-montant_livraison" class="swal2-input text-center" value="1500" readonly>
+                        <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
+                    </div>
+                    <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
+                    <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
+                    <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire"></div>
+                    <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire"></div>
+                    <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison"></div>
+                    <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
+                    <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville"></div>
+                    <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
+                    <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
+                </div>`,
+                showCancelButton: true,
+                cancelButtonText: 'Annuler',
+                focusConfirm: false,
+            preConfirm: () => {
+                const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
+                const prenom_destinataire = document.getElementById('swal-prenom_destinataire').value;
+                const email_destinataire = document.getElementById('swal-email_destinataire').value;
+                const contact_destinataire = document.getElementById('swal-contact_destinataire').value;
+                const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
+                const code_postal = document.getElementById('swal-code_postal').value;
+                const ville = document.getElementById('swal-ville').value;
+                const commune_livraison = document.getElementById('swal-commune_livraison').value;
+                 const quartier = document.getElementById('swal-quartier').value;
+                const montant_timbre = document.getElementById('swal-montant_timbre').value;
+                const montant_livraison = document.getElementById('swal-montant_livraison').value;
+                 if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier || !montant_timbre || !montant_livraison) {
+                     Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
+                    return false;
+                }
+                return {
+                    nom_destinataire: nom_destinataire,
+                    prenom_destinataire: prenom_destinataire,
+                    email_destinataire: email_destinataire,
+                    contact_destinataire: contact_destinataire,
+                    adresse_livraison: adresse_livraison,
+                    code_postal: code_postal,
+                    ville: ville,
+                    commune_livraison: commune_livraison,
+                    quartier: quartier,
+                    montant_timbre:montant_timbre,
+                    montant_livraison:montant_livraison,
+                };
+            }
+        }).then((result) => {
+           if (result.isConfirmed) {
+                const formData = result.value;
+                const form = document.getElementById('declarationForm');
+                for (const key in formData) {
+                    if (formData.hasOwnProperty(key)) {
+                        const hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = key;
+                        hiddenInput.value = formData[key];
+                        form.appendChild(hiddenInput);
+                    }
+                }
+                submitAfterPopup = true;
+               form.submit();
+           } else if(result.dismiss === Swal.DismissReason.cancel){
+                  document.getElementById('option1').checked = true;
+                   submitAfterPopup = false;
+        }
+    });
+}
+  document.getElementById('declarationForm').addEventListener('submit', function(event) {
+         if (formSubmitted) {
+             event.preventDefault();
+             return;
+         }
+
+          const livraisonCheckbox = document.getElementById('option2');
+         if (livraisonCheckbox.checked && !submitAfterPopup) {
+            event.preventDefault();
+            showLivraisonPopup();
+        } else {
+            formSubmitted = true;
+        }
+    });
+      $(document).ready(function() {
+          $("#optionsSection").hide();
+            // Fonction pour vérifier si tous les champs obligatoires sont remplis
+            function checkFields() {
+                const isFilled = $("#declarationForm input[required]").toArray().every(input => input.value.trim() !== "");
+                if (isFilled) {
+                     $("#optionsSection").fadeIn(); // Afficher avec effet
+                } else {
+                  $("#optionsSection").hide(); // Cacher si des champs sont vides
+               }
+        }
+            // Écoutez les changements dans les champs du formulaire
+            $("#declarationForm input").on("input change", checkFields);
+
+            // Appel de la fonction initiale pour vérifier l'état des champs
+            checkFields();
+       });
 </script>
 
 @endsection

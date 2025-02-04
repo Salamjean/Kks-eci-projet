@@ -92,7 +92,7 @@
                     
                         <table class="table align-items-center table-flush" id="dataTable">
                             <thead class="bg-navbar text-white">
-                                <tr style="font-size: 12px">
+                                <tr style="font-size: 12px" class="text-center">
                                     <th>Demandeur</th>
                                     <th>Hôpital</th>
                                     <th>Date de Décès</th>
@@ -108,54 +108,96 @@
                             </thead>
                             <tbody>
                                 @forelse ($deces as $deces)
-                                <tr style="font-size: 12px">
-                                    <td>{{ $deces->user ? $deces->user->name : 'Demandeur inconnu' }}</td>
+                                <tr style="font-size: 12px" class="text-center">
+                                    <td>{{ $deces->user ? $deces->user->name.' '.$deces->user->prenom : 'Demandeur inconnu' }}</td>
                                     <td>{{ $deces->nomHopital }}</td>
                                     <td>{{ $deces->dateDces }}</td>
                                     <td>{{ $deces->nomDefunt }}</td>
                                     <td>{{ $deces->dateNaiss }}</td>
                                     <td>{{ $deces->lieuNaiss }}</td>
                                     <td>
-                                        <div style="position: relative; width: 100px; height: 100px;">
-                                            <img src="{{ asset('storage/' . $deces->identiteDeclarant) }}" 
-                                                alt="Pièce du déclarant" 
-                                                width="100" height="100" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#imageModal" 
-                                                onclick="showImage(this)" 
-                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                            <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                                Aucun fichier
-                                            </span>
-                                        </div>
+                                        @if($deces->identiteDeclarant)
+                                            @php
+                                                $identiteDeclarantPath = asset('storage/' . $deces->identiteDeclarant);
+                                                $isIdentiteDeclarantPdf = strtolower(pathinfo($identiteDeclarantPath, PATHINFO_EXTENSION)) === 'pdf';
+                                            @endphp
+                                             @if ($isIdentiteDeclarantPdf)
+                                                  <a href="{{ $identiteDeclarantPath }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                                  </a>
+                                             @else
+                                                <div style="position: relative; width: 100px; height: 100px;">
+                                                    <img src="{{ $identiteDeclarantPath }}" 
+                                                        alt="Pièce du déclarant" 
+                                                        width="50" height="50" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#imageModal" 
+                                                        onclick="showImage(this)" 
+                                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                                    <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
+                                                        Aucun fichier
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        @else
+                                            <p>Non disponible</p>
+                                        @endif
+                                    </td>
+                                     <td>
+                                        @if($deces->acteMariage)
+                                            @php
+                                                $acteMariagePath = asset('storage/' . $deces->acteMariage);
+                                                $isActeMariagePdf = strtolower(pathinfo($acteMariagePath, PATHINFO_EXTENSION)) === 'pdf';
+                                            @endphp
+                                             @if ($isActeMariagePdf)
+                                                  <a href="{{ $acteMariagePath }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                                  </a>
+                                             @else
+                                                <div style="position: relative; width: 100px; height: 100px;">
+                                                    <img src="{{  $acteMariagePath }}" 
+                                                        alt="Acte de mariage" 
+                                                        width="50" height="50" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#imageModal" 
+                                                        onclick="showImage(this)" 
+                                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                                    <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
+                                                        Aucun fichier
+                                                    </span>
+                                                </div>
+                                            @endif
+                                        @else
+                                            <p>Non disponible</p>
+                                        @endif
                                     </td>
                                     <td>
-                                        <div style="position: relative; width: 100px; height: 100px;">
-                                            <img src="{{ asset('storage/' . $deces->acteMariage) }}" 
-                                                alt="Acte de mariage" 
-                                                width="100" height="100" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#imageModal" 
-                                                onclick="showImage(this)" 
-                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                            <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                                Aucun fichier
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div style="position: relative; width: 100px; height: 100px;">
-                                            <img src="{{ asset('storage/' . $deces->deParLaLoi) }}" 
-                                                alt="Déclaration par la loi" 
-                                                width="100" height="100" 
-                                                data-bs-toggle="modal" 
-                                                data-bs-target="#imageModal" 
-                                                onclick="showImage(this)" 
-                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                                            <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
-                                                Aucun fichier
-                                            </span>
-                                        </div>
+                                        @if($deces->deParLaLoi)
+                                            @php
+                                                $deParLaLoiPath = asset('storage/' . $deces->deParLaLoi);
+                                                $isDeParLaLoiPdf = strtolower(pathinfo($deParLaLoiPath, PATHINFO_EXTENSION)) === 'pdf';
+                                            @endphp
+                                             @if ($isDeParLaLoiPdf)
+                                                  <a href="{{ $deParLaLoiPath }}" target="_blank">
+                                                    <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                                  </a>
+                                             @else
+                                                <div style="position: relative; width: 100px; height: 100px;">
+                                                    <img src="{{ $deParLaLoiPath }}" 
+                                                        alt="Déclaration par la loi" 
+                                                        width="50" height="50" 
+                                                        data-bs-toggle="modal" 
+                                                        data-bs-target="#imageModal" 
+                                                        onclick="showImage(this)" 
+                                                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                                    <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
+                                                        Aucun fichier
+                                                    </span>
+                                                </div>
+                                             @endif
+                                        @else
+                                            <p>Non disponible</p>
+                                        @endif
                                     </td>
                                     <td class="{{ $deces->etat == 'en attente' ? 'bg-warning' : ($deces->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                         {{ $deces->etat }}
@@ -233,55 +275,127 @@
                         <tbody>
                             @forelse ($decesdeja as $dece)
                             <tr class="text-center" style="font-size: 12px">
-                                <td>{{ $dece->user ? $dece->user->name : 'Demandeur inconnu' }}</td>
+                                <td>{{ $dece->user ? $dece->user->name.' '.$dece->user->prenom : 'Demandeur inconnu' }}</td>
                                 <td>{{ $dece->name }}</td>
                                 <td>{{ $dece->numberR }}</td>
                                 <td>{{ \Carbon\Carbon::parse($dece->dateR)->format('d/m/Y') }}</td>
                                 <td>{{ $dece->CMU }}</td>
                                 <td>
-                                    <img src="{{ asset('storage/' . $dece->pActe) }}" alt="Certificat de déclaration" 
-                                         width="100" height="auto" 
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
-                                </td>
-                                <td>
-                                    <img src="{{ asset('storage/' . $dece->CNIdfnt) }}" alt="CNIdfnt" 
-                                         width="100" height="auto" 
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
-                                </td>
-                                <td>
-                                    <img src="{{ asset('storage/' . $dece->CNIdcl) }}" alt="CNIdcl" 
-                                         width="100" height="auto" 
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
-                                </td>
-                                <td>
-                                    @if($dece->documentMariage)
-                                        <img src="{{ asset('storage/' . $dece->documentMariage) }}" alt="Document de Mariage" 
-                                             width="100" height="auto" 
-                                             data-bs-toggle="modal" 
-                                             data-bs-target="#imageModal" 
-                                             onclick="showImage(this)" 
-                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                    @if($dece->pActe)
+                                        @php
+                                            $pActePath = asset('storage/' . $dece->pActe);
+                                            $isPActePdf = strtolower(pathinfo($pActePath, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
+                                         @if ($isPActePdf)
+                                              <a href="{{ $pActePath }}" target="_blank">
+                                                <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                              </a>
+                                         @else
+                                            <img src="{{  $pActePath }}" alt="Certificat de déclaration" 
+                                                 width="50" height="50" 
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                        @endif
                                     @else
-                                        <span>Le défunt(e) n'est pas marié(e)</span>
+                                        <p>Non disponible</p>
                                     @endif
                                 </td>
                                 <td>
-                                    @if($dece->RequisPolice)
-                                        <img src="{{ asset('storage/' . $dece->RequisPolice) }}" alt="Requis de Police" 
-                                             width="100" height="auto" 
-                                             data-bs-toggle="modal" 
-                                             data-bs-target="#imageModal" 
-                                             onclick="showImage(this)" 
-                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                    @if($dece->CNIdfnt)
+                                        @php
+                                            $CNIdfntPath = asset('storage/' . $dece->CNIdfnt);
+                                            $isCNIdfntPdf = strtolower(pathinfo($CNIdfntPath, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
+                                         @if ($isCNIdfntPdf)
+                                              <a href="{{ $CNIdfntPath }}" target="_blank">
+                                                <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                              </a>
+                                         @else
+                                              <img src="{{ $CNIdfntPath }}" alt="CNIdfnt" 
+                                                   width="50" height="50" 
+                                                   data-bs-toggle="modal" 
+                                                   data-bs-target="#imageModal" 
+                                                   onclick="showImage(this)" 
+                                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                        @endif
+                                    @else
+                                        <p>Non disponible</p>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($dece->CNIdcl)
+                                        @php
+                                            $CNIdclPath = asset('storage/' . $dece->CNIdcl);
+                                            $isCNIdclPdf = strtolower(pathinfo($CNIdclPath, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
+                                         @if ($isCNIdclPdf)
+                                              <a href="{{ $CNIdclPath }}" target="_blank">
+                                                <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                              </a>
+                                         @else
+                                            <img src="{{  $CNIdclPath }}" alt="CNIdcl" 
+                                                 width="50" height="50" 
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal" 
+                                                 onclick="showImage(this)" 
+                                                  onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                        @endif
+                                    @else
+                                        <p>Non disponible</p>
+                                    @endif
+                                </td>
+                                 <td>
+                                    @if($dece->documentMariage)
+                                        @php
+                                            $documentMariagePath = asset('storage/' . $dece->documentMariage);
+                                            $isDocumentMariagePdf = strtolower(pathinfo($documentMariagePath, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
+                                         @if ($isDocumentMariagePdf)
+                                              <a href="{{ $documentMariagePath }}" target="_blank">
+                                                <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                              </a>
+                                         @else
+                                            <div style="position: relative; width: 100px; height: 100px;">
+                                                <img src="{{  $documentMariagePath }}" alt="Document de Mariage" 
+                                                     width="50" height="50" 
+                                                     data-bs-toggle="modal" 
+                                                     data-bs-target="#imageModal" 
+                                                     onclick="showImage(this)" 
+                                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                                <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
+                                                    Aucun fichier
+                                                </span>
+                                            </div>
+                                         @endif
+                                     @else
+                                        <span>Le défunt(e) n'est pas marié(e)</span>
+                                    @endif
+                                </td>
+                                 <td>
+                                   @if($dece->RequisPolice)
+                                        @php
+                                            $RequisPolicePath = asset('storage/' . $dece->RequisPolice);
+                                            $isRequisPolicePdf = strtolower(pathinfo($RequisPolicePath, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
+                                         @if ($isRequisPolicePdf)
+                                              <a href="{{  $RequisPolicePath }}" target="_blank">
+                                                <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                              </a>
+                                         @else
+                                            <div style="position: relative; width: 100px; height: 100px;">
+                                                <img src="{{  $RequisPolicePath }}" alt="Requis de Police" 
+                                                     width="50" height="50" 
+                                                     data-bs-toggle="modal" 
+                                                     data-bs-target="#imageModal" 
+                                                     onclick="showImage(this)" 
+                                                    onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                                                <span style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 14px; color: gray;">
+                                                    Document non disponible
+                                                </span>
+                                            </div>
+                                         @endif
                                     @else
                                         <span>Document non disponible</span>
                                     @endif

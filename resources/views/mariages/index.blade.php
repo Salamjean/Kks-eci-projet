@@ -63,7 +63,7 @@
 
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
-                            <tr style="font-size: 12px">
+                            <tr style="font-size: 12px" class="text-center">
                                 <th class="text-center">Nom du demandeur</th>
                                 <th class="text-center">Nom de l'Époux</th>
                                 <th class="text-center">Prénom de l'Époux</th>
@@ -84,24 +84,52 @@
                                 <td>{{ $mariage->dateNaissanceEpoux ?? 'Copie Simple' }}</td>
                                 <td>{{ $mariage->lieuNaissanceEpoux ?? 'Copie Simple' }}</td>
                                 <td class="text-center">
-                                    <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 
-                                         alt="Pièce d'identité" 
-                                         width="100" 
-                                         height="100" 
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                     @if($mariage->pieceIdentite)
+                                        @php
+                                            $pieceIdentitePath = asset('storage/' . $mariage->pieceIdentite);
+                                            $isPieceIdentitePdf = strtolower(pathinfo($pieceIdentitePath, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
+                                        @if ($isPieceIdentitePdf)
+                                             <a href="{{ $pieceIdentitePath }}" target="_blank">
+                                                <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                             </a>
+                                         @else
+                                            <img src="{{ $pieceIdentitePath }}" 
+                                                 alt="Pièce d'identité" 
+                                                 width="50" 
+                                                 height="50" 
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                        @endif
+                                    @else
+                                        <p>Non disponible</p>
+                                    @endif
                                 </td>
                                 <td class="text-center">
-                                    <img src="{{ asset('storage/' . $mariage->extraitMariage) }}" 
-                                         alt="Extrait de mariage" 
-                                         width="100" 
-                                         height="100" 
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                     @if($mariage->extraitMariage)
+                                        @php
+                                            $extraitMariagePath = asset('storage/' . $mariage->extraitMariage);
+                                            $isExtraitMariagePdf = strtolower(pathinfo($extraitMariagePath, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
+                                         @if ($isExtraitMariagePdf)
+                                              <a href="{{ $extraitMariagePath }}" target="_blank">
+                                                <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                              </a>
+                                         @else
+                                            <img src="{{ $extraitMariagePath }}" 
+                                                 alt="Extrait de mariage" 
+                                                 width="50" 
+                                                 height="50" 
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                        @endif
+                                    @else
+                                        <p>Non disponible</p>
+                                    @endif
                                 </td>
                                 <td class="{{ $mariage->etat == 'en attente' ? 'bg-warning' : ($mariage->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                     {{ $mariage->etat }}
@@ -117,16 +145,27 @@
                     </table>
                 </div>
                 
-                <script>
-                    document.getElementById('searchInput').addEventListener('keyup', function() {
+                 <script>
+                     document.getElementById('searchInput').addEventListener('keyup', function() {
                         const filter = this.value.toLowerCase();
                         const rows = document.querySelectorAll('#dataTable tbody tr');
-
+                
                         rows.forEach(row => {
+                            let match = false;
                             const cells = row.querySelectorAll('td');
-                            const match = Array.from(cells).some(cell => 
-                                cell.textContent.toLowerCase().includes(filter)
-                            );
+        
+                            const nomDemandeur = cells[0].textContent.toLowerCase();
+                            const nomEpoux = cells[1].textContent.toLowerCase();
+                            const prenomEpoux = cells[2].textContent.toLowerCase();
+                             const dateNaissance = cells[3].textContent.toLowerCase();
+                            const lieuNaissance = cells[4].textContent.toLowerCase();
+                
+                
+                            if (nomDemandeur.includes(filter) || nomEpoux.includes(filter) ||
+                                prenomEpoux.includes(filter) || dateNaissance.includes(filter) ||
+                                lieuNaissance.includes(filter)) {
+                                 match = true;
+                             }
                             row.style.display = match ? '' : 'none';
                         });
                     });

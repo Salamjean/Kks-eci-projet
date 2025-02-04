@@ -28,7 +28,7 @@
     
                 <table class="table align-items-center table-flush" id="dataTable">
                     <thead class="bg-navbar text-white">
-                        <tr style="font-size: 12px">
+                        <tr style="font-size: 12px" class="text-center">
                             <th>N° CMN</th>
                             <th>Hôpital</th>
                             <th>Commune</th>
@@ -36,13 +36,14 @@
                             <th>Nom de l'accompagnateur</th>
                             <th>Date de naissance du né</th>
                             <th>Date et Heure de déclaration</th>
-                            <th>La pièce de la mère</th>
+                             <th>La pièce de la mère</th>
+                            <th>Nom du docteur déclarant</th>
                         </tr>
                     </thead>
                     
                     <tbody>
                         @forelse ($naisshops as $naisshop)
-                        <tr style="font-size: 12px">
+                        <tr style="font-size: 12px" class="text-center">
                             <td>{{ $naisshop->codeCMN }}</td>
                             <td>{{ $naisshop->NomEnf }}</td>
                             <td>{{ $naisshop->commune }}</td>
@@ -51,15 +52,30 @@
                             <td>{{ $naisshop->DateNaissance }}</td>
                             <td>{{ $naisshop->created_at }}</td>
                             <td>
-                                <img src="{{ public_path('storage/naiss_hops/' . $naisshop->CNI_mere) }}" 
-                                     alt="Pièce du parent" 
-                                     width="100" 
-                                     height="auto"
-                                     data-bs-toggle="modal" 
-                                     data-bs-target="#imageModal" 
-                                     onclick="showImage(this)" 
-                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                 @if($naisshop->CNI_mere)
+                                    @php
+                                        $cniMerePath = asset('storage/' . $naisshop->CNI_mere);
+                                        $isCniMerePdf = strtolower(pathinfo($cniMerePath, PATHINFO_EXTENSION)) === 'pdf';
+                                    @endphp
+                                    @if ($isCniMerePdf)
+                                        <a href="{{ $cniMerePath }}" target="_blank">
+                                           <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                       </a>
+                                    @else
+                                         <img src="{{ $cniMerePath }}" 
+                                             alt="Pièce du parent" 
+                                             width="50" 
+                                             height="50"
+                                             data-bs-toggle="modal" 
+                                             data-bs-target="#imageModal" 
+                                             onclick="showImage(this)" 
+                                             onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                    @endif
+                                @else
+                                    <p>Non disponible</p>
+                                @endif
                             </td>
+                            <td>Dr. {{ $naisshop->sous_admin ? $naisshop->sous_admin->name . ' ' . $naisshop->sous_admin->prenom : 'Demandeur inconnu' }}</td>
                         </tr>
                         @empty
                         <tr>
@@ -88,15 +104,24 @@
     </div>
     
     <script>
-        document.getElementById('searchInput').addEventListener('keyup', function() {
+       document.getElementById('searchInput').addEventListener('keyup', function() {
             const filter = this.value.toLowerCase();
             const rows = document.querySelectorAll('#dataTable tbody tr');
     
             rows.forEach(row => {
+                let match = false;
                 const cells = row.querySelectorAll('td');
-                const match = Array.from(cells).some(cell => 
-                    cell.textContent.toLowerCase().includes(filter)
-                );
+
+                const codeCMN = cells[0].textContent.toLowerCase();
+                 const NomEnf = cells[1].textContent.toLowerCase();
+                const commune = cells[2].textContent.toLowerCase();
+                const NomM = cells[3].textContent.toLowerCase();
+                const NomP = cells[4].textContent.toLowerCase();
+
+                if(codeCMN.includes(filter) || NomEnf.includes(filter) || commune.includes(filter) || NomM.includes(filter) || NomP.includes(filter)){
+                  match = true
+                }
+
                 row.style.display = match ? '' : 'none';
             });
         });

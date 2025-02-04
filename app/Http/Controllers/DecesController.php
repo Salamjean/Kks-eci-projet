@@ -79,50 +79,53 @@ class DecesController extends Controller
         // Retourner la vue avec les données
         return view('deces.userindex', compact('deces', 'decesdeja', 'alerts'));
     }
+
     public function agentindex(Request $request)
-{
-    // Récupérer l'admin connecté
-    $admin = Auth::guard('agent')->user();
+    {
+        // Récupérer l'admin connecté
+        $admin = Auth::guard('agent')->user();
 
-    // Récupérer les alertes
-    $alerts = Alert::where('is_read', false)
-        ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])
-        ->latest()
-        ->get();
+        // Récupérer les alertes
+        $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])
+            ->latest()
+            ->get();
 
-    // Requête pour Deces
-    $decesQuery = Deces::where('commune', $admin->communeM)
-        ->where('agent_id', $admin->id); // Filtrage par agent
+        // Requête pour Deces
+        $decesQuery = Deces::where('commune', $admin->communeM)
+            ->where('agent_id', $admin->id)
+            ->with('user'); // Filtrage par agent et récupération des relations
 
-    // Requête pour Decesdeja
-    $decesdejaQuery = Decesdeja::where('commune', $admin->communeM)
-        ->where('agent_id', $admin->id); // Filtrage par agent
+        // Requête pour Decesdeja
+        $decesdejaQuery = Decesdeja::where('commune', $admin->communeM)
+            ->where('agent_id', $admin->id)
+            ->with('user'); // Filtrage par agent et récupération des relations
 
-    // Appliquer les filtres de recherche pour Deces
-    if ($request->filled('searchType') && $request->filled('searchInput')) {
-        if ($request->searchType === 'nomDefunt') {
-            $decesQuery->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
-        } elseif ($request->searchType === 'nomHopital') {
-            $decesQuery->where('nomHopital', 'like', '%' . $request->searchInput . '%');
+        // Appliquer les filtres de recherche pour Deces
+        if ($request->filled('searchType') && $request->filled('searchInput')) {
+            if ($request->searchType === 'nomDefunt') {
+                $decesQuery->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
+            } elseif ($request->searchType === 'nomHopital') {
+                $decesQuery->where('nomHopital', 'like', '%' . $request->searchInput . '%');
+            }
         }
-    }
 
-    // Appliquer les filtres de recherche pour Decesdeja
-    if ($request->filled('searchType') && $request->filled('searchInput')) {
-        if ($request->searchType === 'nomDefunt') {
-            $decesdejaQuery->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
-        } elseif ($request->searchType === 'nomHopital') {
-            $decesdejaQuery->where('nomHopital', 'like', '%' . $request->searchInput . '%');
+        // Appliquer les filtres de recherche pour Decesdeja
+        if ($request->filled('searchType') && $request->filled('searchInput')) {
+            if ($request->searchType === 'nomDefunt') {
+                $decesdejaQuery->where('nomDefunt', 'like', '%' . $request->searchInput . '%');
+            } elseif ($request->searchType === 'nomHopital') {
+                $decesdejaQuery->where('nomHopital', 'like', '%' . $request->searchInput . '%');
+            }
         }
+
+        // Paginer les résultats
+        $deces = $decesQuery->paginate(10);
+        $decesdeja = $decesdejaQuery->paginate(10);
+
+        // Passer les données à la vue
+        return view('deces.agentindex', compact('deces', 'decesdeja', 'alerts'));
     }
-
-    // Paginer les résultats
-    $deces = $decesQuery->paginate(10);
-    $decesdeja = $decesdejaQuery->paginate(10);
-
-    // Passer les données à la vue
-    return view('deces.agentindex', compact('deces', 'decesdeja', 'alerts'));
-}
 
 
     public function ajointindex(Request $request)
@@ -215,12 +218,27 @@ class DecesController extends Controller
         $deces->identiteDeclarant = $uploadedPaths['identiteDeclarant'] ?? null;
         $deces->acteMariage = $uploadedPaths['acteMariage'] ?? null;
         $deces->deParLaLoi = $uploadedPaths['deParLaLoi'] ?? null; // Si présent
+        $deces->choix_option = $request->choix_option;
         $deces->commune = $user->commune;
         $deces->etat = 'en attente';
         $deces->user_id = $user->id;  // Lier la demande à l'utilisateur connecté
 
-        $deces->save();
+           // Ajout des informations de livraison si option livraison est choisie
+        if ($request->input('choix_option') === 'livraison') {
+            $deces->montant_timbre = $request->input('montant_timbre');
+            $deces->montant_livraison = $request->input('montant_livraison');
+            $deces->nom_destinataire = $request->input('nom_destinataire');
+            $deces->prenom_destinataire = $request->input('prenom_destinataire');
+            $deces->email_destinataire = $request->input('email_destinataire');
+            $deces->contact_destinataire = $request->input('contact_destinataire');
+            $deces->adresse_livraison = $request->input('adresse_livraison');
+            $deces->code_postal = $request->input('code_postal');
+            $deces->ville = $request->input('ville');
+            $deces->commune_livraison = $request->input('commune_livraison');
+            $deces->quartier = $request->input('quartier');
+        }
 
+        $deces->save();
         Alert::create([
             'type' => 'deces',
             'message' => "Une nouvelle demande d'extrait de décès a été enregistrée : {$deces->nomDefunt}.",
@@ -247,6 +265,28 @@ class DecesController extends Controller
 
     public function storedeja(Request $request)
     {
+        $request->validate([
+            'name' => 'required',
+            'numberR' => 'required',
+            'dateR' => 'required',
+            'CMU' => 'required',
+            'pActe' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
+            'CNIdfnt' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
+            'CNIdcl' => 'required|mimes:png,jpg,jpeg,pdf|max:1000',
+        ],[
+            'name.required' => 'Le nom du défunt est obligatoire.',
+            'numberR.required' => 'Le numéro de l\'acte de décès est obligatoire.',
+            'dateR.required' => 'La date de l\'acte de décès est obligatoire.',
+            'CMU.required' => 'Le CMU est obligatoire.',
+            'pActe.required' => 'Le document acte de décès est obligatoire.',
+            'CNIdfnt.required' => 'Le document CNIdfnt est obligatoire.',
+            'CNIdcl.required' => 'Le document CNIdcl est obligatoire.',
+            'documentMariage.required' => 'Le document du document de mariage est obligatoire.',
+            'RequisPolice.required' => 'Le document requis de police est obligatoire.',
+            'pActe.mimes' => 'Le document acte de décès doit être un format de fichier valide (png, jpg, jpeg, pdf).',
+            'CNIdfnt.mimes' => 'Le document CNIdfnt doit être un format de fichier valide (png, jpg, jpeg, pdf).',
+        ]);
+
         $imageBaseLink = '/images/decesdeja/';
 
         // Liste des fichiers à traiter
@@ -293,9 +333,25 @@ class DecesController extends Controller
         $decesdeja->CNIdcl = $uploadedPaths['CNIdcl'] ?? null;
         $decesdeja->documentMariage = $uploadedPaths['documentMariage'] ?? null;
         $decesdeja->RequisPolice = $uploadedPaths['RequisPolice'] ?? null;
+        $decesdeja->choix_option = $request->choix_option;
         $decesdeja->commune = $request->communeD ?: $user->commune; // Déterminer la commune
         $decesdeja->etat = 'en attente';
         $decesdeja->user_id = $user->id; // Lier la demande à l'utilisateur connecté
+
+           // Ajout des informations de livraison si option livraison est choisie
+        if ($request->input('choix_option') === 'livraison') {
+            $decesdeja->montant_timbre = $request->input('montant_timbre');
+            $decesdeja->montant_livraison = $request->input('montant_livraison');
+            $decesdeja->nom_destinataire = $request->input('nom_destinataire');
+            $decesdeja->prenom_destinataire = $request->input('prenom_destinataire');
+            $decesdeja->email_destinataire = $request->input('email_destinataire');
+            $decesdeja->contact_destinataire = $request->input('contact_destinataire');
+            $decesdeja->adresse_livraison = $request->input('adresse_livraison');
+            $decesdeja->code_postal = $request->input('code_postal');
+            $decesdeja->ville = $request->input('ville');
+            $decesdeja->commune_livraison = $request->input('commune_livraison');
+            $decesdeja->quartier = $request->input('quartier');
+        }
 
         $decesdeja->save();
 

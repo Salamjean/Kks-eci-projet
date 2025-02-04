@@ -18,12 +18,25 @@
     <h1 class="text-center text-black mb-4">Bienvenue sur le tableau de bord</h1>
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="card">
                    
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title text-center" style="font-size: 20px;">Nombre total d'agent</h3>
+                                        <div class="text-center">
+                                            <i class="fa fa-home d-block" style="font-size: 30px; color:green"></i>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <h1 class="display-4  text-center">{{ $agences }}</h1>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title text-center" style="font-size: 20px;">Nombre total d'agent</h3>
@@ -36,7 +49,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title text-center" style="font-size: 20px;">Nombre total de déclaration</h3>

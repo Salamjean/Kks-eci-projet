@@ -183,7 +183,7 @@
         </div>
         <div class="card-body">
           <div class="mb-2">
-            <div class="small text-gray-500">Naisshops
+            <div class="small text-gray-500">Naissances
               <div class="small float-right"><b>{{ $naisshopsdash }} sur {{ $totalDataHops }} éléments</b></div>
             </div>
             <div class="progress" style="height: 12px;">
@@ -191,7 +191,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <div class="small text-gray-500">Deceshops
+            <div class="small text-gray-500">Décès
               <div class="small float-right"><b>{{ $deceshopsdash }} sur {{ $totalDataHops }} éléments</b></div>
             </div>
             <div class="progress" style="height: 12px;">

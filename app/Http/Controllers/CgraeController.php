@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgenceCgrae;
 use App\Models\Alert;
 use App\Models\Cgrae;
 use App\Models\CgraeAgent;
@@ -24,6 +25,7 @@ class CgraeController extends Controller
     $admin = Auth::guard('cgrae')->user();
     $cgraeagent = CgraeAgent::where('communeM', $admin->siege)->count();
     $deceshops = DecesHop::count();
+    $agences = AgenceCgrae::count();
 
     // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CGRAE
     $searchHistory = session('cgrae_search_history', []);
@@ -32,7 +34,8 @@ class CgraeController extends Controller
     return view('superadmin.cgrae.dashboard', compact(
         'cgraeagent',
         'deceshops',
-        'searchHistory'
+        'searchHistory',
+        'agences'
     ));
 }
 
@@ -52,6 +55,11 @@ class CgraeController extends Controller
     function indexdeclaration(){
         $deceshops = DecesHop::all();
         return view('superadmin.cgrae.cgraeindex', compact('deceshops'));
+    }
+
+    function agentslistes(){
+        $agents = CgraeAgent::all();
+        return view('superadmin.cgrae.indexagent', compact('agents'));
     }
     
     
