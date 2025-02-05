@@ -512,12 +512,12 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
         Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');
     });
-    Route::middleware('auth:agencecnps')->prefix('cnps/agences')->group(function(){
+    Route::middleware('auth:agencecnps')->prefix('cnps/agences-cnps')->group(function(){
         Route::get('/dashboard', [AgenceCnpsController::class, 'dashboard'])->name('cnpsagences.dashboard');
         Route::get('/logout', [AgenceCnpsController::class, 'logout'])->name('cnpsagences.logout');
     });
 
-    Route::middleware('auth:agencecgrae')->prefix('cgrae/agences')->group(function(){
+    Route::middleware('auth:agencecgrae')->prefix('cgrae/agences-cgrae')->group(function(){
         Route::get('/dashboard', [AgenceCgraeController::class, 'dashboard'])->name('cgraeagences.dashboard');
         Route::get('/logout', [AgenceCgraeController::class, 'logout'])->name('cgraeagences.logout');
     });
