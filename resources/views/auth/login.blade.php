@@ -48,7 +48,7 @@
 </head>
 <body>
   <button ><a href="{{ route('general') }}" style="color: white">Accueil</a></button><br>
-  <div class="container" id="container">
+  <div class="container " id="container">
     <!-- Formulaire d'inscription -->
     <div class="form-container sign-up-container">
       <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
@@ -138,7 +138,7 @@
         <input type="text" name="CMU" placeholder="Entrez votre numéro CMU" required /><br>
         <div class="flex-column">
           <label>Photo de Profil</label>
-      <div class="inputForm">
+      <div class="inputForm mb-3">
           <input type="file" name="profile_picture" class="input" />
           @error('profile_picture')
           <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
@@ -153,13 +153,13 @@
         <script>
             $(document).ready(function() {
                 $('#commune').select2({
-                    placeholder: "Sélectionnez une commune",
+                    placeholder: "Entrez votre commune de naissance",
                     allowClear: true,
                     width: '100%'
                 });
             });
-        </script><br>
-        <button type="submit">S'inscrire</button>
+        </script>
+        <button  type="submit">S'inscrire</button>
       </form>
     </div>
     <!-- Formulaire de connexion -->

@@ -60,7 +60,7 @@
         <input type="password" name="password" placeholder="Mot de passe" required />
         <input type="password" name="password_confirmation" placeholder="Confirmer le mot de passe" required />
         <select id="commune" name="commune" class="block mt-1 w-full" required>
-            <option value="">Sélectionnez votre commune de naisance</option>
+            <option value="">Commune de naisance</option>
             <option value="abobo">Abobo</option>
             <option value="adjame">Adjamé</option>
             <option value="attiecoube">Attécoubé</option>
@@ -138,7 +138,7 @@
         <input type="text" name="CMU" placeholder="Entrez votre numéro CMU" required /><br>
         <div class="flex-column">
           <label>Photo de Profil</label>
-      <div class="inputForm">
+      <div class="inputForm mb-3">
           <input type="file" name="profile_picture" class="input" />
           @error('profile_picture')
           <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
@@ -153,12 +153,12 @@
         <script>
             $(document).ready(function() {
                 $('#commune').select2({
-                    placeholder: "Sélectionnez une commune",
+                    placeholder: "Entrez votre commune de naissance",
                     allowClear: true,
                     width: '100%'
                 });
             });
-        </script><br>
+        </script>
         <button type="submit">S'inscrire</button>
       </form>
     </div>

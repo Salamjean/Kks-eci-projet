@@ -18,7 +18,7 @@
         <div class="profile-picture">
           <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/cnps.jpg') }}" alt="Profile Image">
       </div>
-        <span class="ml-2 d-none d-lg-inline text-black small" style="color: black !important;"><strong>Siège : {{ $user->communeM }}</strong></span>
+        <span class="ml-2 d-none d-lg-inline text-black small" style="color: black !important;"><strong>Agence : {{ $user->communeM }}</strong></span>
       </a>
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
         <a class="dropdown-item" href="#">

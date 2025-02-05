@@ -7,6 +7,7 @@ use App\Models\AgenceCgrae;
 use App\Models\Alert;
 use App\Models\Cgrae;
 use App\Models\CgraeAgent;
+use App\Models\CgraeSearchHistory;
 use App\Models\DecesHop;
 use App\Models\NaissHop;
 use App\Models\ResetCodePasswordCgrae;
@@ -26,6 +27,7 @@ class CgraeController extends Controller
     $cgraeagent = CgraeAgent::where('communeM', $admin->siege)->count();
     $deceshops = DecesHop::count();
     $agences = AgenceCgrae::count();
+    $rechercheInfo = CgraeSearchHistory::latest()->take(7)->get();
 
     // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CGRAE
     $searchHistory = session('cgrae_search_history', []);
@@ -35,21 +37,14 @@ class CgraeController extends Controller
         'cgraeagent',
         'deceshops',
         'searchHistory',
-        'agences'
+        'agences',
+        'rechercheInfo'
     ));
 }
 
  public function recherche(Request $request){
-        $admin = Auth::guard('cgrae')->user();
-        $cgraeagent = CgraeAgent::where('communeM', $admin->siege)->count();
-        $deceshops = DecesHop::count();
-        // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CGRAE
-        $searchHistory = session('cgrae_search_history', []);
-    return view('superadmin.cgrae.recherche', compact(
-            'cgraeagent',
-            'deceshops',
-            'searchHistory'
-));
+    $rechercheInfo = CgraeSearchHistory::latest()->paginate(15);
+    return view('superadmin.cgrae.recherche', compact('rechercheInfo'));
  }
 
     function indexdeclaration(){

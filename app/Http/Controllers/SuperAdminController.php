@@ -3,15 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AgenceCgrae;
+use App\Models\AgenceCnps;
 use App\Models\Agent;
 use App\Models\Ajoint;
 use App\Models\Alert;
 use App\Models\Caisse;
+use App\Models\Cgrae;
+use App\Models\CgraeAgent;
+use App\Models\CgraeSearchHistory;
+use App\Models\Cnps;
+use App\Models\CnpsAgent;
+use App\Models\CnpsSearchHistory;
 use App\Models\Deces;
 use App\Models\Decesdeja;
 use App\Models\DecesHop;
 use App\Models\Doctor;
 use App\Models\Mariage;
+use App\Models\MinistereAgent;
 use App\Models\Naissance;
 use App\Models\NaissanceD;
 use App\Models\NaissHop;
@@ -45,6 +54,14 @@ class SuperAdminController extends Controller
     $caisses = Caisse::count();
     $doctors = Doctor::count();
     $ajoints = Ajoint::count();
+    $agencescnps  = AgenceCnps::count();
+    $agencescgrae = AgenceCgrae::count();
+    $cgraeagents = CgraeAgent::count();
+    $cnpsagents = CnpsAgent::count();
+    $ministereagents = MinistereAgent::count();
+    $totalcnpsrecherche = CnpsSearchHistory::count();
+    $totalcgraesrecherche = CgraeSearchHistory::count();
+
     $mairie = Vendor::whereNull('archived_at')->count();
     $sousadmin = SousAdmin::count();
     $total = $deces + $decesdeja + $mariage + $naissance + $naissanceD;
@@ -66,7 +83,9 @@ class SuperAdminController extends Controller
         'alerts', 'deces', 'decesdeja', 'mariage', 'naissance',
         'naissanceD', 'total', 'soldeActuel', 'soldeDebite', 'soldeRestant',
         'deceshop', 'naisshop', 'agents', 'caisses', 'doctors', 'mairie',
-        'ajoints', 'sousadmin', 'soldeTotalMairies'
+        'ajoints', 'sousadmin', 'soldeTotalMairies','agencescnps', 
+        'agencescgrae','cgraeagents','cnpsagents', 'ministereagents',
+        'totalcnpsrecherche','totalcgraesrecherche'
     ));
 }
 

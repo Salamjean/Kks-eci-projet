@@ -7,6 +7,7 @@ use App\Models\AgenceCnps;
 use App\Models\Alert;
 use App\Models\Cnps;
 use App\Models\CnpsAgent;
+use App\Models\CnpsSearchHistory;
 use App\Models\Decesdeja;
 use App\Models\DecesHop;
 use App\Models\ResetCodePasswordCnps;
@@ -25,9 +26,10 @@ class CnpsController extends Controller
     public function dashboard(Request $request)
 {
     $admin = Auth::guard('cnps')->user();
-    $cnpsagent = CnpsAgent::where('communeM', $admin->siege)->count();
+    $cnpsagent = CnpsAgent::count();
     $deceshops = DecesHop::count();
     $agences = AgenceCnps::count();
+    $rechercheInfo = CnpsSearchHistory::latest()->take(7)->get();
 
     // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CNPS
     $searchHistory = session('cnps_search_history', []);
@@ -37,23 +39,15 @@ class CnpsController extends Controller
         'cnpsagent',
         'deceshops',
         'searchHistory',
-        'agences'
+        'agences',
+        'rechercheInfo'
     ));
 }
 
 public function recherche(Request $request)
 {
-    $admin = Auth::guard('cnps')->user();
-    $cnpsagent = CnpsAgent::where('communeM', $admin->siege)->count();
-    $deceshops = DecesHop::count();
-    // Récupérer l'historique des recherches depuis la session avec une clé spécifique à la CNPS
-    $searchHistory = session('cnps_search_history', []);
-
-    return view('superadmin.cnps.recherche', compact(
-        'cnpsagent',
-        'deceshops',
-        'searchHistory'
-    ));
+    $rechercheInfo = CnpsSearchHistory::latest()->paginate(15);
+    return view('superadmin.cnps.recherche', compact('rechercheInfo'));
 }
     function indexdeclaration(){
         $deceshops = DecesHop::all();

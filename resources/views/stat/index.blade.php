@@ -12,7 +12,6 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
         }
         .card {
             border: 1px solid #ccc;
@@ -26,9 +25,8 @@
         }
     </style>
 </head>
-<body>
-    <br><br>
-    <h4 class="text-center">Statistiques par mois</h4>
+<body >
+    <h4 class="text-center mt-4">Statistiques par mois</h4>
     <!-- Filtre de Mois -->
 <form method="GET" action="{{ route('stats.index') }}" class="form-inline mb-3 justify-content-center">
   <div class="form-group mr-2">

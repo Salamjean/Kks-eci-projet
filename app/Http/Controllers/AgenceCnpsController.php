@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateAgentRequest;
 use App\Models\AgenceCnps;
 use App\Models\Alert;
 use App\Models\CnpsAgent;
+use App\Models\CnpsSearchHistory;
 use App\Models\DecesHop;
 use App\Models\ResetCodePasswordAgenceCnps;
 use App\Models\ResetCodePasswordCnpsAgent;
@@ -200,16 +201,22 @@ class AgenceCnpsController extends Controller
 
     // Récupérer les données de l'agent
     $agents = CnpsAgent::where('communeM', $agenceName)->count();
+    $rechercheInfo = CnpsSearchHistory::latest()->take(7)->get();
     // Récupérer les alertes
     $alerts = Alert::all();
 
     // Passer les données à la vue
-    return view('superadmin.agences.cnps.dashboard', compact('alerts', 'agents','deceshops'));
+    return view('superadmin.agences.cnps.dashboard', compact('alerts', 'agents','deceshops','rechercheInfo'));
 
 }
 function indexdeclaration(){
     $deceshops = DecesHop::all();
     return view('superadmin.agences.cnps.cnpsindex', compact('deceshops'));
+}
+
+public function historique(){
+    $rechercheInfo = CnpsSearchHistory::latest()->paginate(15);
+    return view('superadmin.agences.cnps.historique', compact('rechercheInfo'));
 }
 
     public function logout(){

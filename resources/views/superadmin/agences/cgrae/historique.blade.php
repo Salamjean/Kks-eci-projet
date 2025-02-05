@@ -1,4 +1,4 @@
-@extends('superadmin.cgrae.layouts.template')
+@extends('superadmin.agences.cgrae.layouts.template')
 
 @section('content')
 
@@ -72,7 +72,7 @@
         }
     </style>
 
-    <h1 class="text-center" style="margin: 70px 0">Historiques de toute les recherches effectuées par les agents de la cnps</h1>
+    <h1 class="text-center" style="margin: 70px 0">Historiques de toute les recherches effectuées par les agents de {{ Auth::guard('agencecgrae')->user()->agence_name }}</h1>
 
     <div class="container col-12">
         <div class="row justify-content-center">
@@ -89,7 +89,7 @@
 
                     <div class="card-body">
                         <div class="mb-3">
-                            <input type="text" id="search" class="form-control" placeholder="Rechercher dans par le nom ou le CMD...">
+                            <input type="text" id="search" class="form-control" placeholder="Rechercher dans ce cadre...">
                         </div>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="searchHistoryTable" width="100%" cellspacing="0">
@@ -106,8 +106,8 @@
                                     @foreach($rechercheInfo as $history)
                                         <tr class="text-center">
                                             <td>{{ $history->agent_name }} {{ $history->agent_prenom }}</td>
-                                            <td>{{ $history->defunt_nom ? $history->defunt_nom :'Défunt non trouvé'}} {{ $history->defunt_prenom }}</td>
-                                            <td>{{ $history->codeCMD ? $history->codeCMD :'Défunt non trouvé'}}</td>
+                                            <td>{{ $history->defunt_nom ? $history->defunt_nom : 'Défunt non trouvé' }} {{ $history->defunt_prenom }}</td>
+                                            <td>{{ $history->codeCMD ? $history->codeCMD : 'Défunt non trouvé' }}</td>
                                             <td>{{ $history->search_term }}</td>
                                             <td>{{ $history->created_at }}</td>
                                         </tr>

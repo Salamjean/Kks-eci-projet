@@ -256,9 +256,9 @@
             <label>Le défunt était-il marié ?</label>
             <div style="display: flex; gap: 10px;">
                 <label for="oui">Oui</label>
-                <input type="radio" id="oui" name="married" value="oui" required>
+                <input type="radio" id="oui" name="married" value="oui" >
                 <label for="non">Non</label>
-                <input type="radio" id="non" name="married" value="non" required>
+                <input type="radio" id="non" name="married" value="non" checked >
             </div>
             <div id="married-file-inputs-container"></div>
         </div>
@@ -270,7 +270,7 @@
                 <label for="ouiHorsS">Oui</label>
                 <input type="radio" id="ouiHorsS" name="DecesHorsS" value="oui">
                 <label for="nonHorsS">Non</label>
-                <input type="radio" id="nonHorsS" name="DecesHorsS" value="non">
+                <input type="radio" id="nonHorsS" name="DecesHorsS" value="non" checked>
             </div>
             <div id="deces-file-inputs-container"></div>
         </div>
@@ -279,17 +279,17 @@
             <p style="font-weight: bold; color: #1a5c58;">Choisissez le mode de rétrait :</p>
             <div class="form-row d-flex justify-content-center align-items-center gap-4">
                 <div class="radio-group">
-                    <input type="radio" id="option1" name="choix_option" value="retrait_sur_place" checked required>
+                    <input type="radio" id="option1" name="choix_option" value="retrait_sur_place" checked >
                     <label for="option1" class="mt-2">Retrait sur place</label>
                 </div>
                 <div class="radio-group">
-                    <input type="radio" id="option2" name="choix_option" value="livraison" required>
+                    <input type="radio" id="option2" name="choix_option" value="livraison">
                     <label for="option2" class="mt-2">Livraison</label>
                 </div>
             </div>
           </div>
 
-        <button type="submit">Soumettre</button>
+        <button type="submit">Valider</button>
     </form>
 </div>
 
@@ -365,6 +365,7 @@
                     <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
                 </div>`,
                 showCancelButton: true,
+                confirmButtonText: 'Payer',
                 cancelButtonText: 'Annuler',
                 focusConfirm: false,
             preConfirm: () => {

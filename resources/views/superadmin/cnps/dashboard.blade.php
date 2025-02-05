@@ -3,10 +3,10 @@
 @section('content')
 <style>
     .dashboard-background {
-        background-image: url("{{ asset('assets/images/profiles/cnps.jpg') }}"); 
-        background-size: 30%; 
-        background-position: center; 
-        background-repeat: no-repeat; 
+        background-image: url("{{ asset('assets/images/profiles/cnps.jpg') }}");
+        background-size: 30%;
+        background-position: center;
+        background-repeat: no-repeat;
         background-attachment: fixed;
         min-height: 100vh;
         padding: 20px 20px 20px 40px;
@@ -19,6 +19,23 @@
         border-radius: 8px; /* Coins arrondis */
         overflow: hidden; /* Pour que l'ombre s'applique correctement */
     }
+
+    /* Supprimer les styles de centrage si vous utilisez col-12 */
+    /*
+    .center-card-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .center-card {
+        max-width: 1000px;
+        width: 90%;
+    }
+    */
+
 </style>
 <div class="dashboard-background">
     <h1 class="text-center text-black mb-4">Bienvenue sur le tableau de bord</h1>
@@ -73,44 +90,41 @@
             </div>
         </div>
     </div><br><br>
-    <div class="container col-12">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                          <!-- Afficher les informations de la dernière recherche dans un tableau avec ombre -->
-                          @if(!empty($searchHistory))
-                          <h3 class="text-center text-black mb-3">Les recherches récentes</h3>
-                          <div class="shadow-table">
-                              <table class="table table-bordered mb-0">
-                                  <thead style="background-color: orange !important; color: white;">
-                                      <tr>
-                                          <th class="text-center">Agent</th>
-                                          <th class="text-center">Défunt recherché</th>
-                                          <th class="text-center">N° CMD du défunt</th>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                      @foreach($searchHistory as $search)
-                                          <tr>
-                                              <td class="text-center">{{ $search['agent_name'] }} {{ $search['agent_prenom'] }}</td>
-                                              <td class="text-center">
-                                                  @if($search['defunt_nom'])
-                                                      {{ $search['defunt_nom'] }} {{ $search['defunt_prenom'] }}
-                                                  @else
-                                                      Aucun défunt trouvé
-                                                  @endif
-                                              </td>
-                                              <td class="text-center">{{ $search['codeCMD'] ?? 'N/A' }}</td>
-                                          </tr>
-                                      @endforeach
-                                  </tbody>
-                              </table>
-                            </div>
-                            @endif
-                    </div>
+
+    <div class="row justify-content-center">
+        <div class="card shadow mb-4 col-11">
+            <div class="card-header py-3" style="background-color: orange">
+                <h6 class="font-weight-bold text-white text-center" style="font-size: 30px">Les recherches effectuées récemment</h6>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="searchHistoryTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr class="text-center">
+                                <th>Agent</th>
+                                <th>Défunt trouvé</th>
+                                <th>Code CMD</th>
+                                <th>Terme de recherche</th>
+                                <th>Date et Heure</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($rechercheInfo as $history)
+                                <tr class="text-center">
+                                    <td>{{ $history->agent_name }} {{ $history->agent_prenom }}</td>
+                                    <td>{{ $history->defunt_nom }} {{ $history->defunt_prenom }}</td>
+                                    <td>{{ $history->codeCMD }}</td>
+                                    <td>{{ $history->search_term }}</td>
+                                    <td>{{ $history->created_at }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 </div>
 @endsection

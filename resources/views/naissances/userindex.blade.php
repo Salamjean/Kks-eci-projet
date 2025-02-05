@@ -142,7 +142,7 @@
                                             @if ($naissance->etat !== 'réçu' && $naissance->etat !== 'terminé')
                                                 <button onclick="confirmDelete('{{ route('naissance.delete', $naissance->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
-                                                <button class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
+                                                <button  class="btn btn-danger btn-sm disabled-btn text-center" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
                                             @endif
                                         </td>
                                         <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissance->choix_option }}</div></td>
@@ -210,8 +210,8 @@
                                             @if ($naissanceD->etat !== 'réçu' && $naissanceD->etat !== 'terminé')
                                                  <button onclick="confirmDelete('{{ route('naissanced.delete', $naissanceD->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
-                                                <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
-                                            @endif
+                                                 <button  class="btn btn-danger btn-sm disabled-btn text-center" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
+                                             @endif
                                         </td>
                                         <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissanceD->choix_option }}</div></td>
                                     </tr>

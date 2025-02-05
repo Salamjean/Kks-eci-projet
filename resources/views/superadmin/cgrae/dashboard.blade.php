@@ -70,43 +70,41 @@
         </div>
     </div>
 </div><br><br>
-<div class="container col-12">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                      <!-- Afficher les informations de la dernière recherche dans un tableau avec ombre -->
-                      @if(!empty($searchHistory))
-                      <h3 class="text-center text-black mb-3">Les recherches récentes</h3>
-                      <div class="shadow-table">
-                          <table class="table table-bordered mb-0">
-                              <thead style="background-color: green !important; color: white;">
-                                  <tr>
-                                      <th class="text-center">Agent</th>
-                                      <th class="text-center">Défunt</th>
-                                      <th class="text-center">Code CMD</th>
-                                  </tr>
-                              </thead>
-                              <tbody>
-                                  @foreach($searchHistory as $search)
-                                      <tr>
-                                          <td class="text-center">{{ $search['agent_name'] }} {{ $search['agent_prenom'] }}</td>
-                                          <td class="text-center">
-                                              @if($search['defunt_nom'])
-                                                  {{ $search['defunt_nom'] }} {{ $search['defunt_prenom'] }}
-                                              @else
-                                                  Aucun défunt trouvé
-                                              @endif
-                                          </td>
-                                          <td class="text-center">{{ $search['codeCMD'] ?? 'N/A' }}</td>
-                                      </tr>
-                                  @endforeach
-                              </tbody>
-                          </table>
-                        </div>
-                        @endif
-                </div>
+
+
+<div class="row justify-content-center">
+    <div class="card shadow mb-4 col-11">
+        <div class="card-header py-3" style="background-color: green">
+            <h6 class="font-weight-bold text-white text-center" style="font-size: 30px">Les recherches effectuées récemment</h6>
+        </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="searchHistoryTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr class="text-center">
+                            <th>Agent</th>
+                            <th>Défunt trouvé</th>
+                            <th>Code CMD</th>
+                            <th>Terme de recherche</th>
+                            <th>Date et Heure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($rechercheInfo as $history)
+                            <tr class="text-center">
+                                <td>{{ $history->agent_name }} {{ $history->agent_prenom }}</td>
+                                <td>{{ $history->defunt_nom ? $history->defunt_nom :'Défunt non trouvé' }} {{ $history->defunt_prenom }}</td>
+                                <td>{{ $history->codeCMD ? $history->codeCMD :'Défunt non trouvé' }}</td>
+                                <td>{{ $history->search_term }}</td>
+                                <td>{{ $history->created_at }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
+</div>
+</div>
 @endsection

@@ -274,6 +274,7 @@
                     <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
                 </div>`,
                 showCancelButton: true,
+                confirmButtonText: 'Payer',
                 cancelButtonText: 'Annuler',
                 focusConfirm: false,
             preConfirm: () => {

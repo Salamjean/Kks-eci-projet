@@ -160,7 +160,7 @@
                                             @if ($deceD->etat !== 'réçu' && $deceD->etat !== 'terminé')
                                                 <button onclick="confirmDelete('{{ route('deces.delete', $deceD->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
-                                                <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()">Supprimer</button>
+                                                <button  class="btn btn-danger btn-sm disabled-btn text-center" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
                                             @endif
                                         </td>
                                         <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $deceD->choix_option }}</div></td>
@@ -229,8 +229,7 @@
                                                      alt="Pièce du parent" 
                                                      width="100" 
                                                      height="auto" 
-                                                     onclick="showImage(this)" 
-                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                                     onclick="showImage(this)">
                                             @endif
                                         </td>
                                         <td>
@@ -267,12 +266,11 @@
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
                                                 </a>
                                             @else
-                                                <img src="{{ asset('storage/' . $dece->RequisPolice) }}" 
-                                                     alt="Pièce du parent" 
+                                                <img src="{{ asset('storage/' . $dece->RequisPolice) ? 'eee':'eee' }}" 
+                                                     alt="Pas de Requisition" 
                                                      width="100" 
                                                      height="auto" 
-                                                     onclick="showImage(this)" 
-                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                                     onclick="showImage(this)">
                                             @endif
                                         </td>
                                         <td>
@@ -285,7 +283,7 @@
                                             @if ($dece->etat !== 'réçu' && $dece->etat !== 'terminé')
                                             <button onclick="confirmDelete('{{ route('deces.deletedeja', $dece->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
-                                                <button style="margin-left:30px" class="btn btn-danger btn-sm disabled-btn" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
+                                                <button  class="btn btn-danger btn-sm disabled-btn text-center" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
                                             @endif
                                         </td>
                                         <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $dece->choix_option }}</div></td>

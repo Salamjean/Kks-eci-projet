@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateAgentRequest;
 use App\Models\Alert;
 use App\Models\CnpsAgent;
+use App\Models\CnpsSearchHistory;
 use App\Models\DecesHop;
 use App\Models\ResetCodePasswordCnpsAgent;
 use App\Notifications\SendEmailToCnpsAgentAfterRegistrationNotification;
@@ -177,70 +178,68 @@ class CnpsAgentController extends Controller
             return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
         }
     }
+
     public function dashboard(Request $request)
-{
-    // Récupérer le terme de recherche depuis la requête
-    $searchTerm = $request->input('search');
+    {
+        // Récupérer le terme de recherche depuis la requête
+        $searchTerm = $request->input('search');
 
-    // Vérifier si un terme de recherche est présent
-    $hasSearchTerm = !empty($searchTerm);
+        // Vérifier si un terme de recherche est présent
+        $hasSearchTerm = !empty($searchTerm);
 
-    // Initialiser la variable pour stocker les résultats
-    $defunts = [];
+        // Initialiser la variable pour stocker les résultats
+        $defunts = [];
 
-    // Si un terme de recherche est présent, effectuer la recherche
-    if ($hasSearchTerm) {
-        $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
-            ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
-            ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
-            ->get();
+        // Si un terme de recherche est présent, effectuer la recherche
+        if ($hasSearchTerm) {
+            $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
+                ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
+                ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
+                ->get();
+        }
+
+        // Déterminer si des résultats ont été trouvés
+        $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
+
+        // Récupérer le nom et prénom de l'agent connecté
+        $agentName = Auth::guard('cnpsagent')->user()->name; // Nom de l'agent
+        $agentPrenom = Auth::guard('cnpsagent')->user()->prenom; // Prénom de l'agent
+
+        // Récupérer le nom et prénom du premier défunt trouvé (si des résultats existent)
+        $defuntNom = $found ? $defunts->first()->NomM : null;
+        $defuntPrenom = $found ? $defunts->first()->PrM : null;
+
+        // Stocker les informations de recherche dans la base de données
+        if ($hasSearchTerm) {
+            CnpsSearchHistory::create([
+                'agent_name' => $agentName,
+                'agent_prenom' => $agentPrenom,
+                'defunt_nom' => $defuntNom,
+                'defunt_prenom' => $defuntPrenom,
+                'codeCMD' => $found ? $defunts->first()->codeCMD : null,
+                'search_term' => $searchTerm, // Stocker le terme de recherche
+                'cnpsagent_id' => Auth::guard('cnpsagent')->id(), // Stocker l'ID de l'agent
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+        }
+
+        // Récupérer les alertes
+        $alerts = Alert::all();
+
+        // Passer les données à la vue
+        return view('superadmin.cnps.agent.dashboard', compact(
+            'alerts',
+            'defunts',
+            'searchTerm',
+            'found',
+            'hasSearchTerm',
+            'agentName',
+            'agentPrenom',
+            'defuntNom',
+            'defuntPrenom'
+        ));
     }
-
-    // Déterminer si des résultats ont été trouvés
-    $found = $hasSearchTerm && !empty($defunts) && $defunts->count() > 0;
-
-    // Récupérer le nom et prénom de l'agent connecté
-    $agentName = Auth::guard('cnpsagent')->user()->name; // Nom de l'agent
-    $agentPrenom = Auth::guard('cnpsagent')->user()->prenom; // Prénom de l'agent
-
-    // Récupérer le nom et prénom du premier défunt trouvé (si des résultats existent)
-    $defuntNom = $found ? $defunts->first()->NomM : null;
-    $defuntPrenom = $found ? $defunts->first()->PrM : null;
-
-    // Stocker les informations de recherche dans la session avec une clé spécifique à la CNPS
-    if ($hasSearchTerm) {
-        // Récupérer l'historique des recherches depuis la session
-        $searchHistory = session('cnps_search_history', []);
-      
-
-        // Ajouter la nouvelle recherche à l'historique
-        $searchHistory[] = [
-            'agent_name' => $agentName,
-            'agent_prenom' => $agentPrenom,
-            'defunt_nom' => $defuntNom,
-            'defunt_prenom' => $defuntPrenom,
-            'codeCMD' => $found ? $defunts->first()->codeCMD : null,
-        ];
-        // Mettre à jour la session avec le nouvel historique
-        session(['cnps_search_history' => $searchHistory]);
-    }
-
-    // Récupérer les alertes
-    $alerts = Alert::all();
-
-    // Passer les données à la vue
-    return view('superadmin.cnps.agent.dashboard', compact(
-        'alerts',
-        'defunts',
-        'searchTerm',
-        'found',
-        'hasSearchTerm',
-        'agentName',
-        'agentPrenom',
-        'defuntNom',
-        'defuntPrenom'
-    ));
-}
 
     public function logout(){
         Auth::guard('cnpsagent')->logout();

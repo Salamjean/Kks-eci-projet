@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\AgenceCgrae;
 use App\Models\Alert;
 use App\Models\CgraeAgent;
+use App\Models\CgraeSearchHistory;
+use App\Models\CnpsAgent;
 use App\Models\DecesHop;
 use App\Models\ResetCodePasswordAgenceCgrae;
 use App\Notifications\SendEmailToAgenceCgraeAfterRegistrationNotification;
@@ -195,18 +197,16 @@ class AgenceCgraeController extends Controller
 
     public function dashboard(Request $request)
     {
-          // Vérifier si l'utilisateur est connecté
+         // Vérifier si l'utilisateur est connecté
         $agenceName = Auth::guard('agencecgrae')->user()->agence_name;
         $deceshops = DecesHop::count();
         // Récupérer les données de l'agent
         $agents = CgraeAgent::where('communeM', $agenceName)->count();
+        $rechercheInfo = CgraeSearchHistory::latest()->take(7)->get();
         // Récupérer les alertes
         $alerts = Alert::all();
-        return view('superadmin.agences.cgrae.dashboard', compact(
-            'alerts',
-            'agents',
-            'deceshops',
-        ));
+        // Passer les données à la vue
+        return view('superadmin.agences.cgrae.dashboard', compact('alerts', 'agents','deceshops','rechercheInfo'));
     }
     
         public function logout(){
@@ -251,6 +251,11 @@ class AgenceCgraeController extends Controller
                 // Gérer les erreurs
                 return redirect()->back()->with('error', 'Une erreur s\'est produite lors de la connexion.');
             }
+        }
+
+        public function historique(){
+            $rechercheInfo = CgraeSearchHistory::latest()->paginate(15);
+            return view('superadmin.agences.cgrae.historique', compact('rechercheInfo'));
         }
 
         public function download($id)

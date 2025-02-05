@@ -207,6 +207,7 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/', [CgraeAgentController::class, 'index'])->name('cgraeagent.index');
     Route::get('/create', [CgraeAgentController::class, 'create'])->name('cgraeagent.create');
     Route::post('/store', [CgraeAgentController::class, 'store'])->name('cgraeagent.store');
+    Route::get('/historisque/recherche', [AgenceCgraeController::class, 'historique'])->name('cgraeagences.historique');
     Route::get('/cgrae/index-declaration', [AgenceCgraeController::class, 'indexdeclaration'])->name('cgraeagences.indexdashboard');
     Route::get('/{agent}/edit', [CgraeAgentController::class, 'edit'])->name('cgraeagent.edit');
     Route::put('/{agent}/update', [CgraeAgentController::class, 'update'])->name('cgraeagent.update');
@@ -218,6 +219,7 @@ Route::middleware('auth:web')->group(function () {
         Route::get('/', [CnpsAgentController::class, 'index'])->name('cnpsagent.index');
         Route::get('/create', [CnpsAgentController::class, 'create'])->name('cnpsagent.create');
         Route::post('/store', [CnpsAgentController::class, 'store'])->name('cnpsagent.store');
+        Route::get('/historisque/recherche', [AgenceCnpsController::class, 'historique'])->name('cnpsagences.historique');
         Route::get('/cnps/index-declaration', [AgenceCnpsController::class, 'indexdeclaration'])->name('cnpsagences.indexdashboard');
         Route::get('/{agent}/edit', [CnpsAgentController::class, 'edit'])->name('cnpsagent.edit');
         Route::put('/{agent}/update', [CnpsAgentController::class, 'update'])->name('cnpsagent.update');

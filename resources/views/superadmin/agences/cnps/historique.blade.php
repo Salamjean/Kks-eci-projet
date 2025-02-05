@@ -1,11 +1,11 @@
-@extends('superadmin.cgrae.layouts.template')
+@extends('superadmin.agences.cnps.layouts.template')
 
 @section('content')
 
     <style>
 
 .row {
-     background-image: url("{{ asset('assets/images/profiles/cgrae.jpg') }}"); 
+     background-image: url("{{ asset('assets/images/profiles/cnps.jpg') }}"); 
      background-size: 30%; 
      background-position: center; 
      background-repeat: no-repeat; 
@@ -72,13 +72,13 @@
         }
     </style>
 
-    <h1 class="text-center" style="margin: 70px 0">Historiques de toute les recherches effectuées par les agents de la cnps</h1>
+    <h1 class="text-center" style="margin: 70px 0">Historiques de toute les recherches effectuées par les agents de {{ Auth::guard('agencecnps')->user()->agence_name }}</h1>
 
     <div class="container col-12">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card shadow mb-4 center-card">
-                    <div class="card-header py-3" style="background-color: green; display: flex; justify-content: space-between; align-items: center;">
+                    <div class="card-header py-3" style="background-color: orange; display: flex; justify-content: space-between; align-items: center;">
                         <h6 class="font-weight-bold text-white text-center" style="font-size: 30px">Les recherches effectuées récemment</h6>
                         <nav aria-label="Page navigation">
                             <div class="pagination">
@@ -89,7 +89,7 @@
 
                     <div class="card-body">
                         <div class="mb-3">
-                            <input type="text" id="search" class="form-control" placeholder="Rechercher dans par le nom ou le CMD...">
+                            <input type="text" id="search" class="form-control" placeholder="Rechercher dans ce cadre...">
                         </div>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="searchHistoryTable" width="100%" cellspacing="0">
@@ -106,8 +106,8 @@
                                     @foreach($rechercheInfo as $history)
                                         <tr class="text-center">
                                             <td>{{ $history->agent_name }} {{ $history->agent_prenom }}</td>
-                                            <td>{{ $history->defunt_nom ? $history->defunt_nom :'Défunt non trouvé'}} {{ $history->defunt_prenom }}</td>
-                                            <td>{{ $history->codeCMD ? $history->codeCMD :'Défunt non trouvé'}}</td>
+                                            <td>{{ $history->defunt_nom }} {{ $history->defunt_prenom }}</td>
+                                            <td>{{ $history->codeCMD }}</td>
                                             <td>{{ $history->search_term }}</td>
                                             <td>{{ $history->created_at }}</td>
                                         </tr>
