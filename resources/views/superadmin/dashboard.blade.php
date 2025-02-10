@@ -283,7 +283,7 @@
                                 <div class="card h-100 shadow-sm">
                                     <div class="card-body text-center">
                                         <h5 class="text-xs font-weight-bold text-uppercase mb-2">Recherche-Naissance</h5>
-                                        <div class="h2 mb-0 font-weight-bold text-gray-800">800</div>
+                                        <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $totalministererechercheNaissances }}</div>
                                         <i class="fas fa-baby fa-2x text-primary"></i>
                                     </div>
                                 </div>
@@ -292,7 +292,7 @@
                                 <div class="card h-100 shadow-sm">
                                     <div class="card-body text-center">
                                         <h5 class="text-xs font-weight-bold text-uppercase mb-2">Recherche-Décès</h5>
-                                        <div class="h2 mb-0 font-weight-bold text-gray-800">900</div>
+                                        <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $totalministererechercheDeces }}</div>
                                         <i class="fas fa-church fa-2x text-primary"></i>
                                     </div>
                                 </div>

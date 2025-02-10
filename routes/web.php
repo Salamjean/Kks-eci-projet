@@ -273,6 +273,7 @@ Route::middleware('auth:web')->group(function () {
                 // Dashboard
                 Route::get('/dashboard', [MinistereController::class, 'dashboard'])->name('ministere.dashboard');
                 Route::get('/ministere/index-naissance', [MinistereController::class, 'naissancedeclaration'])->name('ministere.naissancedashboard');
+                Route::get('/historisque/recherche', [MinistereController::class, 'historique'])->name('ministeres.historique');
                 Route::get('/ministere/index-deces', [MinistereController::class, 'decesclaration'])->name('ministere.decesdashboard');
                 Route::get('/logout', [MinistereController::class, 'logout'])->name('ministere.logout');
 

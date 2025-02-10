@@ -7,6 +7,7 @@ use App\Models\Alert;
 use App\Models\DecesHop;
 use App\Models\Ministere;
 use App\Models\MinistereAgent;
+use App\Models\MinistereSearchHistory;
 use App\Models\NaissHop;
 use App\Models\ResetCodePasswordMinistere;
 use App\Notifications\SendEmailToMinistereAfterRegistrationNotification;
@@ -62,6 +63,10 @@ class MinistereController extends Controller
         'naisshops',
         'searchHistory'
     ));
+}
+public function historique(){
+    $rechercheInfo = MinistereSearchHistory::latest()->paginate(6);
+    return view('superadmin.ministere.historique', compact('rechercheInfo'));
 }
 
 function decesclaration(){

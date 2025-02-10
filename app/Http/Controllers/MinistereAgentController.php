@@ -15,6 +15,7 @@ use Exception;
 use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -177,104 +178,102 @@ class MinistereAgentController extends Controller
             }
         
     }
+
     public function dashboard(Request $request)
-{
-    // Récupérer toutes les déclarations
-    $naissancesCount = NaissHop::count();
-    $decesCount = DecesHop::count();
-    $total = $naissancesCount + $decesCount;
+    {
+        // Récupérer toutes les déclarations
+        $naissancesCount = NaissHop::count();
+        $decesCount = DecesHop::count();
+        $total = $naissancesCount + $decesCount;
 
-    // Récupérer le terme de recherche et le type de recherche depuis la requête
-    $searchTerm = $request->input('search');
-    $searchType = $request->input('search_type'); // 'naissance' ou 'deces'
+        // Récupérer le terme de recherche et le type de recherche depuis la requête
+        $searchTerm = $request->input('search');
+        $searchType = $request->input('search_type'); // 'naissance' ou 'deces'
 
-    // Vérifier si un terme de recherche est présent
-    $hasSearchTerm = !empty($searchTerm);
+        // Vérifier si un terme de recherche est présent
+        $hasSearchTerm = !empty($searchTerm);
 
-    // Initialiser les variables pour stocker les résultats
-    $defunts = [];
-    $naissances = [];
+        // Initialiser les variables pour stocker les résultats
+        $defunts = [];
+        $naissances = [];
 
-    // Variables pour déterminer si des résultats ont été trouvés
-    $foundDefunts = false;
-    $foundNaissances = false;
+        // Variables pour déterminer si des résultats ont été trouvés
+        $foundDefunts = false;
+        $foundNaissances = false;
 
-    // Si un terme de recherche est présent, effectuer la recherche en fonction du type choisi
-    if ($hasSearchTerm) {
-        if ($searchType === 'deces') {
-            // Recherche sur les décès
-            $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
-                ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
-                ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
-                ->get();
+        // Si un terme de recherche est présent, effectuer la recherche en fonction du type choisi
+        if ($hasSearchTerm) {
+            if ($searchType === 'deces') {
+                // Recherche sur les décès
+                $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
+                    ->get();
 
-            $foundDefunts = $defunts->count() > 0;
-        } elseif ($searchType === 'naissance') {
-            // Recherche sur les naissances
-            $naissances = NaissHop::where('NomM', 'like', '%' . $searchTerm . '%')
-                ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
-                ->orWhere('codeCMN', 'like', '%' . $searchTerm . '%')
-                ->get();
+                $foundDefunts = $defunts->count() > 0;
+            } elseif ($searchType === 'naissance') {
+                // Recherche sur les naissances
+                $naissances = NaissHop::where('NomM', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('codeCMN', 'like', '%' . $searchTerm . '%')
+                    ->get();
 
-            $foundNaissances = $naissances->count() > 0;
+                $foundNaissances = $naissances->count() > 0;
+            }
         }
+
+        // Récupérer le nom et prénom de l'agent connecté et ID
+        $agentName = Auth::guard('ministereagent')->user()->name; // Nom de l'agent
+        $agentPrenom = Auth::guard('ministereagent')->user()->prenom; // Prénom de l'agent
+        $agentId = Auth::guard('ministereagent')->user()->cnpsagent_id;
+
+        // Récupérer les informations du défunt ou de la naissance
+        $defuntNom = $foundDefunts ? $defunts->first()->NomM : null;
+        $defuntPrenom = $foundDefunts ? $defunts->first()->PrM : null;
+        $codeCMD = $foundDefunts ? $defunts->first()->codeCMD : null;
+        $naissanceNom = $foundNaissances ? $naissances->first()->NomM : null;
+        $naissancePrenom = $foundNaissances ? $naissances->first()->PrM : null;
+        $codeCMN = $foundNaissances ? $naissances->first()->codeCMN : null;
+
+        // Stocker les informations de recherche dans la base de données
+        if ($hasSearchTerm) {
+            DB::table('ministere_search_history')->insert([
+                'agent_name' => $agentName,
+                'agent_prenom' => $agentPrenom,
+                'defunt_nom' => $defuntNom,
+                'defunt_prenom' => $defuntPrenom,
+                'codeCMD' => $codeCMD,
+                'naissance_nom' => $naissanceNom,
+                'naissance_prenom' => $naissancePrenom,
+                'codeCMN' => $codeCMN,
+                'search_term' => $searchTerm,
+                'recherche_type' => $searchType,
+                'cnpsagent_id' => $agentId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        // Récupérer les alertes
+        $alerts = Alert::all();
+
+        // Retourner la vue avec les données
+        return view('superadmin.ministere.agent.dashboard', compact(
+            'alerts',
+            'defunts',
+            'naissances',
+            'searchTerm',
+            'searchType',
+            'foundDefunts',
+            'foundNaissances',
+            'hasSearchTerm',
+            'total',
+            'decesCount',
+            'naissancesCount',
+            'agentName',
+            'agentPrenom'
+        ));
     }
-
-    // Récupérer le nom et prénom de l'agent connecté
-    $agentName = Auth::guard('ministereagent')->user()->name; // Nom de l'agent
-    $agentPrenom = Auth::guard('ministereagent')->user()->prenom; // Prénom de l'agent
-
-    // Récupérer les informations du défunt ou de la naissance
-    $defuntNom = $foundDefunts ? $defunts->first()->NomM : null;
-    $defuntPrenom = $foundDefunts ? $defunts->first()->PrM : null;
-    $naissanceNom = $foundNaissances ? $naissances->first()->NomM : null;
-    $naissancePrenom = $foundNaissances ? $naissances->first()->PrM : null;
-
-    // Stocker les informations de recherche dans la session avec une clé spécifique au ministère
-    if ($hasSearchTerm) {
-        // Récupérer l'historique des recherches depuis la session
-        $searchHistory = session('ministere_search_history', []);
-
-        // Ajouter la nouvelle recherche à l'historique
-        $searchHistory[] = [
-            'agent_name' => $agentName,
-            'agent_prenom' => $agentPrenom,
-            'defunt_nom' => $defuntNom,
-            'defunt_prenom' => $defuntPrenom,
-            'naissance_nom' => $naissanceNom,
-            'naissance_prenom' => $naissancePrenom,
-            'codeCMD' => $foundDefunts ? $defunts->first()->codeCMD : null,
-            'codeCMN' => $foundNaissances ? $naissances->first()->codeCMN : null,
-            'search_type' => $searchType,
-        ];
-
-        // Garder seulement les 5 dernières recherches
-        $searchHistory = array_slice($searchHistory, -5);
-
-        // Mettre à jour la session avec le nouvel historique
-        session(['ministere_search_history' => $searchHistory]);
-    }
-
-    // Récupérer les alertes
-    $alerts = Alert::all();
-
-    // Retourner la vue avec les données
-    return view('superadmin.ministere.agent.dashboard', compact(
-        'alerts',
-        'defunts',
-        'naissances',
-        'searchTerm',
-        'searchType',
-        'foundDefunts',
-        'foundNaissances',
-        'hasSearchTerm',
-        'total',
-        'decesCount',
-        'naissancesCount',
-        'agentName',
-        'agentPrenom'
-    ));
-}
 
     public function logout(){
         Auth::guard('ministereagent')->logout();

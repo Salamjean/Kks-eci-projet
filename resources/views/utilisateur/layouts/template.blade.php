@@ -77,9 +77,9 @@
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
        <!-- Bouton pour afficher le menu sur les petits écrans -->
-       <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center btn-navbar-menu" type="button" data-toggle="offcanvas">
-       <span class="mdi mdi-menu"></span>
-      </button>
+       {{-- <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center btn-navbar-menu" type="button" data-toggle="offcanvas"> --}}
+       {{-- <span class="mdi mdi-menu"></span> --}}
+      {{-- </button> --}}
       
       
       <div class="sidebar sidebar-offcanvas" id="sidebar">

@@ -16,7 +16,7 @@
           $user = Auth::guard('ministereagent')->user();
         @endphp
         <div class="profile-picture">
-          <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/cgrae.jpg') }}" alt="Profile Image">
+          <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/sante.jpg') }}" alt="Profile Image">
       </div>
         <span class="ml-2 d-none d-lg-inline text-black small" style="color: white !important;"><strong>Siège : {{ $user->communeM }}</strong></span>
       </a>

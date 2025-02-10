@@ -21,6 +21,8 @@ use App\Models\DecesHop;
 use App\Models\Doctor;
 use App\Models\Mariage;
 use App\Models\MinistereAgent;
+use App\Models\MinistereHistory;
+use App\Models\MinistereSearchHistory;
 use App\Models\Naissance;
 use App\Models\NaissanceD;
 use App\Models\NaissHop;
@@ -61,6 +63,8 @@ class SuperAdminController extends Controller
     $ministereagents = MinistereAgent::count();
     $totalcnpsrecherche = CnpsSearchHistory::count();
     $totalcgraesrecherche = CgraeSearchHistory::count();
+    $totalministererechercheNaissances = MinistereSearchHistory::where('recherche_type', 'naissance')->count();
+    $totalministererechercheDeces = MinistereSearchHistory::where('recherche_type', 'deces')->count();
 
     $mairie = Vendor::whereNull('archived_at')->count();
     $sousadmin = SousAdmin::count();
@@ -85,7 +89,7 @@ class SuperAdminController extends Controller
         'deceshop', 'naisshop', 'agents', 'caisses', 'doctors', 'mairie',
         'ajoints', 'sousadmin', 'soldeTotalMairies','agencescnps', 
         'agencescgrae','cgraeagents','cnpsagents', 'ministereagents',
-        'totalcnpsrecherche','totalcgraesrecherche'
+        'totalcnpsrecherche','totalcgraesrecherche','totalministererechercheNaissances','totalministererechercheDeces'
     ));
 }
 

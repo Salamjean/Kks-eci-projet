@@ -9,14 +9,78 @@
 
 <style>
     .form-background {
-    background-image: url("{{ asset('assets/images/profiles/arriereP.jpg') }}"); /* Chemin de l'image */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    padding: 20px;
-    border-radius: 8px;
-    width: 100%;
-}
+        background-image: url("{{ asset('assets/images/profiles/arriereP.jpg') }}"); /* Chemin de l'image */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        padding: 20px;
+        border-radius: 8px;
+        width: 100%;
+    }
+
+    .statistics-card {
+        margin-bottom: 15px; /* Add some spacing between the cards */
+        text-align: center;   /* Center the text inside each card */
+    }
+
+    .statistics-card p {
+        font-size: 0.8em;
+        margin-bottom: 5px;
+    }
+
+    .statistics-card h3 {
+        font-size: 1.2em;
+    }
+    
+    .card-rounded {
+        border-radius: 10px;
+    }
+
+    /* Media query for tablets and smaller screens */
+    @media (max-width: 991.98px) {
+      .form-background{
+        padding: 5px;
+      }
+        .statistics-card {
+          padding: 10px
+          margin-bottom: 10px; /* Reduce spacing on smaller screens */
+        }
+
+        .statistics-card p {
+            font-size: 0.7em;  /* Adjust font size for better fit */
+        }
+
+        .statistics-card h3 {
+            font-size: 1em; /* Smaller font for total count */
+        }
+        /* Réduire la hauteur du conteneur du graphique sur les écrans moyens */
+        .col-lg-8 .card-rounded {
+            height: 400px; /* Hauteur réduite pour les écrans moyens */
+        }
+
+        /* Styles pour les plus petits écrans (mobile) */
+        @media (max-width: 575.98px) {
+            .col-lg-8 .card-rounded {
+                height: 300px; /* Hauteur encore plus réduite sur les mobiles */
+            }
+        }
+    }
+
+    /* Media query for very small screens (mobile) */
+    @media (max-width: 575.98px) {
+        .statistics-card {
+            padding: 5px
+            margin-bottom: 5px;
+        }
+
+        .statistics-card p {
+            font-size: 0.6em; /* Even smaller font size on mobile */
+        }
+
+        .statistics-card h3 {
+            font-size: 0.8em; /* Very small font for total count */
+        }
+    }
 </style>
 
 <div class="main-panel form-background">
@@ -36,7 +100,7 @@
                     <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
                         <div class="row">
                             <!-- Section des statistiques de demande -->
-                            <div class="col-lg-12 d-flex justify-content-between">
+                            <div class="col-lg-12 d-flex flex-wrap justify-content-around">
                                 <!-- Extrait de naissance et décès -->
                                 <div class="statistics-card">
                                     <p class="statistics-title">Extrait de naissance</p>
