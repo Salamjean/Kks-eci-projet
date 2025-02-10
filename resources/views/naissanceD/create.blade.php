@@ -49,12 +49,11 @@
 
     select, input[type="text"], input[type="file"], input[type="date"] {
         width: 100%;
-        padding: 0.6rem;
+        padding: 0.8rem;
         border: 1px solid #ddd;
-        border-radius: 8px;
+        border-radius: 10px;
         background: #f9f9f9;
         outline: none;
-        margin-bottom: 0.5rem;
     }
 
     button {
@@ -120,7 +119,7 @@
         flex-direction: column !important; 
         }
         .titre{
-            margin-top: 45 px;
+            margin-top: 45px;
         }
     }
     /* SweetAlert width adjustments */

@@ -14,7 +14,7 @@
 
     .conteneurInfo {
         background: #ffffff;
-        padding: 30px 40px;
+        padding: 20px; /* Reduced padding for smaller screens */
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         max-width: 1000px;
@@ -26,7 +26,7 @@
         text-align: center;
         color: #1a5c58;
         margin-bottom: 1rem;
-        font-size: 40px;
+        font-size: 30px; /* Reduced font size for smaller screens */
     }
 
     label {
@@ -41,12 +41,12 @@
     input[type="file"],
     input[type="date"] {
         width: 100%;
-        padding: 0.8rem;
+        padding: 0.5rem;
         border: 1px solid #ddd;
         border-radius: 10px;
         background: #f9f9f9;
         outline: none;
-       
+        box-sizing: border-box; /* Important for width: 100% */
     }
 
     button {
@@ -68,12 +68,15 @@
 
     .form-row {
         display: flex;
+        flex-wrap: wrap; /* Allow items to wrap on smaller screens */
         justify-content: space-between;
     }
 
     .form-group {
         flex: 1;
         margin-right: 10px;
+        margin-bottom: 15px; /* Added margin for spacing */
+        min-width: 45%; /* Minimum width for each group */
     }
 
     .form-group:last-child {
@@ -101,10 +104,53 @@
             opacity: 1;
         }
     }
+
+    /* Media Queries for responsiveness */
+    @media (max-width: 768px) { /* Tablets and smaller */
+        .conteneurInfo {
+            padding: 15px;
+        }
+
+        .titre{
+            font-size: 30px;
+            margin-top: 70px;
+        }
+
+        h1 {
+            margin-top: 30px;
+            font-size: 24px;
+        }
+
+        .form-row {
+            flex-direction: column; /* Stack form groups vertically */
+        }
+
+        .form-group {
+            width: 100%; /* Each form group takes full width */
+            margin-right: 0;
+            min-width: auto;
+        }
+    }
+
+    @media (max-width: 480px) { /* Phones */
+        .conteneurInfo {
+            padding: 10px;
+        }
+
+        .titre{
+            font-size: 30px;
+            margin-top: 70px;
+        }
+
+        h1 {
+            margin-top: 30px;
+            font-size: 20px;
+        }
+    }
 </style>
 
 <div class="conteneurInfo">
-    <h1>Demande d'acte de Décès</h1>
+    <h1 class="titre">Demande d'acte de Décès</h1>
     <form id="declarationForm" method="POST" enctype="multipart/form-data" action="{{ route('deces.storedeja') }}">
         @csrf
         <div class="form-row">
@@ -185,7 +231,7 @@
                             <option value="kong">Kong</option>
                             <option value="korhogo">Korhogo</option>
                             <option value="marako">Marako</option>
-                            <option value="man">Man</option>
+                            <option value="man">Man</man>
                             <option value="mondougou">Mondougou</option>
                             <option value="nzi">Nzi</option>
                             <option value="odienne">Odienné</option>
@@ -195,7 +241,7 @@
                             <option value="sénoufo">Sénoufo</option>
                             <option value="sikensi">Sikensi</option>
                             <option value="songon">Songon</option>
-                            <option value="solia">Solia</option>
+                            <option value="solia">Solia</Solia>
                             <option value="soubre">Soubré</option>
                             <option value="tabou">Tabou</option>
                             <option value="tiago">Tiago</option>
@@ -207,7 +253,7 @@
                             <option value="diboke">Diboké</option>
                             <option value="doungou">Doungou</option>
                             <option value="boura">Boura</option>
-                            <option value="bofora">Bofora</option>
+                            <option value="bofora">Bofora</Bofora>
                             <option value="zagoua">Zagoua</option>
                 </select>
                 @error('communeD')

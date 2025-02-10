@@ -65,7 +65,7 @@ class MinistereController extends Controller
     ));
 }
 public function historique(){
-    $rechercheInfo = MinistereSearchHistory::latest()->paginate(6);
+    $rechercheInfo = MinistereSearchHistory::latest()->paginate(10);
     return view('superadmin.ministere.historique', compact('rechercheInfo'));
 }
 
