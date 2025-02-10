@@ -1,3 +1,4 @@
+
 <style>
   /* Styles de base (déjà présents) */
   .profile-sidebar {
@@ -41,17 +42,17 @@
   
   /* Styles pour le menu déroulant */
   .profile-sidebar .dropdown-menu {
-      position: absolute; /* Positionnement absolu par rapport à .profile-sidebar */
-      left: 0;       /* Aligné à gauche de la sidebar */
-      top: 100%;   /* En dessous de l'image */
-      width: 100%;   /* Occupe toute la largeur de la sidebar */
-      z-index: 1000;  /* Assure qu'il s'affiche au-dessus des autres éléments */
+      /* Utilisation de position: fixed pour un positionnement absolu par rapport à la fenêtre */
+      position: fixed;
+      top: 60px; /* Ajustez cette valeur pour positionner le dropdown sous la navbar */
+      left: 0;
+      width: 100%;
+      z-index: 9999; /* Assurez-vous qu'il s'affiche au-dessus de tout */
       padding: 0;     /* Supprime le padding par défaut */
       border: none;   /* Supprime la bordure par défaut */
       border-radius: 0; /* Supprime les coins arrondis */
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère */
       background-color: #343a40;
-  
   }
   
   .profile-sidebar .dropdown-menu a{
@@ -71,7 +72,7 @@
   .profile-sidebar .dropdown-menu .dropdown-header{
       color:#ffffff
   }
-  </style>
+</style>
   
   <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
@@ -164,26 +165,4 @@
     </ul>
   </nav>
   
-  <script>
-      // JavaScript pour gérer l'ouverture/fermeture du menu déroulant (pas toujours nécessaire avec Bootstrap 5)
-      document.addEventListener('DOMContentLoaded', function() {
-          var dropdownElementList = [].slice.call(document.querySelectorAll('.profile-sidebar [data-bs-toggle="dropdown"]'))
-          var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
-              return new bootstrap.Dropdown(dropdownToggleEl)
-          });
   
-           // Fermer le menu si on clique en dehors (amélioration)
-          document.addEventListener('click', function(event) {
-              var isClickInside = document.querySelector('.profile-sidebar').contains(event.target);
-              if (!isClickInside) {
-                var dropdowns = document.getElementsByClassName("dropdown-menu");
-                for (var i = 0; i < dropdowns.length; i++) {
-                  var openDropdown = dropdowns[i];
-                  if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                  }
-                }
-              }
-            });
-      });
-  </script>

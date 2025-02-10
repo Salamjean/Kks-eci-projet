@@ -11,6 +11,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="{{asset("assets2/vendors/iconic-fonts/font-awesome/css/all.min.css")}}" rel="stylesheet">
   <link rel="stylesheet" href="{{ asset("assets2/vendors/iconic-fonts/flat-icons/flaticon.css") }}">
+
   <link rel="stylesheet" href="{{ asset("assets2/vendors/iconic-fonts/cryptocoins/cryptocoins.css") }}">
   <link rel="stylesheet" href="{{ asset("assets2/vendors/iconic-fonts/cryptocoins/cryptocoins-colors.css") }}">
   <!-- Bootstrap core CSS -->
@@ -24,7 +25,7 @@
   <!-- Page Specific CSS (Morris Charts.css) -->
   <link href="{{ asset("assets2/assets/css/morris.css") }}" rel="stylesheet">
   <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+   <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
 </head>
 
 <body class="ms-body ms-aside-left-open ms-primary-theme ms-has-quickbar">

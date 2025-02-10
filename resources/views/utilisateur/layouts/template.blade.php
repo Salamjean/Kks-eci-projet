@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="{{ asset('assets3/css/materialdesignicons.min.css') }}">
   <link rel="stylesheet" href="{{ asset('assets3/css/themify-icons.css') }}">
   <link rel="stylesheet" href="{{ asset('assets3/css/typicons.css') }}">
+  <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
   <link rel="stylesheet" href="{{ asset('assets3/css/simple-line-icons.css') }}">
   <link rel="stylesheet" href="{{ asset('assets3/css/vendor.bundle.base.css') }}">
   <!-- endinject -->
@@ -130,6 +131,47 @@
             });
         })(jQuery);
     </script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log("Dropdown script running"); // Vérification du script
+
+    // Initialise tous les dropdowns de la page
+    var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
+    var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+      console.log("Initializing dropdown:", dropdownToggleEl); // Vérification de l'initialisation
+      return new bootstrap.Dropdown(dropdownToggleEl);
+    });
+
+    // Fermer le menu si on clique en dehors du dropdown
+    document.addEventListener('click', function(event) {
+      var dropdowns = document.getElementsByClassName("dropdown-menu");
+      for (var i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          // Vérifie si le clic est à l'intérieur du dropdown, sinon le ferme
+          if (!event.target.closest('.dropdown')) {
+            console.log("Closing dropdown:", openDropdown); // Vérification de la fermeture
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    });
+
+      // Gestion des événements tactiles (pour mobile)
+    document.addEventListener('touchstart', function(event) {
+      var dropdowns = document.getElementsByClassName("dropdown-menu");
+      for (var i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+          if (!event.target.closest('.dropdown')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    });
+  });
+</script>
   <!-- End custom js for this page-->
 </body>
 
