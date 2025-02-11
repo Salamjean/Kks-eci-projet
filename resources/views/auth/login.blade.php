@@ -26,7 +26,69 @@
     button.ghost { background-color: transparent; border-color: #FFFFFF; }
     form { background-color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 0 50px; height: 100%; text-align: center; }
     input, select { background-color: #eee; border: none; padding: 12px 15px; margin: 8px 0; width: 100%; }
+
+    /*  REGLAGE RESPONSIVE  */
     .container { background-color: #fff; border-radius: 10px; box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22); position: relative; overflow: hidden; width: 768px; max-width: 100%; min-height: 600px; }
+
+    @media (max-width: 768px) {
+        .container {
+            transform: scale(0.8);
+            min-height: 500px; /* Hauteur réduite pour les tablettes */
+        }
+        input, select {
+            padding: 8px 12px; /* Réduit le padding */
+            font-size: 0.9em; /* Réduit la taille de la police */
+            width: 200px;  /* Ajout de la largeur des inputs */
+         }
+         h1, p{
+           font-size: 15px; /* Réduit la taille des titres et des paragraphes */
+         }
+         .creer{
+           font-size: 15px;
+         }
+         button {
+           padding: 10px 30px;
+         }
+         .accueil{
+           margin-bottom:0 !important;
+           margin-top: 10px;
+         }
+         a {
+           font-size: 8px;
+           padding: 2px 10px;
+         }
+        
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            transform: scale(0.6);
+            min-height: 400px; /* Hauteur réduite pour les mobiles */
+        }
+        input, select {
+            padding: 4px 10px; /* Réduit encore plus le padding */
+            font-size: 10px; /* Réduit encore plus la taille de la police */
+            width: 160px;  /* Ajout de la largeur des inputs */
+        }
+        h1, p{
+          font-size: 15px; /* Réduit la taille des titres et des paragraphes */
+        }
+        .creer{
+          font-size: 12px;
+        }
+        button {
+          padding: 6px 30px;
+        }
+        .accueil{
+          margin-bottom:0 !important;
+          margin-top: 10px;
+        }
+        a {
+          font-size: 8px;
+          padding: 6px 10px;
+        }
+    }
+
     .form-container { position: absolute; top: 0; height: 100%; transition: all 0.6s ease-in-out; }
     .sign-in-container { left: 0; width: 50%; z-index: 2; }
     .container.right-panel-active .sign-in-container { transform: translateX(100%); }
@@ -48,13 +110,13 @@
   </style>
 </head>
 <body>
-  <button ><a href="{{ route('general') }}" style="color: white">Accueil</a></button><br>
+  <button class="accueil" style="margin-bottom:20px" ><a href="{{ route('general') }}" class="text-accuei" style="color: white;">Accueil</a></button>
   <div class="container " id="container">
     <!-- Formulaire d'inscription -->
     <div class="form-container sign-up-container">
       <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
-        <h1>Créez votre compte</h1>
+        <h1 class="creer">Créez votre compte</h1>
         <input type="text" name="name" placeholder="Votre nom" required />
         <input type="text" name="prenom" placeholder="Votre prénom" required />
         <input type="email" name="email" placeholder="Email" required />

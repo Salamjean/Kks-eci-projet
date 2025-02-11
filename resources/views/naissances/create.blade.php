@@ -15,13 +15,13 @@
 
         .conteneurInfo {
             background: rgba(255, 255, 255, 0.8);
-            padding: 20px;  /* Reduced padding for smaller screens */
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
             max-width: 1000px;
             margin: auto;
             animation: fadeIn 0.6s ease-in-out;
-            box-sizing: border-box; /* Ensure padding is included in width */
+            box-sizing: border-box;
         }
 
         @keyframes fadeIn {
@@ -38,7 +38,7 @@
             text-align: center;
             color: #1a5c58;
             margin-bottom: 1rem;
-            font-size: 30px; /* Reduced font size for smaller screens */
+            font-size: 30px;
         }
 
         h4 {
@@ -48,7 +48,7 @@
         label {
             font-weight: bold;
             color: #1a5c58;
-            display: block; /* Ensure label takes full width */
+            display: block;
             margin-bottom: 0.5rem;
         }
 
@@ -63,7 +63,7 @@
             border-radius: 10px;
             background: #f9f9f9;
             outline: none;
-            box-sizing: border-box; /* Ensure padding is included in width */
+            box-sizing: border-box;
         }
 
         button {
@@ -89,19 +89,19 @@
 
         .form-row {
             display: flex;
-            flex-wrap: wrap; /* Allow items to wrap */
-            margin: 0 -0.5rem; /* Adjust for padding on form-group */
+            flex-wrap: wrap;
+            margin: 0 -0.5rem;
         }
 
         .form-group {
             padding: 0.5rem;
             flex: 1;
-            box-sizing: border-box; /* Ensure padding is included in width */
+            box-sizing: border-box;
         }
 
         .form-group.half-width {
             flex: 0 0 50%;
-            max-width: 50%;  /* Ensure half width on larger screens */
+            max-width: 50%;
         }
 
         .radio-group {
@@ -120,7 +120,7 @@
         }
 
         /* Media queries for responsive design */
-        @media (max-width: 768px) { /* Tablets and smaller */
+        @media (max-width: 768px) {
             .conteneurInfo {
                 padding: 15px;
             }
@@ -135,22 +135,22 @@
             }
 
             .form-group.half-width {
-                flex: 0 0 100%;   /* Full width on smaller screens */
+                flex: 0 0 100%;
                 max-width: 100%;
             }
 
             .form-row {
-                flex-direction: column; /* Stack form groups vertically */
+                flex-direction: column;
             }
 
             .form-group {
-                width: 100%; /* Each form group takes full width */
+                width: 100%;
                 margin-right: 0;
                 min-width: auto;
             }
         }
 
-        @media (max-width: 480px) { /* Phones */
+        @media (max-width: 480px) {
             .conteneurInfo {
                 padding: 10px;
             }
