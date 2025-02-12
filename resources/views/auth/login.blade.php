@@ -204,7 +204,7 @@
             <option value="bofora">Bofora</option>
             <option value="zagoua">Zagoua</option>
         </select>
-        <input type="text" name="CMU" placeholder="Entrez votre numéro CMU" required /><br>
+        <input type="text" name="CMU" placeholder="Entrez votre numéro CMU" required />
         <div class="flex-column">
           <label>Photo de Profil</label>
       <div class="inputForm mb-3">
@@ -213,7 +213,7 @@
           <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
           @enderror
       </div>
-    </div>
+    </div><br>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
