@@ -200,61 +200,61 @@
                             <option value="allankoua">Allankoua</option>
                             <option value="anono">Anono</option>
                             <option value="ankoum">Ankoum</option>
-                            <option value="anyama">Anyama</option>
+                            <option value="anyama">Anyama</Anyama</option>
                             <option value="alepe">Alépé</option>
                             <option value="ayama">Ayama</option>
                             <option value="bagohouo">Bagohouo</option>
                             <option value="banga">Banga</option>
                             <option value="bamboue">Bamboué</option>
                             <option value="bocanda">Bocanda</option>
-                            <option value="borotou">Borotou</option>
+                            <option value="borotou">Borotou</Borotou</option>
                             <option value="bouna">Bouna</option>
                             <option value="bounkani">Bounkani</option>
                             <option value="bouafle">Bouaflé</option>
-                            <option value="bouake">Bouaké</option>
+                            <option value="bouake">Bouaké</Bouaké</option>
                             <option value="bounoua">Bounoua</option>
-                            <option value="dabakala">Dabakala</option>
+                            <option value="dabakala">Dabakala</Dabakala</option>
                             <option value="dabou">Dabou</option>
                             <option value="daloa">Daloa</option>
-                            <option value="dimbokro">Dimbokro</option>
-                            <option value="debine">Débine</option>
+                            <option value="dimbokro">Dimbokro</Dimbokro</option>
+                            <option value="debine">Débine</Debine</option>
                             <option value="djangokro">Djangokro</option>
                             <option value="dini">Dini</option>
                             <option value="ferkessedougou">Ferkessédougou</option>
-                            <option value="gagnoa">Gagnoa</option>
-                            <option value="genegbe">Génégbé</option>
-                            <option value="grand-bassam">Grand-Bassam</option>
-                            <option value="grand-lahou">Grand-Lahou</option>
-                            <option value="guiberoua">Guiberoua</option>
-                            <option value="ikessou">Ikessou</option>
-                            <option value="jacqueville">Jacqueville</option>
-                            <option value="kong">Kong</option>
-                            <option value="korhogo">Korhogo</option>
-                            <option value="marako">Marako</option>
+                            <option value="gagnoa">Gagnoa</Gagnoa</option>
+                            <option value="genegbe">Génégbé</Génégbé</option>
+                            <option value="grand-bassam">Grand-Bassam</Grand-Bassam</option>
+                            <option value="grand-lahou">Grand-Lahou</Grand-Lahou</option>
+                            <option value="guiberoua">Guiberoua</Guiberoua</option>
+                            <option value="ikessou">Ikessou</Ikessou</option>
+                            <option value="jacqueville">Jacqueville</Jacqueville</option>
+                            <option value="kong">Kong</Kong</option>
+                            <option value="korhogo">Korhogo</korhogo>
+                            <option value="marako">Marako</Marako</option>
                             <option value="man">Man</man>
-                            <option value="mondougou">Mondougou</option>
-                            <option value="nzi">Nzi</option>
+                            <option value="mondougou">Mondougou</mondougou>
+                            <option value="nzi">Nzi</nzi>
                             <option value="odienne">Odienné</option>
-                            <option value="san-pedro">San-Pédro</option>
-                            <option value="sassandra">Sassandra</option>
-                            <option value="segueila">Séguéla</option>
-                            <option value="sénoufo">Sénoufo</option>
-                            <option value="sikensi">Sikensi</option>
-                            <option value="songon">Songon</option>
-                            <option value="solia">Solia</Solia>
-                            <option value="soubre">Soubré</option>
-                            <option value="tabou">Tabou</option>
-                            <option value="tiago">Tiago</option>
-                            <option value="tiassale">Tiassalé</option>
-                            <option value="toumodi">Toumodi</option>
-                            <option value="zuénoula">Zuénoula</option>
-                            <option value="chire">Chiré</option>
-                            <option value="deboudougou">Déboudougou</option>
-                            <option value="diboke">Diboké</option>
-                            <option value="doungou">Doungou</option>
-                            <option value="boura">Boura</option>
-                            <option value="bofora">Bofora</Bofora>
-                            <option value="zagoua">Zagoua</option>
+                            <option value="san-pedro">San-Pédro</San-Pédro</option>
+                            <option value="sassandra">Sassandra</sassandra>
+                            <option value="segueila">Séguéla</Séguela</option>
+                            <option value="sénoufo">Sénoufo</Sénoufo</option>
+                            <option value="sikensi">Sikensi</sikensi>
+                            <option value="songon">Songon</songon>
+                            <option value="solia">Solia</Solia</option>
+                            <option value="soubre">Soubré</Soubré</option>
+                            <option value="tabou">Tabou</tabou>
+                            <option value="tiago">Tiago</tiago>
+                            <option value="tiassale">Tiassalé</Tiassalé</option>
+                            <option value="toumodi">Toumodi</toumodi>
+                            <option value="zuénoula">Zuénoula</Zuénoula</option>
+                            <option value="chire">Chiré</Chiré</option>
+                            <option value="deboudougou">Déboudougou</Déboudougou</option>
+                            <option value="diboke">Diboké</Diboké</option>
+                            <option value="doungou">Doungou</Doungou</option>
+                            <option value="boura">Boura</Boura</option>
+                            <option value="bofora">Bofora</Bofora</option>
+                            <option value="zagoua">Zagoua</Zagoua</option>
                 </select>
                 @error('communeD')
                 <span style="color: red">{{ $message }}</span>
@@ -389,7 +389,7 @@
             title: 'Informations de Livraison',
             width: '800px',
             html:
-                `<div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+                `<div class="swal-grid">
                     <div>
                         <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
                         <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
@@ -424,9 +424,9 @@
                 const ville = document.getElementById('swal-ville').value;
                  const commune_livraison = document.getElementById('swal-commune_livraison').value;
                  const quartier = document.getElementById('swal-quartier').value;
-                 const montant_timbre = document.getElementById('swal-montant_timbre').value;
+                const montant_timbre = document.getElementById('swal-montant_timbre').value;
                 const montant_livraison = document.getElementById('swal-montant_livraison').value;
-                if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier|| !montant_timbre || !montant_livraison) {
+                if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier || !montant_timbre || !montant_livraison) {
                     Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
                     return false;
                 }
@@ -440,7 +440,7 @@
                     ville: ville,
                     commune_livraison: commune_livraison,
                     quartier: quartier,
-                     montant_timbre:montant_timbre,
+                    montant_timbre:montant_timbre,
                     montant_livraison:montant_livraison,
                 };
             }
@@ -497,4 +497,20 @@
    });
 
 </script>
+<style>
+/* Styles par défaut (écrans larges) */
+.swal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur les écrans larges */
+    gap: 10px;
+}
+
+/* Media query pour les écrans de taille moyenne et petits (tablettes et mobiles) */
+@media (max-width: 767px) {
+    .swal-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+    }
+}
+</style>
+
 @endsection

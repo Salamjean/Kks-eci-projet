@@ -295,85 +295,84 @@
     let submitAfterPopup = false; // Nouveau drapeau
 
     function showLivraisonPopup() {
-        Swal.fire({
-            title: 'Informations de Livraison',
-            width: '800px',
-            html:
-                `<div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
-                    <div>
-                        <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
-                        <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
-                        <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
-                    </div>
-                    <div>
-                        <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
-                        <input id="swal-montant_livraison" class="swal2-input text-center" value="1500" readonly>
-                        <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
-                    </div>
-                    <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
-                    <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
-                    <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire"></div>
-                    <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire"></div>
-                    <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison"></div>
-                    <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
-                    <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville"></div>
-                    <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
-                    <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
-                </div>`,
-                showCancelButton: true,
-                confirmButtonText: 'Payer',
-                cancelButtonText: 'Annuler',
-                focusConfirm: false,
-            preConfirm: () => {
-                const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
-                const prenom_destinataire = document.getElementById('swal-prenom_destinataire').value;
-                const email_destinataire = document.getElementById('swal-email_destinataire').value;
-                const contact_destinataire = document.getElementById('swal-contact_destinataire').value;
-                const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
-                const code_postal = document.getElementById('swal-code_postal').value;
-                const ville = document.getElementById('swal-ville').value;
-                 const commune_livraison = document.getElementById('swal-commune_livraison').value;
-                 const quartier = document.getElementById('swal-quartier').value;
-                const montant_timbre = document.getElementById('swal-montant_timbre').value;
-                const montant_livraison = document.getElementById('swal-montant_livraison').value;
-                if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier|| !montant_timbre || !montant_livraison) {
-                    Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
-                    return false;
-                }
-                return {
-                    nom_destinataire: nom_destinataire,
-                    prenom_destinataire: prenom_destinataire,
-                    email_destinataire: email_destinataire,
-                    contact_destinataire: contact_destinataire,
-                    adresse_livraison: adresse_livraison,
-                    code_postal: code_postal,
-                    ville: ville,
-                     commune_livraison: commune_livraison,
-                    quartier: quartier,
-                     montant_timbre:montant_timbre,
-                    montant_livraison:montant_livraison,
-                };
+    Swal.fire({
+        title: 'Informations de Livraison',
+        width: '800px',
+        html:
+            `<div class="swal-grid">
+                <div>
+                    <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
+                    <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
+                    <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
+                </div>
+                <div>
+                    <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
+                    <input id="swal-montant_livraison" class="swal2-input text-center" value="1500" readonly>
+                    <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
+                </div>
+                <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
+                <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
+                <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire"></div>
+                <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire"></div>
+                <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison"></div>
+                <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
+                <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville"></div>
+                <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
+                <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
+            </div>`,
+        showCancelButton: true,
+        confirmButtonText: 'Payer',
+        cancelButtonText: 'Annuler',
+        focusConfirm: false,
+        preConfirm: () => {
+            const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
+            const prenom_destinataire = document.getElementById('swal-prenom_destinataire').value;
+            const email_destinataire = document.getElementById('swal-email_destinataire').value;
+            const contact_destinataire = document.getElementById('swal-contact_destinataire').value;
+            const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
+            const code_postal = document.getElementById('swal-code_postal').value;
+            const ville = document.getElementById('swal-ville').value;
+            const commune_livraison = document.getElementById('swal-commune_livraison').value;
+            const quartier = document.getElementById('swal-quartier').value;
+            const montant_timbre = document.getElementById('swal-montant_timbre').value;
+            const montant_livraison = document.getElementById('swal-montant_livraison').value;
+            if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier|| !montant_timbre || !montant_livraison) {
+                Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
+                return false;
             }
-        }).then((result) => {
-           if (result.isConfirmed) {
-                const formData = result.value;
-                const form = document.getElementById('naissanceForm');
-                for (const key in formData) {
-                    if (formData.hasOwnProperty(key)) {
-                        const hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = key;
-                        hiddenInput.value = formData[key];
-                        form.appendChild(hiddenInput);
-                    }
+            return {
+                nom_destinataire: nom_destinataire,
+                prenom_destinataire: prenom_destinataire,
+                email_destinataire: email_destinataire,
+                contact_destinataire: contact_destinataire,
+                adresse_livraison: adresse_livraison,
+                code_postal: code_postal,
+                ville: ville,
+                commune_livraison: commune_livraison,
+                quartier: quartier,
+                montant_timbre:montant_timbre,
+                montant_livraison:montant_livraison,
+            };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const formData = result.value;
+            const form = document.getElementById('naissanceForm');
+            for (const key in formData) {
+                if (formData.hasOwnProperty(key)) {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = key;
+                    hiddenInput.value = formData[key];
+                    form.appendChild(hiddenInput);
                 }
-                submitAfterPopup = true; // Définir le drapeau
-                form.submit(); // Soumettre explicitement le formulaire
-           }
-             else if(result.dismiss === Swal.DismissReason.cancel){
-                 // Si l'utilisateur clique sur annuler, selectionner l'option 1
-                  document.getElementById('option1').checked = true;
-                  submitAfterPopup = false;
+            }
+            submitAfterPopup = true; // Définir le drapeau
+            form.submit(); // Soumettre explicitement le formulaire
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            // Si l'utilisateur clique sur annuler, selectionner l'option 1
+            document.getElementById('option1').checked = true;
+            submitAfterPopup = false;
         }
     });
 }
@@ -394,4 +393,19 @@ document.getElementById('naissanceForm').addEventListener('submit', function(eve
     }
 });
 </script>
+<style>
+/* Styles par défaut (écrans larges) */
+.swal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur les écrans larges */
+    gap: 10px;
+}
+
+/* Media query pour les écrans de taille moyenne et petits (tablettes et mobiles) */
+@media (max-width: 767px) {
+    .swal-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+    }
+}
+</style>
 @endsection

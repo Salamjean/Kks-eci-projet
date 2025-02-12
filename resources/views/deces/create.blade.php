@@ -355,7 +355,7 @@
                 title: 'Informations de Livraison',
                 width: '800px',
                 html:
-                    `<div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+                    `<div class="swal-grid">
                         <div>
                             <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
                             <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
@@ -390,9 +390,9 @@
                     const ville = document.getElementById('swal-ville').value;
                     const commune_livraison = document.getElementById('swal-commune_livraison').value;
                     const quartier = document.getElementById('swal-quartier').value;
-                    const montant_timbre = document.getElementById('swal-montant_timbre').value;
+                     const montant_timbre = document.getElementById('swal-montant_timbre').value;
                     const montant_livraison = document.getElementById('swal-montant_livraison').value;
-                    if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier || !montant_timbre || !montant_livraison) {
+                    if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier|| !montant_timbre || !montant_livraison) {
                         Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
                         return false;
                     }
@@ -406,8 +406,8 @@
                         ville: ville,
                         commune_livraison: commune_livraison,
                         quartier: quartier,
-                        montant_timbre: montant_timbre,
-                        montant_livraison: montant_livraison,
+                         montant_timbre:montant_timbre,
+                        montant_livraison:montant_livraison,
                     };
                 }
             }).then((result) => {
@@ -446,7 +446,7 @@
                 formSubmitted = true;
             }
         });
-        $(document).ready(function() {
+         $(document).ready(function() {
           $("#optionsSection").hide();
             // Fonction pour vérifier si tous les champs obligatoires sont remplis
             function checkFields() {
@@ -465,4 +465,19 @@
        });
     </script>
 
+<style>
+/* Styles par défaut (écrans larges) */
+.swal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur les écrans larges */
+    gap: 10px;
+}
+
+/* Media query pour les écrans de taille moyenne et petits (tablettes et mobiles) */
+@media (max-width: 767px) {
+    .swal-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+    }
+}
+</style>
 @endsection

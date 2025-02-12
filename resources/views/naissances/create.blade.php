@@ -392,8 +392,8 @@
             Swal.fire({
                 title: 'Informations de Livraison',
                 width: '800px',
-                html:
-                    `<div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 10px;">
+                html: `
+                    <div class="swal-grid">
                         <div>
                             <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
                             <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
@@ -472,4 +472,19 @@
             });
         }
     </script>
+<style>
+/* Styles par défaut (écrans larges) */
+.swal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur les écrans larges */
+    gap: 10px;
+}
+
+/* Media query pour les écrans de taille moyenne et petits (tablettes et mobiles) */
+@media (max-width: 767px) {
+    .swal-grid {
+        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+    }
+}
+</style>
 @endsection
