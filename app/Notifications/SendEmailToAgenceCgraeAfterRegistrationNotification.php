@@ -41,7 +41,7 @@ class SendEmailToAgenceCgraeAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('E-CI : Votre Agence Cgrae dans le siège Cgrae')
+            ->subject('E-CI : Votre Agence Cgrae est enrégistré dans le siège CGRAE')
             ->from('no-reply@example.com', 'E-CI')
             ->view('emails.agence_registration', [
                 'code' => $this->code,

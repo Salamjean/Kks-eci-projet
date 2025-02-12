@@ -16,11 +16,13 @@ class SendEmailToHopitalAfterRegistrationNotification extends Notification
      */
     public $code;
     public $email;
+    public $logoUrl;
 
     public function __construct($codeToSend, $sendToemail)
     {
-        $this ->code = $codeToSend;
-        $this ->email = $sendToemail;
+        $this->code = $codeToSend;
+        $this->email = $sendToemail;
+        $this->logoUrl = asset('assets/images/profiles/E-ci-logo.png'); // URL du logo
     }
 
     /**
@@ -39,12 +41,13 @@ class SendEmailToHopitalAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Votre Hôpital est enregistrer dans votre maire')
-                    ->line('Votre compte a été créer avec succès sur la plate-forme.')
-                    ->line('Cliquez sur le bouton ci-dessous pour valider votre compte')
-                    ->line('Saisissez le code '.$this->code.' et renseignez le dans le formulaire qui apparaitra ')
-                    ->action('Cliquez ici', url('/validate-hopital-account' . '/' .$this->email))
-                    ->line('Merci d\'utiliser notre application');
+            ->subject('E-CI : Votre Hôpital est enregistré auprès de votre mairie') // Sujet mis à jour
+            ->from('no-reply@example.com', 'E-CI')
+            ->view('emails.hopital_registration', [
+                'code' => $this->code,
+                'email' => $this->email,
+                'logoUrl' => $this->logoUrl,
+            ]);
     }
 
     /**

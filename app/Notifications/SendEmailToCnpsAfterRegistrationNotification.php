@@ -16,11 +16,13 @@ class SendEmailToCnpsAfterRegistrationNotification extends Notification
      */
     public $code;
     public $email;
+    public $logoUrl;
 
     public function __construct($codeToSend, $sendToemail)
     {
-        $this ->code = $codeToSend;
-        $this ->email = $sendToemail;
+        $this->code = $codeToSend;
+        $this->email = $sendToemail;
+        $this->logoUrl = asset('assets/images/profiles/E-ci-logo.png'); // URL du logo
     }
 
     /**
@@ -39,12 +41,13 @@ class SendEmailToCnpsAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->subject('Votre CNPS a été enregistré est enregistrer dans la base de données de E-CI')
-                    ->line('Votre compte a été créer avec succès sur la plate-forme.')
-                    ->line('Cliquez sur le bouton ci-dessous pour valider votre compte')
-                    ->line('Saisissez le code '.$this->code.' et renseignez le dans le formulaire qui apparaitra ')
-                    ->action('Cliquez ici', url('/validate-cnps-account' . '/' .$this->email))
-                    ->line('Merci d\'utiliser notre application');
+            ->subject('E-CI : Votre CNPS a été enregistrée dans notre base de données')
+            ->from('no-reply@example.com', 'E-CI')
+            ->view('emails.cnps_registration', [
+                'code' => $this->code,
+                'email' => $this->email,
+                'logoUrl' => $this->logoUrl,
+            ]);
     }
 
     /**
