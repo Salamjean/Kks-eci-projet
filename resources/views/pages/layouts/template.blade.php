@@ -13,7 +13,9 @@
         <title>E-ci. demande en ligne.</title>
 
 		<!-- Favicon -->
-        <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
+        <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}" type="image/png">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
+
 
 		<!-- Google Fonts -->
 		<link href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
@@ -56,7 +58,7 @@
 
 			footer {
 			    margin-top: auto;
-				
+
 			}
 			html, body {
 		    height: 100%;
@@ -78,7 +80,7 @@
 					display: none !important; /* Cache sur mobile et tablette */
 				}
 			}
-			
+
 		</style>
     </head>
     <body>

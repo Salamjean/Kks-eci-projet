@@ -512,5 +512,4 @@
     }
 }
 </style>
-
 @endsection
