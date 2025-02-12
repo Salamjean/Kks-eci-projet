@@ -34,6 +34,9 @@
         .container {
             transform: scale(0.8);
             min-height: 500px; /* Hauteur réduite pour les tablettes */
+            width: 90%; /* Occuper 90% de la largeur de l'écran */
+            margin: 0 auto; /* Centrer le conteneur */
+            box-shadow: none; /* Supprimer les ombres */
         }
         input, select {
             padding: 8px 12px; /* Réduit le padding */
@@ -62,13 +65,16 @@
 
     @media (max-width: 480px) {
         .container {
-            transform: scale(0.6);
-            min-height: 400px; /* Hauteur réduite pour les mobiles */
+          transform: scale(1.0); /* Rétablir la taille par défaut sur les téléphones */
+       min-height: 400px; /* Hauteur par défaut */
+       width: 90%; /* Occuper 90% de la largeur de l'écran */
+       margin: 0 auto; /* Centrer le conteneur */
+       box-shadow: none; /* Supprimer les ombres */
         }
         input, select {
-            padding: 4px 10px; /* Réduit encore plus le padding */
-            font-size: 10px; /* Réduit encore plus la taille de la police */
-            width: 160px;  /* Ajout de la largeur des inputs */
+            padding: 4px 10px;
+            font-size: 10px;
+            width: 160px; 
         }
         h1, p{
           font-size: 15px; /* Réduit la taille des titres et des paragraphes */
@@ -80,7 +86,7 @@
           padding: 6px 30px;
         }
         .accueil{
-          margin-bottom:0 !important;
+          margin-bottom:10px !important;
           margin-top: 10px;
         }
         a {
@@ -241,8 +247,8 @@
        
         <input type="password" name="password" placeholder="Mot de passe"  />
        
-        <a href="{{ route('password.request') }}">Mot de passe oublié?</a>
-        <button type="submit">Connexion</button>
+        <a href="{{ route('password.request') }}" style="text-align: flex">Mot de passe oublié?</a>
+        <button type="submit">Connexion </button>
       </form>
     </div>
     <!-- Overlay -->
