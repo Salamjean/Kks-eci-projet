@@ -184,7 +184,7 @@ class DoctorController extends Controller
                         ->notify(new SendEmailToDoctorAfterRegistrationNotification($code, $sousadmin->email));
     
                     return redirect()->route('doctor.index')
-                        ->with('success', 'Le sous-admin a été ajouté avec succès.');
+                        ->with('success', 'Docteur ajouté avec succès.');
                 } catch (Exception $e) {
                     throw new Exception('Une erreur est survenue lors de l\'envoi de l\'e-mail.');
                 }
