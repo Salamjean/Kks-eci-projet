@@ -5,8 +5,6 @@
     <i class="fa fa-bars"></i>
   </button>
 
-
-
   <!-- Icônes du Topbar -->
   <ul class="navbar-nav ml-auto align-items-center">
     <!-- Notifications -->

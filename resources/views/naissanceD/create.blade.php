@@ -297,7 +297,7 @@
     function showLivraisonPopup() {
     Swal.fire({
         title: 'Informations de Livraison',
-        width: '800px',
+        width: '700px',
         html:
             `<div class="swal-grid">
                 <div>

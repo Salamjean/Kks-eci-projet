@@ -18,7 +18,7 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            max-width: 1000px;
+            max-width: 800px;
             margin: auto;
             animation: fadeIn 0.6s ease-in-out;
             box-sizing: border-box;
@@ -391,7 +391,7 @@
         function showLivraisonPopup() {
             Swal.fire({
                 title: 'Informations de Livraison',
-                width: '800px',
+                width: '700px',
                 html: `
                     <div class="swal-grid">
                         <div>

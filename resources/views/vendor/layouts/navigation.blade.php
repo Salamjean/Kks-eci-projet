@@ -82,16 +82,17 @@
         @php
           $user = Auth::guard('vendor')->user();
           $cities = [
-              'Yopougon' => 'yopougon.png',
-              'Marcory' => 'marcory.png',
-              'Cocody' => 'cocody.png',
+              'yopougon' => 'yopougon.png',
+              'plateau' => 'plateau.jpeg',
+              'marcory' => 'marcory.png',
+              'cocody' => 'cocody.png',
               'abobo' => 'abobo.png',
-              'Koumassi' => 'koumassi.png',
-              'Port-Bouët' => 'portbouet.png',
-              'Treichville' => 'treichville.png',
-              'Attécoubé' => 'attecoube.png',
-              'Adjamé' => 'adjame.png',
-              'Songon' => 'songon.png',
+              'koumassi' => 'koumassi.png',
+              'port-bouet' => 'portbouet.png',
+              'treichville' => 'treichville.png',
+              'attecoube' => 'attecoube.png',
+              'adjame' => 'adjame.jpg',
+              'songon' => 'songon.png',
           ];
           $image = isset($cities[$user->name]) ? $cities[$user->name] : 'default.png';
         @endphp

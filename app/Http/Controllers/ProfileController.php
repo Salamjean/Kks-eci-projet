@@ -28,7 +28,7 @@ class ProfileController extends Controller
 {
     // Validation du champ commune
     $validatedData = $request->validate([
-        'commune' => 'required|string|in:abobo,adjame,attécoube,cocody,koumassi,marcory,plateau,port-bouët,treichville,yopougon',
+        'commune' => 'required|string|in:abobo,adjame,attecoube,cocody,koumassi,marcory,plateau,port-bouet,treichville,yopougon',
     ]);
 
     // Ajouter la commune aux données validées

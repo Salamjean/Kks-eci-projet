@@ -101,7 +101,7 @@
                 <option value="{{ old('commune', $user->commune) }}">{{ Auth::user()->commune }}</option>
                     <option value="abobo">Abobo</option>
                     <option value="adjame">Adjamé</option>
-                    <option value="attiecoube">Attécoubé</option>
+                    <option value="attecoube">Attécoubé</option>
                     <option value="cocody">Cocody</option>
                     <option value="koumassi">Koumassi</option>
                     <option value="marcory">Marcory</option>

@@ -138,82 +138,99 @@ public function ajointindex()
     return view('naissances.ajointindex', compact('naissances', 'alerts', 'naissancesD'));
 }
 
-    public function traiterDemande($id)
+public function traiterDemande($id)
 {
     $agent = Auth::guard('agent')->user();
 
     // Essayer de trouver une demande de naissance
     $naissance = Naissance::find($id);
     if ($naissance) {
+        if ($naissance->agent_id) {
+            return redirect()->route('agent.vue')->with('error','Cette demande de décès a déjà été récupérée par un autre agent.');
+        }
+
         $naissance->is_read = true; // Marquer comme traité
         $naissance->agent_id = $agent->id; // Enregistrer l'ID de l'agent
         $naissance->save();
 
-        return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissance traitée avec succès.');
+        return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissance récuperée avec succès.');
     }
 
-    $agent = Auth::guard('agent')->user();
     // Essayer de trouver une demande de naissanceD
     $naissanceD = NaissanceD::find($id);
     if ($naissanceD) {
+        if ($naissanceD->agent_id) {
+            return redirect()->route('agent.vue')->with('error', 'Cette demande de décès a déjà été récupérée par un autre agent.');
+        }
+
         $naissanceD->is_read = true; // Marquer comme traité
         $naissanceD->agent_id = $agent->id; // Enregistrer l'ID de l'agent
         $naissanceD->save();
 
-        return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissanceD traitée avec succès.');
+        return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissance récuperée avec succès.');
     }
 
     // Si aucune demande n'est trouvée
     return redirect()->route('naissance.agentindex')->with('error', 'Demande introuvable.');
 }
 
-
-    public function traiterDemandeDeces($id)
+public function traiterDemandeDeces($id)
 {
     $agent = Auth::guard('agent')->user();
+
     // Essayer de trouver une demande de deces
     $deces = Deces::find($id);
     if ($deces) {
-        $deces->is_read = true; // Marquer comme traité
-        $deces->agent_id = $agent->id; // Enregistrer l'ID de l'agent
+        if ($deces->agent_id) {
+            return redirect()->route('agent.vue')->with('error', 'Cette demande de décès a déjà été récupérée par un autre agent.');
+        }
+
+        $deces->is_read = true;
+        $deces->agent_id = $agent->id;
         $deces->save();
 
-        return redirect()->route('deces.agentindex')->with('success', 'Demande de deces traitée avec succès.');
+        return redirect()->route('deces.agentindex')->with('success', 'Demande de décès récupérée avec succès.');
     }
 
-    $agent = Auth::guard('agent')->user();
-    // Essayer de trouver une demande de naissanceD
+    // Essayer de trouver une demande de decesdeja
     $decesdeja = Decesdeja::find($id);
     if ($decesdeja) {
-        $decesdeja->is_read = true; // Marquer comme traité
-        $decesdeja->agent_id = $agent->id; // Enregistrer l'ID de l'agent
+        if ($decesdeja->agent_id) {
+            return redirect()->route('agent.vue')->with('error', 'Cette demande de décès a déjà été récupérée par un autre agent.');
+        }
+
+        $decesdeja->is_read = true;
+        $decesdeja->agent_id = $agent->id;
         $decesdeja->save();
-        return redirect()->route('deces.agentindex')->with('success', 'Demande de decesdeja traitée avec succès.');
+
+        return redirect()->route('deces.agentindex')->with('success', 'Demande de décès récupérée avec succès.');
     }
 
-    
     // Si aucune demande n'est trouvée
     return redirect()->route('deces.agentindex')->with('error', 'Demande introuvable.');
 }
 
-
-
-    public function traiterDemandeMariage($id)
+public function traiterDemandeMariage($id)
 {
     $agent = Auth::guard('agent')->user();
+
     // Essayer de trouver une demande de mariage
     $mariage = Mariage::find($id);
     if ($mariage) {
-        $mariage->is_read = true; // Marquer comme traité
-        $mariage->agent_id = $agent->id; // Enregistrer l'ID de l'agent
+        if ($mariage->agent_id) {
+            return redirect()->route('agent.vue')->with('error', 'Cette demande de mariage a déjà été récupérée par un autre agent.');
+        }
+
+        $mariage->is_read = true;
+        $mariage->agent_id = $agent->id;
         $mariage->save();
 
-        return redirect()->route('mariage.agentindex')->with('success', 'Demande de mariage traitée avec succès.');
+        return redirect()->route('mariage.agentindex')->with('success', 'Demande de mariage récupérée avec succès.');
     }
+
     // Si aucune demande n'est trouvée
     return redirect()->route('mariage.agentindex')->with('error', 'Demande introuvable.');
 }
-
 
     public function create(){
         \Log::info('Store method called');

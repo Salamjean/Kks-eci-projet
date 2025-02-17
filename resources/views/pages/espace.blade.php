@@ -224,7 +224,7 @@
                                 <h4>SOCOCE</h4>
                                 <p>Vous pouvez désormais faire une demande d’acte à SOCOCE rapidement et facilement sur les bornes administratives tactiles.
                                 </p>
-                                <a href="#"> N’attendez plus !<i class="fa fa-long-arrow-right"></i></a>
+                                <a href="#"> N’attendez plus !</i></a>
                             </div>
                         </div>
                     </div>
@@ -241,7 +241,7 @@
                                 <h4>CAP NORD</h4>
                                 <p>Vous pouvez désormais faire une demande d’acte à CAP NORD rapidement et facilement sur les bornes administratives tactiles.
                                 </p>
-                                <a href="#"> N’attendez plus !<i class="fa fa-long-arrow-right"></i></a>
+                                <a href="#"> N’attendez plus !</i></a>
                             </div>
                         </div>
                     </div>
@@ -258,7 +258,7 @@
                                 <h4>CAP SUD</h4>
                                 <p>Vous pouvez désormais faire une demande d’acte à CAP SUD rapidement et facilement sur les bornes administratives tactiles.
                                 </p>
-                                <a href="#"> N’attendez plus !<i class="fa fa-long-arrow-right"></i></a>
+                                <a href="#"> N’attendez plus !</i></a>
                             </div>
                         </div>
                     </div>

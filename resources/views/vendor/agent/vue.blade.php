@@ -3,6 +3,52 @@
 @section('content')
 
 <!-- Section Principale : Les Demandes de Naissances Récentes -->
+ <!-- Insertion de SweetAlert2 -->
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+ <div class="row" style="width:100%; justify-content:center">
+  <div class="row" style="width:100%; justify-content:center">
+      @if (Session::get('success1')) <!-- Pour la suppression -->
+          <script>
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Suppression réussie',
+                  text: '{{ Session::get('success1') }}',
+                  showConfirmButton: true,  // Afficher le bouton OK
+                  confirmButtonText: 'OK',  // Texte du bouton
+                  background: '#ffcccc',   // Couleur de fond personnalisée
+                  color: '#b30000'          // Texte rouge foncé
+              });
+          </script>
+      @endif
+  
+      @if (Session::get('success')) <!-- Pour la modification -->
+          <script>
+              Swal.fire({
+                  icon: 'success',
+                  title: 'Action réussie',
+                  text: '{{ Session::get('success') }}',
+                  showConfirmButton: true,  // Afficher le bouton OK
+                  confirmButtonText: 'OK',  // Texte du bouton
+                  background: '#ccffcc',   // Couleur de fond personnalisée
+                  color: '#006600'          // Texte vert foncé
+              });
+          </script>
+      @endif
+  
+      @if (Session::get('error')) <!-- Pour une erreur générale -->
+          <script>
+              Swal.fire({
+                  icon: 'error',
+                  title: 'Erreur',
+                  text: '{{ Session::get('error') }}',
+                  showConfirmButton: true,  // Afficher le bouton OK
+                  confirmButtonText: 'OK',  // Texte du bouton
+                  background: '#f86750',    // Couleur de fond rouge vif
+                  color: '#ffffff'          // Texte blanc
+              });
+          </script>
+      @endif
+  </div>
 <div class="row mb-4">
     <div class="col-xl-12 col-lg-12 mb-4">
         <div class="card">
@@ -14,7 +60,7 @@
                     <table class="table table-striped table-hover align-items-center">
                         <thead class="thead-light">
                             <tr>
-                                <th>Type</th>
+                                <th>Type de copie</th>
                                 <th>Hôpital</th>
                                 <th>Date</th>
                                 <th>Heure</th>
@@ -53,7 +99,7 @@
         </div>
     </div>
 </div>
-
+&nbsp;&nbsp;&nbsp;
 <!-- Section : Décès Récents -->
 <div class="row mb-4">
     <div class="col-xl-12 col-lg-12 mb-4">

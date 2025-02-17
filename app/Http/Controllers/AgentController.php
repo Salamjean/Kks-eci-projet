@@ -19,6 +19,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,48 +32,58 @@ class AgentController extends Controller
     return view('vendor.agent.create', compact('alerts'));
  }
 
- public function agentstore(Request $request){
-     // Validation des données
-    
-     $request->validate([
+ public function agentstore(Request $request)
+{
+    // Validation des données
+    $validated = $request->validate([
         'name' => 'required|string|max:255',
         'prenom' => 'required|string|max:255',
         'email' => 'required|email|unique:agents,email',
         'contact' => 'required|string|min:10',
         'commune' => 'required|string|max:255',
-        'profile_picture' => 'nullable|image|max:2048',
-    
+        'profile_picture' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+    ],[
+        'name.required' => 'Le nom est obligatoire.',
+        'prenom.required' => 'Le prénom est obligatoire.',
+        'email.required' => 'L\'adresse e-mail est obligatoire.',
+        'email.email' => 'L\'adresse e-mail n\'est pas valide.',
+        'email.unique' => 'Cette adresse e-mail est déjà associée à un compte.',
+        'contact.required' => 'Le contact est obligatoire.',
+        'contact.min' => 'Le contact doit avoir au moins 10 chiffres.',
+        'commune.required' => 'La commune est obligatoire.',
+        'profile_picture.image' => 'Le fichier doit être une image.',
+        'profile_picture.mimes' => 'L\'image doit être au format jpeg, png, jpg, gif ou svg.',
+        'profile_picture.max' => 'L\'image ne doit pas dépasser 2048 KB.',
     ]);
 
     try {
         // Récupérer le vendor connecté
         $vendor = Auth::guard('vendor')->user();
-
         if (!$vendor || !$vendor->name) {
-            return redirect()->back()->withErrors(['error' => 'Impossible de récupérer les informations du vendor.']);
+            return back()->withErrors(['error' => 'Impossible de récupérer les informations du vendor.'])->withInput();
         }
 
-        // Création du docteur
+        // Traitement de l'image de profil
+        $profilePicturePath = null;
+        if ($request->hasFile('profile_picture')) {
+            $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+        }
+
+        // Création de l'agent
         $agent = new Agent();
         $agent->name = $request->name;
         $agent->prenom = $request->prenom;
         $agent->email = $request->email;
         $agent->contact = $request->contact;
         $agent->password = Hash::make('default');
-        
-        if ($request->hasFile('profile_picture')) {
-            $agent->profile_picture = $request->file('profile_picture')->store('profile_pictures', 'public');
-        }
-
+        $agent->profile_picture = $profilePicturePath;
         $agent->commune = $request->commune;
         $agent->communeM = $vendor->name;
-        
         $agent->save();
 
         // Envoi de l'e-mail de vérification
         ResetCodePasswordAgent::where('email', $agent->email)->delete();
         $code = rand(100000, 400000);
-
         ResetCodePasswordAgent::create([
             'code' => $code,
             'email' => $agent->email,
@@ -83,10 +94,12 @@ class AgentController extends Controller
 
         return redirect()->route('agent.index')
             ->with('success', 'Agent enregistré avec succès.');
+
     } catch (\Exception $e) {
-        return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
+        Log::error('Error creating agent: ' . $e->getMessage()); // Enregistrement de l'erreur dans les logs
+        return back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()])->withInput();
     }
- }
+}
 
  public function login(){
     return view('vendor.agent.auth.login');
@@ -192,24 +205,22 @@ public function handleLogin(Request $request)
         return redirect()->route('agent.login');
     };
 }
-
-public function submitDefineAccess(Request $request){
-
+public function submitDefineAccess(Request $request)
+{
     // Validation des données
-    $request->validate([
-            'code'=>'required|exists:reset_code_password_agents,code',
-            'password' => 'required|same:confirme_password',
-            'confirme_password' => 'required|same:password',
-            'profile_picture' => 'required'
-        ], [
-            'code.exists' => 'Le code de réinitialisation est invalide.',
-            'code.required' => 'Le code de réinitialisation est obligatoire verifié votre mail.',
-            'password.required' => 'Le mot de passe est obligatoire.',
-            'password.same' => 'Les mots de passe doivent être identiques.',
-            'confirme_password.same' => 'Les mots de passe doivent être identiques.',
-            'confirme_password.required' => 'Le mot de passe de confirmation est obligatoire.',
-            'profile_picture.required' => 'Votre photo de profil est obligatoire',
+    $validated = $request->validate([
+        'code' => 'required|exists:reset_code_password_agents,code',
+        'password' => 'required|same:confirme_password',
+        'confirme_password' => 'required|same:password',
+    ], [
+        'code.exists' => 'Le code de réinitialisation est invalide.',
+        'code.required' => 'Le code de réinitialisation est obligatoire. Veuillez vérifier votre email.',
+        'password.required' => 'Le mot de passe est obligatoire.',
+        'password.same' => 'Les mots de passe doivent être identiques.',
+        'confirme_password.same' => 'Les mots de passe doivent être identiques.',
+        'confirme_password.required' => 'Le mot de passe de confirmation est obligatoire.',
     ]);
+
     try {
         $agent = Agent::where('email', $request->email)->first();
 
@@ -217,33 +228,35 @@ public function submitDefineAccess(Request $request){
             // Mise à jour du mot de passe
             $agent->password = Hash::make($request->password);
 
-            // Vérifier si une image est uploadée
+            // Traitement de l'image de profil
             if ($request->hasFile('profile_picture')) {
                 // Supprimer l'ancienne photo si elle existe
                 if ($agent->profile_picture) {
-                    Storage::delete('public/' . $agent->profile_picture);
+                    Storage::delete('public/' . $agent->profile_picture); // Assurez-vous du 'public/' ici
                 }
 
                 // Stocker la nouvelle image
                 $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
                 $agent->profile_picture = $imagePath;
             }
+
             $agent->update();
 
-            if($agent){
-               $existingcodeagent =  ResetCodePasswordAgent::where('email', $agent->email)->count();
+            if ($agent) {
+                $existingcodeagent = ResetCodePasswordAgent::where('email', $agent->email)->count();
 
-               if($existingcodeagent > 1){
-                ResetCodePasswordAgent::where('email', $agent->email)->delete();
-               }
+                if ($existingcodeagent > 1) {
+                    ResetCodePasswordAgent::where('email', $agent->email)->delete();
+                }
             }
 
             return redirect()->route('agent.login')->with('success', 'Compte mis à jour avec succès');
         } else {
             return redirect()->route('agent.login')->with('error', 'Email inconnu');
         }
-    } catch (Exception $e) {
-        return redirect()->back()->with('error', 'Une erreur est survenue : ' . $e->getMessage());
+    } catch (\Exception $e) {
+        Log::error('Error updating agent profile: ' . $e->getMessage());
+        return back()->with('error', 'Une erreur est survenue : ' . $e->getMessage())->withInput();
     }
 }
 public function agentdashboard(Agent $agent) {
