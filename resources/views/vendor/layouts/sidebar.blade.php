@@ -109,6 +109,7 @@
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Gestion des Hôpitaux</h6>
         <a class="collapse-item" href="{{ route('doctor.hoptitalcreate') }}">Ajouter un Hôpital</a>
+        <a class="collapse-item" href="{{ route('doctor.hoptitalindex') }}">Liste des Hôpitaux</a>
       </div>
     </div>
   </li>

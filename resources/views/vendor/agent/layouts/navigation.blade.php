@@ -4,7 +4,7 @@
   <button id="sidebarToggleTop" class="btn btn-primary  rounded-circle mr-3">
     <i class="fa fa-bars"></i>
   </button>
-
+  <h3 class="text-white d-flex justify-content-center" style="font-weight: bold; font-size:20px">Mairie de {{ Auth::guard('agent')->user()->communeM }}</h3>
   <!-- Icônes du Topbar -->
   <ul class="navbar-nav ml-auto align-items-center">
     <!-- Notifications -->
@@ -65,9 +65,25 @@
         <!-- Image selon la ville -->
         @php
           $user = Auth::guard('agent')->user();
+          $cities = [
+              'yopougon' => 'yopougon.png',
+              'plateau' => 'plateau.jpeg',
+              'marcory' => 'marcory.png',
+              'cocody' => 'cocody.png',
+              'abobo' => 'abobo.png',
+              'koumassi' => 'koumassi.png',
+              'port-bouet' => 'portbouet.png',
+              'treichville' => 'treichville.png',
+              'attecoube' => 'attecoube.png',
+              'adjame' => 'adjame.jpg',
+              'songon' => 'songon.png',
+          ];
+          $image = isset($cities[$user->communeM]) ? $cities[$user->communeM] : 'default.png';
         @endphp
-        <img class="img-profile rounded-circle" src="{{ asset('storage/' . (Auth::guard('agent')->user()->profile_picture ?? 'default-profile.png')) }}" >
-        <span class="ml-2 d-none d-lg-inline text-white small">Agent {{ $user->name }} {{ $user->prenom }}</span>
+        <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/' . $image) }}" 
+             alt="Logo {{ $user->communeM }}">
+        <span class="ml-2 d-none d-lg-inline text-white small">Mairie de {{ $user->communeM }}</span>
+      </a>
       </a>
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
         <a class="dropdown-item" href="#">

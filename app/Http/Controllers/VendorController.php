@@ -23,6 +23,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
@@ -239,9 +240,7 @@ public function edit4($id)
 
 public function hoptitalcreate(){
     $alerts = Alert::all();
-    $admin = Auth::guard('vendor')->user();
-    $doctors = Doctor::where('commune', $admin->name)->paginate(10);
-    return view('vendor.hoptital.create', compact('alerts','doctors'));
+    return view('vendor.hoptital.create', compact('alerts'));
 }
 
 public function superindex() {
@@ -261,6 +260,28 @@ public function hoptitalstore(Request $request)
         'type' => 'required|string|max:255',
         'profile_picture' => 'nullable|image|max:2048',
     
+    ],[
+        'profile_picture.image' => 'Le format de l\'image doit être PNG ou JPG.',
+        'profile_picture.max' => 'La taille de l\'image ne doit pas dépasser 2MB.',
+        'commune.max' => 'La commune ne doit pas dépasser 255 caractères.',
+        'type.max' => 'Le type ne doit pas dépasser 255 caractères.',
+        'email.unique' => 'Cette adresse email est déjà utilisée.',
+        'name.required' => 'Le nom est requis.',
+        'name.string' => 'Le nom doit être une chaîne de caractères.',
+        'name.max' => 'Le nom ne doit pas dépasser 255 caractères.',
+        'email.required' => 'L\'adresse email est requise.',
+        'email.email' => 'L\'adresse email n\'est pas valide.',
+        'contact.required' => 'Le numéro de contact est requis.',
+        'contact.string' => 'Le numéro de contact doit être une chaîne de caractères.',
+        'contact.min' => 'Le numéro de contact doit contenir au moins 10 chiffres.',
+        'nomHop.required' => 'Le nom du hopital est requis.',
+        'nomHop.string' => 'Le nom du hopital doit être une chaîne de caractères.',
+        'nomHop.max' => 'Le nom du hopital ne doit pas dépasser 255 caractères.',
+        'commune.required' => 'La commune est requise.',
+        'commune.string' => 'La commune doit être une chaîne de caractères.',
+        'type.required' => 'Le type est requis.',
+        'type.string' => 'Le type doit être une chaîne de caractères.',
+        'type.max' => 'Le type ne doit pas dépasser 255 caractères.',
     ]);
 
     try {
@@ -299,13 +320,80 @@ public function hoptitalstore(Request $request)
         Notification::route('mail', $doctor->email)
             ->notify(new SendEmailToHopitalAfterRegistrationNotification($code, $doctor->email));
 
-        return redirect()->route('vendor.hoptitalcreate')
+        return redirect()->route('doctor.hoptitalindex')
             ->with('success', 'Hôpital enregistré avec succès.');
     } catch (\Exception $e) {
         return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
     }
 }
 
+public function hoptitalindex(){
+    $alerts = Alert::all();
+    $admin = Auth::guard('vendor')->user();
+    $doctors = Doctor::where('commune', $admin->name)->paginate(10);
+    return view('vendor.hoptital.index', compact('doctors', 'alerts'));
+}
+
+public function hoptitaledit(Doctor $doctor){
+    $alerts = Alert::all();
+    return view('vendor.hoptital.edit', compact('doctor','alerts'));
+ }
+
+ public function hoptitalupdate(Request $request ,Doctor $doctor){
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email',
+        'contact' => 'required|string|min:10',
+        'nomHop' => 'required|string|max:255',
+        'commune' => 'required|string|max:255',
+        'type' => 'required|string|max:255',
+    ]
+    ,[
+        'commune.max' => 'La commune ne doit pas dépasser 255 caractères.',
+        'type.max' => 'Le type ne doit pas dépasser 255 caractères.',
+        'email.unique' => 'Cette adresse email est déjà utilisée.',
+        'name.required' => 'Le nom est requis.',
+        'name.string' => 'Le nom doit être une chaîne de caractères.',
+        'name.max' => 'Le nom ne doit pas dépasser 255 caractères.',
+        'email.required' => 'L\'adresse email est requise.',
+        'email.email' => 'L\'adresse email n\'est pas valide.',
+        'contact.required' => 'Le numéro de contact est requis.',
+        'contact.string' => 'Le numéro de contact doit être une chaîne de caractères.',
+        'contact.min' => 'Le numéro de contact doit contenir au moins 10 chiffres.',
+        'nomHop.required' => 'Le nom du hopital est requis.',
+        'nomHop.string' => 'Le nom du hopital doit être une chaîne de caractères.',
+        'nomHop.max' => 'Le nom du hopital ne doit pas dépasser 255 caractères.',
+        'commune.required' => 'La commune est requise.',
+        'commune.string' => 'La commune doit être une chaîne de caractères.',
+        'type.required' => 'Le type est requis.',
+        'type.string' => 'Le type doit être une chaîne de caractères.',
+        'type.max' => 'Le type ne doit pas dépasser 255 caractères.',
+ ]);
+    try {
+        $doctor->name = $request->name;
+        $doctor->email = $request->email;
+        $doctor->contact = $request->contact;
+        $doctor->nomHop = $request->nomHop;
+        $doctor->commune = $request->commune;
+        $doctor->type = $request->type;
+        $doctor->update();
+        return redirect()->route('doctor.hoptitalindex')->with('success','Hôpital mises à jour avec succès.');
+    } catch (Exception $e) {
+        // dd($e);
+        throw new Exception('error','Une erreur est survenue lors de la modification du hopital');
+    }
+ }
+
+ public function hopitaldelete(Doctor $doctor)
+{
+    try {
+        $doctor->delete();
+        return redirect()->route('doctor.hoptitalindex')->with('success1','Hôpital supprimé avec succès.');
+    } catch (Exception $e) {
+        Log::error("Erreur lors de la suppression de l'hôpital (ID: " . $doctor->id . "): " . $e->getMessage());
+        return redirect()->route('doctor.hoptitalindex')->with('error', 'Une erreur est survenue lors de la suppression de l\'hôpital.');
+    }
+}
 public function archive(Vendor $vendor){
     try {
         $vendor->archive();

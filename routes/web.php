@@ -313,7 +313,11 @@ Route::middleware('auth:web')->group(function () {
     
     // Création d'un hôpital
     Route::get('/hospital/create', [VendorController::class, 'hoptitalcreate'])->name('doctor.hoptitalcreate');
+    Route::get('/hospital/index', [VendorController::class, 'hoptitalindex'])->name('doctor.hoptitalindex');
     Route::post('/hospital/store', [VendorController::class, 'hoptitalstore'])->name('doctor.hoptitalstore');
+    Route::get('/{doctor}/edit', [VendorController::class, 'hoptitaledit'])->name('doctor.hoptitaledit');
+    Route::put('/{doctor}/update', [VendorController::class, 'hoptitalupdate'])->name('doctor.hoptitalupdate');
+    Route::delete('doctor/{doctor}/delete', [VendorController::class, 'hopitaldelete'])->name('doctor.hoptitaldelete');
     
             // Gestion des agents
     Route::prefix('agents')->group(function () {

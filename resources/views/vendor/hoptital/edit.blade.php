@@ -78,11 +78,11 @@
 </style>
 
 <div class="signup-container">
-  <h6>Enregistrer un hôpital</h6>
+  <h6>Modifier les informations de l'hôpital {{ $doctor->name}}</h6>
   <div class="ms-panel-body">
-    <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('doctor.hoptitalstore') }}" novalidate id="hospitalForm">
+    <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('doctor.hoptitalupdate', $doctor->id) }}" novalidate id="hospitalForm">
         @csrf
-        @method('POST')
+        @method('PUT')
 
         <div class="row">
             @if (Session::has('success1'))
@@ -118,13 +118,13 @@
         <div class="form-row mb-3">
             <div class="col-md-6">
                 <label for="validationCustom001" class="form-label">Nom et prénoms de l'administrateur</label>
-                <input type="text" class="form-control" name="name" id="validationCustom001" placeholder="Entrez le nom de l'administrateur" required>
+                <input type="text" class="form-control" name="name" id="validationCustom001" value="{{ $doctor->name }}">
                
             </div>
 
             <div class="col-md-6">
                 <label for="validationCustom002" class="form-label">Email de l'hôpital</label>
-                <input type="email" class="form-control" name="email" id="validationCustom002" placeholder="Entrez l'email de l'hôpital" required>
+                <input type="email" class="form-control" name="email" id="validationCustom002"  value="{{ $doctor->email }}">
                 
             </div>
         </div>
@@ -132,7 +132,7 @@
         <div class="form-row mb-3">
             <div class="col-md-6">
                 <label for="validationCustom003" class="form-label">Contact de l'hôpital</label>
-                <input type="text" class="form-control" name="contact" id="validationCustom003" placeholder="Entrez le contact de l'hôpital" required>
+                <input type="text" class="form-control" name="contact" id="validationCustom003"  value="{{ $doctor->contact }}">
                
             </div>
 
@@ -146,7 +146,7 @@
             <div class="col-md-6">
                 <label for="validationCustom005" class="form-label">Type</label>
                 <select class="form-control" name="type" id="validationCustom005" required>
-                    <option value="" disabled selected>Choisissez le type d'hôpital...</option>
+                    <option value="{{ $doctor->type }}">{{ $doctor->type }}</option>
                     <option value="hôpital-general">Hôpital Général</option>
                     <option value="clinique">Clinique</option>
                     <option value="pmi">PMI</option>
@@ -156,12 +156,12 @@
             </div>
             <div class="col-md-6">
                 <label for="validationCustom005" class="form-label">Nom de l'hôpital</label>
-                <input type="text" class="form-control" name="nomHop" id="validationCustom005" placeholder="Entrez le nom de l'hôpital" required>
+                <input type="text" class="form-control" name="nomHop" id="validationCustom005"  value="{{ $doctor->nomHop }}">
                
             </div>
         </div>
 
-        <button class="btn btn-primary" type="submit">Créer le compte</button>
+        <button class="btn btn-primary" type="submit">Mèttre à jour</button>
     </form>
   </div>
 </div>
