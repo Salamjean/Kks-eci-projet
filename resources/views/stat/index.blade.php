@@ -26,7 +26,7 @@
     </style>
 </head>
 <body >
-    <h4 class="text-center mt-4">Statistiques par moisDDDDDDDDDDDDDDDDDDDDD</h4>
+    <h4 class="text-center mt-4">Statistiques par mois</h4>
     <!-- Filtre de Mois -->
 <form method="GET" action="{{ route('stats.index') }}" class="form-inline mb-3 justify-content-center">
   <div class="form-group mr-2">
@@ -97,7 +97,7 @@
   <!-- Boutons de téléchargement -->
   <h6 class="text-center mb-0">Télécharger les statistiques</h6>
   <div class="form-inline mb-3 justify-content-center text-center">
-<<<<<<< HEAD
+
     <a href="{{ route('stats.download', ['month' => $selectedMonth, 'year' => $selectedYear]) }}" class="btn btn-danger mx-2"><i class="fas fa-download"></i> PDF</a>
 
     <form method="GET" action="{{ route('stats.index') }}" class="d-inline-block">
@@ -106,9 +106,7 @@
         <input type="hidden" name="year" value="{{ $selectedYear }}">   {{-- Pass selected year --}}
         <button type="submit" class="btn btn-success mx-2"><i class="fas fa-download"></i> Excel</button>
     </form>
-=======
     <a href="{{ route('stats.download') }}" class="btn btn-danger mx-2"><i class="fas fa-download"></i> PDF</a>
->>>>>>> 81a8243 (continuter)
 </div>
 <div class="row mb-3">
     <!-- Statistiques des Shops -->
