@@ -26,7 +26,7 @@
     </style>
 </head>
 <body >
-    <h4 class="text-center mt-4">Statistiques par mois</h4>
+    <h4 class="text-center mt-4">Statistiques par moisDDDDDDDDDDDDDDDDDDDDD</h4>
     <!-- Filtre de Mois -->
 <form method="GET" action="{{ route('stats.index') }}" class="form-inline mb-3 justify-content-center">
   <div class="form-group mr-2">
