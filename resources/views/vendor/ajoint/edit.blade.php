@@ -78,7 +78,7 @@
 </style>
 
 <div class="signup-container">
-  <h6>Modifier les informations de l'ajoint {{ $ajoint->name .' '. $ajoint->prenom }}</h6>
+  <h6>Modifier les informations de l'huissier {{ $ajoint->name .' '. $ajoint->prenom }}</h6>
   <div class="ms-panel-body">
     <form class="needs-validation" method="POST"  action="{{ route('ajoint.update', $ajoint->id) }}" novalidate>
         @csrf
@@ -131,13 +131,13 @@
         <!-- Formulaire principal -->
         <div class="form-row mb-3">
             <div class="col-md-6">
-                <label for="validationCustom001" class="form-label">Nom de l'ajoint</label>
+                <label for="validationCustom001" class="form-label">Nom de l'huissier</label>
                 <input type="text" class="form-control" name="name" id="validationCustom001" value="{{ $ajoint->name }}" >
                
             </div>
 
             <div class="col-md-6">
-                <label for="validationCustom002" class="form-label">Prénoms de l'ajoint</label>
+                <label for="validationCustom002" class="form-label">Prénoms de l'huissier</label>
                 <input type="text" class="form-control" name="prenom" id="validationCustom002" value="{{ $ajoint->prenom }}" >
                 
             </div>

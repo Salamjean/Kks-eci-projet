@@ -1,7 +1,10 @@
 <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top" style="background-color: orange">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Bouton Sidebar -->
-
+  @php
+  $user = Auth::guard('cnpsagent')->user();
+@endphp
+<span class="ml-2 d-none d-lg-inline text-black small" style="color: black !important;"><img src="{{ asset('assets/images/profiles/cnps.jpg') }}" style="width: 60px" alt=""></span>
   <!-- Icônes du Topbar -->
   <ul class="navbar-nav ml-auto align-items-center">
     <!-- Notifications -->
@@ -12,9 +15,7 @@
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" 
          aria-haspopup="true" aria-expanded="false">
         <!-- Image selon la ville -->
-        @php
-          $user = Auth::guard('cnpsagent')->user();
-        @endphp
+        
         <div class="profile-picture">
           <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/cnps.jpg') }}" alt="Profile Image">
       </div>

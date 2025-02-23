@@ -165,7 +165,7 @@ button {
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="text-center">Aucune demande effectuée</td>
+                        <td colspan="6" class="text-center">Aucun caissier inscrire</td>
                     </tr>
                     @endforelse
                 </tbody>

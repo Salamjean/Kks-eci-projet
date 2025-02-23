@@ -81,18 +81,18 @@
                             <table class="table select-table">
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center">
-                                        <th>Demandeur</th>
-                                        <th>Hôpital</th>
-                                        <th>Nom et Prénoms de la mère</th>
-                                        <th>Nom et Prénoms (choisir) du né</th>
-                                        <th>Nom et Prénoms du père</th>
-                                        <th>Date de Naissance de l'enfant</th>
-                                        <th>CNI du père</th>
-                                        <th>Certificat Médical de Naissance</th>
-                                        <th>Etat Actuel</th>
-                                        <th>Agent</th>
-                                        <th>Supprimer</th>
-                                        <th>Rétrait</th>
+                                        <th>Demandeur |</th>
+                                        <th>Hôpital |</th>
+                                        <th>Nom et Prénoms de la mère |</th>
+                                        <th>Nom et Prénoms (choisir) du né |</th>
+                                        <th>Nom et Prénoms du père |</th>
+                                        <th>Date de Naissance de l'enfant |</th>
+                                        <th>CNI du père |</th>
+                                        <th>Certificat Médical de Naissance |</th>
+                                        <th>Etat Actuel |</th>
+                                        <th>Agent |</th>
+                                        <th>Supprimer |</th>
+                                        <th>Rétrait </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -163,17 +163,17 @@
                             <table class="table select-table">
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center" style="font-size: 12px">
-                                        <th>Demandeur</th>
-                                        <th>Type de copie</th>
-                                        <th>Nom sur l'extrait</th>
-                                        <th>Numéro de régistre</th>
-                                        <th>Date de régistre</th>
-                                        <th>Numéro CMU</th>
-                                        <th>Pièce d'identité du demandeur</th>
-                                        <th>Etat Actuel</th>
-                                        <th>Agent</th>
-                                        <th>Supprimer</th>
-                                        <th>Rétrait</th>
+                                        <th>Demandeur |</th>
+                                        <th>|Type de copie |</th>
+                                        <th>|Nom sur l'extrait |</th>
+                                        <th>|Numéro de régistre |</th>
+                                        <th>|Date de régistre |</th>
+                                        <th>|Numéro CMU |</th>
+                                        <th>|Pièce d'identité du demandeur |</th>
+                                        <th>|Etat Actuel |</th>
+                                        <th>|Agent |</th>
+                                        <th>|Supprimer |</th>
+                                        <th>|Rétrait</th>
                                     </tr>
                                 </thead>
                                 <tbody>

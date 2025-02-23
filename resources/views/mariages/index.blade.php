@@ -138,7 +138,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="8" class="text-center">Aucune déclaration trouvée</td>
+                                <td colspan="9" class="text-center">Aucune demande effectuée</td>
                             </tr>
                             @endforelse
                         </tbody>

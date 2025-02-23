@@ -85,18 +85,18 @@
                             <table class="table select-table">
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center" style="font-size: 12px">
-                                        <th>Demandeur</th>
-                                        <th>Hôpital</th>
-                                        <th>Nom du défunt</th>
-                                        <th>Date de Naissance</th>
-                                        <th>Date de Décès</th>
-                                        <th>Pièce du Défunt</th>
-                                        <th>Certificat de Déclaration</th>
-                                        <th>De par la Loi</th>
-                                        <th>Etat Actuel</th>
-                                        <th>Agent</th>
-                                        <th>Supprimer</th>
-                                        <th>Rétrait</th>
+                                        <th>|Demandeur|</th>
+                                        <th>|Hôpital|</th>
+                                        <th>|Nom du défunt|</th>
+                                        <th>|Date de Naissance|</th>
+                                        <th>|Date de Décès|</th>
+                                        <th>|Pièce du Défunt|</th>
+                                        <th>|Certificat de Déclaration|</th>
+                                        <th>|De par la Loi|</th>
+                                        <th>|Etat Actuel|</th>
+                                        <th>|Agent|</th>
+                                        <th>|Supprimer|</th>
+                                        <th>|Rétrait|</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -181,19 +181,19 @@
                             <table class="table select-table">
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center" style="font-size: 12px">
-                                        <th>Demandeur</th>
-                                        <th>Nom et prénoms du défunt</th>
-                                        <th>Numéro du registre</th>
-                                        <th>Date du registre</th>
-                                        <th>Numéro du CMU</th>
-                                        <th>Certificat Médical de Décès</th>
-                                        <th>CNI-défunt</th>
-                                        <th>CNI-déclarant</th>
-                                        <th>Document de Mariage</th>
-                                        <th>Requisition de Police</th>
-                                        <th>État Actuel</th>
-                                        <th>Agent</th>
-                                        <th>Supprimer</th>
+                                        <th>Demandeur |</th>
+                                        <th>Nom et prénoms du défunt |</th>
+                                        <th>Numéro du registre |</th>
+                                        <th>Date du registre |</th>
+                                        <th>Numéro du CMU |</th>
+                                        <th>Certificat Médical de Décès |</th>
+                                        <th>CNI-défunt |</th>
+                                        <th>CNI-déclarant |</th>
+                                        <th>Document de Mariage |</th>
+                                        <th>Requisition de Police |</th>
+                                        <th>État Actuel |</th>
+                                        <th>Agent |</th>
+                                        <th>Supprimer |</th>
                                         <th>Rétrait</th>
                                     </tr>
                                 </thead>

@@ -194,7 +194,7 @@
                         @endif
                         @empty
                         <tr>
-                            <td colspan="9" class="text-center">Aucune demande effectuée</td>
+                            <td colspan="10" class="text-center">Aucune demande effectuée</td>
                         </tr>
                     @endforelse
                
@@ -307,7 +307,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="6" class="text-center">Aucune demande effectuée</td>
+                                <td colspan="8" class="text-center">Aucune demande effectuée</td>
                             </tr>
                             @endforelse
                             

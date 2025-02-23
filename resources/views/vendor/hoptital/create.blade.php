@@ -78,7 +78,7 @@
 </style>
 
 <div class="signup-container">
-  <h6>Enregistrer un hôpital</h6>
+  <h6>Enregistrer un hôpital pour la mairie de {{ Auth::guard('vendor')->user()->name }}</h6>
   <div class="ms-panel-body">
     <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('doctor.hoptitalstore') }}" novalidate id="hospitalForm">
         @csrf

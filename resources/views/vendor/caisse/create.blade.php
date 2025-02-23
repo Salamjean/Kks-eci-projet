@@ -78,7 +78,7 @@
 </style>
 
 <div class="signup-container">
-  <h6>Inscrire un caissié pour la maire de {{ Auth::guard('vendor')->user()->name }}</h6>
+  <h6>Inscrire un caissier pour la maire de {{ Auth::guard('vendor')->user()->name }}</h6>
   <div class="ms-panel-body">
     <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('caisse.store') }}" novalidate>
         @csrf
@@ -131,14 +131,14 @@
         <!-- Formulaire principal -->
         <div class="form-row mb-3">
             <div class="col-md-6">
-                <label for="validationCustom001" class="form-label">Nom du caissié</label>
-                <input type="text" class="form-control" name="name" id="validationCustom001" placeholder="Entrez le nom du caissié" required>
+                <label for="validationCustom001" class="form-label">Nom du caissier</label>
+                <input type="text" class="form-control" name="name" id="validationCustom001" placeholder="Entrez le nom du caissier" required>
                
             </div>
 
             <div class="col-md-6">
-                <label for="validationCustom002" class="form-label">Prénoms du caissié</label>
-                <input type="text" class="form-control" name="prenom" id="validationCustom002" placeholder="Entrez le prénom du caissié" required>
+                <label for="validationCustom002" class="form-label">Prénoms du caissier</label>
+                <input type="text" class="form-control" name="prenom" id="validationCustom002" placeholder="Entrez le prénom du caissier" required>
                 
             </div>
         </div>

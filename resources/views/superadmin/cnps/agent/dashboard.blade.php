@@ -24,7 +24,7 @@
         <!-- En-tête -->
         <div class="text-center mb-0">
             <h2 class="font-semibold text-xl text-gray-800" style="font-weight:bold">
-                Caisse N° {{ Auth::guard('cnpsagent')->user()->id }}, Visualisé par : {{ Auth::guard('cnpsagent')->user()->name .' '.Auth::guard('cnpsagent')->user()->prenom }}
+                Visualisé par : {{ Auth::guard('cnpsagent')->user()->name .' '.Auth::guard('cnpsagent')->user()->prenom }}
             </h2>
         </div>
 

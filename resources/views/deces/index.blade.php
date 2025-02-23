@@ -206,7 +206,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="10" class="text-center">Aucune déclaration trouvée</td>
+                                    <td colspan="11" class="text-center">Aucune demande effectuée</td>
                                 </tr>
                                 @endforelse
                         
@@ -407,7 +407,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="12" class="text-center">Aucune déclaration trouvée</td>
+                                <td colspan="12" class="text-center">Aucune demande effectuée</td>
                             </tr>
                             @endforelse
                         </tbody>

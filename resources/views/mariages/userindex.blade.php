@@ -157,17 +157,17 @@
                     <table class="table select-table">
                         <thead class="bg-navbar text-white">
                             <tr style="font-size: 12px">
-                                <th class="text-center">Nom du demandeur</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">Nom du conjoint(e)</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">Prénoms du conjoint(e)</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">Date de Naissance du conjoint(e)</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">Lieu de Naissance du conjoint(e)</th>
-                                <th class="text-center">Pièce d'Identité du conjoint(e)</th>
-                                <th class="text-center">Extrait de Mariage</th>
-                                <th class="text-center">Etat Actuel</th>
-                                <th class="text-center">Agent</th>
-                                <th class="text-center">Supprimer</th>
-                                <th class="text-center">Rétrait</th>
+                                <th class="text-center">Nom du demandeur|</th>
+                                <th class="text-center d-none-tablet d-none-small-pc">|Nom du conjoint(e)|</th>
+                                <th class="text-center d-none-tablet d-none-small-pc">|Prénoms du conjoint(e)|</th>
+                                <th class="text-center d-none-tablet d-none-small-pc">|Date de Naissance du conjoint(e)|</th>
+                                <th class="text-center d-none-tablet d-none-small-pc">|Lieu de Naissance du conjoint(e)|</th>
+                                <th class="text-center">|Pièce d'Identité du conjoint(e)|</th>
+                                <th class="text-center">|Extrait de Mariage|</th>
+                                <th class="text-center">|Etat Actuel|</th>
+                                <th class="text-center">|Agent|</th>
+                                <th class="text-center">|Supprimer|</th>
+                                <th class="text-center">|Rétrait</th>
                             </tr>
                         </thead>
                         <tbody>

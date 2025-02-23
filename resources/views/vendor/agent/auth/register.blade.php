@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="Style.css">
-    <title>Inscription d'un Admin</title>
+    <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
+    <title>Inscription d'agent</title>
     <style>
         body {
             display: flex;
@@ -99,6 +100,16 @@
         .error-message {
             color: red;
             text-align: center;
+        }
+        .button-submit{
+            background-color: #007bff;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
         }
     </style>
 </head>

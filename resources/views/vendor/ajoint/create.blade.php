@@ -78,7 +78,7 @@
 </style>
 
 <div class="signup-container">
-  <h6>Inscrire un ajoint au maire pour la maire de {{ Auth::guard('vendor')->user()->name }}</h6>
+  <h6>Inscrire un huissier d'état civil pour la maire de {{ Auth::guard('vendor')->user()->name }}</h6>
   <div class="ms-panel-body">
     <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('ajoint.store') }}" novalidate>
         @csrf
@@ -131,14 +131,14 @@
         <!-- Formulaire principal -->
         <div class="form-row mb-3">
             <div class="col-md-6">
-                <label for="validationCustom001" class="form-label">Nom de l'ajoint</label>
-                <input type="text" class="form-control" name="name" id="validationCustom001" placeholder="Entrez le nom de l'ajoint" required>
+                <label for="validationCustom001" class="form-label">Nom de l'huissier</label>
+                <input type="text" class="form-control" name="name" id="validationCustom001" placeholder="Entrez le nom de l'huissier" required>
                
             </div>
 
             <div class="col-md-6">
-                <label for="validationCustom002" class="form-label">Prénoms de l'ajoint</label>
-                <input type="text" class="form-control" name="prenom" id="validationCustom002" placeholder="Entrez le prénom de l'ajoint" required>
+                <label for="validationCustom002" class="form-label">Prénoms de l'huissier</label>
+                <input type="text" class="form-control" name="prenom" id="validationCustom002" placeholder="Entrez le prénom de l'huissier" required>
                 
             </div>
         </div>
@@ -158,7 +158,7 @@
 
         <div class="form-row mb-3">
             <div class="col-md-12">
-                <label for="validationCustom005" class="form-label">Lieu de résidance</label>
+                <label for="validationCustom005" class="form-label">Lieu de résidence</label>
                 <input type="text" class="form-control" name="commune" id="validationCustom005" placeholder="Entrez son lieu de résidence" required>
                
             </div>

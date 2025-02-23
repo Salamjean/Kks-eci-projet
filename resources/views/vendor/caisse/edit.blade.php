@@ -78,7 +78,7 @@
 </style>
 
 <div class="signup-container">
-  <h6>Modifier les informations du caissié {{ $caisse->name . ' ' . $caisse->prenom}}</h6>
+  <h6>Modifier les informations du caissier {{ $caisse->name . ' ' . $caisse->prenom}}</h6>
   <div class="ms-panel-body">
     <form class="needs-validation" method="POST"  action="{{ route('caisse.update', $caisse->id) }}" novalidate>
         @csrf
@@ -131,13 +131,13 @@
         <!-- Formulaire principal -->
         <div class="form-row mb-3">
             <div class="col-md-6">
-                <label for="validationCustom001" class="form-label">Nom du caissié</label>
+                <label for="validationCustom001" class="form-label">Nom du caissier</label>
                 <input type="text" class="form-control" name="name" id="validationCustom001" value="{{ $caisse->name }}" >
                
             </div>
 
             <div class="col-md-6">
-                <label for="validationCustom002" class="form-label">Prénoms du caissié</label>
+                <label for="validationCustom002" class="form-label">Prénoms du caissier</label>
                 <input type="text" class="form-control" name="prenom" id="validationCustom002" value="{{ $caisse->prenom }}" >
                 
             </div>

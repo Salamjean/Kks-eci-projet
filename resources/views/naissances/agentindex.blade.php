@@ -208,7 +208,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="text-center">Aucune demande effectuée</td>
+                        <td colspan="11" class="text-center">Aucune demande effectuée</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -331,7 +331,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="10" class="text-center">Aucune demande effectuée</td>
+                                    <td colspan="9" class="text-center">Aucune demande effectuée</td>
                                 </tr>
                             @endforelse
                         </tbody>

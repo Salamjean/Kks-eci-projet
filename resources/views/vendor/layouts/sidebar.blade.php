@@ -10,7 +10,7 @@
   <li class="nav-item active">
     <a class="nav-link" href="{{ route('vendor.dashboard') }}">
       <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span>Dashboard</span>
+      <span>Tableau de board</span>
     </a>
   </li>
 
@@ -87,13 +87,13 @@
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaire"
       aria-expanded="true" aria-controls="collapseMaire">
       <i class="fa fa-user"></i>
-      <span>Ajoint-Maire</span>
+      <span>Huissier d'état civil</span>
     </a>
     <div id="collapseMaire" class="collapse" aria-labelledby="headingMaire" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">Gestion Ajoint-Maire</h6>
-        <a class="collapse-item" href="{{ route('ajoint.index') }}">Liste des Ajoint-Maire</a>
-        <a class="collapse-item" href="{{ route('ajoint.create') }}">Ajouter un Ajoint-Maire</a>
+        <a class="collapse-item" href="{{ route('ajoint.index') }}">Liste des huissiers</a>
+        <a class="collapse-item" href="{{ route('ajoint.create') }}">Ajouter un huissier</a>
       </div>
     </div>
   </li>

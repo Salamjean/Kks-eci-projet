@@ -109,7 +109,7 @@ button {
 
 <div class="container-fluid" id="container-wrapper">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-      <h1 class="h3 mb-0 text-gray-800">Listes des ajoints au maire</h1>
+      <h1 class="h3 mb-0 text-gray-800">Listes des huissiers d'état civil</h1>
       <ol class="breadcrumb">
         <li class="breadcrumb-item"><a href="{{ route('vendor.dashboard') }}">Accueil</a></li>
         <li class="breadcrumb-item">Listes</li>
@@ -122,7 +122,7 @@ button {
       <div class="col-lg-12">
         <div class="card mb-4">
           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Informations des ajoints au maire</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Informations les huissiers</h6>
           </div>
           <div class="table-responsive p-3">
             <!-- Champ de recherche -->
@@ -165,7 +165,7 @@ button {
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="9" class="text-center">Aucune demande effectuée</td>
+                        <td colspan="6" class="text-center">Aucun huissier inscrire</td>
                     </tr>
                     @endforelse
                 </tbody>
