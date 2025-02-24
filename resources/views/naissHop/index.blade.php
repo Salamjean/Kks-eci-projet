@@ -202,12 +202,12 @@
         </div>
 
         <div class="container col-11">
-            <h1>Liste Des Naissances Déclarées</h1>
+            <h1>Liste des naissances déclarées</h1>
             <div class="header">
                 <div class="search-bar">
                     <input type="text" id="search" placeholder="Rechercher une déclaration...">
                 </div>
-                <a href="{{ route('naissHop.create') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter une nouvelle déclaration</a>
+                <a href="{{ route('naissHop.create') }}" class="add-patient"><i class="fas fa-plus"></i> Faire une nouvelle déclaration</a>
             </div>
             
             <table id="patients-table" class="display">
@@ -219,7 +219,8 @@
                         <th>Hôpital</th>
                         <th>N°CMU de la mère</th>
                         <th>Date de Naissance</th>
-                        <th colspan="4" style="text-align: center">Action</th>
+                        <th colspan="3" style="text-align: center">Action</th>
+                        <th>Télécharger</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -245,7 +246,8 @@
                         <td>
                             <button class="eye">
                                 <a href="{{ route('naissHop.download', $naisshop->id) }}" style="color: #009efb">
-                                    <i class="fas fa-download" style="color: blue"></i> PDF
+                                    <i class="fas fa-download" style="color: blue"></i> <br>
+                                    Certificat
                                 </a>
                             </button>
                         </td>

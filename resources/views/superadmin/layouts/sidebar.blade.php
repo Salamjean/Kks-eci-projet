@@ -161,12 +161,12 @@
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseMaire"
       aria-expanded="true" aria-controls="collapseMaire">
       <i class="fa fa-user"></i>
-      <span>Ajoint-Maire</span>
+      <span>Huissier d'état civil</span>
     </a>
     <div id="collapseMaire" class="collapse" aria-labelledby="headingMaire" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">Gestion Ajoint-Maire</h6>
-        <a class="collapse-item" href="{{ route('superajoint.index') }}">Tous les Ajoint-maire</a>
+        <h6 class="collapse-header">Gestion-Huissier</h6>
+        <a class="collapse-item" href="{{ route('superajoint.index') }}">Tous les huissiers</a>
       </div>
     </div>
   </li>

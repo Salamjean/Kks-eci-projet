@@ -130,7 +130,7 @@
     <div class="col-lg-12">
         <div class="card mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Liste de tous les ajoints</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Liste de tous les huissiers</h6>
             </div>
             <div class="table-responsive p-3">
                 <input type="text" id="searchInput" class="form-control mb-3" placeholder="Rechercher...">
@@ -160,7 +160,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center">Aucune demande effectuée</td>
+                            <td colspan="8" class="text-center">Aucun huissier inscrire</td>
                         </tr>
                         @endforelse
                     </tbody>

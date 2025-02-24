@@ -238,7 +238,7 @@
                               <th>Nombres d'agents</th>
                               <th>Nombre de caissié</th>
                               <th>Nombre d'hôpital</th>
-                              <th>Nombre d'ajoint-maire</th>
+                              <th>Nombre d'huissier</th>
                               <th>Solde restant</th>
                               <th class="text-center">Archivé</th>
                           </tr>

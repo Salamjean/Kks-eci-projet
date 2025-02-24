@@ -2,11 +2,25 @@
     <!-- Logo -->
     <div class="logo-sn ms-d-block-lg">
       <div style="background-color:azure; margin-top:10px"><a class="pl-0 ml-0 text-center" href="index.html"> {{ Auth::guard('sous_admin')->user()->nomHop }} </a></div><br>
-      <a href="{{ route('sous_admin.dashboard') }}" class="text-center ms-logo-img-link"> <img class="ms-user-img ms-img-round" style=" width: 70px; /* Taille du cercle */
-        height: 70px; /* Taille du cercle */
-        border-radius: 55%; /* Cela rend l'image ronde */
-        object-fit: cover;" src="{{ asset('storage/' . Auth::guard('sous_admin')->user()->profile_picture) }}"></a>
-      <h5 class="text-center text-white mt-2">Dr. {{ Auth::guard('sous_admin')->user()->name }} </h5>
+      <a href="{{ route('sous_admin.dashboard') }}" class="text-center ms-logo-img-link"> <img class="ms-user-img ms-img-round" style="
+        width: 70px;
+        height: 70px;
+        border-radius: 55%;
+        object-fit: cover;"
+        src="
+            @if(Auth::guard('sous_admin')->user()->profile_picture)
+                {{ asset('storage/' . Auth::guard('sous_admin')->user()->profile_picture) }}
+            @else
+                @if(Auth::guard('sous_admin')->user()->sexe == 'Homme') 
+                    {{ asset('assets/images/profiles/user_homme.png') }}
+                @elseif(Auth::guard('sous_admin')->user()->sexe == 'Femme')
+                    {{ asset('assets/images/profiles/user_femme.jpeg') }}
+                @else
+                    {{ asset('assets/images/profiles/neutre.png') }} 
+                @endif
+            @endif
+        "></a>
+      <h5 class="text-center text-white mt-2">{{ Auth::guard('sous_admin')->user()->fonction }} : {{ Auth::guard('sous_admin')->user()->name }} </h5>
       
     </div>
     <!-- Navigation -->
@@ -14,7 +28,7 @@
       <!-- Dashboard -->
       <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#dashboard" aria-expanded="false" aria-controls="dashboard">
-          <span><i class="material-icons fs-16">dashboard</i>Dashboard </span>
+          <span><i class="material-icons fs-16">dashboard</i>Tableau de board </span>
         </a>
         <ul id="dashboard" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
           <li> <a href="{{ route('sous_admin.dashboard') }}">E-Côte d'Ivoire</a> </li>
@@ -52,7 +66,17 @@
           <li> <a href="{{ route('stats.index') }}">Statistique</a> </li>
         </ul>
       </li><br><br>
-      <!-- /Schedule -->
+
+         <!-- signature -->
+         <li class="menu-item">
+          <a href="#" class="has-chevron" data-toggle="collapse" data-target="#signature" aria-expanded="false" aria-controls="signature">
+            <span><i class="fas fa-list-alt"></i>Signature</span>
+          </a>
+          <ul id="signature" class="collapse" aria-labelledby="signature" data-parent="#side-nav-accordion">
+            <li> <a href="{{ route('sous_admin.signature') }}">Emarger</a> </li>
+          </ul>
+        </li><br><br>
+      <!-- /signature -->
   </aside>
   <!-- Main Content -->
   <main class="body-content">

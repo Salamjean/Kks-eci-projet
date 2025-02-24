@@ -13,17 +13,17 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a href="">Liste Docteur</a>
+                        <a href="{{ route('doctor.index') }}">Liste Personnel</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Ajout Docteur</li>
+                    <li class="breadcrumb-item active" aria-current="page">Ajout Personnel</li>
                 </ol>
             </nav>
         </div>
         <div class="col-xl-12 col-md-12">
             <div class="ms-panel">
                 <div class="ms-panel-header ms-panel-custome">
-                    <h6>Ajout D'un Docteur</h6>
-                    <a href="{{ route('doctor.index') }}" class="add-patient"><i class="fas fa-bars"></i>&emsp; Liste docteur</a>
+                    <h6>Ajout d'un personnel</h6>
+                    <a href="{{ route('doctor.index') }}" class="add-patient"><i class="fas fa-bars"></i>  Liste    </a>
                 </div>
                 <div class="ms-panel-body">
                     <form class="needs-validation" method="POST" enctype="multipart/form-data" action="{{ route('doctor.store') }}" novalidate>
@@ -35,7 +35,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="validationCustom001">Nom</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="name" id="validationCustom001" placeholder="Entre son nom" required>
+                                    <input type="text" class="form-control" name="name" value="{{ old('name') }}" id="validationCustom001" placeholder="Entre son nom" required>
                                     <div class="valid-feedback">Correct</div>
                                 </div>
                                 @error('name')
@@ -46,8 +46,8 @@
                             <div class="col-md-6 mb-3">
                                 <label for="validationCustom002">Prénom</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="prenom" id="validationCustom002" placeholder="Entre son prénom" required>
-                                    <div class="valid-feedback">Looks good!</div>
+                                    <input type="text" class="form-control" name="prenom" value="{{ old('prenom') }}" id="validationCustom002" placeholder="Entre son prénom" required>
+                                    <div class="valid-feedback">correct</div>
                                 </div>
                                 @error('prenom')
                                     <div class="text-danger text-center">{{ $message }}</div>
@@ -60,7 +60,7 @@
                             <div class="col-md-6 mb-2">
                                 <label for="validationCustom003">Email</label>
                                 <div class="input-group">
-                                    <input type="email" class="form-control" name="email" id="validationCustom003" placeholder="Entre son email" required>
+                                    <input type="email" class="form-control" name="email" value="{{ old('email') }}" id="validationCustom003" placeholder="Entre son email" required>
                                     <div class="valid-feedback">Correct</div>
                                 </div>
                                 @error('email')
@@ -71,10 +71,43 @@
                             <div class="col-md-6 mb-3">
                                 <label for="validationCustom009">Contact</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control" name="contact" id="validationCustom009" placeholder="Son Numéro" required>
+                                    <input type="text" class="form-control" name="contact" value="{{ old('contact') }}" id="validationCustom009" placeholder="Son contact" required>
                                     <div class="valid-feedback">Correct</div>
                                 </div>
                                 @error('contact')
+                                    <div class="text-danger text-center">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                         <!-- Fonction et Sexe -->
+                         <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fonctionSelect">Fonction</label>
+                                <div class="input-group">
+                                    <select class="form-control" name="fonction" id="fonctionSelect" required>
+                                        <option value="" disabled selected>Sélectionnez une fonction</option>
+                                        <option value="Médecin">Médecin(e)</option>
+                                        <option value="Sage-femme">Sage-femme</option>
+                                        <option value="Infirmier">Infirmier(e)</option>
+                                    </select>
+                                    <div class="valid-feedback">Correct</div>
+                                </div>
+                                @error('fonction')
+                                    <div class="text-danger text-center">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="sexeSelect">Sexe</label>
+                                <div class="input-group">
+                                    <select class="form-control" name="sexe" id="sexeSelect" required>
+                                        <option value="" disabled selected>Sélectionnez le sexe</option>
+                                        <option value="Homme">Homme</option>
+                                        <option value="Femme">Femme</option>
+                                    </select>
+                                    <div class="valid-feedback">Correct</div>
+                                </div>
+                                @error('sexe')
                                     <div class="text-danger text-center">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -85,7 +118,7 @@
                             <div class="col-md-12 mb-3">
                                 <label for="validationCustom005">Description</label>
                                 <div class="input-group">
-                                    <textarea class="form-control" name="description" id="validationCustom005" placeholder="Décrivez le docteur" required style="height: 150px;"></textarea>
+                                    <textarea class="form-control" name="description"  id="validationCustom005" placeholder="Décrivez le le personnel" required style="height: 150px;"></textarea>
                                     <div class="valid-feedback">Correct</div>
                                 </div>
                                 @error('description')
@@ -126,27 +159,14 @@
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     }
 
-    .ms-panel-body form .form-row {
-        margin-bottom: 15px;
-    }
-
-    .ms-panel-body form .col-md-6 {
-        padding-right: 15px;
-        padding-left: 15px;
-    }
-
-    .ms-panel-body form .col-md-12 textarea {
-        margin-bottom: 10px;
-    }
-
-    /* For better button alignment */
+    /* For better button alignment (garder si nécessaire, sinon supprimer) */
     .ms-panel-body .text-center {
         margin-top: 20px;
     }
 
     .ms-panel-body form button {
-        display: inline-block;
-        width: 30%;
+        display: inline-block; /* Garder si nécessaire, sinon peut-être 'display: block;' ou 'display: flex; justify-content: center;' */
+        width: 25%; /* Utilisation de w-25 Bootstrap est préférable, ou ajuster selon besoin */
     }
 </style>
 

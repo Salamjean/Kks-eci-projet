@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
-    <title>Document</title>
+    <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
+    <title>Inscrire-Super-Docteur</title>
 </head>
 <style>
   body {
@@ -197,7 +198,7 @@
             @enderror
         </div>
       </div>
-      <button type="submit" class="submit-btn">Valider</button>
+      <button type="submit" class="submit-btn" style="width: 100%; padding:10px 0; color:white; background-color: #3eafe1;font-size:20px; font-weight:bold">Valider</button>
     </form>
     
     

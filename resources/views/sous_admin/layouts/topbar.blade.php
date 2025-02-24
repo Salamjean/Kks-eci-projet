@@ -15,9 +15,21 @@
   <li class="ms-nav-item ms-nav-user dropdown" style="list-style: none;">
     <a href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
       <div class="profile-container" style="display: flex; align-items: center;">
-        <img class="ms-user-img ms-img-round" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 10px;" src="{{ asset('storage/' . (Auth::guard('sous_admin')->user()->profile_picture ?? 'default-profile.png')) }}" alt="Profile Picture">
+        <img class="ms-user-img ms-img-round" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 10px;"  src="
+        @if(Auth::guard('sous_admin')->user()->profile_picture)
+            {{ asset('storage/' . Auth::guard('sous_admin')->user()->profile_picture) }}
+        @else
+            @if(Auth::guard('sous_admin')->user()->sexe == 'Homme') 
+                {{ asset('assets/images/profiles/user_homme.png') }}
+            @elseif(Auth::guard('sous_admin')->user()->sexe == 'Femme')
+                {{ asset('assets/images/profiles/user_femme.jpeg') }}
+            @else
+                {{ asset('assets/images/profiles/neutre.png') }} 
+            @endif
+        @endif
+    ">
         <span style="color: white; font-weight: bold;">
-          Dr. {{ Auth::guard('sous_admin')->user()->name }} 
+          {{ Auth::guard('sous_admin')->user()->fonction }} : {{ Auth::guard('sous_admin')->user()->name }} 
         </span>
       </div>
     </a>
@@ -27,16 +39,11 @@
       </li>
       <li class="dropdown-divider"></li>
       <li class="ms-dropdown-list" style="list-style: none;">
-        <a class="media fs-14 p-2" href="pages/prebuilt-pages/user-profile.html"> <span><i class="flaticon-user mr-2"></i> Profile</span> </a>
-        <a class="media fs-14 p-2" href="pages/apps/email.html"> <span><i class="flaticon-mail mr-2"></i> Inbox</span> <span class="badge badge-pill badge-info">3</span> </a>
-        <a class="media fs-14 p-2" href="pages/prebuilt-pages/user-profile.html"> <span><i class="flaticon-gear mr-2"></i> Account Settings</span> </a>
+        <a class="media fs-14 p-2" href="#"> <span><i class="flaticon-user mr-2"></i> Profile</span> </a>
       </li>
       <li class="dropdown-divider"></li>
       <li class="dropdown-menu-footer" style="list-style: none;">
-        <a class="media fs-14 p-2" href="pages/prebuilt-pages/lock-screen.html"> <span><i class="flaticon-security mr-2"></i> Lock</span> </a>
-      </li>
-      <li class="dropdown-menu-footer" style="list-style: none;">
-        <a class="media fs-14 p-2" href="{{ route('sous_admin.logout') }}"> <span><i class="flaticon-shut-down mr-2"></i> Logout</span> </a>
+        <a class="media fs-14 p-2" href="{{ route('sous_admin.logout') }}"> <span><i class="flaticon-shut-down mr-2"></i> Déconnexion</span> </a>
       </li>
     </ul>
   </li>

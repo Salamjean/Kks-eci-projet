@@ -289,18 +289,14 @@ class NaissHopController extends Controller
     $dateCreation = $naissHop->created_at->format('d/m/Y H:i:s');
         // Génération du QR code
     $qrCodeData = "Les Informations concernants la mère \n" .
-        "Nom de la mère: {$validatedData['NomM']}\n" .
-        "Prénom de la mère: {$validatedData['PrM']}\n" .
+        "Nom et prénom de la mère: {$validatedData['NomM']} {$validatedData['PrM']}\n" .
         "Contact de la mère: {$validatedData['contM']}\n" .
-        "Date de naissance : {$validatedData['dateM']}\n \n" .
         "Les Informations concernants l'enfant \n" .
         "Date de naissance : {$validatedData['DateNaissance']}\n".
         "Sexe : {$validatedData['sexe']}\n".
         "Hôpital de naissance : {$validatedData['NomEnf']}\n".
-        "Accompagner par : {$validatedData['NomP']} {$validatedData['PrP']}".
-        "Contact de l'accompagnateur: {$validatedData['contP']}".
-        "Certificat délivré par le Dr. : {$nomSousadmin}".
-        "Date de déclaration : {$dateCreation}";
+        "Certificat délivré par le Dr. : {$nomSousadmin}\n".
+        "Date et Heure de déclaration : {$dateCreation}";
         
 
     $qrCode = QrCode::create($qrCodeData)

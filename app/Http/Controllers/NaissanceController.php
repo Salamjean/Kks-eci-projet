@@ -138,101 +138,92 @@ public function ajointindex()
     return view('naissances.ajointindex', compact('naissances', 'alerts', 'naissancesD'));
 }
 
-public function traiterDemande($id)
-{
-    $agent = Auth::guard('agent')->user();
+  // Fonction réutilisable pour compter les demandes en attente
+  private function compterDemandesEnAttente($agentId)
+  {
+      return Naissance::where('agent_id', $agentId)->where('etat', '!=', 'terminé')->count() +
+             NaissanceD::where('agent_id', $agentId)->where('etat', '!=', 'terminé')->count() +
+             Deces::where('agent_id', $agentId)->where('etat', '!=', 'terminé')->count() +
+             Decesdeja::where('agent_id', $agentId)->where('etat', '!=', 'terminé')->count() +
+             Mariage::where('agent_id', $agentId)->where('etat', '!=', 'terminé')->count();
+  }
 
-    // Essayer de trouver une demande de naissance
-    $naissance = Naissance::find($id);
-    if ($naissance) {
-        if ($naissance->agent_id) {
-            return redirect()->route('agent.vue')->with('error','Cette demande de décès a déjà été récupérée par un autre agent.');
-        }
+  /**
+   * Fonction générique pour traiter une demande.
+   *
+   * @param string $modelClass Le nom de classe du modèle Eloquent (ex: Naissance::class).
+   * @param int $id L'ID de la demande.
+   * @param string $successRoute La route de redirection en cas de succès (ex: 'naissance.agentindex').
+   * @param string $modelName Le nom du modèle pour les messages d'erreur (ex: 'naissance').
+   * @return RedirectResponse
+   */
+  private function traiterDemandeGenerique($modelClass, $id, $successRoute, $modelName)
+  {
+      $agent = Auth::guard('agent')->user();
+      $pendingRequestsCount = $this->compterDemandesEnAttente($agent->id);
 
-        $naissance->is_read = true; // Marquer comme traité
-        $naissance->agent_id = $agent->id; // Enregistrer l'ID de l'agent
-        $naissance->save();
+      if ($pendingRequestsCount >= 2) {
+          return redirect()->route('agent.vue')->with('error', 'Vous avez déjà récupéré 2 demandes en attente. Veuillez terminer celles en cours avant de récupérer une autre.');
+      }
 
-        return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissance récuperée avec succès.');
-    }
+      $demande = $modelClass::find($id);
 
-    // Essayer de trouver une demande de naissanceD
-    $naissanceD = NaissanceD::find($id);
-    if ($naissanceD) {
-        if ($naissanceD->agent_id) {
-            return redirect()->route('agent.vue')->with('error', 'Cette demande de décès a déjà été récupérée par un autre agent.');
-        }
+      if (!$demande) {
+          return redirect()->route($successRoute)->with('error', 'Demande introuvable.'); // Utilisation de $successRoute pour le redirect erreur, car on ne sait pas quel index afficher.
+      }
 
-        $naissanceD->is_read = true; // Marquer comme traité
-        $naissanceD->agent_id = $agent->id; // Enregistrer l'ID de l'agent
-        $naissanceD->save();
+      if ($demande->agent_id) {
+          return redirect()->route('agent.vue')->with('error', "Cette demande de {$modelName} a déjà été récupérée par un autre agent.");
+      }
 
-        return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissance récuperée avec succès.');
-    }
+      $demande->is_read = true;
+      $demande->agent_id = $agent->id;
+      $demande->etat = 'en attente'; // Définir le statut à 'en attente' lorsqu'elle est récupérée
+      $demande->save();
 
-    // Si aucune demande n'est trouvée
-    return redirect()->route('naissance.agentindex')->with('error', 'Demande introuvable.');
-}
+      return redirect()->route($successRoute)->with('success', "Demande de {$modelName} récupérée avec succès.");
+  }
 
-public function traiterDemandeDeces($id)
-{
-    $agent = Auth::guard('agent')->user();
+  public function traiterDemande($id)
+  {
+      $naissance = Naissance::find($id);
+      if ($naissance) {
+          return $this->traiterDemandeGenerique(Naissance::class, $id, 'naissance.agentindex', 'naissance');
+      }
 
-    // Essayer de trouver une demande de deces
-    $deces = Deces::find($id);
-    if ($deces) {
-        if ($deces->agent_id) {
-            return redirect()->route('agent.vue')->with('error', 'Cette demande de décès a déjà été récupérée par un autre agent.');
-        }
+      $naissanceD = NaissanceD::find($id);
+      if ($naissanceD) {
+          return $this->traiterDemandeGenerique(NaissanceD::class, $id, 'naissance.agentindex', 'naissance'); // Garder 'naissance.agentindex' car ils sont listés ensemble.
+      }
 
-        $deces->is_read = true;
-        $deces->agent_id = $agent->id;
-        $deces->save();
+      // Si aucune demande n'est trouvée (ni Naissance, ni NaissanceD)
+      return redirect()->route('naissance.agentindex')->with('error', 'Demande introuvable.'); // Rediriger vers l'index naissance par défaut si ID incorrect.
+  }
 
-        return redirect()->route('deces.agentindex')->with('success', 'Demande de décès récupérée avec succès.');
-    }
 
-    // Essayer de trouver une demande de decesdeja
-    $decesdeja = Decesdeja::find($id);
-    if ($decesdeja) {
-        if ($decesdeja->agent_id) {
-            return redirect()->route('agent.vue')->with('error', 'Cette demande de décès a déjà été récupérée par un autre agent.');
-        }
+  public function traiterDemandeDeces($id)
+  {
+      $deces = Deces::find($id);
+      if ($deces) {
+          return $this->traiterDemandeGenerique(Deces::class, $id, 'deces.agentindex', 'décès');
+      }
 
-        $decesdeja->is_read = true;
-        $decesdeja->agent_id = $agent->id;
-        $decesdeja->save();
+      $decesdeja = Decesdeja::find($id);
+      if ($decesdeja) {
+          return $this->traiterDemandeGenerique(Decesdeja::class, $id, 'deces.agentindex', 'décès');
+      }
 
-        return redirect()->route('deces.agentindex')->with('success', 'Demande de décès récupérée avec succès.');
-    }
+      // Si aucune demande n'est trouvée (ni Deces, ni Decesdeja)
+      return redirect()->route('deces.agentindex')->with('error', 'Demande introuvable.'); // Rediriger vers l'index deces par défaut si ID incorrect.
+  }
 
-    // Si aucune demande n'est trouvée
-    return redirect()->route('deces.agentindex')->with('error', 'Demande introuvable.');
-}
+  public function traiterDemandeMariage($id)
+  {
+      return $this->traiterDemandeGenerique(Mariage::class, $id, 'mariage.agentindex', 'mariage');
+  }
 
-public function traiterDemandeMariage($id)
-{
-    $agent = Auth::guard('agent')->user();
 
-    // Essayer de trouver une demande de mariage
-    $mariage = Mariage::find($id);
-    if ($mariage) {
-        if ($mariage->agent_id) {
-            return redirect()->route('agent.vue')->with('error', 'Cette demande de mariage a déjà été récupérée par un autre agent.');
-        }
-
-        $mariage->is_read = true;
-        $mariage->agent_id = $agent->id;
-        $mariage->save();
-
-        return redirect()->route('mariage.agentindex')->with('success', 'Demande de mariage récupérée avec succès.');
-    }
-
-    // Si aucune demande n'est trouvée
-    return redirect()->route('mariage.agentindex')->with('error', 'Demande introuvable.');
-}
-
-    public function create(){
+     public function create(){
         \Log::info('Store method called');
         $naisshop = NaissHop::all();
         return view('naissances.create', compact('naisshop'));

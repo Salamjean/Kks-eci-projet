@@ -9,6 +9,38 @@
     body {
         margin: 0;
     }
+    .logo1 {
+            position: absolute;
+            margin-left: 75%;
+            margin-top: 2;
+            height: 110px;
+            left: 40px;
+        }
+        .logo2 {
+            height: 130px;
+            position: absolute;
+            left: -50px;
+            margin-left: 0;
+            margin-top: 0;
+        }
+        .logo {
+            display: flex;
+            justify-content: space-between;
+        }
+        .tete {
+            text-align: center;
+            font-family: calisto MT;
+            font-size: 25px;
+            color: #006;
+            font-weight: bold;
+        }
+        .signature {
+            position: absolute;
+            bottom: 300px;
+            right: 25px;
+            font-size: 15px;
+            font-weight: bold;
+        }
     .header{
         display: flex;
         justify-content: space-around;
@@ -38,24 +70,19 @@
     }
 </style>
 <body>
-    <div class="header">
-        <div>
-            <h2>MINISTERE DE LA SANTE, <br>
-                DE L'HYGIENE PUBLIQUE ET <br>
-            DE LA COUVERTURE MALADIE UNIVERSELLE</h2>
-            <hr style="width: 20%; margin-top: -10px;  margin-left: 50px; margin-bottom: 1px;">
-            <h2 style="margin-top: 0px">DIRECTION REGIONALE DE LA SANTE ABIDJAN</h2>
-            <hr style="width: 20%; margin-top: -10px; margin-left: 50px; margin-bottom: 1px;">
-            <h2 >DISTRICT SANITAIRE {{ strtoupper($sousadmin->commune) }}</h2>
+    <header>
+        <div class="logo_g">
+            <div class="logo">
+                <img src="assets/images/profiles/sante.jpg" class="logo2" alt="Logo">
+                <img src="assets/images/profiles/gouv_ci.png" class="logo1" alt="Logo">
+            </div>
         </div>
-        <div class="union">
-            <h2>REPUBLIQUE DE CÔTE D'IVOIRE</h2>
-            <p style="font-size:12px; margin-left:55px; margin-top: -10px;">Union-Discipline-Travail</p>
-        </div>
-    </div>
+        <br><br><br><br><br><br><br><br>
+       
+    </header>
     <div class="content">
         <h2 >{{ strtoupper($sousadmin->nomHop) }}</h2>
-        <h2 class="fait">Abidjan le, {{ $sousadmin->created_at->format('d M Y') }}</h2>
+        <h2 class="fait">Abidjan le, {{ $sousadmin->created_at->translatedFormat('d M Y') }}</h2>
     </div>
     <h1 style="text-align: center; font-family: algerian; font-size: 30px; "><u>CERTIFICAT DE NON CONTAGION</u></h1>
     <div class="containt">
@@ -68,6 +95,7 @@
     <div>
         <p style="text-align: right;font-size:16px; margin-right: 50px; font-weight: bold;"><u>LE MEDECIN</u></p>
         <p style="text-align: right;font-size:13px; margin-right: 50px; font-weight: bold;"></u>{{ $sousadmin->name .' '.$sousadmin->prenom  }}</p>
+        <p><img src="{{ public_path('storage/' . $sousadmin->signature) }}" style="margin-left:570px; max-width: 200px; max-height: 100px;"/></p>
     </div>
 </body>
 </html>

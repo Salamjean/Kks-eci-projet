@@ -162,6 +162,8 @@ class DoctorController extends Controller
             $sousadmin->description = $request->description;
             $sousadmin->password = Hash::make('default');
             $sousadmin->contact = $request->contact;
+            $sousadmin->fonction = $request->fonction;
+            $sousadmin->sexe = $request->sexe;
             $sousadmin->profile_picture = $request->profile_picture;
             $sousadmin->nomHop = $doctor->nomHop; // Associe le même nomHop que le docteur
             $sousadmin->commune = $doctor->commune; // Associe la commune du docteur

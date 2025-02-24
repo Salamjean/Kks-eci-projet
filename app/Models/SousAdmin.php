@@ -13,6 +13,8 @@ class SousAdmin extends Authenticatable
             'name',
             'email',
             'password',
+            'fonction',
+            'sexe',
             'profile_picture',
             'archived_at'
         ];

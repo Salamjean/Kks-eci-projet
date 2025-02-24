@@ -378,6 +378,8 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     });
     Route::middleware('auth:sous_admin')->prefix('sous-admin')->name('sous_admin.')->group(function(){
     Route::get('/dashboard', [SousAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/docteur/signature',[SousAdminController::class, 'signature'])->name('signature');
+    Route::post('/docteur/signature/update',[SousAdminController::class, 'updateSignature'])->name('signature.update'); 
     Route::get('/logout',[SousAdminController::class, 'souslogout'])->name('logout');
     });
 

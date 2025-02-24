@@ -15,22 +15,24 @@ use Endroid\QrCode\QrCode;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use App; // Importez la classe App
+use Carbon\Carbon; // Importez la classe Carbon (si ce n'est pas déjà fait)
 
 class DecesHopController extends Controller
 {
     public function index() {
         // Récupérer l'administrateur connecté
         $sousadmin = Auth::guard('sous_admin')->user();
-        
+
         // Récupérer la commune de l'administrateur
         $communeAdmin = $sousadmin->nomHop;
         $sousAdminId = $sousadmin->id; // Récupérer l'ID du sous-administrateur
-    
+
         // Récupérer les déclarations de décès filtrées par la commune de l'administrateur et l'ID du sous-administrateur
         $deceshops = DecesHop::where('nomHop', $communeAdmin)
             ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
             ->get();
-    
+
         return view('decesHop.index', ['deceshops' => $deceshops]);
     }
 
@@ -41,13 +43,13 @@ class DecesHopController extends Controller
         $communeAdmin = $directeur->nomHop;
         // Récupérer les déclarations de décès filtrées par la commune de l'administrateur et l'ID du sous-administrateur
         $deceshops = DecesHop::where('nomHop', $communeAdmin)->get();
-    
+
         return view('decesHop.directeurindex', ['deceshops' => $deceshops]);
     }
 
     public function superindex(){
         $alerts = Alert::where('is_read', false)
-        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])
         ->latest()
         ->get();
         $deceshops = DecesHop::all();
@@ -57,7 +59,7 @@ class DecesHopController extends Controller
     public function create(){
         $doctor = Doctor::all();
         return view('decesHop.create', compact('doctor'));
-    
+
     }
 
     public function edit(DecesHop $deceshop){
@@ -76,17 +78,17 @@ class DecesHopController extends Controller
 
     public function show($id)
     {
-        $deceshop = DecesHop::findOrFail($id); 
+        $deceshop = DecesHop::findOrFail($id);
         return view('decesHop.details', compact('deceshop'));
     }
     public function mairieshow($id)
     {
        // Récupérer les alertes
        $alerts = Alert::where('is_read', false)
-       ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+       ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])
        ->latest()
        ->get();
-        $deceshop = DecesHop::findOrFail($id); 
+        $deceshop = DecesHop::findOrFail($id);
         return view('decesHop.mariedetails', compact('deceshop','alerts'));
     }
 
@@ -130,7 +132,7 @@ class DecesHopController extends Controller
         'nomHop' => $validatedData['nomHop'],
         'commune' => $validatedData['commune'],
         'Remarques' => $validatedData['Remarques'] ?? null,
-        'sous_admin_id' => $sousadmin->id, 
+        'sous_admin_id' => $sousadmin->id,
     ]);
 
     // Génération des codes
@@ -146,7 +148,7 @@ class DecesHopController extends Controller
 
     // Génération du QR code
     $qrCodeData = "Les details de décès:\n" .
-    "Nom du défunt: {$validatedData['NomM']}\n" . 
+    "Nom du défunt: {$validatedData['NomM']}\n" .
     "Prénom du défunt: {$validatedData['PrM']}\n" .
     "Date de naissance  du défunt: {$validatedData['DateNaissance']}\n" .
     "Date de décès: {$validatedData['DateDeces']}\n" .
@@ -161,14 +163,14 @@ class DecesHopController extends Controller
     // Écrire le QR code dans un fichier
     $writer = new PngWriter();
     $result = $writer->write($qrCode);
-    
+
     // Générer un nom de fichier unique (optionnel)
     $qrCodeFileName = "qrcode_{$decesHop->id}.png"; // Nom du fichier basé sur l'ID
     $qrCodePath = "deces_hops/{$qrCodeFileName}"; // Chemin relatif dans le dossier 'deces_hops'
-    
+
     // Utiliser le système de stockage de Laravel pour enregistrer le fichier
     Storage::disk('public')->put($qrCodePath, $result->getString());
-    
+
     // Récupérer les informations du sous-admin
     $sousadmin = Auth::guard('sous_admin')->user();
 
@@ -180,10 +182,10 @@ class DecesHopController extends Controller
 
     // Générer la contagion PDF
     $pdf3 = PDF::loadView('decesHop.contagionpdf', compact('decesHop', 'codeDM', 'codeCMD', 'sousadmin', 'qrCodePath'))
-    ->setPaper('a4', 'landscape'); 
+    ->setPaper('a4', 'landscape');
     $pdfFileName3 = "contagion_{$decesHop->id}.pdf";
     $pdf3->save(storage_path("app/public/deces_hops/{$pdfFileName3}"));
-    
+
     Alert::create([
         'type' => 'decesHop',
         'message' => "Une nouvelle déclaration de décès a été enregistrée par : {$decesHop->nomHop}.",
@@ -200,12 +202,12 @@ class DecesHopController extends Controller
         $validatedData = $request->validate([
             'codeCMN' => 'required|string|max:50', // Validation de l'entrée
         ]);
-    
+
         $codeCMN = $validatedData['codeCMN'];
-    
+
         // Recherche du dossier médical
         $decesHop = DecesHop::where('codeCMD', $codeCMN)->first();
-    
+
         if ($decesHop) {
             return response()->json([
                 'existe' => true,
@@ -216,10 +218,10 @@ class DecesHopController extends Controller
                 'lieuNaiss' => $decesHop->commune,
             ]);
         }
-    
+
         return response()->json(['existe' => false]);
     }
-    
+
 public function download($id)
 {
     // Récupérer l'objet NaissHop
@@ -241,11 +243,14 @@ public function download($id)
 
 public function downloadcontagion($id)
 {
-    // Récupérer l'objet NaissHop
+    // Définir la locale en français pour Carbon
+    App::setLocale('fr');
+
+    // Récupérer l'objet DecesHop
     $decesHop = DecesHop::findOrFail($id);
 
     // Récupérer les informations du sous-admin connecté
-    $sousadmin = Auth::guard('sous_admin')->user(); // Supposons que le sous-admin est connecté via `auth`
+    $sousadmin = Auth::guard('sous_admin')->user();
 
     if (!$sousadmin) {
         return back()->withErrors(['error' => 'Sous-admin non authentifié.']);
@@ -258,5 +263,5 @@ public function downloadcontagion($id)
     return $pdf->download("contagion_{$decesHop->id}.pdf");
 }
 
-    
+
 }

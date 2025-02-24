@@ -4,7 +4,7 @@
 <div class="container-fluid" id="container-wrapper">
     <div >
       <div class="font-semibold text-xl text-gray-800 text-center" style="display: flex;justify-content:center; text-align:center; font-weight:bold; font-size:20px;">
-        Monsieur l'ajoint au maire {{ Auth::guard('ajoint')->user()->name }} vous êtes a la mairie de  {{ Auth::guard('ajoint')->user()->communeM }}
+        L'huissier d'état civil M. {{ Auth::guard('ajoint')->user()->name }} vous êtes a la mairie de  {{ Auth::guard('ajoint')->user()->communeM }}
       </div>
       <br><br>
     </div>

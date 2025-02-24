@@ -19,6 +19,9 @@ return new class extends Migration
             $table->string('password');
             $table->string('description')->nullable();
             $table->string('contact');
+            $table->string('fonction');
+            $table->string('sexe');
+            $table->string('signature')->nullable();
             $table->string('profile_picture')->nullable();
             $table->string('nomHop')->nullable();
             $table->timestamp('archived_at')->nullable();

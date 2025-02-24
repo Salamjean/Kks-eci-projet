@@ -100,6 +100,7 @@
             <p>Fait à {{ $decesHop->commune }}, Le {{ $decesHop->created_at }}</p>
             <p>Le Médecin :</p>
             <p>{{ $sousadmin->name }} {{ $sousadmin->prenom }}</p>
+            <p><img src="{{ public_path('storage/' . $sousadmin->signature) }}" style="margin-left:150px; max-width: 200px; max-height: 100px;"/></p>
         </div>
         <!-- Afficher le QR code -->
         <div style="margin: 70px 0 0 10px">

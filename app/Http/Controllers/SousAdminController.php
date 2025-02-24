@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SousAdminRequest;
 use App\Http\Requests\submitDefineAccessRequest;
 use App\Http\Requests\updateDoctorRequest;
+use App\Http\Requests\UpdateSignatureRequest;
 use App\Models\Alert;
 use App\Models\DecesHop;
 use App\Models\NaissHop;
@@ -256,5 +257,32 @@ public function soushandleLogin(Request $request)
         // Gérer les erreurs
         return redirect()->back()->with('error', 'Une erreur s\'est produite lors de la connexion.');
     }
+}
+
+public function signature()
+{
+    $sousAdmin = Auth::guard('sous_admin')->user();
+    return view('sous_admin.signature', compact('sousAdmin'));
+}
+
+public function updateSignature(UpdateSignatureRequest $request) // On va créer cette request
+{
+    $sousAdmin = Auth::guard('sous_admin')->user();
+
+    if ($request->hasFile('signature')) {
+        // Valider et stocker la nouvelle signature
+        $path = $request->file('signature')->store('signatures', 'public'); // Stocker dans storage/app/public/signatures
+
+        // Supprimer l'ancienne signature si elle existe
+        if ($sousAdmin->signature && Storage::disk('public')->exists($sousAdmin->signature)) {
+            Storage::disk('public')->delete($sousAdmin->signature);
+        }
+
+        $sousAdmin->signature = $path;
+    }
+
+    $sousAdmin->update();
+
+    return redirect()->route('sous_admin.signature')->with('success', 'Signature mise à jour avec succès.');
 }
 }
