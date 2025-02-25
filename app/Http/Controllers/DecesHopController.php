@@ -147,7 +147,9 @@ class DecesHopController extends Controller
     ]);
 
     // Génération du QR code
-    $qrCodeData = "Les details de décès:\n" .
+    $qrCodeData = 
+    "N° CMD: {$codeCMD}\n" .
+    "Les details de décès:\n" .
     "Nom du défunt: {$validatedData['NomM']}\n" .
     "Prénom du défunt: {$validatedData['PrM']}\n" .
     "Date de naissance  du défunt: {$validatedData['DateNaissance']}\n" .

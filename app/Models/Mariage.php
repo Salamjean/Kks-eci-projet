@@ -28,4 +28,14 @@ class Mariage extends Model
     {
         return $this->belongsTo(Agent::class, 'agent_id');
     }
+
+    public static function getNextId()
+    {
+        $lastMariage = self::orderBy('id', 'desc')->first();
+        if ($lastMariage) {
+            return $lastMariage->id + 1;
+        } else {
+            return 1;
+        }
+    }
 }

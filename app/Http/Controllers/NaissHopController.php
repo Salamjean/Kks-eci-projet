@@ -279,7 +279,6 @@ class NaissHopController extends Controller
 
 
     $sousadmin = Auth::guard('sous_admin')->user();
-
 // Vérifiez si l'utilisateur est authentifié
     if ($sousadmin) {
         $nomSousadmin = $sousadmin->name .' '.$sousadmin->prenom; // Assurez-vous que 'name' est le bon attribut
@@ -288,7 +287,9 @@ class NaissHopController extends Controller
     }
     $dateCreation = $naissHop->created_at->format('d/m/Y H:i:s');
         // Génération du QR code
-    $qrCodeData = "Les Informations concernants la mère \n" .
+    $qrCodeData = 
+        "N° CMN: {$codeCMN}\n".
+        "Les Informations concernants la mère \n" .
         "Nom et prénom de la mère: {$validatedData['NomM']} {$validatedData['PrM']}\n" .
         "Contact de la mère: {$validatedData['contM']}\n" .
         "Les Informations concernants l'enfant \n" .

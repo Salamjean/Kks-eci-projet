@@ -95,7 +95,10 @@
     <div>
         <p style="text-align: right;font-size:16px; margin-right: 50px; font-weight: bold;"><u>LE MEDECIN</u></p>
         <p style="text-align: right;font-size:13px; margin-right: 50px; font-weight: bold;"></u>{{ $sousadmin->name .' '.$sousadmin->prenom  }}</p>
-        <p><img src="{{ public_path('storage/' . $sousadmin->signature) }}" style="margin-left:570px; max-width: 200px; max-height: 100px;"/></p>
-    </div>
+        <p>
+            <img src="{{ $sousadmin->signature ? public_path('storage/' . $sousadmin->signature) : 'signature' }}" 
+                 style="margin-left:550px; max-width: 200px; max-height: 100px;" 
+                 alt="Signature"/>
+        </p>
 </body>
 </html>

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('DateR'); // Numéro associé
             $table->string('CNI'); // Numéro associé
             $table->string('CMU'); // Numéro associé
+            $table->string('reference');
             $table->string('commune')->nullable(); // Commune, nullable
             $table->string('etat')->default('en attente'); // État par défaut
             $table->boolean('is_read')->default(false); // Statut de lecture

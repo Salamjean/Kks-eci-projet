@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('pieceIdentite');
             $table->string('extraitMariage');
             $table->string('CMU');
+            $table->string('reference');
             $table->string('commune')->nullable();
             $table->string('etat')->default('en attente'); // État par défaut
             $table->boolean('is_read')->default(false); // Statut de lecture

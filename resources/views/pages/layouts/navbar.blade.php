@@ -34,6 +34,7 @@
                                             </ul>
                                         </li>
                                         <li><a href="{{ route('mariagesans') }}" style="color:white">Mariage</a></li>
+                                        <li><a href="{{ route('recherche.demande') }}" style="color:white">Recherche</a></li>
                                         <li class="show-on-mobile"><a href="{{ route('login') }}"  style="color: white; background-color: green; width:100%; margin-top:10px; font-weight:bold; border-radius:100px; text-align:center">Se connecter</a></li>
                                         <li class="show-on-mobile"><a href="{{ route('register') }}" style="color: white; background-color: green; width:100%; margin-top:10px; font-weight:bold; border-radius:100px; text-align:center">S'inscrire</a></li>
                                         

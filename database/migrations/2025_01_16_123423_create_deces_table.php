@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('acteMariage')->nullable();
             $table->string('deParLaLoi')->nullable();
             $table->string('commune')->nullable();
+            $table->string('reference');
             $table->boolean('is_read')->default(false); // Statut de lecture
             $table->string('etat')->default('en attente'); // État par défaut
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Ajout de user_id

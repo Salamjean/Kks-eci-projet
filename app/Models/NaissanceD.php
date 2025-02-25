@@ -26,4 +26,14 @@ class NaissanceD extends Model
     {
         return $this->belongsTo(Agent::class, 'agent_id');
     }
+
+    public static function getNextId()
+    {
+        $lastNaissanced = self::orderBy('id', 'desc')->first();
+        if ($lastNaissanced) {
+            return $lastNaissanced->id + 1;
+        } else {
+            return 1;
+        }
+    }
 }

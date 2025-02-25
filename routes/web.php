@@ -46,6 +46,7 @@ Route::get('/E-ci-Naissancesans', [GeneralController::class, 'naissancesans'])->
 Route::get('/E-ci-deces', [GeneralController::class, 'decesavec'])->name('decesavec');
 Route::get('/E-ci-decessans', [GeneralController::class, 'decessans'])->name('decessans');
 Route::get('/E-ci-mariagesans', [GeneralController::class, 'mariagesans'])->name('mariagesans');
+Route::match(['get', 'post'], '/E-ci-recherche/demande', [GeneralController::class, 'recherche'])->name('recherche.demande');
 Route::get('/doctor/dashboard', function () {
     return view('doctor.dashboard');
 });

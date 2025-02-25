@@ -31,4 +31,13 @@ class Deces extends Model
     {
         return $this->belongsTo(Agent::class, 'agent_id');
     }
+    public static function getNextId()
+    {
+        $lastDeces = self::orderBy('id', 'desc')->first();
+        if ($lastDeces) {
+            return $lastDeces->id + 1;
+        } else {
+            return 1;
+        }
+    }
 }

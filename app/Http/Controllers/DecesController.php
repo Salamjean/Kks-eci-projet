@@ -6,6 +6,7 @@ use App\Http\Requests\saveDecesRequest;
 use App\Models\Alert;
 use App\Models\Deces;
 use App\Models\Decesdeja;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -208,6 +209,12 @@ class DecesController extends Controller
         // Récupérer l'utilisateur connecté
         $user = Auth::user();
 
+        // Générer la référence ici dans le contrôleur
+        $communeInitiale = strtoupper(substr($user->commune ?? 'X', 0, 1)); // 'X' si commune est null ou vide
+        $anneeCourante = Carbon::now()->year;
+        $reference = 'AD' . str_pad(Deces::getNextId(), 4, '0', STR_PAD_LEFT) . $communeInitiale . $anneeCourante; // AD pour Acte de Decès
+
+
         // Enregistrement de l'objet Deces
         $deces = new Deces();
         $deces->nomHopital = $request->nomHopital;
@@ -222,6 +229,7 @@ class DecesController extends Controller
         $deces->commune = $user->commune;
         $deces->etat = 'en attente';
         $deces->user_id = $user->id;  // Lier la demande à l'utilisateur connecté
+        $deces->reference = $reference; // Assignez la référence générée
 
            // Ajout des informations de livraison si option livraison est choisie
         if ($request->input('choix_option') === 'livraison') {
@@ -246,7 +254,6 @@ class DecesController extends Controller
 
         return redirect()->route('decesutilisateur.index')->with('success', 'Votre demande a été traitée avec succès.');
     }
-
     public function show($id)
     {
         // Récupérer les alertes
@@ -322,6 +329,12 @@ class DecesController extends Controller
         // Récupérer l'utilisateur connecté
         $user = Auth::user();
 
+        // Générer la référence ici dans le contrôleur
+        $communeInitiale = strtoupper(substr($request->communeD ?: $user->commune ?: 'X', 0, 1)); // 'X' si commune est null ou vide (prend communeD du request si existe sinon commune user sinon X)
+        $anneeCourante = Carbon::now()->year;
+        $reference = 'ADJ' . str_pad(Decesdeja::getNextId(), 4, '0', STR_PAD_LEFT) . $communeInitiale . $anneeCourante; // ADJ pour Acte de Decès Déjà Jugé
+
+
         // Enregistrement de l'objet Decesdeja
         $decesdeja = new Decesdeja();
         $decesdeja->name = $request->name;
@@ -337,6 +350,7 @@ class DecesController extends Controller
         $decesdeja->commune = $request->communeD ?: $user->commune; // Déterminer la commune
         $decesdeja->etat = 'en attente';
         $decesdeja->user_id = $user->id; // Lier la demande à l'utilisateur connecté
+        $decesdeja->reference = $reference; // Assignez la référence générée
 
            // Ajout des informations de livraison si option livraison est choisie
         if ($request->input('choix_option') === 'livraison') {
@@ -357,7 +371,6 @@ class DecesController extends Controller
 
         return redirect()->route('decesutilisateur.index')->with('success', 'Demande envoyée avec succès.');
     }
-
     public function deletedeja(Decesdeja $decesdeja)
     {
         try {

@@ -6,6 +6,7 @@ use App\Http\Requests\saveMariageRequest;
 use App\Models\Alert;
 use App\Models\Mariage;
 use App\Models\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -178,36 +179,43 @@ public function agentindex(Request $request)
     public function edit(Mariage $mariage){
         return view('mariages.edit', compact('mariage'));
     }
+   
     public function store(saveMariageRequest $request)
     {
         $imageBaseLink = '/images/mariages/';
-        
+
         // Liste des fichiers à traiter
         $filesToUpload = [
-            'pieceIdentite' => 'identite/', 
+            'pieceIdentite' => 'identite/',
             'extraitMariage' => 'extrait/', // Si ce fichier est présent
         ];
-        
+
         $uploadedPaths = []; // Contiendra les chemins des fichiers uploadés
-        
+
         foreach ($filesToUpload as $fileKey => $subDir) {
             if ($request->hasFile($fileKey)) {
                 $file = $request->file($fileKey);
                 $extension = $file->getClientOriginalExtension();
                 $newFileName = (string) Str::uuid() . '.' . $extension;
                 $file->storeAs("public/images/mariages/$subDir", $newFileName);
-        
+
                 // Ajouter le chemin public à $uploadedPaths
                 $uploadedPaths[$fileKey] = $imageBaseLink . "$subDir" . $newFileName;
             }
         }
-        
+
         // Récupérer l'utilisateur connecté
         $user = Auth::user();
-        
+
         // Récupérer la commune du formulaire ou par défaut celle de l'utilisateur
         $commune = $request->input('commune', $user->commune);
-        
+
+        // Générer la référence ici dans le contrôleur
+        $communeInitiale = strtoupper(substr($commune ?: 'X', 0, 1)); // 'X' si commune est null ou vide
+        $anneeCourante = Carbon::now()->year;
+        $reference = 'AM' . str_pad(Mariage::getNextId(), 4, '0', STR_PAD_LEFT) . $communeInitiale . $anneeCourante; // AM pour Acte de Mariage
+
+
         // Enregistrement de l'objet Mariage
         $mariage = new Mariage();
         $mariage->nomEpoux = $request->nomEpoux;
@@ -221,6 +229,8 @@ public function agentindex(Request $request)
         $mariage->CMU = $request->CMU;
         $mariage->etat = 'en attente';
         $mariage->user_id = $user->id;  // Lier la demande à l'utilisateur connecté
+        $mariage->reference = $reference; // Assignez la référence générée
+
 
         if ($request->input('choix_option') === 'livraison') {
             $mariage->montant_timbre = $request->input('montant_timbre');
@@ -235,14 +245,14 @@ public function agentindex(Request $request)
             $mariage->commune_livraison = $request->input('commune_livraison');
             $mariage->quartier = $request->input('quartier');
         }
-        
+
         $mariage->save();
-        
+
         Alert::create([
             'type' => 'mariage',
             'message' => "Une nouvelle demande d'extrait de mariage a été enregistrée : {$mariage->nomEpoux} {$mariage->prenomEpoux}.",
         ]);
-        
+
         return redirect()->route('mariage.userindex')->with('success', 'Votre demande a été traitée avec succès.');
     }
     

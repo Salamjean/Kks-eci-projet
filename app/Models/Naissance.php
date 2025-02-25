@@ -39,4 +39,16 @@ class Naissance extends Model
 {
     return $this->hasMany(CompteDemande::class);
 }
+
+public static function getNextId() // Rendez la méthode publique et statique
+{
+    // Récupérer le dernier ID et incrémenter
+    $lastNaissance = self::orderBy('id', 'desc')->first();
+    if ($lastNaissance) {
+        return $lastNaissance->id + 1;
+    } else {
+        return 1; // Si c'est le premier enregistrement
+    }
+}
+
 }

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('cdnaiss', 255)->nullable();
             $table->string('acteMariage', 255)->nullable();
             $table->string('commune')->nullable();
+            $table->string('reference');
             $table->string('nom');
             $table->string('prenom');
             $table->string('nompere');

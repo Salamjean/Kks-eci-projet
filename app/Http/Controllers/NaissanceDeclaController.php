@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\saveNaissanceDRequest;
 use App\Models\Alert;
 use App\Models\NaissanceD;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,9 +40,9 @@ class NaissanceDeclaController extends Controller
         $filesToUpload = [
            'CNI' => 'cni/',
        ];
-       
+
        $uploadedPaths = [];
-       
+
        foreach ($filesToUpload as $fileKey => $subDir) {
           if ($request->hasFile($fileKey)) {
                $file = $request->file($fileKey);
@@ -52,8 +53,14 @@ class NaissanceDeclaController extends Controller
                $uploadedPaths[$fileKey] = $imageBaseLink . "$subDir" . $newFileName;
             }
        }
-       
+
       $user = Auth::user();
+
+        // Générer la référence ici dans le contrôleur
+        $communeInitiale = strtoupper(substr($user->commune ?? 'X', 0, 1)); // 'X' si commune est null ou vide
+        $anneeCourante = Carbon::now()->year;
+        $reference = 'ANJ' . str_pad(Naissanced::getNextId(), 4, '0', STR_PAD_LEFT) . $communeInitiale . $anneeCourante; // EN pour Extrait Naissance
+
 
        $naissanced = new Naissanced();
        $naissanced->pour = $request->pour;
@@ -68,6 +75,7 @@ class NaissanceDeclaController extends Controller
        $naissanced->choix_option = $request->choix_option;
        $naissanced->user_id = $user->id;
        $naissanced->etat = 'en attente';
+       $naissanced->reference = $reference; // Assignez la référence générée
 
 
            // Ajout des informations de livraison si option livraison est choisie
