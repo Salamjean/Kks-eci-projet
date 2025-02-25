@@ -22,7 +22,11 @@
 
         <div class="card" >
             <div class="card-body">
-                <h5 class="card-title">Votre Signature Actuelle</h5>
+                <div style="display: flex; justify-content:space-between">
+                    <h5 class="card-title">Votre Signature Actuelle</h5>
+                    <h5 style="margin-top:50px ">Avez-vous une signature électronique ?<br>Si non <a href="https://createmysignature.com/fr" target="_blank">cliquez ici pour en crée</a></h5>
+                </div>
+               
 
                 @if($sousAdmin->signature)
                     <img src="{{ Storage::url($sousAdmin->signature) }}" alt="Signature de {{ $sousAdmin->name }} {{ $sousAdmin->prenom }}" style="max-width: 200px; max-height: 100px;">
