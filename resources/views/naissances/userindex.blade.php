@@ -82,6 +82,7 @@
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center">
                                         <th>Demandeur |</th>
+                                        <th>Demandeur |</th>
                                         <th>Hôpital |</th>
                                         <th>Nom et Prénoms de la mère |</th>
                                         <th>Nom et Prénoms (choisir) du né |</th>
@@ -99,6 +100,7 @@
                                     @forelse ($naissances as $naissance)
                                     <tr class="text-center">
                                         <td>{{ $naissance->user ? $naissance->user->name : 'Demandeur inconnu' }}</td>
+                                        <td>{{ $naissance->reference }}</td>
                                         <td>{{ $naissance->nomHopital }}</td>
                                         <td>{{ $naissance->nomDefunt }}</td>
                                         <td>{{ $naissance->nom . ' ' . $naissance->prenom }}</td>
@@ -164,6 +166,7 @@
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center" style="font-size: 12px">
                                         <th>Demandeur |</th>
+                                        <th>|Réference |</th>
                                         <th>|Type de copie |</th>
                                         <th>|Nom sur l'extrait |</th>
                                         <th>|Numéro de régistre |</th>
@@ -180,6 +183,7 @@
                                     @forelse ($naissancesD as $naissanceD)
                                     <tr class="text-center">
                                         <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
+                                        <td>{{ $naissanceD->reference }}</td>
                                         <td>{{ $naissanceD->type }}</td>
                                         <td>{{ $naissanceD->name.' '.$naissanceD->prenom.' '.'('.($naissanceD->pour).')'}}</td>
                                         <td>{{ $naissanceD->number }}</td>

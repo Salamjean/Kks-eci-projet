@@ -158,6 +158,7 @@
                         <thead class="bg-navbar text-white">
                             <tr style="font-size: 12px">
                                 <th class="text-center">Nom du demandeur|</th>
+                                <th class="text-center">|Réference|</th>
                                 <th class="text-center d-none-tablet d-none-small-pc">|Nom du conjoint(e)|</th>
                                 <th class="text-center d-none-tablet d-none-small-pc">|Prénoms du conjoint(e)|</th>
                                 <th class="text-center d-none-tablet d-none-small-pc">|Date de Naissance du conjoint(e)|</th>
@@ -174,6 +175,7 @@
                             @forelse ($allMariages as $mariage)
                             <tr class="text-center" style="font-size: 12px">
                                 <td data-label="Demandeur">{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
+                                <td data-label="Reference">{{ $mariage->reference}}</td>
                                 <td data-label="Nom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->nomEpoux ? : 'copie-simple' }}</td>
                                 <td data-label="Prénom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->prenomEpoux ? : 'copie-simple' }}</td>
                                 <td data-label="Date de Naissance" class="d-none-tablet d-none-small-pc">{{ $mariage->dateNaissanceEpoux ? : 'copie-simple' }}</td>

@@ -86,6 +86,7 @@
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center" style="font-size: 12px">
                                         <th>|Demandeur|</th>
+                                        <th>|Réference|</th>
                                         <th>|Hôpital|</th>
                                         <th>|Nom du défunt|</th>
                                         <th>|Date de Naissance|</th>
@@ -103,6 +104,7 @@
                                     @forelse ($deces as $deceD)
                                     <tr class="text-center" style="font-size: 12px">
                                         <td>{{ $deceD->user ? $deceD->user->name : 'Demandeur inconnu' }}</td>
+                                        <td>{{ $deceD->reference }}</td>
                                         <td>{{ $deceD->nomHopital }}</td>
                                         <td>{{ $deceD->nomDefunt }}</td>
                                         <td>{{ $deceD->dateNaiss }}</td>
@@ -182,6 +184,7 @@
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center" style="font-size: 12px">
                                         <th>Demandeur |</th>
+                                        <th>Réference|</th>
                                         <th>Nom et prénoms du défunt |</th>
                                         <th>Numéro du registre |</th>
                                         <th>Date du registre |</th>
@@ -201,6 +204,7 @@
                                     @forelse ($decesdeja as $dece)
                                     <tr class="text-center" style="font-size: 12px">
                                         <td>{{ $dece->user ? $dece->user->name : 'Demandeur inconnu' }}</td>
+                                        <td>{{ $dece->reference }}</td>
                                         <td>{{ $dece->name }}</td>
                                         <td>{{ $dece->numberR }}</td>
                                         <td>{{ \Carbon\Carbon::parse($dece->dateR)->format('d/m/Y') }}</td>
