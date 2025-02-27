@@ -50,7 +50,6 @@ return new class extends Migration
             $table->string('commune_livraison')->nullable();
             $table->string('quartier')->nullable();
 
-            $table->foreignId('motif_id')->nullable()->constrained('motifs');
             $table->timestamps();
         });
     }
