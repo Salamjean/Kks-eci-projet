@@ -17,6 +17,7 @@ class Naissance extends Model
         'commune',
         'nom',
         'prenom',
+        'archived_at',
         'nompere',
         'prenompere',
         'datepere',
@@ -49,6 +50,16 @@ public static function getNextId() // Rendez la méthode publique et statique
     } else {
         return 1; // Si c'est le premier enregistrement
     }
+}
+
+public function motifAnnulation()
+{
+    return $this->belongsTo(Motif::class, 'motif_id'); // Make sure 'motif_id' is correct
+}
+
+public function archive()
+{
+    $this->update(['archived_at' => now()]);
 }
 
 }

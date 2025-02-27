@@ -61,6 +61,7 @@ Route::prefix('utilisateur')->group(function () {
     Route::get('/demandes/livraison/{id}', [CompteDemandeController::class, 'initPaiment'])->name('demandes.livraison');
     //Route::post('/compte_demandes', [CompteDemandeController::class, 'updateLivraison'])->name('naissances.livraison');
     Route::get('/index', [NaissanceController::class, 'userindex'])->name('utilisateur.index');
+    Route::post('/update/prenom/{id}', [NaissanceController::class, 'updateprenom'])->name('modifier.prenom');;
     Route::get('/deces-index', [DecesController::class, 'userindex'])->name('decesutilisateur.index');
     Route::get('/mariage-index', [MariageController::class, 'userindex'])->name('mariage.userindex');
     Route::get('/logout', [UtilisateurController::class, 'logout'])->name('utilisateur.logout');
@@ -518,6 +519,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     Route::middleware('auth:agent')->prefix('agent')->group(function(){
         Route::get('/dashboard', [AgentController::class, 'agentdashboard'])->name('agent.dashboard');
         Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
+        Route::post('/{naissance}/annuler', [AgentController::class, 'annulerDemande'])->name('annuler.demande');
         Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');
     });
     Route::middleware('auth:agencecnps')->prefix('cnps/agences-cnps')->group(function(){

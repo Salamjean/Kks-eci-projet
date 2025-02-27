@@ -90,8 +90,31 @@
         <div class="InfoImp">
             <p>Je soussigné(e) : Dr {{ $sousadmin->name }} {{ $sousadmin->prenom }},</p>
             <p>Certifie que Mme : {{ $naissHop->NomM }} {{ $naissHop->PrM }},</p>
-            <p>a bien accouché dans notre établissement sanitaire le : {{ $naissHop->DateNaissance }}.</p>
-            <p>De 1 enfant vivant, de sexe {{ $naissHop->sexe }}</p>
+            <p>a bien accouché dans notre établissement sanitaire le : @if ($naissHop->enfants->isNotEmpty())
+                                            {{ $naissHop->enfants->first()->date_naissance }}  {{-- Get nombreEnf from the *first* child --}}
+                                        @else
+                                            Aucun enfant enregistré
+                                        @endif
+                                    </p>
+                <p>De @if ($naissHop->enfants->isNotEmpty())
+                        {{ $naissHop->enfants->first()->nombreEnf }}  {{-- Get nombreEnf from the *first* child --}}
+                    @else
+                        Aucun enfant enregistré
+                    @endif
+                    enfant(s) vivant(s), de sexe(s) respectivement  @if ($naissHop->enfants->isNotEmpty())
+                    <ul class="text-center">
+                        @foreach ($naissHop->enfants as $enfant)
+                            <li>
+                                Enfant {{ $loop->iteration }} sexe : {{ $enfant->sexe }}
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    Aucun enfant enregistré
+                @endif
+            </p>
+                <p>
+                           
         </div>
        
         <div class="signature">

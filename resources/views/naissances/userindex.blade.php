@@ -7,7 +7,9 @@
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!-- Bootstrap CSS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -45,7 +47,16 @@
         pointer-events: all; /* Permet au bouton de recevoir des événements de clic */
     }
 </style>
-
+@if($naissances->contains(function ($naissance) { return $naissance->archived_at; }))
+    @foreach($naissances as $naissance)
+        @if($naissance->archived_at)
+            <marquee behavior="" direction="left" style="font-size:30px; color:red; font-weight:bold">
+                Motif d'annulation de demande pour l'extrait de {{ $naissance->nom.' '.$naissance->prenom  }} : 
+                 {{ $naissance->autre_motif_text ?? $naissance->motif_annulation }}
+            </marquee>
+        @endif
+    @endforeach
+@endif
 <div class="row flex-grow form-background">
     <div class="col-12 grid-margin stretch-card">
         <div class="card card-rounded">
@@ -93,7 +104,10 @@
                                         <th>Etat Actuel |</th>
                                         <th>Agent |</th>
                                         <th>Supprimer |</th>
-                                        <th>Rétrait </th>
+                                        <th>Rétrait |</th>
+                                        @if($naissances->contains(function ($naissance) { return $naissance->archived_at; }))
+                                            <th>Modifier</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -148,7 +162,76 @@
                                             @endif
                                         </td>
                                         <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissance->choix_option }}</div></td>
-                                    </tr>
+                                        <td>
+                                            @if($naissance->archived_at)
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modifierModal{{ $naissance->id }}">
+                                                    Modifier
+                                                </button>
+                                            @endif
+                                        </td>
+                                        
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="modifierModal{{ $naissance->id }}" tabindex="-1" role="dialog" aria-labelledby="modifierModalLabel{{ $naissance->id }}" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="modifierModalLabel{{ $naissance->id }}">Modifier le prénom</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="modifierForm{{ $naissance->id }}">
+                                                            @csrf
+                                                            @method('POST') <!-- Ajoutez cette ligne pour simuler une méthode PUT -->
+                                                            <div class="form-group">
+                                                                <label for="newPrenom{{ $naissance->id }}">Nouveau prénom</label>
+                                                                <input type="text" class="form-control" id="newPrenom{{ $naissance->id }}" name="newPrenom" required>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                                        <button type="button" class="btn btn-primary" onclick="submitForm({{ $naissance->id }})">Enregistrer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <script>
+                                            function submitForm(naissanceId) {
+                                                var newPrenom = $('#newPrenom' + naissanceId).val();
+                                                console.log('ID:', naissanceId, 'Nouveau prénom:', newPrenom); // Debug
+
+                                                // Utilisation de la route nommée pour générer l'URL
+                                                var url = '{{ route("modifier.prenom", ["id" => ":id"]) }}';
+                                                url = url.replace(':id', naissanceId); // Remplacez :id par l'ID dynamique
+
+                                                $.ajax({
+                                                    url: url, // Utilisation de l'URL générée dynamiquement
+                                                    type: 'POST', // Utilisez PUT ici si nécessaire
+                                                    data: {
+                                                        _token: $('input[name="_token"]').val(),
+                                                        newPrenom: newPrenom
+                                                    },
+                                                    success: function(response) {
+                                                        console.log('Réponse du serveur:', response); // Debug
+                                                        if (response.success) {
+                                                            alert('Prénom modifié avec succès !');
+                                                            $('#modifierModal' + naissanceId).modal('hide');
+                                                            location.reload(); // Recharger la page pour voir les changements
+                                                        } else {
+                                                            alert('Erreur : ' + response.message);
+                                                        }
+                                                    },
+                                                    error: function(xhr, status, error) {
+                                                        console.error('Erreur AJAX:', xhr.responseText); // Debug
+                                                        alert('Erreur lors de la communication avec le serveur. Détails : ' + xhr.responseText);
+                                                    }
+                                                });
+                                            }
+                                        </script>
+                                 
                                     @empty
                                     <tr>
                                         <td colspan="11" class="text-center">Aucune demande effectuée</td>
@@ -244,6 +327,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- SweetAlert2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

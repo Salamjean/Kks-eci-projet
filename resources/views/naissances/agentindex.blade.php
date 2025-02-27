@@ -97,14 +97,17 @@
                         <th>Demandeur</th>
                         <th>Hôpital</th>
                         <th>Nom Du Nouveau Né</th>
-                        <th>Date De Naissance</th>
-                        <th>Lieu De Naissance</th>
-                        <th>Pièce Du Parent</th>
-                        <th>Certificat De Déclaration</th>
-                        <th>Pièce de la mère</th>
+                        <th>Date De Naissance Né</th>
+                        <th>Nom-mère</th>
+                        <th>Nom-père</th>
+                        <th>Date-père</th>
+                        <th>Pièce-père</th>
+                        <th>CMN</th>
+                        <th>Pièce-mère</th>
                         <th>Etat Actuel</th>
-                        <th>Action</th>
+                        <th>Modifier l'etat</th>
                         <th>Mode de rétrait</th>
+                        <th>Annuler</th>
                     </tr>
                 </thead>
                 
@@ -121,9 +124,11 @@
                            @endif
                           </td>
                         <td>{{ $naissance->nomHopital }}</td>
-                        <td>{{ $naissance->nomDefunt }}</td>
-                        <td>{{ $naissance->dateNaiss }}</td>
+                        <td>{{ $naissance->nom .' '.$naissance->prenom }}</td>
                         <td>{{ $naissance->lieuNaiss }}</td>
+                        <td>{{ $naissance->nomDefunt }}</td>
+                        <td>{{ $naissance->nompere.' '.$naissance->prenompere }}</td>
+                        <td>{{ $naissance->datepere}}</td>
                         <td>
                             @if($naissance->identiteDeclarant)
                                 @php
@@ -202,18 +207,90 @@
                             {{ $naissance->etat }}
                         </td>
                         <td>
-                            <a href="{{ route('naissances.edit', $naissance->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
+                            <a href="{{ route('naissances.edit', $naissance->id) }}" class="btn btn-sm" style="size: 0.6rem">Modifier</a>
                         </td>
                         <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissance->choix_option }}</div></td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-danger" style="size: 0.6rem" data-bs-toggle="modal" data-bs-target="#annulationModal" data-demande-id="{{ $naissance->id }}">Annuler</button>
+                        </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="11" class="text-center">Aucune demande effectuée</td>
+                        <td colspan="14" class="text-center">Aucune demande effectuée</td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
+        <div class="modal fade" id="annulationModal" tabindex="-1" aria-labelledby="annulationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="annulationModalLabel">Motif d'annulation de la demande</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="annulationForm" method="POST" action="{{ route('annuler.demande', 'demandeId') }}">
+                            @csrf
+                            @method('post') {{-- Ou vous pouvez utiliser POST si vous préférez --}}
+                            <input type="hidden" name="demande_id" id="demande_id_input" value=""> {{-- Input caché pour stocker l'ID de la demande --}}
+        
+                            <div class="mb-3">
+                                <label for="motif_annulation" class="form-label">Motif d'annulation:</label>
+                                <select class="form-select" id="motif_annulation" name="motif_annulation" required>
+                                    <option value="" selected disabled>Sélectionner un motif</option>
+                                    <option value="Une erreur du demandeur">Erreur de la part du demandeur</option>
+                                    <option value="Document Incomplet ou Incorret">Document incomplet ou incorrect</option>
+                                    <option value="Demande dupliquée">Demande dupliquée</option>
+                                    <option value="autre">Autre motif (à préciser)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3" id="autreMotifDiv" style="display: none;">
+                                <label for="autre_motif_text" class="form-label">Précisez le motif:</label>
+                                <textarea class="form-control" id="autre_motif_text" name="autre_motif_text" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                        <button type="button" class="btn btn-danger" onclick="submitAnnulationForm()">Annuler la demande</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const annulationModal = document.getElementById('annulationModal');
+                annulationModal.addEventListener('show.bs.modal', function (event) {
+                    const button = event.relatedTarget;
+                    const demandeId = button.getAttribute('data-demande-id');
+                    document.getElementById('demande_id_input').value = demandeId; // Définir l'ID de la demande dans l'input caché
+        
+                    // Mettre à jour l'action du formulaire avec l'ID de la demande correct (le placeholder sera remplacé)
+                    let formAction = "{{ route('annuler.demande', 'demandeId') }}";
+                    formAction = formAction.replace('demandeId', demandeId);
+                    document.getElementById('annulationForm').action = formAction;
+                });
+        
+                const motifSelect = document.getElementById('motif_annulation');
+                const autreMotifDiv = document.getElementById('autreMotifDiv');
+        
+                motifSelect.addEventListener('change', function() {
+                    if (this.value === 'autre') {
+                        autreMotifDiv.style.display = 'block';
+                        document.getElementById('autre_motif_text').setAttribute('required', 'required'); // Rendre le textarea 'autre motif' obligatoire
+                    } else {
+                        autreMotifDiv.style.display = 'none';
+                        document.getElementById('autre_motif_text').removeAttribute('required'); // Retirer l'attribut 'required' si ce n'est pas 'autre'
+                    }
+                });
+            });
+        
+            function submitAnnulationForm() {
+                document.getElementById('annulationForm').submit();
+            }
+        </script>
         
         <script>
             document.getElementById('searchInput').addEventListener('keyup', function() {

@@ -212,26 +212,48 @@
             
             <table id="patients-table" class="display">
                 <thead style="text-align: center">
-                    <tr>
-                        <th>N° CMN</th>
-                        <th>Nom de la mère</th>
-                        <th>Nom de l'accompagnateur</th>
-                        <th>Hôpital</th>
-                        <th>N°CMU de la mère</th>
-                        <th>Date de Naissance</th>
+                    <tr class="text-center">
+                        <th class="text-center">N° CMN</th>
+                        <th class="text-center">Nom de la mère</th>
+                        <th class="text-center">Nom de l'accompagnateur</th>
+                        <th class="text-center">Hôpital</th>
+                        <th class="text-center">N°CMU de la mère</th>
+                        <th class="text-center">Date de Naissance</th>
+                        <th class="text-center">Nombre d'enfant</th>
                         <th colspan="3" style="text-align: center">Action</th>
-                        <th>Télécharger</th>
+                        <th class="text-center">Télécharger</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($naisshops as $naisshop)
-                    <tr>
-                        <td>{{ $naisshop->codeCMN }}</td>
-                        <td>{{ $naisshop->NomM . ' ' . $naisshop->PrM }}</td>
-                        <td>{{ $naisshop->NomP . ' ' . $naisshop->PrP }}</td>
-                        <td>{{ $naisshop->NomEnf . ' ' . $naisshop->preEnf }}</td>
-                        <td>{{ $naisshop->codeCMU }}</td>
-                        <td>{{ $naisshop->DateNaissance }}</td>
+                    <tr class="text-center">
+                        <td class="text-center">{{ $naisshop->codeCMN }}</td>
+                        <td class="text-center">{{ $naisshop->NomM . ' ' . $naisshop->PrM }}</td>
+                        <td class="text-center">{{ $naisshop->NomP . ' ' . $naisshop->PrP }}</td>
+                        <td class="text-center">{{ $naisshop->NomEnf . ' ' . $naisshop->preEnf }}</td>
+                        <td class="text-center">{{ $naisshop->codeCMU }}</td>
+                        <td class="text-center">
+                            @if ($naisshop->enfants->isNotEmpty())
+                                {{ $naisshop->enfants->first()->nombreEnf }}  {{-- Get nombreEnf from the *first* child --}}
+                            @else
+                                Aucun enfant enregistré
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if ($naisshop->enfants->isNotEmpty())
+                                <ul class="text-center">
+                                    @foreach ($naisshop->enfants as $enfant)
+                                        <li>
+                                            <strong> Enfant {{ $loop->iteration }} </strong> <br>
+                                            Date Naissance: {{ \Carbon\Carbon::parse($enfant->date_naissance)->format('d/m/Y') }}, <br>
+                                            Sexe: {{ $enfant->sexe }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                Aucun enfant enregistré
+                            @endif
+                        </td>
                         <td>
                             <button class="edit"><a href="{{ route('naissHop.edit', $naisshop->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
                         </td>

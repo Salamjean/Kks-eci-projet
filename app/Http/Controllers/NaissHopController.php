@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateNaissHopRequest;
 use App\Models\Alert;
 use App\Models\DecesHop;
 use App\Models\Doctor;
+use App\Models\Enfant;
 use App\Models\NaissHop;
 use App\Models\SousAdmin;
 use Endroid\QrCode\Writer\PngWriter;
@@ -36,7 +37,9 @@ class NaissHopController extends Controller
         // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur et l'ID du sous-administrateur
         $naisshops = NaissHop::where('NomEnf', $communeAdmin)
             ->where('sous_admin_id', $sousAdminId) // Filtrer par ID de sous-administrateur
+            ->with('enfants') // Chargement eager des relations 'enfants' pour éviter le problème N+1
             ->get();
+            
     
         return view('naissHop.index', ['naisshops' => $naisshops]);
     }
@@ -196,143 +199,180 @@ class NaissHopController extends Controller
     }
 
     public function store(Request $request)
-{
-    // Validation des données
-    $validatedData = $request->validate([
-        'NomM' => 'required',
-        'PrM' => 'required',
-        'contM' => 'required|unique:naiss_hops,contM|max:11',
-        'dateM' => 'required',
-        'CNI_mere' => 'nullable|mimes:jpeg,png,jpg,pdf|max:2048',
-        'NomP' => 'required',
-        'PrP' => 'required',
-        'contP' => 'required|unique:naiss_hops,contP|max:11',
-        'NomEnf' => 'required',
-        'DateNaissance' => 'required|date',
-        'commune' => 'required',
-        'sexe' => 'required',
-        'codeCMU' => 'required',
-        'lien' => 'required',
-        'CNI_Pere' => 'required',
-    ], [
-        'contM.unique' => 'Ce numéro de téléphone est déjà utilisé.',
-        'contP.unique' => 'Ce numéro de téléphone est déjà utilisé.',
-        'CNI_mere.mimes' => 'Le fichier doit être au format jpeg, png, jpg ou pdf.',
-        'CNI_mere.max' => 'Le fichier ne doit pas dépasser 2Mo.',
-        'CNI_mere.required' => 'Le champ CNI de la mère est obligatoire.',
-        'NomP.required' => 'Le champ nom du père est obligatoire.',
-        'PrP.required' => 'Le champ prénom du père est obligatoire.',
-        'contP.required' => 'Le champ numéro de téléphone du père est obligatoire.',
-        'NomEnf.required' => 'Le champ nom de l\'enfant est obligatoire.',
-        'DateNaissance.required' => 'Le champ date de naissance est obligatoire.',
-        'commune.required' => 'Le champ commune est obligatoire.',
-        'sexe.required' => 'Le champ sexe est obligatoire.',
-        'codeCMU.required' => 'Le champ code CMU est obligatoire.',
-        'lien.required' => 'Le champ lien est obligatoire.',
-        'CNI_Pere.required' => 'Le champ CNI du père est obligatoire.',
-    ]);
+    {
+        // *** Construction des règles de validation (statiques et dynamiques) ***
+        $rules = [
+            'NomM' => 'required',
+            'PrM' => 'required',
+            'contM' => 'required|unique:naiss_hops,contM|max:11',
+            'dateM' => 'required',
+            'CNI_mere' => 'nullable|mimes:jpeg,png,jpg,pdf|max:2048',
+            'NomP' => 'required',
+            'PrP' => 'required',
+            'contP' => 'required|unique:naiss_hops,contP|max:11',
+            'nombreEnf' => 'required|integer|min:1', // Validation pour le nombre d'enfants
+            'NomEnf' => 'required', // Nom de l'hôpital, toujours nécessaire
+            'commune' => 'required', // Commune, toujours nécessaire
+            'codeCMU' => 'required',
+            'lien' => 'required',
+            'CNI_Pere' => 'required',
+        ];
 
-    // Gérer les fichiers
-    $imageBaseLink = '/images/naissances/'; // Base pour les images
-    $uploadedPaths = []; // Pour stocker les chemins des fichiers
+        // Règles de validation dynamiques pour les informations des enfants
+        $nombreEnfants = $request->input('nombreEnf'); // Récupérer nombre_enfants de la requête
+        if ($nombreEnfants) { // Vérifier si nombre_enfants est défini
+            for ($i = 1; $i <= $nombreEnfants; $i++) {
+                $rules['DateNaissance_enfant_' . $i] = 'required|date';
+                $rules['sexe_enfant_' . $i] = 'required|in:masculin,feminin';
+            }
+        }
 
-    // Traitement du fichier CNI de la mère
-    if ($request->hasFile('CNI_mere')) {
-        $file = $request->file('CNI_mere');
-        $extension = $file->getClientOriginalExtension();
-        $newFileName = (string) Str::uuid() . '.' . $extension;
-        $file->storeAs('public/images/naissances/cni/', $newFileName);
-        $uploadedPaths['CNI_mere'] = $imageBaseLink . "cni/" . $newFileName;
+        // Messages d'erreur personnalisés (facultatif, mais bonne pratique)
+        $messages = [
+            'NomM.required' => 'Le champ nom de la mère est obligatoire.',
+            'PrM.required' => 'Le champ prénom de la mère est obligatoire.',
+            'contM.required' => 'Le champ numéro de téléphone de la mère est obligatoire.',
+            'contM.unique' => 'Ce numéro de téléphone est déjà utilisé.',
+            'contP.unique' => 'Ce numéro de téléphone est déjà utilisé.',
+            'CNI_mere.mimes' => 'Le fichier doit être au format jpeg, png, jpg ou pdf.',
+            'CNI_mere.max' => 'Le fichier ne doit pas dépasser 2Mo.',
+            'CNI_mere.required' => 'Le champ CNI de la mère est obligatoire.',
+            'NomP.required' => 'Le champ nom du père est obligatoire.',
+            'PrP.required' => 'Le champ prénom du père est obligatoire.',
+            'contP.required' => 'Le champ numéro de téléphone du père est obligatoire.',
+            'NomEnf.required' => 'Le champ nom de l\'enfant est obligatoire.',
+            'commune.required' => 'Le champ commune est obligatoire.',
+            'codeCMU.required' => 'Le champ code CMU est obligatoire.',
+            'lien.required' => 'Le champ lien est obligatoire.',
+            'CNI_Pere.required' => 'Le champ CNI du père est obligatoire.',
+            'nombreEnf.required' => 'Le champ Nombre d\'enfants est obligatoire.',
+            'nombreEnf.integer' => 'Le champ Nombre d\'enfants doit être un nombre entier.',
+            'nombreEnf.min' => 'Le champ Nombre d\'enfants doit être au minimum 1.',
+        ];
+
+        // Ajouter des messages d'erreur dynamiques pour les enfants
+        if ($nombreEnfants) {
+            for ($i = 1; $i <= $nombreEnfants; $i++) {
+                $messages['DateNaissance_enfant_' . $i . '.required'] = 'Le champ Date de naissance de l\'enfant ' . $i . ' est obligatoire.';
+                $messages['DateNaissance_enfant_' . $i . '.date'] = 'Le champ Date de naissance de l\'enfant ' . $i . ' doit être une date valide.';
+                $messages['sexe_enfant_' . $i . '.required'] = 'Le champ Sexe de l\'enfant ' . $i . ' est obligatoire.';
+                $messages['sexe_enfant_' . $i . '.in'] = 'Le champ Sexe de l\'enfant ' . $i . ' doit être masculin ou feminin.';
+            }
+        }
+
+
+        // *** Validation de toutes les données en utilisant les règles définies ***
+        $validatedData = $request->validate($rules, $messages);
+
+        // Gérer les fichiers
+        $imageBaseLink = '/images/naissances/'; // Base pour les images
+        $uploadedPaths = []; // Pour stocker les chemins des fichiers
+
+        // Traitement du fichier CNI de la mère
+        if ($request->hasFile('CNI_mere')) {
+            $file = $request->file('CNI_mere');
+            $extension = $file->getClientOriginalExtension();
+            $newFileName = (string) Str::uuid() . '.' . $extension;
+            $file->storeAs('public/images/naissances/cni/', $newFileName);
+            $uploadedPaths['CNI_mere'] = $imageBaseLink . "cni/" . $newFileName;
+        }
+
+        $sousadmin = Auth::guard('sous_admin')->user();
+        // Création dans la base de données NaissHop
+        $naissHop = NaissHop::create([
+            'NomM' => $validatedData['NomM'],
+            'PrM' => $validatedData['PrM'],
+            'contM' => $validatedData['contM'],
+            'dateM' => $validatedData['dateM'],
+            'CNI_mere' => $uploadedPaths['CNI_mere'] ?? null,
+            'NomP' => $validatedData['NomP'],
+            'PrP' => $validatedData['PrP'],
+            'contP' => $validatedData['contP'],
+            'NomEnf' => $validatedData['NomEnf'], // Nom de l'hôpital
+            'commune' => $validatedData['commune'],
+            'codeCMU' => $validatedData['codeCMU'],
+            'lien' => $validatedData['lien'],
+            'CNI_Pere' => $validatedData['CNI_Pere'],
+            'sous_admin_id' => $sousadmin->id,
+        ]);
+
+        // Génération des codes
+        $anneeNaissance = date('Y', strtotime($validatedData['DateNaissance_enfant_1'])); // Utiliser la date du premier enfant pour l'année
+        $id = $naissHop->id;
+        $codeDM = "DM{$anneeNaissance}{$id}225";
+        $codeCMN = "CMN{$anneeNaissance}{$id}225";
+
+        $naissHop->update([
+            'codeDM' => $codeDM,
+            'codeCMN' => $codeCMN,
+        ]);
+
+        // Création des enregistrements Enfant
+        for ($i = 1; $i <= $nombreEnfants; $i++) {
+            Enfant::create([
+                'naiss_hop_id' => $naissHop->id,
+                'nombreEnf' => $validatedData['nombreEnf'], // Enregistrer le nombre d'enfants dans naiss_hops
+                'date_naissance' => $validatedData['DateNaissance_enfant_' . $i],
+                'sexe' => $validatedData['sexe_enfant_' . $i],
+            ]);
+        }
+
+
+        $sousadmin = Auth::guard('sous_admin')->user();
+        // Vérifiez si l'utilisateur est authentifié
+        if ($sousadmin) {
+            $nomSousadmin = $sousadmin->name . ' ' . $sousadmin->prenom; // Assurez-vous que 'name' est le bon attribut
+        } else {
+            $nomSousadmin = 'Inconnu'; // Valeur par défaut si l'utilisateur n'est pas authentifié
+        }
+        $dateCreation = $naissHop->created_at->format('d/m/Y H:i:s');
+        // Génération du QR code (adapter les informations selon le besoin, ici on prend les infos du premier enfant)
+        $qrCodeData =
+            "N° CMN: {$codeCMN}\n" .
+            "Les Informations concernants la mère \n" .
+            "Nom et prénom de la mère: {$validatedData['NomM']} {$validatedData['PrM']}\n" .
+            "Contact de la mère: {$validatedData['contM']}\n" .
+            "Les Informations concernants l'enfant (Premier enfant) \n" . // Adapter si besoin pour plusieurs enfants
+            "Date de naissance : {$validatedData['DateNaissance_enfant_1']}\n" .
+            "Sexe : {$validatedData['sexe_enfant_1']}\n" .
+            "Hôpital de naissance : {$validatedData['NomEnf']}\n" .
+            "Certificat délivré par le Dr. : {$nomSousadmin}\n" .
+            "Date et Heure de déclaration : {$dateCreation}";
+
+
+        $qrCode = QrCode::create($qrCodeData)
+            ->setSize(300)
+            ->setMargin(10);
+
+        // Générer le QR code
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+
+        // Sauvegarder l'image du QR code
+        $qrCodeFileName = "qrcode_{$naissHop->id}.png"; // Nom du fichier
+        $qrCodePath = "naiss_hops/{$qrCodeFileName}"; // Chemin relatif dans le dossier 'naiss_hops'
+
+        // Utiliser le système de stockage de Laravel pour enregistrer le fichier
+        Storage::disk('public')->put($qrCodePath, $result->getString());
+
+        // Récupérer les informations du sous-admin
+        $sousadmin = Auth::guard('sous_admin')->user();
+        // Générer le PDF
+        $pdf = PDF::loadView('naissHop.pdf', compact('naissHop', 'codeDM', 'codeCMN', 'sousadmin', 'qrCodePath','nombreEnfants')); // Adapter la vue PDF pour gérer les enfants
+
+        // Sauvegarder le PDF dans le dossier public
+        $pdfFileName = "declaration_{$naissHop->id}.pdf";
+        $pdf->save(storage_path("app/public/naiss_hops/{$pdfFileName}"));
+
+        Alert::create([
+            'type' => 'naissHop',
+            'message' => "Une nouvelle déclaration de naissance a été enregistrée par : {$naissHop->nomHop}.",
+        ]);
+
+        // Retourner le PDF pour téléchargement direct
+        return redirect()->route('naissHop.index')->with('success', 'Déclaration effectuée avec succès');
     }
 
-    $sousadmin = Auth::guard('sous_admin')->user();
-    // Création dans la base de données
-    $naissHop = NaissHop::create([
-        'NomM' => $validatedData['NomM'],
-        'PrM' => $validatedData['PrM'],
-        'contM' => $validatedData['contM'],
-        'dateM' => $validatedData['dateM'],
-        'CNI_mere' => $uploadedPaths['CNI_mere'] ?? null,
-        'NomP' => $validatedData['NomP'],
-        'PrP' => $validatedData['PrP'],
-        'contP' => $validatedData['contP'],
-        'NomEnf' => $validatedData['NomEnf'],
-        'commune' => $validatedData['commune'],
-        'codeCMU' => $validatedData['codeCMU'],
-        'lien' => $validatedData['lien'],
-        'CNI_Pere' => $validatedData['CNI_Pere'],
-        'DateNaissance' => $validatedData['DateNaissance'],
-        'sexe' => $validatedData['sexe'],
-        'sous_admin_id' => $sousadmin->id, 
-    ]);
-
-    // Génération des codes
-    $anneeNaissance = date('Y', strtotime($naissHop->DateNaissance));
-    $id = $naissHop->id;
-    $codeDM = "DM{$anneeNaissance}{$id}225";
-    $codeCMN = "CMN{$anneeNaissance}{$id}225";
-
-    $naissHop->update([
-        'codeDM' => $codeDM,
-        'codeCMN' => $codeCMN,
-    ]);
-
-
-    $sousadmin = Auth::guard('sous_admin')->user();
-// Vérifiez si l'utilisateur est authentifié
-    if ($sousadmin) {
-        $nomSousadmin = $sousadmin->name .' '.$sousadmin->prenom; // Assurez-vous que 'name' est le bon attribut
-    } else {
-        $nomSousadmin = 'Inconnu'; // Valeur par défaut si l'utilisateur n'est pas authentifié
-    }
-    $dateCreation = $naissHop->created_at->format('d/m/Y H:i:s');
-        // Génération du QR code
-    $qrCodeData = 
-        "N° CMN: {$codeCMN}\n".
-        "Les Informations concernants la mère \n" .
-        "Nom et prénom de la mère: {$validatedData['NomM']} {$validatedData['PrM']}\n" .
-        "Contact de la mère: {$validatedData['contM']}\n" .
-        "Les Informations concernants l'enfant \n" .
-        "Date de naissance : {$validatedData['DateNaissance']}\n".
-        "Sexe : {$validatedData['sexe']}\n".
-        "Hôpital de naissance : {$validatedData['NomEnf']}\n".
-        "Certificat délivré par le Dr. : {$nomSousadmin}\n".
-        "Date et Heure de déclaration : {$dateCreation}";
-        
-
-    $qrCode = QrCode::create($qrCodeData)
-        ->setSize(300)
-        ->setMargin(10);
-        
-    // Générer le QR code
-    $writer = new PngWriter();
-    $result = $writer->write($qrCode);
-    
-    // Sauvegarder l'image du QR code
-    $qrCodeFileName = "qrcode_{$naissHop->id}.png"; // Nom du fichier
-    $qrCodePath = "naiss_hops/{$qrCodeFileName}"; // Chemin relatif dans le dossier 'naiss_hops'
-    
-    // Utiliser le système de stockage de Laravel pour enregistrer le fichier
-    Storage::disk('public')->put($qrCodePath, $result->getString());
-    
-    // Récupérer les informations du sous-admin
-    $sousadmin = Auth::guard('sous_admin')->user();
-
-    // Générer le PDF
-    $pdf = PDF::loadView('naissHop.pdf', compact('naissHop', 'codeDM', 'codeCMN', 'sousadmin', 'qrCodePath'));
-
-    // Sauvegarder le PDF dans le dossier public
-    $pdfFileName = "declaration_{$naissHop->id}.pdf";
-    $pdf->save(storage_path("app/public/naiss_hops/{$pdfFileName}"));
-
-    Alert::create([
-        'type' => 'naissHop',
-        'message' => "Une nouvelle déclaration de naissance a été enregistrée par : {$naissHop->nomHop}.",
-    ]);
-
-    // Retourner le PDF pour téléchargement direct
-    return redirect()->route('naissHop.index')->with('success', 'Déclaration effectuée avec succès');
-}
 
     public function verifierCodeDM(Request $request)
     {
@@ -358,7 +398,7 @@ class NaissHopController extends Controller
 public function download($id)
 {
     // Récupérer l'objet NaissHop
-    $naissHop = NaissHop::findOrFail($id);
+    $naissHop = NaissHop::with('enfants')->findOrFail($id);
 
     // Récupérer les informations du sous-admin connecté
     $sousadmin = Auth::guard('sous_admin')->user(); // Supposons que le sous-admin est connecté via `auth`

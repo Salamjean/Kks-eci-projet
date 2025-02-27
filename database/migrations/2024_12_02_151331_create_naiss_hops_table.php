@@ -29,8 +29,6 @@ return new class extends Migration
             // les informations de l'enfant
             $table->string('NomEnf');
             $table->string('commune');
-            $table->string('DateNaissance');
-            $table->string('sexe');
             $table->string('codeDM')->default('rien')->unique();
             $table->string('codeCMN')->default('rien')->unique();
             $table->foreignId('sous_admin_id')->constrained()->onDelete('cascade'); // Ajout du docteur_id

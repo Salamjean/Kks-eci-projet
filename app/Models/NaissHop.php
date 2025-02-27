@@ -22,10 +22,8 @@ class NaissHop extends Model
         'commune',
         'codeCMU',
         'lien',
-        'DateNaissance',
         'codeDM',
         'codeCMN',
-        'sexe',
         'sous_admin_id',  // Ajout de sous_admin_id
     ];
 
@@ -34,4 +32,8 @@ class NaissHop extends Model
      {
          return $this->belongsTo(SousAdmin::class);
      }
+     public function enfants()
+{
+    return $this->hasMany(Enfant::class);
+}
 }

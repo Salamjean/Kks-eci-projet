@@ -389,4 +389,32 @@ public function agentvue(Request $request) {
         'selectedMonthHops', 'selectedYearHops', 'recentNaisshops', 'recentDeceshops'
     ));
 }
+public function annulerDemande(Request $request, $naissance) 
+{
+    $admin = Auth::guard('agent')->user();
+
+   
+    $id = $naissance; 
+    $motifAnnulation = $request->input('motif_annulation');
+    $autreMotifText = $request->input('autre_motif_text'); 
+
+    $demande = Naissance::find($id);
+
+    if($demande){
+      
+        $demande->motif_annulation = $motifAnnulation; 
+        if ($motifAnnulation === 'autre') {
+            $demande->autre_motif_text = $autreMotifText; 
+        } else {
+            $demande->autre_motif_text = null; 
+        }
+        $demande->etat = "terminé";
+        $demande->save(); 
+
+        $demande->archive();
+        return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissance annulée avec succès.');
+    } else {
+        return redirect()->route('naissance.agentindex')->with('error', 'La demande de naissance n\'existe pas.');
+    }
+}
 }

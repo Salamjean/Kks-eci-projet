@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 use function Pest\Laravel\post;
@@ -106,6 +107,7 @@ public function agentindex()
     $naissances = Naissance::where('commune', $admin->communeM)
         ->where('agent_id', $admin->id) // Filtrage par agent
         ->with('user') // Récupérer l'utilisateur
+        ->whereNull('archived_at')
         ->paginate(10); // Pagination
 
     $naissancesD = NaissanceD::where('commune', $admin->communeM)
@@ -363,5 +365,22 @@ public function showEtat($id)
 }
 
     
+public function updateprenom(Request $request, $id)
+{
+    \Log::info('Méthode updateprenom appelée avec ID:', ['id' => $id]);
+    $naissance = Naissance::find($id);
 
+    if ($naissance) {
+        $naissance->prenom = $request->newPrenom;
+        $naissance->archived_at = null; // Désarchiver
+        $naissance->motif_annulation = null; // Désarchiver
+        $naissance->autre_motif_text = null; // Désarchiver
+        $naissance->etat = 'en attente'; // Changer l'état
+        $naissance->save();
+
+        return response()->json(['success' => true]);
+    }
+
+    return response()->json(['success' => false]);
+}
 }

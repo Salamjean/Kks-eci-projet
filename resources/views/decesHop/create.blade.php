@@ -152,34 +152,23 @@
 
         <div class="input-group">
           <label for="dateDeces">Date du décès</label>
-          <input type="date" id="dateDeces" name="DateDeces" id="dateDeces" style="background-color:#e8e8e8" readonly required />
-          <script>
-            // Récupérer la date du jour
-            const today = new Date();
-        
-            // Formater la date au format YYYY-MM-DD (requis pour les champs de type date)
-            const year = today.getFullYear();
-            const month = String(today.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
-            const day = String(today.getDate()).padStart(2, '0');
-            const formattedDate = `${year}-${month}-${day}`;
-        
-            // Définir la valeur du champ de date
-            document.getElementById('dateDeces').value = formattedDate;
-        </script>
+          <input type="date" id="dateDeces" name="DateDeces" id="dateDeces"  required />
+
         </div>
       </div>
-
-      <div class="input-group">
-        <label for="remarques">Décrivez les circonstances du décès</label>
-        <textarea id="remarques" name="Remarques" required maxlength="200"></textarea>
-      </div>
-      <div class="input-group">
-        <input type="text" class="text-center" style="background-color:#e8e8e8" name="nomHop" value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
-      </div>
-      <div class="input-group">
-        <input type="text" class="text-center" style="background-color:#e8e8e8" name="commune" value="{{ Auth::guard('sous_admin')->user()->commune }}" readonly/>
-      </div>
-     
+      
+        <div class="input-group">
+          <label for="remarques">Décrivez les circonstances du décès</label>
+          <textarea id="remarques" name="Remarques" required maxlength="200"></textarea>
+        </div>
+        <div class="div">
+          <div class="input-group">
+            <input type="text" class="text-center" style="background-color:#e8e8e8" name="nomHop" value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
+          </div>
+          <div class="input-group">
+            <input type="text" class="text-center" style="background-color:#e8e8e8" name="commune" value="{{ Auth::guard('sous_admin')->user()->commune }}" readonly/>
+          </div>
+        </div>
 
       <button type="submit" class="action-button" style="margin-left:42%">Valider</button>
     </fieldset>

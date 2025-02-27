@@ -21,7 +21,10 @@ return new class extends Migration
             $table->string('cdnaiss', 255)->nullable();
             $table->string('acteMariage', 255)->nullable();
             $table->string('commune')->nullable();
+            $table->string('motif_annulation')->nullable();
+            $table->string('autre_motif_text')->nullable();
             $table->string('reference');
+            $table->timestamp('archived_at')->nullable();
             $table->string('nom');
             $table->string('prenom');
             $table->string('nompere');
@@ -31,6 +34,7 @@ return new class extends Migration
             $table->string('etat')->default('en attente'); // État par défaut
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Ajout de user_id
             $table->foreignId('agent_id')->nullable()->constrained('agents')->onDelete('set null'); // Ajout de agent_id
+            
 
             //informations de livraison 
             $table->string('montant_timbre')->nullable();
@@ -45,6 +49,8 @@ return new class extends Migration
             $table->string('ville')->nullable();
             $table->string('commune_livraison')->nullable();
             $table->string('quartier')->nullable();
+
+            $table->foreignId('motif_id')->nullable()->constrained('motifs');
             $table->timestamps();
         });
     }
