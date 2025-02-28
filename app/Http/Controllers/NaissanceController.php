@@ -69,8 +69,8 @@ class NaissanceController extends Controller
         ->get();
 
     // Filtrer les naissances selon l'ID de l'utilisateur connecté
-    $naissances = Naissance::where('user_id', $user->id)->paginate(10);
-    $naissancesD = NaissanceD::where('user_id', $user->id)->paginate(10);
+    $naissances = Naissance::where('user_id', $user->id)->paginate(20);
+    $naissancesD = NaissanceD::where('user_id', $user->id)->paginate(20);
 
     // Retourner la vue avec les données
     return view('naissances.userindex', compact('naissances', 'alerts', 'naissancesD'));

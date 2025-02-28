@@ -98,6 +98,7 @@ class DecesHopController extends Controller
             $deceshop->PrM = $request->PrM;
             $deceshop->DateNaissance = $request->DateNaissance;
             $deceshop->DateDeces = $request->DateDeces;
+            $deceshop->choix = $request->choix;
             $deceshop->Remarques = $request->Remarques;
             $deceshop->nomHop = $request->nomHop;
             $deceshop->commune = $request->commune;
@@ -120,6 +121,7 @@ class DecesHopController extends Controller
         'DateDeces' => 'required|date',
         'nomHop' => 'required',
         'commune' => 'required',
+        'choix' => 'required',
         'Remarques' => 'nullable|string',
     ]);
     $sousadmin = Auth::guard('sous_admin')->user();
@@ -131,6 +133,7 @@ class DecesHopController extends Controller
         'DateDeces' => $validatedData['DateDeces'],
         'nomHop' => $validatedData['nomHop'],
         'commune' => $validatedData['commune'],
+        'choix' => $validatedData['choix'],
         'Remarques' => $validatedData['Remarques'] ?? null,
         'sous_admin_id' => $sousadmin->id,
     ]);

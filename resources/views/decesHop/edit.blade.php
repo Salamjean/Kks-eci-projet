@@ -22,9 +22,9 @@
     /* Form styles */
     #msform {
       width: 100%;
-      max-width: 600px;
+      max-width: 1500px;
       background: #fff;
-      padding: 30px;
+      padding: 30px 30px;
       border-radius: 15px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
@@ -48,8 +48,7 @@
       color: #666;
     }
 
-    .input-group input,
-    .input-group textarea {
+    .input-group input{
       width: 100%;
       padding: 15px;
       border: 1px solid #ccc;
@@ -60,6 +59,16 @@
       outline: none;
     }
 
+    .input-group textarea {
+      width: 100%;
+      padding: 40px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+      resize: none;
+      outline: none;
+    }
     .input-group input:focus,
     .input-group textarea:focus {
       border-color: #009efb;
@@ -87,6 +96,7 @@
       background: #009efb;
       color: #fff;
       font-size: 16px;
+      margin-left: 350px;
       font-weight: 600;
       text-align: center;
       border: none;
@@ -155,20 +165,32 @@
           <input type="date" id="dateDeces" name="DateDeces" value="{{ $deceshop->DateDeces }}"  />
         </div>
       </div>
+      <div class="div">
+        <div class="input-group">
+          <label for="choixa" class="text-center mb-3" style="font-size: 22px; font-weight:bold">Décès subvenu à l'hôpital</label>
+          <input type="radio" id="choixa" name="choix" value="à" checked style="transform: scale(2);"/>
+        </div>
+        <div class="input-group">
+          <label for="choixhors" class="text-center mb-3"  style="font-size: 22px; font-weight:bold">Décès subvenu hors l'hôpital</label>
+          <input type="radio" id="choixhors" name="choix" id="dateDeces" value="hors" style="transform: scale(2);"  />
+        </div>
+      </div>
 
       <div class="input-group">
         <label for="remarques">Décrivez les circonstances du décès</label>
         <textarea id="remarques" name="Remarques">{{ $deceshop->Remarques }}</textarea>
       </div>
-      <div class="input-group">
-        <input type="text" class="text-center" style="background-color:#e8e8e8" name="nomHop" value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
-      </div>
-      <div class="input-group">
-        <input type="text" class="text-center" style="background-color:#e8e8e8" name="commune" value="{{ Auth::guard('sous_admin')->user()->commune }}" readonly/>
-      </div>
+      <div class="div">
+          <div class="input-group">
+            <input type="text" class="text-center" style="background-color:#e8e8e8" name="nomHop" value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
+          </div>
+          <div class="input-group">
+            <input type="text" class="text-center" style="background-color:#e8e8e8" name="commune" value="{{ Auth::guard('sous_admin')->user()->commune }}" readonly/>
+          </div>
+        </div>
      
 
-      <button type="submit" style="margin-left:38%" class="action-button">Mettre à jour</button>
+      <button type="submit" style="align-items:center; width:50%" class="action-button" >Mettre à jour</button>
     </fieldset>
   </form>
 </div>

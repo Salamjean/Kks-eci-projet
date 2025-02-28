@@ -49,7 +49,21 @@
                             <td>{{ $naisshop->commune }}</td>
                             <td>{{ $naisshop->NomM .' '.$naisshop->PrM }}</td>
                             <td>{{ $naisshop->NomP. ' '.$naisshop->PrP }}</td>
-                            <td>{{ $naisshop->DateNaissance }}</td>
+                            <td class="text-center">
+                                @if ($naisshop->enfants->isNotEmpty())
+                                    <ul class="text-center">
+                                        @foreach ($naisshop->enfants as $enfant)
+                                           
+                                                <strong> Enfant {{ $loop->iteration }} </strong> <br>
+                                                Date Naissance: {{ \Carbon\Carbon::parse($enfant->date_naissance)->format('d/m/Y') }}, <br>
+                                                Sexe: {{ $enfant->sexe }} <br>
+                                            
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    Aucun enfant enregistré
+                                @endif
+                            </td>
                             <td>{{ $naisshop->created_at }}</td>
                              <td>
                                 @if($naisshop->CNI_mere)

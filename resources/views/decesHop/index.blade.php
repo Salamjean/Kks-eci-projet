@@ -202,7 +202,7 @@
         </div>
 
         <div class="container col-11">
-            <h1>Liste Des Décès Déclarés</h1>
+            <h1>Liste des déclarations de décès</h1>
             <div class="header">
                 <div class="search-bar">
                     <input type="text" id="search" placeholder="Rechercher une déclaration...">
@@ -212,26 +212,28 @@
             
             <table id="patients-table" class="display">
                 <thead style="text-align: center">
-                    <tr>
-                        <th>N° CMD</th>
-                        <th>Nom du défunt</th>
-                        <th>Prénoms du défunt</th>
-                        <th>Date de Naissance</th>
-                        <th>Date de Décès</th>
-                        <th>Causes du Décès</th>
-                        <th>Commune de Décès</th>
+                    <tr class="text-center">
+                        <th class="text-center">N° CMD</th>
+                        <th class="text-center">Nom du défunt</th>
+                        <th class="text-center">Prénoms du défunt</th>
+                        <th class="text-center">Date de naissance</th>
+                        <th class="text-center">Date de décès</th>
+                        <th class="text-center">Lieu de décès</th>
+                        <th class="text-center">Causes du décès</th>
+                        <th class="text-center">Commune de décès</th>
                         <th colspan="3" style="text-align: center">Action</th>
                         <th colspan="2" style="text-align: center">Télécharger</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($deceshops as $deceshop)
-                    <tr>
+                    <tr class="text-center">
                         <td>{{ $deceshop->codeCMD }}</td>
                         <td>{{ $deceshop->NomM }}</td>
                         <td>{{ $deceshop->PrM }}</td>
                         <td>{{ $deceshop->DateNaissance }}</td>
                         <td>{{ $deceshop->DateDeces }}</td>
+                        <td>{{ $deceshop->choix }} l'hôpital</td>
                         <td>{{ $deceshop->Remarques }}</td>
                         <td>{{ $deceshop->commune }}</td>
                         <td>

@@ -200,24 +200,26 @@
             @endif
         </div>
 
-        <div class="container">
-            <h1>Liste Des Docteurs De L'Hôpital</h1>
+        <div class="container col-11">
+            <h1>Liste des personnels de l'hôpital</h1>
             <div class="header">
                 <div class="search-bar">
-                    <input type="text" id="search" placeholder="Rechercher un docteur...">
+                    <input type="text" id="search" placeholder="Rechercher un personnel...">
                 </div>
-                <a href="{{ route('doctor.create') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter un docteur</a>
+                <a href="{{ route('doctor.create') }}" class="add-patient"><i class="fas fa-plus"></i> Ajouter un personnel</a>
             </div>
         
             <table id="patients-table" class="display">
                 <thead class="text-center">
                     <tr>
-                        <th>Nom</th>
-                        <th>Prénoms</th>
-                        <th>Email</th>
-                        <th>Description</th>
-                        <th>Contact</th>
-                        <th>Action</th>
+                        <th class="text-center">Nom</th>
+                        <th class="text-center">Prénoms</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Description</th>
+                        <th class="text-center">Contact</th>
+                        <th class="text-center">Fonction</th>
+                        <th class="text-center">Sexe</th>
+                        <th class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -228,6 +230,8 @@
                         <td>{{ $sousadmin->email }}</td>
                         <td>{{ $sousadmin->description }}</td>
                         <td>{{ $sousadmin->contact }}</td>
+                        <td>{{ $sousadmin->fonction }}</td>
+                        <td>{{ $sousadmin->sexe }}</td>
                         <td>
                             <button class="edit"><a href="{{ route('doctor.edit', $sousadmin->id) }}" class="edit"><i class="fas fa-edit"></i></a></button>
                             <button class="delete"><a href="{{ route('doctor.delete', $sousadmin->id) }}" class="delete"><i class="fas fa-trash"></i></a></button>
@@ -235,7 +239,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center">Aucun docteur trouvé</td>
+                        <td colspan="6" class="text-center">Aucun personnel trouvé</td>
                     </tr>
                     @endforelse
                 </tbody>

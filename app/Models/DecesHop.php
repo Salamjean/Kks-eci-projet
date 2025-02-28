@@ -15,6 +15,7 @@ class DecesHop extends Model
         'DateDeces',
         'Remarques',
         'nomHop',
+        'choix',
         'commune',
         'codeDM',
         'codeCMD',

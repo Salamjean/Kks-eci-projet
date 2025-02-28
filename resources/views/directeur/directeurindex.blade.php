@@ -201,16 +201,18 @@
         </div>
 
         <div class="container col-11">
-            <h1>Liste des docteurs de l'hôpital</h1>
+            <h1>Liste des personnels de l'hôpital</h1>
         
             <table id="patients-table" class="display">
                 <thead class="text-center">
-                    <tr>
-                        <th>Nom</th>
-                        <th>Prénoms</th>
-                        <th>Email</th>
-                        <th>Description</th>
-                        <th>Contact</th>
+                    <tr class="text-center">
+                        <th class="text-center">Nom</th>
+                        <th class="text-center">Prénoms</th>
+                        <th class="text-center">Email</th>
+                        <th class="text-center">Description</th>
+                        <th class="text-center">Contact</th>
+                        <th class="text-center">Fonction</th>
+                        <th class="text-center">Sexe</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -221,6 +223,8 @@
                         <td>{{ $sousadmin->email }}</td>
                         <td>{{ $sousadmin->description }}</td>
                         <td>{{ $sousadmin->contact }}</td>
+                        <td>{{ $sousadmin->fonction }}</td>
+                        <td>{{ $sousadmin->sexe }}</td>
                     </tr>
                     @empty
                     <tr>

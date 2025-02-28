@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('password');
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('archived_at')->nullable();
-            $table->decimal('solde', 20, 2)->default(0);
+            $table->decimal('solde')->default(0);
             $table->timestamps();
         });
     }

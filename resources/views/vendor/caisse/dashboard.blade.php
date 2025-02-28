@@ -57,63 +57,6 @@
       </div>
     </div>
 
-    <!-- Trois tables séparées pour afficher les demandes récentes -->
-    <div class="row mb-4">
-        <div class="col-xl-4 col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="text-xl font-weight-bold text-uppercase mb-4 text-center">Demandes Récentes - Naissance</h5>
-                    <ul class="text-center">
-                        @foreach($demandesNaissance as $demande)
-                            <li>La demande d'extrait de naissance pour {{ $demande->name .' '. $demande->prenom ?? $demande->nom .' '. $demande->prenom}}
-                              est <button style="background-color: rgba(255, 206, 86, 0.2)" class="badge {{ $demande->etat == 'en attente' ? 'badge-opacity-warning' : 
-                                ($demande->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">
-                                  {{ $demande->etat }}
-                              </button>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="text-xl font-weight-bold text-uppercase mb-4 text-center">Demandes Récentes - Décès</h5>
-                    <ul class="text-center">
-                        @foreach($demandesDeces as $demande)
-                            <li>La demande d'extrait du défunt {{ $demande->name ?? $demande->nomDefunt }} est 
-                              <button style="background-color: rgba(255, 206, 86, 0.2)" class="badge {{ $demande->etat == 'en attente' ? 'badge-opacity-warning' : 
-                                  ($demande->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">
-                                    {{ $demande->etat }}
-                                </button>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-4 col-md-4 mb-3">
-            <div class="card h-100 shadow-sm">
-                <div class="card-body">
-                    <h5 class="text-xl font-weight-bold text-uppercase mb-4 text-center">Demandes Récentes - Mariage</h5>
-                    <ul class="text-center">
-                        @foreach($demandesMariage as $demande)
-                            <li>Demande d'extrait de mariage effectué pour le conjoint(e) {{ $demande->nomEpoux }} est 
-                              <button style="background-color: rgba(255, 206, 86, 0.2)" class="badge {{ $demande->etat == 'en attente' ? 'badge-opacity-warning' : 
-                                ($demande->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">
-                                  {{ $demande->etat }}
-                              </button>  
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Graphique des demandes -->
     <div class="row mb-4">
         <div class="col-12">

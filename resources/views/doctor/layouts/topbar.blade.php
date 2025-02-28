@@ -26,16 +26,10 @@
               </li>
               <li class="dropdown-divider"></li>
               <li class="ms-dropdown-list">
-                  <a class="media fs-14 p-2" href="pages/prebuilt-pages/user-profile.html"> <span><i class="flaticon-user mr-2"></i> Profile</span> </a>
-                  <a class="media fs-14 p-2" href="pages/apps/email.html"> <span><i class="flaticon-mail mr-2"></i> Inbox</span> <span class="badge badge-pill badge-info">3</span> </a>
-                  <a class="media fs-14 p-2" href="pages/prebuilt-pages/user-profile.html"> <span><i class="flaticon-gear mr-2"></i> Account Settings</span> </a>
-              </li>
-              <li class="dropdown-divider"></li>
-              <li class="dropdown-menu-footer">
-                  <a class="media fs-14 p-2" href="pages/prebuilt-pages/lock-screen.html"> <span><i class="flaticon-security mr-2"></i> Lock</span> </a>
+                  <a class="media fs-14 p-2" href="pages/prebuilt-pages/user-profile.html"> <span><i class="flaticon-user mr-2"></i> Profil</span> </a>
               </li>
               <li class="dropdown-menu-footer">
-                  <a class="media fs-14 p-2" href="{{ route('doctor.logout') }}"> <span><i class="flaticon-shut-down mr-2"></i> Logout</span> </a>
+                  <a class="media fs-14 p-2" href="{{ route('doctor.logout') }}"> <span><i class="flaticon-shut-down mr-2"></i> Déconnexion</span> </a>
               </li>
           </ul>
       </li>

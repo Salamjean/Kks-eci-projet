@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Bouton Sidebar -->
-
+  <h3 class="text-white d-flex justify-content-center" style="font-weight: bold; font-size:20px">Mairie de {{ Auth::guard('caisse')->user()->communeM }}</h3>
   <!-- Icônes du Topbar -->
   <ul class="navbar-nav ml-auto align-items-center">
     <!-- Notifications -->

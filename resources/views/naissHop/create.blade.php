@@ -23,13 +23,13 @@
 
     body {
       font-family: montserrat, arial, verdana;
+      
     }
 
     /* Form styles */
     #msform {
-      width: 50%;
+      width: 70%;
       margin-top: 60px;
-      margin-left:170px;
       text-align: center;
       position: relative;
     }
@@ -65,7 +65,7 @@
     }
 
     select, #msform input, #msform textarea {
-      padding: 15px;
+      padding: 30px;
       border: 1px solid #ccc;
       border-radius: 3px;
       margin-bottom: 10px;
@@ -85,7 +85,7 @@
         color: white;
     }
 
-    input[type="file"] {
+    input[type="file",type="text"] {
         border: 1px dashed black;
     }
 
@@ -201,7 +201,7 @@
   </style>
 </head>
 <body>
-  <form id="msform" action="{{ route('naissHop.store') }}" method="POST" enctype="multipart/form-data">
+  <form id="msform" action="{{ route('naissHop.store') }}" method="POST" enctype="multipart/form-data" > 
     @csrf
     <ul id="progressbar">
       <li class="active">Informations
@@ -211,7 +211,7 @@
       <li>Informations du nouveau-né</li>
     </ul>
 
-    <fieldset>
+    <fieldset >
       <h2 class="fs-title">Déclaration de naissance</h2>
       <h3 class="fs-subtitle">Informations sur la mère</h3>
       <div class="form-group">

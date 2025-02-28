@@ -24,10 +24,10 @@
       <!-- Doctor -->
       <li class="menu-item">
         <a href="#" class="has-chevron" data-toggle="collapse" data-target="#doctor" aria-expanded="false" aria-controls="doctor">
-          <span><i class="fas fa-stethoscope"></i>Docteur</span>
+          <span><i class="fas fa-stethoscope"></i>Personnel</span>
         </a>
         <ul id="doctor" class="collapse" aria-labelledby="doctor" data-parent="#side-nav-accordion">
-          <li> <a href="{{ route('directeur.index') }}">Liste Docteur</a> </li>
+          <li> <a href="{{ route('directeur.index') }}">Liste Personnel</a> </li>
         </ul>
       </li>
       <!-- Doctor -->

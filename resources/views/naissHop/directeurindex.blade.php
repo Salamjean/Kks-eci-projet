@@ -205,24 +205,38 @@
             <h1>Liste des naissances déclarées</h1>
             <table id="patients-table" class="display">
                 <thead style="text-align: center">
-                    <tr>
-                        <th>N° CMN</th>
-                        <th>Nom de la mère</th>
-                        <th>Nom de l'accompagnateur</th>
-                        <th>Hôpital</th>
-                        <th>N°CMU de la mère</th>
-                        <th>Date de Naissance</th>
+                    <tr class="text-center">
+                        <th class="text-center">N° CMN</th>
+                        <th class="text-center">Nom de la mère</th>
+                        <th class="text-center">Nom de l'accompagnateur</th>
+                        <th class="text-center">Hôpital</th>
+                        <th class="text-center">N°CMU de la mère</th>
+                        <th class="text-center">Date de Naissance</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($naisshops as $naisshop)
-                    <tr>
+                    <tr class="text-center">
                         <td>{{ $naisshop->codeCMN }}</td>
                         <td>{{ $naisshop->NomM . ' ' . $naisshop->PrM }}</td>
                         <td>{{ $naisshop->NomP . ' ' . $naisshop->PrP }}</td>
                         <td>{{ $naisshop->NomEnf . ' ' . $naisshop->preEnf }}</td>
                         <td>{{ $naisshop->codeCMU }}</td>
-                        <td>{{ $naisshop->DateNaissance }}</td>
+                        <td class="text-center">
+                            @if ($naisshop->enfants->isNotEmpty())
+                                <ul class="text-center">
+                                    @foreach ($naisshop->enfants as $enfant)
+                                        <li>
+                                            <strong> Enfant {{ $loop->iteration }} </strong> <br>
+                                            Date Naissance: {{ \Carbon\Carbon::parse($enfant->date_naissance)->format('d/m/Y') }}, <br>
+                                            Sexe: {{ $enfant->sexe }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                Aucun enfant enregistré
+                            @endif
+                        </td>
                     </tr>
                     @empty
                     <tr>

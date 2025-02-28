@@ -7,7 +7,7 @@
 
 <style>
   .signup-container {
-    max-width: 70%;
+    max-width: 100%;
     margin: 50px auto;
     background-color: #f8f9fa;
     padding: 30px;
@@ -170,7 +170,7 @@
       @endif
     </div>
     
-    <div class="row">
+    <div class="row col-12">
       <div class="col-lg-12">
           <div class="card mb-4">
               <div class="card-header py-3">

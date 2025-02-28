@@ -24,9 +24,7 @@
         <a class="dropdown-item" href="#">
           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profil
         </a>
-        <a class="dropdown-item" href="#">
-          <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Paramètres
-        </a>
+       
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{{ route('ministereagent.logout') }}">
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Déconnexion

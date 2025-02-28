@@ -52,7 +52,9 @@ class NaissHopController extends Controller
         $communeAdmin = $directeur->nomHop;
         
         // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur 
-        $naisshops = NaissHop::where('NomEnf', $communeAdmin)->get();
+        $naisshops = NaissHop::where('NomEnf', $communeAdmin)
+        ->with('enfants') // Chargement eager des relations 'enfants' pour éviter le problème N+1
+        ->get();
         
         return view('naissHop.directeurindex', ['naisshops' => $naisshops]);
     }
@@ -63,7 +65,7 @@ class NaissHopController extends Controller
             ->whereIn('type', ['naissance','naissanceD', 'mariage', 'deces','decesHop','naissHop'])  
             ->latest()
             ->get();
-        $naisshops = NaissHop::all();
+        $naisshops = NaissHop::with('enfants')->get();
         return view('naissHop.superindex', compact('naisshops','alerts'));
     }
     public function mairieindex() {
@@ -77,7 +79,9 @@ class NaissHopController extends Controller
         $communeAdmin = $sousadmin->name; // Ajustez selon votre logique
     
         // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
-        $naisshops = NaissHop::where('commune', $communeAdmin)->get();
+        $naisshops = NaissHop::where('commune', $communeAdmin)
+        ->with('enfants') // Chargement eager des relations 'enfants' pour éviter le problème N+1
+        ->get();
     
         return view('naissHop.mairieindex', [
             'naisshops' => $naisshops,
@@ -97,7 +101,9 @@ class NaissHopController extends Controller
         $communeAdmin = $sousadmin->communeM; // Ajustez selon votre logique
     
         // Récupérer les déclarations de naissances filtrées par la commune de l'administrateur
-        $naisshops = NaissHop::where('commune', $communeAdmin)->get();
+        $naisshops = NaissHop::where('commune', $communeAdmin)
+        ->with('enfants') // Chargement eager des relations 'enfants' pour éviter le problème N+1
+        ->get();
     
         return view('naissHop.agentmairieindex', [
             'naisshops' => $naisshops,
@@ -375,24 +381,29 @@ class NaissHopController extends Controller
 
 
     public function verifierCodeDM(Request $request)
-    {
-        $codeCMN = $request->input('codeCMN');
-        
-        // Rechercher dans la table naiss_hops en utilisant le codeCMN
-        $naissHop = NaissHop::where('codeCMN', $codeCMN)->first();
-    
-        if ($naissHop) {
-            return response()->json([
-                'existe' => true,
-                'nomHopital' => $naissHop->NomEnf,
-                'nomMere' => $naissHop->NomM . ' ' . $naissHop->PrM,
-                'nomPere' => $naissHop->NomP . ' ' . $naissHop->PrP,
-                'dateNaiss' => $naissHop->DateNaissance
-            ]);
-        } else {
-            return response()->json(['existe' => false]);
-        }
+{
+    $codeCMN = $request->input('codeCMN');
+
+    // Rechercher dans la table naiss_hops en utilisant le codeCMN et charger la relation 'enfants'
+    $naissHop = NaissHop::where('codeCMN', $codeCMN)
+                        ->with('enfants') // Charger la relation 'enfants'
+                        ->first();
+
+    if ($naissHop) {
+        // Récupérer TOUTES les dates de naissance des enfants associés
+        $dateNaissancesEnfants = $naissHop->enfants->pluck('date_naissance')->toArray();
+
+        return response()->json([
+            'existe' => true,
+            'nomHopital' => $naissHop->NomEnf,
+            'nomMere' => $naissHop->NomM . ' ' . $naissHop->PrM,
+            'nomPere' => $naissHop->NomP . ' ' . $naissHop->PrP,
+            'dateNaiss' => $dateNaissancesEnfants // Envoyer un tableau de dates de naissance
+        ]);
+    } else {
+        return response()->json(['existe' => false]);
     }
+}
 
 
 public function download($id)

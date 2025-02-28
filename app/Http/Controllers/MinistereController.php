@@ -74,7 +74,7 @@ function decesclaration(){
     return view('superadmin.ministere.decesindex', compact('deceshops'));
 }
 function naissancedeclaration(){
-    $naisshops = NaissHop::all();
+    $naisshops = NaissHop::with('enfants')->get();
     return view('superadmin.ministere.naissindex', compact('naisshops'));
 }
     public function create(){

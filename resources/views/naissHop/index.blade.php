@@ -218,8 +218,8 @@
                         <th class="text-center">Nom de l'accompagnateur</th>
                         <th class="text-center">Hôpital</th>
                         <th class="text-center">N°CMU de la mère</th>
+                        <th class="text-center">Nombre d'enfant</th>  
                         <th class="text-center">Date de Naissance</th>
-                        <th class="text-center">Nombre d'enfant</th>
                         <th colspan="3" style="text-align: center">Action</th>
                         <th class="text-center">Télécharger</th>
                     </tr>
@@ -276,7 +276,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center">Aucune Naissance Déclarée</td>
+                        <td colspan="9" class="text-center">Aucune daissance déclarée</td>
                     </tr>
                     @endforelse
                 </tbody>

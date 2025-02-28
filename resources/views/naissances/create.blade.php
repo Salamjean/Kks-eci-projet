@@ -216,7 +216,7 @@
                         <input type="text" id="nomDefunt" name="nomDefunt" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="dateNaiss">Nom et Prénom de l'accompagnateur</label>
+                        <label for="dateNaiss">Nom et Prénom du Père</label>
                         <input type="text" id="dateNaiss" name="dateNaiss" readonly>
                     </div>
                 </div>
@@ -225,7 +225,10 @@
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="lieuNaiss">Date de Naissance de l'Enfant</label>
-                        <input type="text" id="lieuNaiss" name="lieuNaiss" readonly>
+                        <input type="date" id="lieuNaiss" name="lieuNaiss" required>
+                        @error('lieuNaiss')
+                        <span style="color: red">{{ $message }}</span>
+                        @enderror
                     </div>
                     <div class="form-group half-width">
                         <label for="nom">Nom du nouveau né</label>
@@ -263,7 +266,7 @@
                     <div class="form-group half-width">
                         <label for="datepere">Date de naissance du père</label>
                         <input type="date" id="datepere" name="datepere">
-                        @error('identiteDeclarant')
+                        @error('datepere')
                         <span style="color: red">{{ $message }}</span>
                         @enderror
                     </div>
@@ -312,6 +315,7 @@
         $(document).ready(function () {
             // Cacher la section des options par défaut
             $("#optionsSection").hide();
+            $("#btnValider").prop('disabled', true); // Désactiver le bouton "Valider" au chargement de la page
 
             // Fonction pour vérifier si tous les champs obligatoires sont remplis
             function checkFields() {
@@ -336,10 +340,15 @@
                 if ($('input[name="choix_option"]:checked').val() === 'livraison') {
                     showLivraisonPopup();
                 } else {
-                    this.submit();
+                    // Form submission will be handled if date is valid
+                    if (!$("#btnValider").prop('disabled')) { // Only submit if button is enabled (date is valid)
+                        this.submit();
+                    }
                 }
             });
         });
+
+        let expectedDateNaissances; // Variable pour stocker les dates de naissance attendues (tableau)
 
         function validerFormulaire() {
             const dossierNum = $("#dossierNum").val();
@@ -364,11 +373,12 @@
                         $("#nomHopital").val(response.nomHopital);
                         $("#nomDefunt").val(response.nomMere);
                         $("#dateNaiss").val(response.nomPere);
-                        $("#lieuNaiss").val(response.dateNaiss);
+                        expectedDateNaissances = response.dateNaiss; // Stocker le tableau de dates de naissance attendues
 
                         $("#infoDefunt").removeClass("hidden");
                         $("#btnSuivant").addClass("hidden");
                         $("#btnValider").removeClass("hidden");
+                        $("#btnValider").prop('disabled', false); // Activer le bouton "Valider" quand CMN est validé et infos affichées
                         checkFields(); // Vérifiez les champs après la réponse
                     } else {
                         Swal.fire({
@@ -376,6 +386,10 @@
                             title: 'Erreur',
                             text: 'Ce numéro <' + dossierNum + '> n\'existe pas.',
                         });
+                        $("#btnValider").prop('disabled', true); // Désactiver "Valider" si CMN invalide
+                        $("#infoDefunt").addClass("hidden"); // Cacher la section d'info si CMN invalide
+                        $("#btnSuivant").removeClass("hidden"); // Afficher "Suivant" si CMN invalide
+                        $("#btnValider").addClass("hidden"); // Cacher "Valider" si CMN invalide
                     }
                 },
                 error: function () {
@@ -384,9 +398,62 @@
                         title: 'Erreur',
                         text: 'Problème de connexion au serveur.',
                     });
+                    $("#btnValider").prop('disabled', true); // Désactiver "Valider" en cas d'erreur serveur
                 }
             });
         }
+
+        // Override the form submission to add date validation
+        $("#naissanceForm").on('submit', function(e){
+            const userDateNaiss = $("#lieuNaiss").val();
+            const dateNaissanceInput = $("#lieuNaiss"); // Récupérer l'élément input de date
+
+            if (!userDateNaiss) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erreur',
+                    text: 'Veuillez entrer la date de naissance de l\'enfant.',
+                    showConfirmButton: true
+                });
+                e.preventDefault();
+                return;
+            }
+
+            if (expectedDateNaissances && expectedDateNaissances.length > 0) {
+                const userDate = new Date(userDateNaiss);
+                let dateMatchFound = false;
+
+                for (let i = 0; i < expectedDateNaissances.length; i++) {
+                    const expectedDate = new Date(expectedDateNaissances[i]);
+                    if (userDate.getTime() === expectedDate.getTime()) {
+                        dateMatchFound = true;
+                        break;
+                    }
+                }
+
+                if (!dateMatchFound) {
+                    e.preventDefault();
+                    dateNaissanceInput.val('');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: 'La date de naissance de l\'enfant ne correspond à aucune des dates associées au numéro de dossier médical. Veuillez saisir une date correcte.',
+                        timer: 30000,
+                        showConfirmButton: true
+                    }).then(() => { // Add .then() to handle what happens after the popup is closed
+                        // No further actions are needed here as preventDefault already stopped submission
+                        // and the function will naturally exit after the popup is closed.
+                    });
+                    return; // Explicitly return to stop further execution in this submit handler
+                } else {
+                    $("#btnValider").prop('disabled', false);
+                }
+            } else {
+                console.log("expectedDateNaissances is NULL, undefined or empty. Skipping date check.");
+            }
+            // If date is valid, the form will submit normally as preventDefault was not called.
+        });
+
 
         function showLivraisonPopup() {
             Swal.fire({

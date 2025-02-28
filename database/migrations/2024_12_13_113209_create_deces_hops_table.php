@@ -20,6 +20,7 @@ return new class extends Migration
              $table->string('DateDeces');
              $table->string('Remarques');
              $table->string('nomHop');
+             $table->string('choix');
              $table->string('commune');
              $table->string('codeDM')->default('rien')->unique();
              $table->string('codeCMD')->default('rien')->unique();
