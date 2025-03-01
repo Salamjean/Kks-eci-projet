@@ -22,6 +22,10 @@ class InfobipService
 
         // Instanciation de Configuration avec les arguments requis
         $this->config = new Configuration($apiKey, $baseUrl);
+        // Configuration supplémentaire
+        $this->config
+            ->setApiKeyPrefix('Authorization', 'App')
+            ->setApiKey('Authorization', $apiKey);
     }
 
     public function sendSms($to, $message)
