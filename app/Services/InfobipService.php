@@ -16,17 +16,10 @@ class InfobipService
 
     public function __construct()
     {
-        // Récupération des configurations
-        $apiKey = config('services.infobip.api_key');
-        $baseUrl = config('services.infobip.base_url');
-
-        // Instanciation de Configuration avec les arguments requis
-        $this->config = new Configuration($apiKey, $baseUrl);
-
-        // Configuration supplémentaire
-        $this->config
+        $this->config = (new Configuration())
+            ->setHost(config('services.infobip.base_url'))
             ->setApiKeyPrefix('Authorization', 'App')
-            ->setApiKey('Authorization', $apiKey);
+            ->setApiKey('Authorization', config('services.infobip.api_key'));
     }
 
     public function sendSms($to, $message)
