@@ -22,7 +22,6 @@ class InfobipService
 
         // Instanciation de Configuration avec les arguments requis
         $this->config = new Configuration($apiKey, $baseUrl);
-        $this->config->setHost($baseUrl);
         $this->config->setApiKey('Authorization', $apiKey);
     }
 
