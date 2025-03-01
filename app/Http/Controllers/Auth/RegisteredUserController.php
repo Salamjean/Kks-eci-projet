@@ -39,6 +39,8 @@ class RegisteredUserController extends Controller
             'prenom' => 'required',
             'email' => 'required|email|unique:users,email',
             'commune' => 'required',
+            'indicatif' => 'required',
+            'contact' => 'required',
             'CMU' => 'required',
             'password' => [
                 'required',
@@ -60,13 +62,14 @@ class RegisteredUserController extends Controller
             'password.required' => 'Le mot de passe est obligatoire.',
             'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
             'password.confirmed' => 'Les mots de passe ne correspondent pas.',
+            'indicatif.required' => 'indicatif du pays est obligatoire.',
+            'contact.required' => 'contact est obligatoire.',
             'password.regex' => 'Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, un chiffre et un caractère spécial.', // Message d'erreur personnalisé pour regex
             'CMU.required' => 'Le numéro CMU est obligatoire.',
             'profile_picture.image' => 'Le fichier doit être une image.',
             'profile_picture.mimes' => 'L\'image doit être au format jpeg, png, jpg, gif ou svg.',
             'profile_picture.max' => 'L\'image ne doit pas dépasser 2048 KB.',
         ]);
-
         // Création de l'utilisateur
         try {
             $profilePicturePath = null;
@@ -74,13 +77,15 @@ class RegisteredUserController extends Controller
                 $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
                 Log::info('Profile picture stored at: ' . $profilePicturePath);
             }
-
+            
             User::create([
                 'name' => $request->name,
                 'prenom' => $request->prenom,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'commune' => $request->commune,
+                'indicatif' => $request->indicatif,
+                'contact' => $request->contact,
                 'CMU' => $request->CMU,
                 'profile_picture' => $profilePicturePath,
             ]);
