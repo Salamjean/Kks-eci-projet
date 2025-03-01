@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\saveNaissanceDRequest;
 use App\Models\Alert;
 use App\Models\NaissanceD;
+use App\Services\InfobipService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class NaissanceDeclaController extends Controller
         return view('naissanceD.index');
     }
 
-    public function store(SaveNaissancedRequest $request)
+    public function store(SaveNaissancedRequest $request, InfobipService $infobipService)
     {
          Log::info('Store method called', $request->all());
         $imageBaseLink = '/images/naissanceds/';
@@ -94,6 +95,14 @@ class NaissanceDeclaController extends Controller
        $naissanced->quartier = $request->input('quartier');
     }
       $naissanced->save();
+
+      $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence: {$naissanced->reference}.";
+    $infobipService->sendSms(+2250798278981, $message);
+  
+      Alert::create([
+          'type' => 'extrait_naissance',
+          'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissanced->name} {$naissanced->prenom}.",
+      ]);
       Alert::create([
         'type' => 'extrait_naissance',
         'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissanced->name} {$naissanced->prenom}.",

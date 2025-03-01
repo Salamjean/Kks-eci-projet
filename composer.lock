@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "909f8cd4efa75783be1dbf9c24415a6c",
+    "content-hash": "dcbf49efcec16c9abc20b49a1a73e629",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1464,6 +1464,63 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "infobip/infobip-api-php-client",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/infobip/infobip-api-php-client.git",
+                "reference": "e37bb618e3813d473179c1cddec04c56fd96e23c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/infobip/infobip-api-php-client/zipball/e37bb618e3813d473179c1cddec04c56fd96e23c",
+                "reference": "e37bb618e3813d473179c1cddec04c56fd96e23c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "guzzlehttp/guzzle": "^7.3",
+                "php": ">=8.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Infobip\\": "Infobip/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Infobip Support",
+                    "email": "support@infobip.com",
+                    "homepage": "https://www.infobip.com"
+                }
+            ],
+            "description": "PHP library for consuming Infobip's API",
+            "homepage": "https://www.infobip.com",
+            "keywords": [
+                "2fa",
+                "api",
+                "infobip",
+                "msisdn",
+                "openapi",
+                "php",
+                "rest",
+                "sdk",
+                "sms",
+                "tfa"
+            ],
+            "support": {
+                "source": "https://github.com/infobip/infobip-api-php-client/tree/4.0.0",
+                "issues": "https://github.com/infobip/infobip-api-php-client/issues"
+            },
+            "time": "2022-10-21T12:44:29+00:00"
         },
         {
             "name": "intervention/gif",
@@ -9596,7 +9653,7 @@
         }
     ],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,

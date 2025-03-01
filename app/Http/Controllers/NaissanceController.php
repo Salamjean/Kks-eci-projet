@@ -11,6 +11,7 @@ use App\Models\Mariage;
 use App\Models\Naissance;
 use App\Models\NaissanceD;
 use App\Models\NaissHop;
+use App\Services\InfobipService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -237,7 +238,7 @@ public function ajointindex()
         return view('naissances.edit', compact('naissance'));
     }
 
-    public function store(saveNaissanceRequest $request)
+    public function store(saveNaissanceRequest $request, InfobipService $infobipService)
     {
         \Log::info('Store method called', $request->all());
         $imageBaseLink = '/images/naissances/';
@@ -308,6 +309,10 @@ public function ajointindex()
         }
 
         $naissance->save();
+
+        $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence: {$naissance->reference}.";
+        $infobipService->sendSms(+2250798278981, $message);
+
         Alert::create([
             'type' => 'naissance',
             'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissance->nomDefunt}.",

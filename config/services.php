@@ -34,5 +34,10 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    
+    'infobip' => [
+    'api_key' => env('INFOBIP_API_KEY'),
+    'base_url' => env('INFOBIP_BASE_URL'),
+],
 
 ];

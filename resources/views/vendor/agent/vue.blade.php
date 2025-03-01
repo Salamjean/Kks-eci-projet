@@ -98,12 +98,12 @@
             </div>
         </div>
     </div>
-</div>
-&nbsp;&nbsp;&nbsp;
+</div><br>
+&nbsp;&nbsp;&nbsp;<br>
 <!-- Section : Décès Récents -->
 <div class="row mb-4">
-    <div class="col-xl-12 col-lg-12 mb-4">
-        <div class="card">
+    <div class="col-xl-12 col-lg-12 mb-4 w-100">
+        <div class="card card w-100">
             <div class="card-header py-3 bg-primary">
                 <h6 class="m-0 font-weight-bold text-white text-center">Décès Récents</h6>
             </div>
@@ -166,18 +166,18 @@
 <!-- Section : Mariages Récents -->
 <div class="row mb-4">
     <div class="col-xl-12 col-lg-12 mb-4">
-        <div class="card">
+        <div class="card card w-100">
             <div class="card-header py-3 bg-primary">
                 <h6 class="m-0 font-weight-bold text-white text-center">Mariages Récents</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-striped table-hover align-items-center">
+                    <table class="table table-striped table-hover align-items-center w-100">
                         <thead class="thead-light">
                             <tr>
                                 <th>Type</th>
                                 <th>Demandeur</th>
-                                <th>Date</th>
+                                <th>Date</th> 
                                 <th>Heure</th>
                                 <th>Action</th>
                             </tr>

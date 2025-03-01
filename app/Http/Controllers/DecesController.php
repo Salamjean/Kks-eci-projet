@@ -6,6 +6,7 @@ use App\Http\Requests\saveDecesRequest;
 use App\Models\Alert;
 use App\Models\Deces;
 use App\Models\Decesdeja;
+use App\Services\InfobipService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -181,7 +182,7 @@ class DecesController extends Controller
         return view('deces.edit', compact('deces'));
     }
 
-    public function store(saveDecesRequest $request)
+    public function store(saveDecesRequest $request, InfobipService $infobipService)
     {
         $imageBaseLink = '/images/deces/';
 
@@ -247,6 +248,9 @@ class DecesController extends Controller
         }
 
         $deces->save();
+
+        $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$deces->reference}.";
+        $infobipService->sendSms(+2250798278981, $message);
         Alert::create([
             'type' => 'deces',
             'message' => "Une nouvelle demande d'extrait de décès a été enregistrée : {$deces->nomDefunt}.",
@@ -270,7 +274,7 @@ class DecesController extends Controller
         return view('deces.createdeja');
     }
 
-    public function storedeja(Request $request)
+    public function storedeja(Request $request, InfobipService $infobipService)
     {
         $request->validate([
             'name' => 'required',
@@ -368,6 +372,9 @@ class DecesController extends Controller
         }
 
         $decesdeja->save();
+
+        $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$decesdeja->reference}.";
+        $infobipService->sendSms(+2250798278981, $message);
 
         return redirect()->route('decesutilisateur.index')->with('success', 'Demande envoyée avec succès.');
     }

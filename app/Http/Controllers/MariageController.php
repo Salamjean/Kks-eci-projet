@@ -6,6 +6,7 @@ use App\Http\Requests\saveMariageRequest;
 use App\Models\Alert;
 use App\Models\Mariage;
 use App\Models\User;
+use App\Services\InfobipService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -180,7 +181,7 @@ public function agentindex(Request $request)
         return view('mariages.edit', compact('mariage'));
     }
    
-    public function store(saveMariageRequest $request)
+    public function store(saveMariageRequest $request, InfobipService $infobipService)
     {
         $imageBaseLink = '/images/mariages/';
 
@@ -247,6 +248,9 @@ public function agentindex(Request $request)
         }
 
         $mariage->save();
+
+        $message = "Bonjour {$user->name}, votre demande d'extrait de mariage a bien été transmise à la mairie de {$user->commune}. Référence: {$mariage->reference}.";
+        $infobipService->sendSms(+2250798278981, $message);
 
         Alert::create([
             'type' => 'mariage',
