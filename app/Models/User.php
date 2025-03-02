@@ -24,10 +24,9 @@ class User extends Authenticatable
         'prenom',
         'email',
         'password',
-        'is_activated',
-        'commune',
         'indicatif',
-        'contact',  
+        'contact',
+        'commune',
         'CMU',
         'profile_picture',
     ];

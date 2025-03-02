@@ -248,9 +248,9 @@ public function agentindex(Request $request)
         }
 
         $mariage->save();
-
+        $phoneNumber = $user->indicatif . $user->contact;
         $message = "Bonjour {$user->name}, votre demande d'extrait de mariage a bien été transmise à la mairie de {$user->commune}. Référence: {$mariage->reference}.";
-        $infobipService->sendSms(+2250798278981, $message);
+        $infobipService->sendSms($phoneNumber, $message);
 
         Alert::create([
             'type' => 'mariage',

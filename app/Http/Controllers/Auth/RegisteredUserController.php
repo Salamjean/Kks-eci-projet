@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Mail\welcomeMail;
 use App\Models\User;
+use App\Models\Utilisateur;
 use App\Models\verifyToken;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -78,17 +79,17 @@ class RegisteredUserController extends Controller
                 Log::info('Profile picture stored at: ' . $profilePicturePath);
             }
             
-            User::create([
-                'name' => $request->name,
-                'prenom' => $request->prenom,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'commune' => $request->commune,
-                'indicatif' => $request->indicatif,
-                'contact' => $request->contact,
-                'CMU' => $request->CMU,
-                'profile_picture' => $profilePicturePath,
-            ]);
+            $users = new User();
+            $users->name = $request->name;
+            $users->prenom = $request->prenom;
+            $users->email = $request->email;
+            $users->commune = $request->commune;
+            $users->indicatif = $request->indicatif;
+            $users->contact = $request->contact;
+            $users->CMU = $request->CMU;
+            $users->password = Hash::make($request->password);
+            $users->profile_picture = $profilePicturePath;
+            $users->save();
 
             return redirect()->route('login')->with('success', 'Votre compte a été créé avec succès. Vous pouvez vous connecter.');
 

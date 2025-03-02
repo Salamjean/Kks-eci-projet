@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->string('prenom');
             $table->string('email')->unique();
-            $table->timestamp('indicatif');
             $table->string('password');
-            $table->boolean('contact');
+            $table->string('indicatif');
+            $table->string('contact');
             $table->string('commune');
             $table->string('CMU');
             $table->string('profile_picture')->nullable();

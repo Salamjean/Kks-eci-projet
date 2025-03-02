@@ -34,53 +34,53 @@ class NaissanceDeclaController extends Controller
     }
 
     public function store(SaveNaissancedRequest $request, InfobipService $infobipService)
-    {
-         Log::info('Store method called', $request->all());
-        $imageBaseLink = '/images/naissanceds/';
+{
+    // Log des données de la requête
+    Log::info('Store method called', $request->all());
 
-        $filesToUpload = [
-           'CNI' => 'cni/',
-       ];
+    // Configuration des chemins pour le stockage des fichiers
+    $imageBaseLink = '/images/naissanceds/';
+    $filesToUpload = [
+        'CNI' => 'cni/',
+    ];
+    $uploadedPaths = [];
 
-       $uploadedPaths = [];
+    // Traitement des fichiers uploadés
+    foreach ($filesToUpload as $fileKey => $subDir) {
+        if ($request->hasFile($fileKey)) {
+            $file = $request->file($fileKey);
+            $extension = $file->getClientOriginalExtension();
+            $newFileName = (string) Str::uuid() . '.' . $extension;
+            $file->storeAs("public/images/naissanceds/$subDir", $newFileName);
+            $uploadedPaths[$fileKey] = $imageBaseLink . "$subDir" . $newFileName;
+        }
+    }
 
-       foreach ($filesToUpload as $fileKey => $subDir) {
-          if ($request->hasFile($fileKey)) {
-               $file = $request->file($fileKey);
-               $extension = $file->getClientOriginalExtension();
-              $newFileName = (string) Str::uuid() . '.' . $extension;
-                $file->storeAs("public/images/naissanceds/$subDir", $newFileName);
+    // Récupération de l'utilisateur connecté
+    $user = Auth::user();
 
-               $uploadedPaths[$fileKey] = $imageBaseLink . "$subDir" . $newFileName;
-            }
-       }
+    // Génération de la référence
+    $communeInitiale = strtoupper(substr($user->commune ?? 'X', 0, 1)); // 'X' si commune est null ou vide
+    $anneeCourante = Carbon::now()->year;
+    $reference = 'ANJ' . str_pad(Naissanced::getNextId(), 4, '0', STR_PAD_LEFT) . $communeInitiale . $anneeCourante;
 
-      $user = Auth::user();
+    // Création de la demande d'extrait de naissance
+    $naissanced = new Naissanced();
+    $naissanced->pour = $request->pour;
+    $naissanced->type = $request->type;
+    $naissanced->name = $request->name;
+    $naissanced->prenom = $request->prenom;
+    $naissanced->number = $request->number;
+    $naissanced->DateR = $request->DateR;
+    $naissanced->commune = $request->commune;
+    $naissanced->CNI = $uploadedPaths['CNI'] ?? null;
+    $naissanced->CMU = $request->CMU;
+    $naissanced->choix_option = $request->choix_option;
+    $naissanced->user_id = $user->id;
+    $naissanced->etat = 'en attente';
+    $naissanced->reference = $reference;
 
-        // Générer la référence ici dans le contrôleur
-        $communeInitiale = strtoupper(substr($user->commune ?? 'X', 0, 1)); // 'X' si commune est null ou vide
-        $anneeCourante = Carbon::now()->year;
-        $reference = 'ANJ' . str_pad(Naissanced::getNextId(), 4, '0', STR_PAD_LEFT) . $communeInitiale . $anneeCourante; // EN pour Extrait Naissance
-
-
-       $naissanced = new Naissanced();
-       $naissanced->pour = $request->pour;
-       $naissanced->type = $request->type;
-        $naissanced->name = $request->name;
-        $naissanced->prenom = $request->prenom;
-       $naissanced->number = $request->number;
-        $naissanced->DateR = $request->DateR;
-       $naissanced->commune = $request->commune;
-       $naissanced->CNI = $uploadedPaths['CNI'] ?? null;
-       $naissanced->CMU = $request->CMU;
-       $naissanced->choix_option = $request->choix_option;
-       $naissanced->user_id = $user->id;
-       $naissanced->etat = 'en attente';
-       $naissanced->reference = $reference; // Assignez la référence générée
-
-
-           // Ajout des informations de livraison si option livraison est choisie
-               // Ajout des informations de livraison si option livraison est choisie
+    // Ajout des informations de livraison si l'option "livraison" est choisie
     if ($request->input('choix_option') === 'livraison') {
         $naissanced->montant_timbre = $request->input('montant_timbre');
         $naissanced->montant_livraison = $request->input('montant_livraison');
@@ -91,26 +91,43 @@ class NaissanceDeclaController extends Controller
         $naissanced->adresse_livraison = $request->input('adresse_livraison');
         $naissanced->code_postal = $request->input('code_postal');
         $naissanced->ville = $request->input('ville');
-       $naissanced->commune_livraison = $request->input('commune_livraison');
-       $naissanced->quartier = $request->input('quartier');
+        $naissanced->commune_livraison = $request->input('commune_livraison');
+        $naissanced->quartier = $request->input('quartier');
     }
-      $naissanced->save();
 
-      $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence: {$naissanced->reference}.";
-    $infobipService->sendSms(+2250798278981, $message);
-  
-      Alert::create([
-          'type' => 'extrait_naissance',
-          'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissanced->name} {$naissanced->prenom}.",
-      ]);
-      Alert::create([
+    // Sauvegarde de la demande
+    $naissanced->save();
+
+    // Log des données de l'utilisateur pour débogage
+    Log::info('Données de l\'utilisateur : ', [
+        'indicatif' => $user->indicatif,
+        'contact' => $user->contact,
+    ]);
+
+    // Construction du numéro de téléphone
+    $phoneNumber = $user->indicatif . $user->contact;
+    Log::info('Numéro de téléphone construit : ' . $phoneNumber);
+
+    // Envoi du SMS
+    $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence: {$naissanced->reference}.";
+    $smsResult = $infobipService->sendSms($phoneNumber, $message);
+
+    // Log du résultat de l'envoi du SMS
+    if ($smsResult === false) {
+        Log::error('Échec de l\'envoi du SMS à : ' . $phoneNumber);
+    } else {
+        Log::info('SMS envoyé avec succès à : ' . $phoneNumber);
+    }
+
+    // Création d'une alerte
+    Alert::create([
         'type' => 'extrait_naissance',
         'message' => "Une nouvelle demande d'extrait de naissance a été enregistrée : {$naissanced->name} {$naissanced->prenom}.",
     ]);
 
-       return redirect()->route('utilisateur.index')->with('success', 'Votre demande a été traitée avec succès.');
-    }
-
+    // Redirection avec un message de succès
+    return redirect()->route('utilisateur.index')->with('success', 'Votre demande a été traitée avec succès.');
+}
     public function delete(NaissanceD $naissanceD)
     {
         try {

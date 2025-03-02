@@ -16,11 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('prenom');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('indicatif');
             $table->string('password');
+            $table->string('contact');
+            $table->string('commune');
+            $table->string('CMU');
             $table->string('profile_picture')->nullable();
-            $table->boolean('is_activated')->default(0);
-            $table->string('commune')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

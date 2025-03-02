@@ -248,9 +248,9 @@ class DecesController extends Controller
         }
 
         $deces->save();
-
+        $phoneNumber = $user->indicatif . $user->contact;
         $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$deces->reference}.";
-        $infobipService->sendSms(+2250798278981, $message);
+        $infobipService->sendSms($phoneNumber, $message);
         Alert::create([
             'type' => 'deces',
             'message' => "Une nouvelle demande d'extrait de décès a été enregistrée : {$deces->nomDefunt}.",
@@ -372,9 +372,9 @@ class DecesController extends Controller
         }
 
         $decesdeja->save();
-
+        $phoneNumber = $user->indicatif . $user->contact;
         $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$decesdeja->reference}.";
-        $infobipService->sendSms(+2250798278981, $message);
+        $infobipService->sendSms($phoneNumber, $message);
 
         return redirect()->route('decesutilisateur.index')->with('success', 'Demande envoyée avec succès.');
     }

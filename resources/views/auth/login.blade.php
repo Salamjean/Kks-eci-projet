@@ -195,6 +195,7 @@
         <input type="password" name="password_confirmation" placeholder="Confirmer le mot de passe" required />
         <div style="display: flex; gap: 10px;">
             <select name="indicatif" style="flex: 1;" required>
+            <option value="">indicatif</option>
             <option value="+225">Côte d'Ivoire (+225)</option>
             <option value="+33">France (+33)</option>
             <option value="+1">États-Unis (+1)</option>
@@ -424,6 +425,7 @@
         </div>
         <select id="commune" name="commune" class="block mt-1 w-full" required>
             <option value="">Sélectionnez votre commune de naisance</option>
+            <option value="">indicatif</option>
             <option value="abobo">Abobo</option>
             <option value="adjame">Adjamé</option>
             <option value="attiecoube">Attécoubé</option>

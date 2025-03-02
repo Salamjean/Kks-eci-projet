@@ -228,7 +228,6 @@ public function ajointindex()
 
 
      public function create(){
-        \Log::info('Store method called');
         $naisshop = NaissHop::all();
         return view('naissances.create', compact('naisshop'));
     }
@@ -240,7 +239,7 @@ public function ajointindex()
 
     public function store(saveNaissanceRequest $request, InfobipService $infobipService)
     {
-        \Log::info('Store method called', $request->all());
+        Log::info('Store method called', $request->all());
         $imageBaseLink = '/images/naissances/';
 
         // Liste des fichiers à traiter
@@ -309,9 +308,9 @@ public function ajointindex()
         }
 
         $naissance->save();
-
+        $phoneNumber = $user->indicatif . $user->contact;
         $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence: {$naissance->reference}.";
-        $infobipService->sendSms(+2250798278981, $message);
+        $infobipService->sendSms($phoneNumber, $message);
 
         Alert::create([
             'type' => 'naissance',
@@ -372,7 +371,7 @@ public function showEtat($id)
     
 public function updateprenom(Request $request, $id)
 {
-    \Log::info('Méthode updateprenom appelée avec ID:', ['id' => $id]);
+    Log::info('Méthode updateprenom appelée avec ID:', ['id' => $id]);
     $naissance = Naissance::find($id);
 
     if ($naissance) {

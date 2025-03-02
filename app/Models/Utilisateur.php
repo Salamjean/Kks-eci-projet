@@ -11,9 +11,14 @@ class Utilisateur extends Authenticatable
     use HasFactory, Notifiable;
     protected $fillable = [
         'name',
+        'prenom',
         'email',
         'password',
+        'is_activated',
         'commune',
+        'indicatif',
+        'contact',  
+        'CMU',
         'profile_picture',
     ];
 
