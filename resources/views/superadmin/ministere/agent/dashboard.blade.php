@@ -90,9 +90,18 @@
                 </div>
             </div>
 
-            <!-- Champ de recherche -->
+            <!-- Sélection de la période -->
             <div class="form-group col-6 mb-3">
-                <input type="text" name="search" class="form-control p-3 text-center" placeholder="Rechercher par nom, prénom ou certificat" value="{{ $searchTerm ?? '' }}">
+                <select name="period_type" id="period_type" class="form-control p-2 text-center">
+                    <option value="week" {{ $periodType === 'week' ? 'selected' : '' }}>Semaine</option>
+                    <option value="month" {{ $periodType === 'month' ? 'selected' : '' }}>Mois</option>
+                    <option value="year" {{ $periodType === 'year' ? 'selected' : '' }}>Année</option>
+                </select>
+            </div>
+
+            <!-- Champ de recherche pour la période -->
+            <div class="form-group col-6 mb-3">
+                <input type="text" name="period_value" class="form-control p-3 text-center" placeholder="Entrez la semaine, le mois ou l'année" value="{{ $periodValue ?? '' }}">
             </div>
 
             <!-- Boutons de recherche et d'actualisation -->
@@ -119,7 +128,6 @@
                                 <th>Nom de l'hôpital</th>
                                 <th>Cause du décès</th>
                                 <th>Nom du docteur déclarant</th>
-                                <th>Télécharger le certificat</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -134,20 +142,14 @@
                                     <td>{{ $defunt->nomHop }}</td>
                                     <td>{{ $defunt->Remarques }}</td>
                                     <td>Dr. {{ $defunt->sous_admin ? $defunt->sous_admin->name . ' ' . $defunt->sous_admin->prenom : 'Demandeur inconnu' }}</td>
-                                    <td>
-                                        <button class="eye">
-                                            <a href="{{ route('ministereagent.decesdownload', $defunt->id) }}" style="color: #009efb">
-                                                <i class="fas fa-download" style="color: blue"></i><br> Télécharger
-                                            </a>
-                                        </button>
-                                    </td>
+                                    
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             @else
-                <p class="text-center text-black">Aucun défunt trouvé.</p>
+                <p class="text-center text-black">Aucun défunt trouvé pour la période sélectionnée.</p>
             @endif
         @endif
 
@@ -172,7 +174,7 @@
                                 <th>Date-Naissance</th>
                                 <th>Sexe-Enfant</th>
                                 <th>Nom du docteur déclarant</th>
-                                <th>Télécharger le certificat</th>
+                               
                             </tr>
                         </thead>
                         <tbody>
@@ -191,20 +193,14 @@
                                     <td>{{ $naissance->DateNaissance }}</td>
                                     <td>{{ $naissance->sexe }}</td>
                                     <td>Dr. {{ $naissance->sous_admin ? $naissance->sous_admin->name . ' ' . $naissance->sous_admin->prenom : 'Demandeur inconnu' }}</td>
-                                    <td>
-                                        <button class="eye">
-                                            <a href="{{ route('ministereagent.naissdownload', $naissance->id) }}" style="color: #009efb">
-                                                <i class="fas fa-download" style="color: blue"></i><br> Télécharger
-                                            </a>
-                                        </button>
-                                    </td>
+                                
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             @else
-                <p class="text-center text-black">Aucune naissance trouvée.</p>
+                <p class="text-center text-black">Aucune naissance trouvée pour la période sélectionnée.</p>
             @endif
         @endif
     </div>
@@ -247,5 +243,19 @@
             @endif
         @endif
     @endif
+</script>
+
+<!-- Script pour dynamiser le formulaire -->
+<script>
+    document.getElementById('period_type').addEventListener('change', function() {
+        var periodValueInput = document.querySelector('input[name="period_value"]');
+        if (this.value === 'week') {
+            periodValueInput.placeholder = 'Entrez le numéro de la semaine (1-52)';
+        } else if (this.value === 'month') {
+            periodValueInput.placeholder = 'Entrez le numéro du mois (1-12)';
+        } else if (this.value === 'year') {
+            periodValueInput.placeholder = 'Entrez l\'année (ex: 2023)';
+        }
+    });
 </script>
 @endsection

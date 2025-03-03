@@ -185,48 +185,79 @@ class MinistereAgentController extends Controller
         $naissancesCount = NaissHop::count();
         $decesCount = DecesHop::count();
         $total = $naissancesCount + $decesCount;
-
+    
         // Récupérer le terme de recherche et le type de recherche depuis la requête
         $searchTerm = $request->input('search');
         $searchType = $request->input('search_type'); // 'naissance' ou 'deces'
-
+        $periodType = $request->input('period_type'); // 'week', 'month', 'year'
+        $periodValue = $request->input('period_value'); // Valeur de la semaine, mois ou année
+    
         // Vérifier si un terme de recherche est présent
-        $hasSearchTerm = !empty($searchTerm);
-
+        $hasSearchTerm = !empty($searchTerm) || !empty($periodValue);
+    
         // Initialiser les variables pour stocker les résultats
         $defunts = [];
         $naissances = [];
-
+    
         // Variables pour déterminer si des résultats ont été trouvés
         $foundDefunts = false;
         $foundNaissances = false;
-
+    
         // Si un terme de recherche est présent, effectuer la recherche en fonction du type choisi
         if ($hasSearchTerm) {
             if ($searchType === 'deces') {
                 // Recherche sur les décès
-                $defunts = DecesHop::where('NomM', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%')
-                    ->get();
-
+                $query = DecesHop::query();
+    
+                if (!empty($searchTerm)) {
+                    $query->where('NomM', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('codeCMD', 'like', '%' . $searchTerm . '%');
+                }
+    
+                if (!empty($periodValue)) {
+                    if ($periodType === 'week') {
+                        $query->whereRaw('WEEK(DateDeces) = ?', [$periodValue]);
+                    } elseif ($periodType === 'month') {
+                        $query->whereRaw('MONTH(DateDeces) = ?', [$periodValue]);
+                    } elseif ($periodType === 'year') {
+                        $query->whereRaw('YEAR(DateDeces) = ?', [$periodValue]);
+                    }
+                }
+    
+                $defunts = $query->get();
                 $foundDefunts = $defunts->count() > 0;
             } elseif ($searchType === 'naissance') {
                 // Recherche sur les naissances
-                $naissances = NaissHop::where('NomM', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('PrM', 'like', '%' . $searchTerm . '%')
-                    ->orWhere('codeCMN', 'like', '%' . $searchTerm . '%')
-                    ->get();
-
+                $query = NaissHop::query()
+                    ->join('enfants', 'naiss_hops.id', '=', 'enfants.naiss_hop_id'); // Joindre la table enfants
+    
+                if (!empty($searchTerm)) {
+                    $query->where('naiss_hops.NomM', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('naiss_hops.PrM', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('naiss_hops.codeCMN', 'like', '%' . $searchTerm . '%');
+                }
+    
+                if (!empty($periodValue)) {
+                    if ($periodType === 'week') {
+                        $query->whereRaw('WEEK(enfants.date_naissance) = ?', [$periodValue]);
+                    } elseif ($periodType === 'month') {
+                        $query->whereRaw('MONTH(enfants.date_naissance) = ?', [$periodValue]);
+                    } elseif ($periodType === 'year') {
+                        $query->whereRaw('YEAR(enfants.date_naissance) = ?', [$periodValue]);
+                    }
+                }
+    
+                $naissances = $query->get();
                 $foundNaissances = $naissances->count() > 0;
             }
         }
-
+    
         // Récupérer le nom et prénom de l'agent connecté et ID
         $agentName = Auth::guard('ministereagent')->user()->name; // Nom de l'agent
         $agentPrenom = Auth::guard('ministereagent')->user()->prenom; // Prénom de l'agent
         $agentId = Auth::guard('ministereagent')->user()->cnpsagent_id;
-
+    
         // Récupérer les informations du défunt ou de la naissance
         $defuntNom = $foundDefunts ? $defunts->first()->NomM : null;
         $defuntPrenom = $foundDefunts ? $defunts->first()->PrM : null;
@@ -234,29 +265,29 @@ class MinistereAgentController extends Controller
         $naissanceNom = $foundNaissances ? $naissances->first()->NomM : null;
         $naissancePrenom = $foundNaissances ? $naissances->first()->PrM : null;
         $codeCMN = $foundNaissances ? $naissances->first()->codeCMN : null;
-
-        // Stocker les informations de recherche dans la base de données
+    
+        // Enregistrer la recherche dans la table ministere_search_history
         if ($hasSearchTerm) {
             DB::table('ministere_search_history')->insert([
                 'agent_name' => $agentName,
                 'agent_prenom' => $agentPrenom,
+                'recherche_type' => $searchType,
                 'defunt_nom' => $defuntNom,
                 'defunt_prenom' => $defuntPrenom,
-                'codeCMD' => $codeCMD,
                 'naissance_nom' => $naissanceNom,
                 'naissance_prenom' => $naissancePrenom,
                 'codeCMN' => $codeCMN,
-                'search_term' => $searchTerm,
-                'recherche_type' => $searchType,
-                'cnpsagent_id' => $agentId,
+                'codeCMD' => $codeCMD,
+                'search_term' => $periodType,
+                'cnpsagent_id' => $periodValue,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
         }
-
+    
         // Récupérer les alertes
         $alerts = Alert::all();
-
+    
         // Retourner la vue avec les données
         return view('superadmin.ministere.agent.dashboard', compact(
             'alerts',
@@ -271,7 +302,9 @@ class MinistereAgentController extends Controller
             'decesCount',
             'naissancesCount',
             'agentName',
-            'agentPrenom'
+            'agentPrenom',
+            'periodType',
+            'periodValue'
         ));
     }
 

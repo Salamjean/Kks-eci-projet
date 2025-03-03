@@ -76,7 +76,7 @@
 
     <div class="container col-12">
         <div class="row justify-content-center">
-            <div class="col-md-10">
+            <div class="col-md-12">
                 <div class="card shadow mb-4 center-card">
                     <div class="card-header py-3" style="background-color: #2797d6; display: flex; justify-content: space-between; align-items: center;">
                         <h6 class="font-weight-bold text-white text-center" style="font-size: 30px">Les recherches effectuées récemment</h6>
@@ -99,7 +99,8 @@
                                         <th>Type de recherche</th>
                                         <th>Recherche sur </th>
                                         <th>Code CMD</th>
-                                        <th>Terme de recherche</th>
+                                        <th>Recherche par</th>
+                                        <th>Période</th>
                                         <th>Date et Heure</th>
                                     </tr>
                                 </thead>
@@ -126,7 +127,17 @@
                                                     Type de recherche inconnu
                                                 @endif
                                             </td>
-                                            <td>{{ $history->search_term }}</td>
+                                            <td>
+                                                @php
+                                                    $translations = [
+                                                        'month' => 'Mois',
+                                                        'year' => 'Année',
+                                                        'week' => 'Semaine',
+                                                    ];
+                                                @endphp
+                                                {{ $translations[$history->search_term] ?? $history->search_term }}
+                                            </td>
+                                            <td>{{ $history->cnpsagent_id }}</td>
                                             <td>{{ $history->created_at }}</td>
                                         </tr>
                                     @endforeach

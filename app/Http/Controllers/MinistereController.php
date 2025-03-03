@@ -22,48 +22,73 @@ use Illuminate\Support\Facades\Notification;
 class MinistereController extends Controller
 {
     public function dashboard(Request $request)
-{
-    $admin = Auth::guard('ministere')->user();
-    $selectedMonth = $request->input('month', Carbon::now()->month);
-    $selectedYear = $request->input('year', Carbon::now()->year);
-    $deceshops = DecesHop::count();
-    $naisshops = NaissHop::count();
-
-    // Récupérer les données pour les graphiques (Naissances)
-    $naissData = NaissHop::whereYear('created_at', $selectedYear)
-        ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-        ->groupBy('month')
-        ->orderBy('month')
-        ->pluck('count', 'month')->toArray();
-
-    // Remplir les données manquantes pour les naissances
-    $naissData = array_replace(array_fill(1, 12, 0), $naissData);
-
-    // Récupérer les données pour les graphiques (Décès)
-    $decesData = DecesHop::whereYear('created_at', $selectedYear)
-        ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
-        ->groupBy('month')
-        ->orderBy('month')
-        ->pluck('count', 'month')->toArray();
-
-    // Remplir les données manquantes pour les décès
-    $decesData = array_replace(array_fill(1, 12, 0), $decesData);
-
-    // Récupérer l'historique des recherches depuis la session avec une clé spécifique au ministère
-    $searchHistory = session('ministere_search_history', []);
-
-    // Compter les agents du ministère
-    $ministereagent = MinistereAgent::where('communeM', $admin->siege)->count();
-
-    return view('superadmin.ministere.dashboard', compact(
-        'ministereagent',
-        'naissData',
-        'decesData',
-        'deceshops',
-        'naisshops',
-        'searchHistory'
-    ));
-}
+    {
+        $admin = Auth::guard('ministere')->user();
+        $selectedMonth = $request->input('month', Carbon::now()->month);
+        $selectedYear = $request->input('year', Carbon::now()->year);
+    
+        // Compter le nombre total de déclarations de naissances et de décès
+        $deceshops = DecesHop::count();
+        $naisshops = NaissHop::count();
+        
+    
+        // Récupérer les données pour les graphiques (Naissances)
+        $naissData = NaissHop::whereYear('created_at', $selectedYear)
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month')->toArray();
+    
+        // Remplir les données manquantes pour les naissances
+        $naissData = array_replace(array_fill(1, 12, 0), $naissData);
+    
+        // Récupérer les données pour les graphiques (Décès)
+        $decesData = DecesHop::whereYear('created_at', $selectedYear)
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->groupBy('month')
+            ->orderBy('month')
+            ->pluck('count', 'month')->toArray();
+    
+        // Remplir les données manquantes pour les décès
+        $decesData = array_replace(array_fill(1, 12, 0), $decesData);
+    
+        // Compter les déclarations de naissances par commune et par mois
+        $naissByCommunePerMonth = NaissHop::whereYear('created_at', $selectedYear)
+            ->selectRaw('MONTH(created_at) as month, commune, COUNT(*) as total')
+            ->groupBy('month', 'commune')
+            ->orderBy('month')
+            ->orderByDesc('total')
+            ->get()
+            ->groupBy('month');
+    
+        // Compter les déclarations de décès par commune et par mois
+        $decesByCommunePerMonth = DecesHop::whereYear('created_at', $selectedYear)
+            ->selectRaw('MONTH(created_at) as month, commune, COUNT(*) as total')
+            ->groupBy('month', 'commune')
+            ->orderBy('month')
+            ->orderByDesc('total')
+            ->get()
+            ->groupBy('month');
+    
+        // Récupérer l'historique des recherches depuis la session avec une clé spécifique au ministère
+        $searchHistory = session('ministere_search_history', []);
+    
+        // Compter les agents du ministère
+        $ministereagent = MinistereAgent::where('communeM', $admin->siege)->count();
+    
+        return view('superadmin.ministere.dashboard', compact(
+            'ministereagent',
+            'naissData',
+            'decesData',
+            'deceshops',
+            'naisshops',
+            'searchHistory',
+            'naissByCommunePerMonth',
+            'decesByCommunePerMonth',
+            'selectedYear',
+            'selectedMonth',
+        ));
+    }  
 public function historique(){
     $rechercheInfo = MinistereSearchHistory::latest()->paginate(10);
     return view('superadmin.ministere.historique', compact('rechercheInfo'));

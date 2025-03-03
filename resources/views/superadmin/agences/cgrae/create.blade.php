@@ -166,7 +166,7 @@
 
         <div class="form-row mb-3">
             <div class="col-md-12">
-                <label for="validationCustom005" class="form-label">Nom de l'agence</label>
+                <label for="validationCustom005" class="form-label">Localisation de l'agence</label>
                 <input type="text" class="form-control" name="agence_name" id="validationCustom005" placeholder="Entrez le nom de l'agence" >
                 @error('agence_name')
                   <div class="invalid-feedback">{{ $message }}</div>
