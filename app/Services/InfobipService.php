@@ -28,7 +28,7 @@ class InfobipService
         Log::info('Message : ' . $message);
     
         $client = new Client([
-            'verify' => 'C:\Users\Salam\OneDrive\Documents\@Kks Technologies\cacert.pem', // Chemin vers le fichier de certificat
+            'verify' => env('SSL_CERT_PATH'), // Utilise la variable d'environnement
         ]);
     
         $sendSmsApi = new SendSmsApi($client, $this->config);
