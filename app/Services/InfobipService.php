@@ -21,9 +21,10 @@ class InfobipService
         $baseUrl = config('services.infobip.base_url'); // URL de base Infobip
     
         // Instanciation de Configuration avec les arguments requis
-        $this->config = new Configuration();
-        $this->config->setHost($baseUrl);
-        $this->config->setApiKey('Authorization', $apiKey); // Pas besoin de setApiKeyPrefix
+        $this->config = new Configuration($apiKey, $baseUrl);
+    
+        // Configuration supplémentaire (si nécessaire)
+        $this->config->setApiKey('Authorization', $apiKey);
     }
     public function sendSms($to, $message)
     {
