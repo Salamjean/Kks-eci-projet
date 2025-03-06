@@ -21,7 +21,7 @@ class InfobipService
         $baseUrl = config('services.infobip.base_url'); // URL de base Infobip
     
         // Instanciation de Configuration
-        $this->config = new Configuration();
+        $this->config = new Configuration($baseUrl, $apiKey);
         $this->config->setHost($baseUrl); // Utilise l'URL de base correcte
         $this->config->setApiKey('Authorization', 'App ' . $apiKey); // Ajoutez 'App ' avant la clé API
     }
