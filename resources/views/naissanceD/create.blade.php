@@ -278,7 +278,7 @@
                     `<div class="swal-grid">
                         <div>
                             <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
-                            <input id="swal-montant_timbre" class="swal2-input text-center" value="50" readonly>
+                            <input id="swal-montant_timbre" class="swal2-input text-center" value="150" readonly>
                             <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
                         </div>
                         <div>
