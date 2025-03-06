@@ -14,17 +14,17 @@ class InfobipService
 {
     protected $config;
 
-    public function __construct()
-    {
-        // Récupération des configurations
-        $apiKey = config('services.infobip.api_key'); // Clé API Infobip
-        $baseUrl = config('services.infobip.base_url'); // URL de base Infobip
-    
-        // Instanciation de Configuration
-        $this->config = new Configuration($baseUrl, $apiKey);
-        $this->config->setHost($baseUrl); // Utilise l'URL de base correcte
-        $this->config->setApiKey('Authorization', 'App ' . $apiKey); // Ajoutez 'App ' avant la clé API
-    }
+   public function __construct()
+{
+    // Récupération des configurations
+    $apiKey = config('services.infobip.api_key'); // Clé API Infobip
+    $baseUrl = config('services.infobip.base_url'); // URL de base Infobip
+
+    // Instanciation de Configuration avec les arguments requis
+    $this->config = new Configuration();
+    $this->config->setHost($baseUrl);
+    $this->config->setApiKey('Authorization', $apiKey); // Pas besoin de setApiKeyPrefix
+}
     public function sendSms($to, $message)
     {
         Log::info('Tentative d\'envoi de SMS à : ' . $to);
