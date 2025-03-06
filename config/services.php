@@ -34,6 +34,11 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+
+    'cinetpay' => [
+    'api_key' => env('CINETPAY_API_KEY'),
+    'site_id' => env('CINETPAY_SITE_ID'),
+],
     
     'infobip' => [
     'api_key' => env('INFOBIP_API_KEY'),

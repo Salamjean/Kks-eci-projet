@@ -3,6 +3,7 @@
 @section('content')
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.cinetpay.com/seamless/main.js"></script>
 
 <style>
     body {
@@ -88,51 +89,13 @@
         flex: 1 1 100%;
     }
 
-    /* Style for larger screens */
     @media (min-width: 768px) {
         .form-group {
-            flex: 0 0 50%; /* Two columns */
+            flex: 0 0 50%; /* Deux colonnes */
         }
         .titre{
             margin-top: 45px;
         }
-    }
-    /* Responsive radio buttons */
-    .form-group.text-center .form-row.d-flex.justify-content-center.align-items-center.gap-4 {
-        flex-direction: row !important; /* Make the layout horizontal on larger screens */
-    }
-.form-row .form-group .radio-group input[type="radio"] {
-    display: inline-block !important;
-    width: auto !important; /* Set width to auto */
-    margin-right: 0.5em; /* Add some spacing */
-}
-
-.form-row .form-group .radio-group label {
-    display: inline-block;
-    margin-left: 0; /* Reset margin for proper alignment */
-    color: #1a5c58;
-    font-weight: bold; /* Maintain font weight */
-}
-   /* Responsive radio buttons */
-   @media(max-width: 576px) {
-        .form-row.d-flex.justify-content-center.align-items-center.gap-4 {
-        flex-direction: column !important; 
-        }
-        .titre{
-            margin-top: 45px;
-        }
-    }
-    /* SweetAlert width adjustments */
-    .swal2-popup {
-        width: auto !important; /* Let SweetAlert determine its width */
-        max-width: 90% !important;  /* Ensure it fits on smaller screens */
-    }
-
-    @media (min-width: 768px) {
-        .swal2-popup {
-            width: 800px !important; /* Set it back to the original width on larger screens */
-        }
-        
     }
 </style>
 
@@ -162,7 +125,7 @@
 
 <div class="conteneurInfo">
     <h2 class="titre text-center">Demande d'Extrait de Naissance</h2>
-    <form id="naissanceForm" method="POST" action="{{ route('naissanced.store') }}" enctype="multipart/form-data">
+    <form id="naissanceForm" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="form-row">
@@ -231,7 +194,7 @@
                 @enderror
             </div>
             <div class="form-group half-width">
-                <label for="CNI">Pièce d'identité(demandeur)</label>
+                <label for="CNI">Pièce d'identité (demandeur)</label>
                 <input type="file" id="CNI" name="CNI" class="form-control" >
                 @error('CNI')
                     <span style="color: red">{{ $message }}</span>
@@ -246,166 +209,194 @@
                 <span style="color: red">{{ $message }}</span>
             @enderror
         </div>
-                        
-        <script>
-            function updateFields() {
-                const pourSelect = document.getElementById('pour');
-                const nameInput = document.getElementById('name');
-                const prenomInput = document.getElementById('prenom');
-                const communeInput = document.getElementById('commune');
-                const CMUInput = document.getElementById('CMU');
-                
-                if (pourSelect.value === 'Moi') {
-                    nameInput.value = '{{ $userName }}';
-                    prenomInput.value = '{{ $userPrenom }}';
-                    communeInput.value = '{{ $userCommune }}';
-                    CMUInput.value = '{{ $userCMU }}';
-                } else {
-                    nameInput.value = '';
-                    prenomInput.value = '';
-                    communeInput.value = '';
-                    CMUInput.value = '';
-                }
-            }
-            document.addEventListener('DOMContentLoaded', updateFields);
-        </script>
-          <!-- Options Radio -->
-       <div class="form-group text-center" id="optionsSection">
-        <p style="font-weight: bold; color: #1a5c58;">Choisissez le mode de rétrait :</p>
-        <div class="form-row d-flex justify-content-center align-items-center gap-4 justify-content-md-around" >
-            <div class="radio-group">
-                <input type="radio" id="option1" name="choix_option" value="retrait_sur_place" checked required>
-                <label for="option1" class="">Retrait sur place</label>
-            </div>
-            <div class="radio-group">
-                <input type="radio" id="option2" name="choix_option" value="livraison" required>
-                <label for="option2" class="">Livraison</label>
+        
+        <!-- Options Radio -->
+        <div class="form-group text-center" id="optionsSection">
+            <p style="font-weight: bold; color: #1a5c58;">Choisissez le mode de retrait :</p>
+            <div class="form-row d-flex justify-content-center align-items-center gap-4 justify-content-md-around">
+                <div class="radio-group">
+                    <input type="radio" id="option1" name="choix_option" value="retrait_sur_place" checked >
+                    <label for="option1" class="">Retrait sur place</label>
+                </div>
+                <div class="radio-group">
+                    <input type="radio" id="option2" name="choix_option" value="livraison" >
+                    <label for="option2" class="">Livraison</label>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Boutons -->
+        <!-- Boutons -->
         <button type="submit" id="btnValider">Valider</button>
     </form>
 </div>
 
 <script>
     let formSubmitted = false;
-    let livraisonSelected = false;
-    let submitAfterPopup = false; // Nouveau drapeau
 
-    function showLivraisonPopup() {
-    Swal.fire({
-        title: 'Informations de Livraison',
-        width: '700px',
-        html:
-            `<div class="swal-grid">
-                <div>
-                    <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
-                    <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
-                    <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
-                </div>
-                <div>
-                    <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
-                    <input id="swal-montant_livraison" class="swal2-input text-center" value="1500" readonly>
-                    <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
-                </div>
-                <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
-                <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
-                <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire"></div>
-                <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire"></div>
-                <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison"></div>
-                <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
-                <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville"></div>
-                <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
-                <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
-            </div>`,
-        showCancelButton: true,
-        confirmButtonText: 'Payer',
-        cancelButtonText: 'Annuler',
-        focusConfirm: false,
-        preConfirm: () => {
-            const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
-            const prenom_destinataire = document.getElementById('swal-prenom_destinataire').value;
-            const email_destinataire = document.getElementById('swal-email_destinataire').value;
-            const contact_destinataire = document.getElementById('swal-contact_destinataire').value;
-            const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
-            const code_postal = document.getElementById('swal-code_postal').value;
-            const ville = document.getElementById('swal-ville').value;
-            const commune_livraison = document.getElementById('swal-commune_livraison').value;
-            const quartier = document.getElementById('swal-quartier').value;
-            const montant_timbre = document.getElementById('swal-montant_timbre').value;
-            const montant_livraison = document.getElementById('swal-montant_livraison').value;
-            if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier|| !montant_timbre || !montant_livraison) {
-                Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
-                return false;
-            }
-            return {
-                nom_destinataire: nom_destinataire,
-                prenom_destinataire: prenom_destinataire,
-                email_destinataire: email_destinataire,
-                contact_destinataire: contact_destinataire,
-                adresse_livraison: adresse_livraison,
-                code_postal: code_postal,
-                ville: ville,
-                commune_livraison: commune_livraison,
-                quartier: quartier,
-                montant_timbre:montant_timbre,
-                montant_livraison:montant_livraison,
-            };
+    function updateFields() {
+        const pourSelect = document.getElementById('pour');
+        const nameInput = document.getElementById('name');
+        const prenomInput = document.getElementById('prenom');
+        const communeInput = document.getElementById('commune');
+        const CMUInput = document.getElementById('CMU');
+
+        if (pourSelect.value === 'Moi') {
+            nameInput.value = '{{ $userName }}';
+            prenomInput.value = '{{ $userPrenom }}';
+            communeInput.value = '{{ $userCommune }}';
+            CMUInput.value = '{{ $userCMU }}';
+        } else {
+            nameInput.value = '';
+            prenomInput.value = '';
+            communeInput.value = '';
+            CMUInput.value = '';
         }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const formData = result.value;
-            const form = document.getElementById('naissanceForm');
-            for (const key in formData) {
-                if (formData.hasOwnProperty(key)) {
-                    const hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
-                    hiddenInput.name = key;
-                    hiddenInput.value = formData[key];
-                    form.appendChild(hiddenInput);
-                }
-            }
-            submitAfterPopup = true; // Définir le drapeau
-            form.submit(); // Soumettre explicitement le formulaire
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            // Si l'utilisateur clique sur annuler, selectionner l'option 1
-            document.getElementById('option1').checked = true;
-            submitAfterPopup = false;
+    }
+    document.addEventListener('DOMContentLoaded', updateFields);
+
+    document.getElementById('naissanceForm').addEventListener('submit', function(event) {
+        if (formSubmitted) {
+            event.preventDefault();
+            return;
+        }
+
+        const livraisonCheckbox = document.getElementById('option2');
+        if (livraisonCheckbox.checked) {
+            event.preventDefault();
+            showPaymentPopup();
+        } else {
+            formSubmitted = true;
+            this.submit();
         }
     });
-}
 
+    function showPaymentPopup() {
+        Swal.fire({
+            title: 'Confirmer le paiement',
+            width: '700px',
+            html:
+                    `<div class="swal-grid">
+                        <div>
+                            <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
+                            <input id="swal-montant_timbre" class="swal2-input text-center" value="50" readonly>
+                            <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
+                        </div>
+                        <div>
+                            <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
+                            <input id="swal-montant_livraison" class="swal2-input text-center" value="50" readonly>
+                            <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
+                        </div>
+                        <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
+                        <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
+                        <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire"></div>
+                        <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire"></div>
+                        <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison"></div>
+                        <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
+                        <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville"></div>
+                        <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
+                        <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
+                    </div>`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Oui, payer!',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const montantTimbre = parseFloat(document.getElementById('swal-montant_timbre').value);
+                const montantLivraison = parseFloat(document.getElementById('swal-montant_livraison').value);
+                const nomDestinataire = document.getElementById('swal-nom_destinataire').value;
+                const prenomDestinataire = document.getElementById('swal-prenom_destinataire').value;
+                const emailDestinataire = document.getElementById('swal-email_destinataire').value;
+                const contactDestinataire = document.getElementById('swal-contact_destinataire').value;
+                const adresseLivraison = document.getElementById('swal-adresse_livraison').value;
+                const codePostal = document.getElementById('swal-code_postal').value;
+                const ville = document.getElementById('swal-ville').value;
+                const communeLivraison = document.getElementById('swal-commune_livraison').value;
+                const quartier = document.getElementById('swal-quartier').value;
 
-document.getElementById('naissanceForm').addEventListener('submit', function(event) {
-    if (formSubmitted) {
-      event.preventDefault();
-      return;
+                const formData = new FormData(document.getElementById('naissanceForm'));
+                const transactionId = Math.floor(Math.random() * 100000000).toString(); // ID de transaction
+
+                // Ajoutez les informations de livraison dans formData
+                formData.append('montant_timbre', montantTimbre);
+                formData.append('montant_livraison', montantLivraison);
+                formData.append('nom_destinataire', nomDestinataire);
+                formData.append('prenom_destinataire', prenomDestinataire);
+                formData.append('email_destinataire', emailDestinataire);
+                formData.append('contact_destinataire', contactDestinataire);
+                formData.append('adresse_livraison', adresseLivraison);
+                formData.append('code_postal', codePostal);
+                formData.append('ville', ville);
+                formData.append('commune_livraison', communeLivraison);
+                formData.append('quartier', quartier);
+
+                const totalAmount = montantTimbre + montantLivraison; // Montant total
+
+                // Configuration CinetPay et soumission
+                CinetPay.setConfig({
+                    apikey: '521006956621e4e7a6a3d16.70681548', // Remplacez par votre APIKEY
+                    site_id: '935132', // Remplacez par votre SITE ID
+                    notify_url: 'http://mondomaine.com/notify/',
+                    mode: 'PRODUCTION'
+                });
+
+                CinetPay.getCheckout({
+                    transaction_id: transactionId,
+                    amount: totalAmount,
+                    currency: 'XOF',
+                    channels: 'ALL',
+                    description: 'Demande d\'extrait de naissance',
+                    customer_name: formData.get('name'),
+                    customer_surname: formData.get('prenom'),
+                    customer_email: '{{ auth()->user()->email }}',
+                    customer_phone_number: '{{ auth()->user()->phone }}',
+                    customer_address: formData.get('commune'),
+                    customer_city: formData.get('commune'),
+                    customer_country: 'CI',
+                    customer_state: 'CI',
+                    customer_zip_code: '225',
+                });
+
+                CinetPay.waitResponse(function(data) {
+                    if (data.status === "ACCEPTED") {
+                        formSubmitted = true; // Soumettre le formulaire après le paiement réussi
+                        // Soumettez le formulaire avec les nouvelles données
+                        document.getElementById('naissanceForm').submit();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erreur',
+                            text: 'Le paiement a échoué. Veuillez réessayer.',
+                        });
+                    }
+                });
+
+                CinetPay.onError(function(data) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: 'Une erreur s\'est produite lors du traitement du paiement.',
+                    });
+                });
+            }
+        });
     }
-
-   const livraisonCheckbox = document.getElementById('option2');
-    if (livraisonCheckbox.checked && !submitAfterPopup) {
-         event.preventDefault();
-        showLivraisonPopup();
-    } else {
-         formSubmitted = true;
-    }
-});
+    
 </script>
 <style>
-/* Styles par défaut (écrans larges) */
-.swal-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur les écrans larges */
-    gap: 10px;
-}
-
-/* Media query pour les écrans de taille moyenne et petits (tablettes et mobiles) */
-@media (max-width: 767px) {
+    /* Styles par défaut (écrans larges) */
     .swal-grid {
-        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur les écrans larges */
+        gap: 10px;
     }
-}
-</style>
+    
+    /* Media query pour les écrans de taille moyenne et petits (tablettes et mobiles) */
+    @media (max-width: 767px) {
+        .swal-grid {
+            grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+        }
+    }
+    </style>
+
 @endsection

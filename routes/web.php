@@ -26,7 +26,9 @@ use App\Http\Controllers\MinistereController;
 use App\Http\Controllers\NaissanceController;
 use App\Http\Controllers\NaissanceDeclaController;
 use App\Http\Controllers\NaissHopController;
+use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\PaiemntConfigController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SousAdminController;
 use App\Http\Controllers\StatController;
@@ -65,6 +67,11 @@ Route::prefix('utilisateur')->group(function () {
     Route::get('/deces-index', [DecesController::class, 'userindex'])->name('decesutilisateur.index');
     Route::get('/mariage-index', [MariageController::class, 'userindex'])->name('mariage.userindex');
     Route::get('/logout', [UtilisateurController::class, 'logout'])->name('utilisateur.logout');
+
+    //route pour le piement 
+    Route::post('/initier-paiement', [PaiementController::class, 'initierPaiement'])->name('paiement.initier');
+    Route::get('/paiement/success', [PaiementController::class, 'success'])->name('paiement.success');
+    Route::post('/paiement/notify', [PaiementController::class, 'notify'])->name('paiement.notify');
 });  
 
 Route::prefix('utilisateur/')->group(function () {

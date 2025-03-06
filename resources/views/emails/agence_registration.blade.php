@@ -12,7 +12,7 @@
         </tr>
         <tr>
             <td>
-                <h1>Votre Agence Cgrae est enrégistré dans le siège CGRAE</h1>
+                <h1>Agence Cgrae est enrégistré</h1>
                 <p>Votre compte a été créé avec succès sur la plateforme.</p>
                 <p>Cliquez sur le bouton ci-dessous pour valider votre compte.</p>
                 <p>Saisissez le code <strong>{{ $code }}</strong> dans le formulaire qui apparaîtra.</p>

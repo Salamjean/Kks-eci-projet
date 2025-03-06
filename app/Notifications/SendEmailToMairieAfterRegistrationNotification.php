@@ -41,7 +41,7 @@ class SendEmailToMairieAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('E-CI : Votre Mairie a été enregistrée dans notre base de données') // Sujet mis à jour
+            ->subject('E-CI : Mairie enregistrée') // Sujet mis à jour
             ->from('no-reply@example.com', 'E-CI')
             ->view('emails.mairie_registration', [
                 'code' => $this->code,

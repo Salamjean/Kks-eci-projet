@@ -12,7 +12,7 @@
         </tr>
         <tr>
             <td>
-                <h1>Le Ministère de la Santé a été enregistré dans notre base de données</h1>
+                <h1>Le Ministère de la Santé a été enregistré avec succès</h1>
                 <p>Votre compte a été créé avec succès sur la plateforme.</p>
                 <p>Cliquez sur le bouton ci-dessous pour valider votre compte.</p>
                 <p>Saisissez le code <strong>{{ $code }}</strong> dans le formulaire qui apparaîtra.</p>

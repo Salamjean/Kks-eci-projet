@@ -2,6 +2,7 @@
 
 @section('content')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
     <style>
         body {
             background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}');
@@ -281,7 +282,6 @@
             const btnSuivant = document.getElementById("btnSuivant");
             const btnValider = document.getElementById("btnValider");
 
-            // Vérification si le numéro de dossier est vide
             if (dossierNum.trim() === "") {
                 Swal.fire({
                     icon: 'error',
@@ -291,14 +291,12 @@
                 return;
             }
 
-            // Affichage de la préloader pendant la vérification
             Swal.fire({
                 title: 'Vérification en cours...',
                 allowOutsideClick: false,
                 didOpen: () => Swal.showLoading()
             });
 
-            // Envoi de la requête AJAX pour vérifier le code CMD
             $.ajax({
                 url: "{{ route('deces.verifierCodeCMD') }}",
                 method: "POST",
@@ -308,9 +306,6 @@
                 },
                 success: function (response) {
                     Swal.close();
-                    // Ferme l'indicateur de chargement
-
-                    // Si le code est trouvé, afficher les informations du défunt
                     if (response.existe) {
                         $("#nomHopital").val(response.nomHopital);
                         $("#nomDefunt").val(response.nomDefunt);
@@ -318,17 +313,14 @@
                         $("#dateDces").val(response.dateDeces);
                         $("#lieuNaiss").val(response.lieuNaiss);
 
-                        // Afficher les informations et masquer les boutons
                         infoDefunt.classList.remove("hidden");
                         btnSuivant.classList.add("hidden");
                         btnValider.classList.remove("hidden");
                         const isFilled = $("#declarationForm input[required]").toArray().every(input => input.value.trim() !== "");
                         if (isFilled) {
                             $("#optionsSection").fadeIn();
-                            // Afficher avec effet
                         }
                     } else {
-                        // Si le code n'existe pas, afficher une alerte d'erreur
                         Swal.fire({
                             icon: 'error',
                             title: 'Erreur',
@@ -338,9 +330,7 @@
                 },
                 error: function (xhr) {
                     Swal.close();
-                    // Ferme l'indicateur de chargement
                     console.error(xhr.responseText);
-                    // Affiche les erreurs dans la console
                     Swal.fire({
                         icon: 'error',
                         title: 'Erreur',
@@ -354,17 +344,17 @@
             Swal.fire({
                 title: 'Informations de Livraison',
                 width: '700px',
-                html:
-                    `<div class="swal-grid">
+                html: `
+                    <div class="swal-grid">
                         <div>
                             <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
-                            <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
-                            <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
+                            <input id="swal-montant_timbre" class="swal2-input text-center" value="50" readonly>
+                            <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournis par Kks-technologies</label>
                         </div>
                         <div>
                             <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
-                            <input id="swal-montant_livraison" class="swal2-input text-center" value="1500" readonly>
-                            <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
+                            <input id="swal-montant_livraison" class="swal2-input text-center" value="50" readonly>
+                            <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais de livraison sont fixés à 1500 Fcfa</label>
                         </div>
                         <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
                         <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
@@ -390,9 +380,10 @@
                     const ville = document.getElementById('swal-ville').value;
                     const commune_livraison = document.getElementById('swal-commune_livraison').value;
                     const quartier = document.getElementById('swal-quartier').value;
-                     const montant_timbre = document.getElementById('swal-montant_timbre').value;
+                    const montant_timbre = document.getElementById('swal-montant_timbre').value;
                     const montant_livraison = document.getElementById('swal-montant_livraison').value;
-                    if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier|| !montant_timbre || !montant_livraison) {
+
+                    if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier || !montant_timbre || !montant_livraison) {
                         Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
                         return false;
                     }
@@ -406,25 +397,72 @@
                         ville: ville,
                         commune_livraison: commune_livraison,
                         quartier: quartier,
-                         montant_timbre:montant_timbre,
-                        montant_livraison:montant_livraison,
+                        montant_timbre: montant_timbre,
+                        montant_livraison: montant_livraison,
                     };
                 }
             }).then((result) => {
                 if (result.isConfirmed) {
                     const formData = result.value;
-                    const form = document.getElementById('declarationForm');
-                    for (const key in formData) {
-                        if (formData.hasOwnProperty(key)) {
-                            const hiddenInput = document.createElement('input');
-                            hiddenInput.type = 'hidden';
-                            hiddenInput.name = key;
-                            hiddenInput.value = formData[key];
-                            form.appendChild(hiddenInput);
+                    const totalAmount = parseFloat(formData.montant_timbre) + parseFloat(formData.montant_livraison);
+
+                    // Configuration de CinetPay
+                    CinetPay.setConfig({
+                        apikey: '521006956621e4e7a6a3d16.70681548', // Remplacez par votre clé API CinetPay
+                        site_id: '935132', // Remplacez par votre site ID
+                        notify_url: 'https://votredomaine.com/notify', // URL de notification
+                        mode: 'PRODUCTION' // Ou 'TEST' pour les tests
+                    });
+
+                    // Lancement du paiement
+                    CinetPay.getCheckout({
+                        transaction_id: Math.floor(Math.random() * 100000000).toString(), // ID de transaction unique
+                        amount: totalAmount,
+                        currency: 'XOF',
+                        channels: 'ALL',
+                        description: 'Paiement pour livraison de document',
+                        customer_name: formData.nom_destinataire,
+                        customer_surname: formData.prenom_destinataire,
+                        customer_email: formData.email_destinataire,
+                        customer_phone_number: formData.contact_destinataire,
+                        customer_address: formData.adresse_livraison,
+                        customer_city: formData.ville,
+                        customer_country: 'CI',
+                        customer_state: 'CI',
+                        customer_zip_code: formData.code_postal,
+                    });
+
+                    // Gestion de la réponse de CinetPay
+                    CinetPay.waitResponse(function(data) {
+                        if (data.status === "ACCEPTED") {
+                            const form = document.getElementById('declarationForm');
+                            for (const key in formData) {
+                                if (formData.hasOwnProperty(key)) {
+                                    const hiddenInput = document.createElement('input');
+                                    hiddenInput.type = 'hidden';
+                                    hiddenInput.name = key;
+                                    hiddenInput.value = formData[key];
+                                    form.appendChild(hiddenInput);
+                                }
+                            }
+                            formSubmitted = true;
+                            form.submit();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erreur',
+                                text: 'Le paiement a échoué. Veuillez réessayer.',
+                            });
                         }
-                    }
-                    submitAfterPopup = true;
-                    form.submit();
+                    });
+
+                    CinetPay.onError(function(data) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erreur',
+                            text: 'Une erreur s\'est produite lors du traitement du paiement.',
+                        });
+                    });
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     document.getElementById('option1').checked = true;
                     submitAfterPopup = false;
@@ -432,7 +470,7 @@
             });
         }
 
-        document.getElementById('declarationForm').addEventListener('submit', function (event) {
+        document.getElementById('declarationForm').addEventListener('submit', function(event) {
             if (formSubmitted) {
                 event.preventDefault();
                 return;
@@ -446,38 +484,33 @@
                 formSubmitted = true;
             }
         });
-         $(document).ready(function() {
-          $("#optionsSection").hide();
-            // Fonction pour vérifier si tous les champs obligatoires sont remplis
+
+        $(document).ready(function() {
+            $("#optionsSection").hide();
             function checkFields() {
                 const isFilled = $("#declarationForm input[required]").toArray().every(input => input.value.trim() !== "");
                 if (isFilled) {
-                     $("#optionsSection").fadeIn(); // Afficher avec effet
+                    $("#optionsSection").fadeIn();
                 } else {
-                  $("#optionsSection").hide(); // Cacher si des champs sont vides
-               }
-        }
-            // Écoutez les changements dans les champs du formulaire
+                    $("#optionsSection").hide();
+                }
+            }
             $("#declarationForm input").on("input change", checkFields);
-
-            // Appel de la fonction initiale pour vérifier l'état des champs
             checkFields();
-       });
+        });
     </script>
 
-<style>
-/* Styles par défaut (écrans larges) */
-.swal-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur les écrans larges */
-    gap: 10px;
-}
+    <style>
+        .swal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
 
-/* Media query pour les écrans de taille moyenne et petits (tablettes et mobiles) */
-@media (max-width: 767px) {
-    .swal-grid {
-        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
-    }
-}
-</style>
+        @media (max-width: 767px) {
+            .swal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 @endsection

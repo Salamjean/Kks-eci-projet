@@ -41,7 +41,7 @@ class SendEmailToDoctorAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('E-CI : Création de votre compte Docteur') // Sujet mis à jour
+            ->subject('E-CI : Compte du personnel crée avec succès') // Sujet mis à jour
             ->from('no-reply@example.com', 'E-CI')
             ->view('emails.doctor_registration', [
                 'code' => $this->code,

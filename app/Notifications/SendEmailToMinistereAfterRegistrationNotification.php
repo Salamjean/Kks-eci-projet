@@ -41,7 +41,7 @@ class SendEmailToMinistereAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('E-CI : Le Ministère de la Santé a été enregistré dans notre base de données') // Sujet mis à jour
+            ->subject('E-CI :Ministère de la Santé a été enregistré') // Sujet mis à jour
             ->from('no-reply@example.com', 'E-CI')
             ->view('emails.ministere_registration', [
                 'code' => $this->code,

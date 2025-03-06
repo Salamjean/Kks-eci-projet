@@ -41,7 +41,7 @@ class SendEmailToCnpsAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('E-CI : Votre CNPS a été enregistrée dans notre base de données')
+            ->subject('E-CI :CNPS a été enregistrée ')
             ->from('no-reply@example.com', 'E-CI')
             ->view('emails.cnps_registration', [
                 'code' => $this->code,

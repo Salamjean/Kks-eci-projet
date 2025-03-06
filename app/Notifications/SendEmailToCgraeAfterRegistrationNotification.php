@@ -41,7 +41,7 @@ class SendEmailToCgraeAfterRegistrationNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('E-CI : Votre CGRAE a été enregistrée dans notre base de données')
+            ->subject('E-CI : CGRAE a été enregistrée')
             ->from('no-reply@example.com', 'E-CI')
             ->view('emails.cgrae_registration', [
                 'code' => $this->code,

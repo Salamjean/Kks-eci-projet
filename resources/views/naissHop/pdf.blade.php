@@ -105,7 +105,7 @@
                     <ul class="text-center">
                         @foreach ($naissHop->enfants as $enfant)
                             <li>
-                                Enfant {{ $loop->iteration }} sexe : {{ $enfant->sexe }}
+                                Enfant {{ $loop->iteration }}: Né(e) le : {{ $enfant->date_naissance }} de sexe : {{ $enfant->sexe }}
                             </li>
                         @endforeach
                     </ul>

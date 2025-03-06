@@ -8,6 +8,7 @@
     "require": {
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.0",
+        "cinetpay/cinetpay-php": "1.9.2",
         "endroid/qr-code": "^5.0",
         "guzzlehttp/guzzle": "^7.9",
         "infobip/infobip-api-php-client": "^4.0",
@@ -76,13 +77,7 @@
         }
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-    {
-        "type": "vcs",
-        "url": "https://github.com/infobip/infobip-api-php-client"
-    }
-]
+    "prefer-stable": true
 
     
 }

@@ -4,6 +4,8 @@
 
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+
 <style>
     body {
         background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}');
@@ -342,20 +344,18 @@
 <script>
     let formSubmitted = false;
     let submitAfterPopup = false;
+
     document.addEventListener('DOMContentLoaded', () => {
-        // Mariage radio buttons
+        // Gestion des champs conditionnels pour le mariage et le décès
         const marriedYes = document.getElementById('oui');
         const marriedNo = document.getElementById('non');
         const marriedFileInputsContainer = document.getElementById('married-file-inputs-container');
 
-        // Décès hors centre de santé radio buttons
         const horsSYes = document.getElementById('ouiHorsS');
         const horsSNo = document.getElementById('nonHorsS');
         const decesFileInputsContainer = document.getElementById('deces-file-inputs-container');
 
-        // Contenu des champs conditionnels
-        const marriageFields =
-         `
+        const marriageFields = `
             <div class="form-group">
                 <label for="documentMariage">Photocopie de document de mariage pour le défunt(e)</label>
                 <input type="file" id="documentMariage" name="documentMariage" required>
@@ -369,7 +369,6 @@
             </div>
         `;
 
-        // Gestion des champs conditionnels
         marriedYes.addEventListener('change', () => {
             marriedFileInputsContainer.innerHTML = marriageFields;
         });
@@ -384,21 +383,22 @@
             decesFileInputsContainer.innerHTML = '';
         });
     });
+
     function showLivraisonPopup() {
         Swal.fire({
             title: 'Informations de Livraison',
             width: '700px',
-            html:
-                `<div class="swal-grid">
+            html: `
+                <div class="swal-grid">
                     <div>
                         <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
-                        <input id="swal-montant_timbre" class="swal2-input text-center" value="500" readonly>
-                        <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
+                        <input id="swal-montant_timbre" class="swal2-input text-center" value="50" readonly>
+                        <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournis par Kks-technologies</label>
                     </div>
                     <div>
                         <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
-                        <input id="swal-montant_livraison" class="swal2-input text-center" value="1500" readonly>
-                        <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
+                        <input id="swal-montant_livraison" class="swal2-input text-center" value="50" readonly>
+                        <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais de livraison sont fixés à 1500 Fcfa</label>
                     </div>
                     <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
                     <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
@@ -410,10 +410,10 @@
                     <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
                     <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
                 </div>`,
-                showCancelButton: true,
-                confirmButtonText: 'Payer',
-                cancelButtonText: 'Annuler',
-                focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Payer',
+            cancelButtonText: 'Annuler',
+            focusConfirm: false,
             preConfirm: () => {
                 const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
                 const prenom_destinataire = document.getElementById('swal-prenom_destinataire').value;
@@ -422,10 +422,11 @@
                 const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
                 const code_postal = document.getElementById('swal-code_postal').value;
                 const ville = document.getElementById('swal-ville').value;
-                 const commune_livraison = document.getElementById('swal-commune_livraison').value;
-                 const quartier = document.getElementById('swal-quartier').value;
+                const commune_livraison = document.getElementById('swal-commune_livraison').value;
+                const quartier = document.getElementById('swal-quartier').value;
                 const montant_timbre = document.getElementById('swal-montant_timbre').value;
                 const montant_livraison = document.getElementById('swal-montant_livraison').value;
+
                 if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier || !montant_timbre || !montant_livraison) {
                     Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
                     return false;
@@ -440,76 +441,123 @@
                     ville: ville,
                     commune_livraison: commune_livraison,
                     quartier: quartier,
-                    montant_timbre:montant_timbre,
-                    montant_livraison:montant_livraison,
+                    montant_timbre: montant_timbre,
+                    montant_livraison: montant_livraison,
                 };
             }
         }).then((result) => {
-           if (result.isConfirmed) {
+            if (result.isConfirmed) {
                 const formData = result.value;
-                const form = document.getElementById('declarationForm');
-                for (const key in formData) {
-                    if (formData.hasOwnProperty(key)) {
-                        const hiddenInput = document.createElement('input');
-                        hiddenInput.type = 'hidden';
-                        hiddenInput.name = key;
-                        hiddenInput.value = formData[key];
-                        form.appendChild(hiddenInput);
+                const totalAmount = parseFloat(formData.montant_timbre) + parseFloat(formData.montant_livraison);
+
+                // Configuration de CinetPay
+                CinetPay.setConfig({
+                    apikey: '521006956621e4e7a6a3d16.70681548', // Remplacez par votre clé API CinetPay
+                    site_id: '935132', // Remplacez par votre site ID
+                    notify_url: 'https://votredomaine.com/notify', // URL de notification
+                    mode: 'PRODUCTION' // Ou 'TEST' pour les tests
+                });
+
+                // Lancement du paiement
+                CinetPay.getCheckout({
+                    transaction_id: Math.floor(Math.random() * 100000000).toString(), // ID de transaction unique
+                    amount: totalAmount,
+                    currency: 'XOF',
+                    channels: 'ALL',
+                    description: 'Paiement pour livraison de document',
+                    customer_name: formData.nom_destinataire,
+                    customer_surname: formData.prenom_destinataire,
+                    customer_email: formData.email_destinataire,
+                    customer_phone_number: formData.contact_destinataire,
+                    customer_address: formData.adresse_livraison,
+                    customer_city: formData.ville,
+                    customer_country: 'CI',
+                    customer_state: 'CI',
+                    customer_zip_code: formData.code_postal,
+                });
+
+                // Gestion de la réponse de CinetPay
+                CinetPay.waitResponse(function(data) {
+                    if (data.status === "ACCEPTED") {
+                        // Ajouter les données de livraison au formulaire
+                        const form = document.getElementById('declarationForm');
+                        for (const key in formData) {
+                            if (formData.hasOwnProperty(key)) {
+                                const hiddenInput = document.createElement('input');
+                                hiddenInput.type = 'hidden';
+                                hiddenInput.name = key;
+                                hiddenInput.value = formData[key];
+                                form.appendChild(hiddenInput);
+                            }
+                        }
+                        // Soumettre le formulaire
+                        formSubmitted = true;
+                        form.submit();
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Erreur',
+                            text: 'Le paiement a échoué. Veuillez réessayer.',
+                        });
                     }
-                }
-                 submitAfterPopup = true;
-                 form.submit();
-           } else if(result.dismiss === Swal.DismissReason.cancel){
-                  document.getElementById('option1').checked = true;
-                   submitAfterPopup = false;
-        }
-    });
-}
- document.getElementById('declarationForm').addEventListener('submit', function(event) {
+                });
+
+                CinetPay.onError(function(data) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur',
+                        text: 'Une erreur s\'est produite lors du traitement du paiement.',
+                    });
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                document.getElementById('option1').checked = true;
+                submitAfterPopup = false;
+            }
+        });
+    }
+
+    document.getElementById('declarationForm').addEventListener('submit', function(event) {
         if (formSubmitted) {
             event.preventDefault();
             return;
         }
         const livraisonCheckbox = document.getElementById('option2');
-         if (livraisonCheckbox.checked && !submitAfterPopup) {
-              event.preventDefault();
+        if (livraisonCheckbox.checked && !submitAfterPopup) {
+            event.preventDefault();
             showLivraisonPopup();
         } else {
-             formSubmitted = true;
+            formSubmitted = true;
         }
     });
+
     $(document).ready(function() {
         $("#optionsSection").hide();
 
-          function checkFields() {
-              const isFilled = $("#declarationForm input[required]").toArray().every(input => input.value.trim() !== "");
-              if (isFilled) {
-                   $("#optionsSection").fadeIn(); // Afficher avec effet
-              } else {
-                $("#optionsSection").hide(); // Cacher si des champs sont vides
-             }
+        function checkFields() {
+            const isFilled = $("#declarationForm input[required]").toArray().every(input => input.value.trim() !== "");
+            if (isFilled) {
+                $("#optionsSection").fadeIn();
+            } else {
+                $("#optionsSection").hide();
+            }
         }
-          // Écoutez les changements dans les champs du formulaire
+
         $("#declarationForm input, #declarationForm select").on("input change", checkFields);
-
-        // Appel de la fonction initiale pour vérifier l'état des champs
         checkFields();
-   });
-
+    });
 </script>
-<style>
-/* Styles par défaut (écrans larges) */
-.swal-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur les écrans larges */
-    gap: 10px;
-}
 
-/* Media query pour les écrans de taille moyenne et petits (tablettes et mobiles) */
-@media (max-width: 767px) {
+<style>
     .swal-grid {
-        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
-}
+
+    @media (max-width: 767px) {
+        .swal-grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 @endsection
