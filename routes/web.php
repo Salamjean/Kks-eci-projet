@@ -358,9 +358,6 @@ Route::middleware('auth:web')->group(function () {
             Route::get('/{livraison}/edit', [LivraisonController::class, 'edit'])->name('livraison.edit');
             Route::put('/{livraison}/update', [LivraisonController::class, 'update'])->name('livraison.update');
             Route::put('/{livraison}/delete', [LivraisonController::class, 'delete'])->name('livraison.delete');
-            Route::get('/effectuer/livraison', [LivraisonController::class, 'effectuerlivraison'])->name('livraison.effectuer');
-            Route::get('/deja', [LivraisonController::class, 'livraisoneffectuer'])->name('livraison.livraisoneffectuer');
-            Route::get('/non', [LivraisonController::class, 'livraisonnoneffectuer'])->name('livraison.livraisonnoneffectuer');
             });
 
         // Gestion des caisses
@@ -582,6 +579,9 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     Route::middleware('auth:livraison')->prefix('livraison')->group(function(){
         Route::get('/dashboard', [LivraisonController::class, 'dashboard'])->name('livraison.dashboard');
         Route::get('/logout', [LivraisonController::class, 'logout'])->name('livraison.logout');
+        Route::get('/effectuer/livraison', [LivraisonController::class, 'effectuerlivraison'])->name('livraison.effectuer');
+        Route::get('/deja', [LivraisonController::class, 'livraisoneffectuer'])->name('livraison.livraisoneffectuer');
+        Route::get('/non', [LivraisonController::class, 'livraisonnoneffectuer'])->name('livraison.livraisonnoneffectuer');
     });
 
     Route::middleware('auth:caisse')->prefix('caisse')->group(function(){
