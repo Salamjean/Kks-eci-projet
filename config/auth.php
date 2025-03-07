@@ -71,6 +71,11 @@ return [
             'provider' => 'ajoints',
         ],
 
+        'livraison' => [
+            'driver' => 'session',
+            'provider' => 'livraisons',
+        ],
+
         'caisse' => [
             'driver' => 'session',
             'provider' => 'caisses',
@@ -182,6 +187,11 @@ return [
         'ajoints' => [
             'driver' => 'eloquent',
             'model' => App\Models\Ajoint::class,
+        ],
+
+        'livraisons' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Livraison::class,
         ],
 
         'caisses' => [

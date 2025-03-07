@@ -73,7 +73,7 @@ class AjointController extends Controller
            Notification::route('mail', $ajoint->email)
                ->notify(new SendEmailToAjointAfterRegistrationNotification($code, $ajoint->email));
            return redirect()->route('ajoint.index')
-               ->with('success', 'Ajoint au maire enregistré avec succès.');
+               ->with('success', 'Huissier enregistré avec succès.');
        } catch (\Exception $e) {
            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
        }
@@ -107,10 +107,10 @@ class AjointController extends Controller
             $ajoint->contact = $request->contact;
             $ajoint->commune = $request->commune;
             $ajoint->update();
-            return redirect()->route('ajoint.index')->with('success','Les informations ajoint au maire mises à jour avec succès.');
+            return redirect()->route('ajoint.index')->with('success','Les informations de l\'huissier mises à jour avec succès.');
         } catch (Exception $e) {
             // dd($e);
-            throw new Exception('error','Une erreur est survenue lors de la modification du Docteur');
+            throw new Exception('error','Une erreur est survenue lors de la modification du huissier');
         }
      }
 
@@ -299,7 +299,7 @@ class AjointController extends Controller
                 'code'=>'required|exists:reset_code_password_ajoints,code',
                 'password' => 'required|same:confirme_password',
                 'confirme_password' => 'required|same:password',
-                'profile_picture' => 'required'
+               
             ], [
                 'code.exists' => 'Le code de réinitialisation est invalide.',
                 'code.required' => 'Le code de réinitialisation est obligatoire verifié votre mail.',
@@ -307,7 +307,7 @@ class AjointController extends Controller
                 'password.same' => 'Les mots de passe doivent être identiques.',
                 'confirme_password.same' => 'Les mots de passe doivent être identiques.',
                 'confirme_password.required' => 'Le mot de passe de confirmation est obligatoire.',
-                'profile_picture.required' => 'Votre photo de profil est obligatoire',
+                
         ]);
         try {
             $ajoint = Ajoint::where('email', $request->email)->first();

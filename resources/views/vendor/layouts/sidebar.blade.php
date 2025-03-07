@@ -91,13 +91,28 @@
     </a>
     <div id="collapseMaire" class="collapse" aria-labelledby="headingMaire" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">Gestion Ajoint-Maire</h6>
+        <h6 class="collapse-header">Gestion Huissier</h6>
         <a class="collapse-item" href="{{ route('ajoint.index') }}">Liste des huissiers</a>
         <a class="collapse-item" href="{{ route('ajoint.create') }}">Ajouter un huissier</a>
       </div>
     </div>
   </li>
 
+   <!-- Section livraison -->
+   <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLivreur"
+      aria-expanded="true" aria-controls="collapseLivreur">
+      <i class="fa fa-user"></i>
+      <span>Livreur</span>
+    </a>
+    <div id="collapseLivreur" class="collapse" aria-labelledby="headingLivreur" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Gestion Livreur</h6>
+        <a class="collapse-item" href="{{ route('livraison.index') }}">Liste des Livreurs</a>
+        <a class="collapse-item" href="{{ route('livraison.create') }}">Ajouter un Livreur</a>
+      </div>
+    </div>
+  </li>
   <!-- Section Hôpital -->
   <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHopital"

@@ -19,6 +19,7 @@ use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\Doctors\DoctorDashboard;
 use App\Http\Controllers\Doctors\SousDoctorsDashboard;
 use App\Http\Controllers\GeneralController;
+use App\Http\Controllers\LivraisonController;
 use App\Http\Controllers\Vendor\VendorDashboard;
 use App\Http\Controllers\MariageController;
 use App\Http\Controllers\MinistereAgentController;
@@ -349,6 +350,18 @@ Route::middleware('auth:web')->group(function () {
             Route::delete('/{ajoint}/delete', [AjointController::class, 'ajointdelete'])->name('ajoint.delete');
             });
 
+        //Gestion de livraison
+        Route::prefix('livraison')->group(function () {
+            Route::get('/', [LivraisonController::class, 'index'])->name('livraison.index');
+            Route::get('/create', [LivraisonController::class, 'create'])->name('livraison.create');
+            Route::post('/store', [LivraisonController::class, 'store'])->name('livraison.store');
+            Route::get('/{livraison}/edit', [LivraisonController::class, 'edit'])->name('livraison.edit');
+            Route::put('/{livraison}/update', [LivraisonController::class, 'update'])->name('livraison.update');
+            Route::get('/effectuer/livraison', [LivraisonController::class, 'effectuerlivraison'])->name('livraison.effectuer');
+            Route::get('/deja', [LivraisonController::class, 'livraisoneffectuer'])->name('livraison.livraisoneffectuer');
+            Route::get('/non', [LivraisonController::class, 'livraisonnoneffectuer'])->name('livraison.livraisonnoneffectuer');
+            });
+
         // Gestion des caisses
         Route::prefix('caisses')->group(function () {
             Route::get('/', [CaisseController::class, 'caisseindex'])->name('caisse.index');
@@ -358,6 +371,7 @@ Route::middleware('auth:web')->group(function () {
             Route::put('/{caisse}/update', [CaisseController::class, 'caisseupdate'])->name('caisse.update');
             Route::delete('/{caisse}/delete', [CaisseController::class, 'caissedelete'])->name('caisse.delete');
             });
+
     });
 });
 
@@ -431,7 +445,6 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     Route::post('/validate-cnps-account/{email}', [CnpsController::class, 'submitDefineAccess'])->name('cnps.validate');
     Route::get('/validate-cnps-agent-account/{email}', [CnpsAgentController::class, 'defineAccess']);
     Route::post('/validate-cnps-agent-account/{email}', [CnpsAgentController::class, 'submitDefineAccess'])->name('cnpsagent.validate');
-
     Route::get('/validate-cnps-agence-account/{email}', [AgenceCnpsController::class, 'defineAccess']);
     Route::post('/validate-cnps-agence-account/{email}', [AgenceCnpsController::class, 'submitDefineAccess'])->name('cnpsagences.validate');
     Route::get('/validate-cgrae-agence-account/{email}', [AgenceCgraeController::class, 'defineAccess']);
@@ -444,6 +457,8 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     Route::post('/validate-ministere-account/{email}', [MinistereController::class, 'submitDefineAccess'])->name('ministere.validate');
     Route::get('/validate-ministere-agent-account/{email}', [MinistereAgentController::class, 'defineAccess']);
     Route::post('/validate-ministere-agent-account/{email}', [MinistereAgentController::class, 'submitDefineAccess'])->name('ministereagent.validate');
+    Route::get('/validate-livraison-account/{email}', [LivraisonController::class, 'defineAccess']);
+    Route::post('/validate-livraison-account/{email}', [LivraisonController::class, 'submitDefineAccess'])->name('livraison.validate');
 
 
     //creer un docteurs
@@ -518,6 +533,11 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::post('/login', [AjointController::class, 'handleLogin'])->name('ajoint.handleLogin');
     });
 
+    Route::prefix('livraison')->group(function() {
+        Route::get('/login', [LivraisonController::class, 'login'])->name('livraison.login');
+        Route::post('/login', [LivraisonController::class, 'handleLogin'])->name('livraison.handleLogin');
+    });
+
     Route::prefix('caisse')->group(function() {
         Route::get('/login', [CaisseController::class, 'login'])->name('caisse.login');
         Route::post('/login', [CaisseController::class, 'handleLogin'])->name('caisse.handleLogin');
@@ -556,6 +576,11 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     Route::middleware('auth:ajoint')->prefix('ajoint')->group(function(){
         Route::get('/vue', [AjointController::class, 'ajointvue'])->name('ajoint.dashboard');
         Route::get('/logout', [AjointController::class, 'logout'])->name('ajoint.logout');
+    });
+
+    Route::middleware('auth:livraison')->prefix('livraison')->group(function(){
+        Route::get('/dashboard', [LivraisonController::class, 'dashboard'])->name('livraison.dashboard');
+        Route::get('/logout', [LivraisonController::class, 'logout'])->name('livraison.logout');
     });
 
     Route::middleware('auth:caisse')->prefix('caisse')->group(function(){
