@@ -410,6 +410,7 @@
                     <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
                     <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
                 </div>`,
+                icon: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Payer',
             cancelButtonText: 'Annuler',

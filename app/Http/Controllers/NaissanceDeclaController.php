@@ -97,8 +97,6 @@ class NaissanceDeclaController extends Controller
 
     // Sauvegarde de la demande
     $naissanced->save();
-
-    // Log des données de l'utilisateur pour débogage
     Log::info('Données de l\'utilisateur : ', [
         'indicatif' => $user->indicatif,
         'contact' => $user->contact,

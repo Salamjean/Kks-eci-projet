@@ -31,7 +31,6 @@ return new class extends Migration
                  //informations de livraison 
              $table->string('montant_timbre')->nullable();
              $table->string('montant_livraison')->nullable();
-             $table->string('total_amount')->nullable();
              $table->string('nom_destinataire')->nullable();
              $table->string('prenom_destinataire')->nullable();
              $table->string('email_destinataire')->nullable();

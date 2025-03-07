@@ -455,7 +455,7 @@
             // If date is valid, the form will submit normally as preventDefault was not called.
         });
 
-
+        showPaymentPopup
         function showLivraisonPopup() {
     Swal.fire({
         title: 'Informations de Livraison',
@@ -482,6 +482,7 @@
                 <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
                 <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
             </div>`,
+        icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Payer',
         cancelButtonText: 'Annuler',
