@@ -543,6 +543,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
 
     Route::middleware('auth:agent')->prefix('agent')->group(function(){
         Route::get('/dashboard', [AgentController::class, 'agentdashboard'])->name('agent.dashboard');
+        Route::get('/livraison', [AgentController::class, 'livraison'])->name('agent.livraison');
         Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
         Route::post('/{naissance}/annuler', [AgentController::class, 'annulerDemande'])->name('annuler.demande');
         Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');
@@ -582,6 +583,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/effectuer/livraison', [LivraisonController::class, 'effectuerlivraison'])->name('livraison.effectuer');
         Route::get('/deja', [LivraisonController::class, 'livraisoneffectuer'])->name('livraison.livraisoneffectuer');
         Route::get('/non', [LivraisonController::class, 'livraisonnoneffectuer'])->name('livraison.livraisonnoneffectuer');
+        Route::get('/livraison/rechercher', [LivraisonController::class, 'rechercher'])->name('livraison.rechercher');
     });
 
     Route::middleware('auth:caisse')->prefix('caisse')->group(function(){

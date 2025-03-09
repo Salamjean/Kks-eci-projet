@@ -9,6 +9,7 @@ use App\Models\Alert;
 use App\Models\Deces;
 use App\Models\Decesdeja;
 use App\Models\DecesHop;
+use App\Models\Livraison;
 use App\Models\Mariage;
 use App\Models\Naissance;
 use App\Models\NaissanceD;
@@ -413,8 +414,14 @@ public function annulerDemande(Request $request, $naissance)
 
         $demande->archive();
         return redirect()->route('naissance.agentindex')->with('success', 'Demande de naissance annulée avec succès.');
-    } else {
-        return redirect()->route('naissance.agentindex')->with('error', 'La demande de naissance n\'existe pas.');
+        } else {
+            return redirect()->route('naissance.agentindex')->with('error', 'La demande de naissance n\'existe pas.');
+        }
     }
-}
+
+    public function livraison(){
+        $livraisons = Livraison::all();
+        $alerts = Alert::all();
+        return view('vendor.agent.livraison', compact('livraisons','alerts'));
+    }
 }

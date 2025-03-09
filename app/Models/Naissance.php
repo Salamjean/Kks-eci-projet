@@ -36,6 +36,11 @@ class Naissance extends Model
     {
         return $this->belongsTo(Agent::class, 'agent_id');
     }
+
+    public function livraison()
+    {
+        return $this->belongsTo(Livraison::class, 'livraison_id');
+    }
     public function compteDemandes()
 {
     return $this->hasMany(CompteDemande::class);
@@ -50,11 +55,6 @@ public static function getNextId() // Rendez la méthode publique et statique
     } else {
         return 1; // Si c'est le premier enregistrement
     }
-}
-
-public function motifAnnulation()
-{
-    return $this->belongsTo(Motif::class, 'motif_id'); // Make sure 'motif_id' is correct
 }
 
 public function archive()

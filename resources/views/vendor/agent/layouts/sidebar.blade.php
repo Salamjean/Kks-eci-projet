@@ -56,4 +56,11 @@
       <span>Acte de mariage</span>
     </a>
   </li>
+
+  <li class="nav-item">
+    <a class="nav-link" href="{{ route('agent.livraison') }}">
+      <i class="fab fa-fw fa-wpforms"></i>
+      <span>Livreur</span>
+    </a>
+  </li>
 </ul>

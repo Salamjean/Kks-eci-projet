@@ -5,7 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateAjointrequest;
 use App\Models\Alert;
+use App\Models\Deces;
+use App\Models\Decesdeja;
 use App\Models\Livraison;
+use App\Models\Mariage;
+use App\Models\Naissance;
+use App\Models\NaissanceD;
 use App\Models\ResetCodePasswordLivraison;
 use App\Notifications\SendEmailToLivraisonAfterRegistrationNotification;
 use Exception;
@@ -111,7 +116,36 @@ class LivraisonController extends Controller
      }
 
      public function dashboard(Request $request) {
-        return view('vendor.livraison.dashboard');
+        // Récupérer l'ID du livreur connecté
+        $livreurId = Auth::guard('livraison')->user()->id;
+    
+        // Compter les livraisons attribuées au livreur dans chaque table
+        $countNaissanceD = NaissanceD::where('livraison_id', $livreurId)->count();
+        $countNaissances = Naissance::where('livraison_id', $livreurId)->count();
+        $countDeces = Deces::where('livraison_id', $livreurId)->count();
+        $countDecesDejas = Decesdeja::where('livraison_id', $livreurId)->count();
+        $countMariages = Mariage::where('livraison_id', $livreurId)->count();
+    
+        // Calculer le total des livraisons attribuées
+        $totalLivraisons = $countNaissances + $countDeces + $countDecesDejas + $countMariages + $countNaissanceD;
+    
+        // Calculer les pourcentages
+        $pourcentageNaissances = ($totalLivraisons > 0) ? (($countNaissances + $countNaissanceD) / $totalLivraisons) * 100 : 0;
+        $pourcentageDeces = ($totalLivraisons > 0) ? (($countDeces + $countDecesDejas) / $totalLivraisons) * 100 : 0;
+        $pourcentageMariages = ($totalLivraisons > 0) ? ($countMariages / $totalLivraisons) * 100 : 0;
+    
+        // Passer les données à la vue
+        return view('vendor.livraison.dashboard', [
+            'totalLivraisons' => $totalLivraisons,
+            'countNaissances' => $countNaissances,
+            'countNaissanceD' => $countNaissanceD,
+            'countDeces' => $countDeces,
+            'countDecesDejas' => $countDecesDejas,
+            'countMariages' => $countMariages,
+            'pourcentageNaissances' => $pourcentageNaissances,
+            'pourcentageDeces' => $pourcentageDeces,
+            'pourcentageMariages' => $pourcentageMariages,
+        ]);
     }
 
     public function logout(){
@@ -222,9 +256,77 @@ class LivraisonController extends Controller
         }
     }
 
-    public function effectuerlivraison(){
-        return view('vendor.livraison.effectuerlivraison');
+    public function effectuerlivraison()
+{
+    $livreurId = Auth::guard('livraison')->user()->id; // Récupérer l'ID du livreur connecté
+
+    // Récupérer les demandes attribuées au livreur connecté
+    $naissances = NaissanceD::where('livraison_id', $livreurId)
+                             ->where('choix_option', 'livraison')
+                             ->get();
+
+    return view('vendor.livraison.effectuerlivraison', compact('naissances'));
+}
+
+public function rechercher(Request $request)
+{
+    $reference = $request->input('reference');
+    $livreurId = Auth::guard('livraison')->user()->id; // Récupérer l'ID du livreur connecté
+
+    // Rechercher la demande par référence dans toutes les tables
+    $naissanceD = NaissanceD::where('reference', $reference)
+                            ->where('choix_option', 'livraison')
+                            ->first();
+    
+    $naissance = Naissance::where('reference', $reference)
+                            ->where('choix_option', 'livraison')
+                            ->first();
+
+    $deces = Deces::where('reference', $reference)
+                  ->where('choix_option', 'livraison')
+                  ->first();
+
+    $decesDejas = Decesdeja::where('reference', $reference)
+                            ->where('choix_option', 'livraison')
+                            ->first();
+
+    $mariage = Mariage::where('reference', $reference)
+                      ->where('choix_option', 'livraison')
+                      ->first();
+
+    // Fusionner les résultats dans une collection
+    $results = collect([$naissance,$naissanceD, $deces, $decesDejas, $mariage])
+                ->filter() // Supprimer les résultats null
+                ->values(); // Réindexer la collection
+
+    if ($results->isNotEmpty()) {
+        // Parcourir les résultats pour vérifier l'attribution
+        foreach ($results as $result) {
+            if ($result->livraison_id === null) {
+                // Attribuer la demande au livreur connecté
+                $result->livraison_id = $livreurId;
+                $result->save();
+
+                // Message de succès
+                return redirect()->back()
+                    ->with('success', 'La demande a été trouvée et attribuée avec succès.')
+                    ->with('results', [$result]);
+            } elseif ($result->livraison_id === $livreurId) {
+                // Si la demande est déjà attribuée au livreur connecté, afficher les informations
+                return redirect()->back()
+                    ->with('success', 'La demande a déjà été attribuée à vous.')
+                    ->with('results', [$result]);
+            } else {
+                // La demande est attribuée à un autre livreur
+                return redirect()->back()
+                    ->with('error', 'Cette demande a déjà été attribuée à un autre livreur.');
+            }
+        }
+    } else {
+        // Aucune demande trouvée avec cette référence
+        return redirect()->back()->with('error', 'Aucune demande de livraison trouvée avec cette référence.');
     }
+}
 
     public function livraisoneffectuer(){
         return view('vendor.livraison.livraisoneffectuer');

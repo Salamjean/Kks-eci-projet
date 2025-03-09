@@ -23,19 +23,19 @@ class Livraison extends Authenticatable
 
     public function naissances()
     {
-        return $this->hasMany(NaissanceD::class, 'agent_id');
+        return $this->hasMany(NaissanceD::class, 'livraison_id');
     }
     public function naissance()
     {
-        return $this->hasMany(Naissance::class, 'agent_id');
+        return $this->hasMany(Naissance::class, 'livraison_id');
     }
     public function deces()
     {
-        return $this->hasMany(Deces::class, 'agent_id');
+        return $this->hasMany(Deces::class, 'livraison_id');
     }
     public function mariage()
     {
-        return $this->hasMany(Mariage::class, 'agent_id');
+        return $this->hasMany(Mariage::class, 'livraison_id');
     }
 
      /**

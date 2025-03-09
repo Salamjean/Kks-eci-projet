@@ -34,8 +34,8 @@ return new class extends Migration
             $table->string('etat')->default('en attente'); // État par défaut
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Ajout de user_id
             $table->foreignId('agent_id')->nullable()->constrained('agents')->onDelete('set null'); // Ajout de agent_id
+            $table->foreignId('livraison_id')->nullable()->constrained('livraisons')->onDelete('set null'); // Ajout de livraison
             
-
             //informations de livraison 
             $table->string('montant_timbre')->nullable();
             $table->string('montant_livraison')->nullable();
