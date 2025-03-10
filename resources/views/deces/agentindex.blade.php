@@ -213,7 +213,15 @@
                                         <td>
                                             <a href="{{ route('deces.edit', $decesItem->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
                                         </td>
-                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $decesItem->choix_option }}</div></td>
+                                        <td>
+                                            @if($decesItem->choix_option == 'livraison')
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#livraisonModal" onclick="showLivraison1Modal({{ json_encode($decesItem) }})">
+                                                    <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $decesItem->choix_option }}</div>
+                                                </a>
+                                            @else
+                                                <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $decesItem->choix_option }}</div>
+                                            @endif
+                                        </td>        
                                     </tr>
                                 @empty
                                     <tr>
@@ -398,7 +406,15 @@
                                         <td>
                                             <a href="{{ route('decesdeja.edit', $dece->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
                                         </td>
-                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $dece->choix_option }}</div></td>
+                                        <td>
+                                            @if($dece->choix_option == 'livraison')
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#livraisonModal" onclick="showLivraisonModal({{ json_encode($dece) }})">
+                                                    <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $dece->choix_option }}</div>
+                                                </a>
+                                            @else
+                                                <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $dece->choix_option }}</div>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -409,6 +425,20 @@
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="livraisonModal" tabindex="-1" aria-labelledby="livraisonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #6777ef; color:white; text-align:center">
+                <h5 class="modal-title" style="text-align: center" id="livraisonModalLabel">Informations de livraison</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="livraisonDetails"></div>
             </div>
         </div>
     </div>
@@ -501,6 +531,36 @@
             <p style="text-align:center"><strong>N°CMU:</strong> ${user.CMU}</p>
            `;
       }
+
+      function showLivraisonModal(dece) {
+    const livraisonDetailsDiv = document.getElementById('livraisonDetails');
+    livraisonDetailsDiv.innerHTML = `
+        <p style="text-align:center"><strong>Nom et prénoms du destinataire:</strong> ${dece.nom_destinataire} ${dece.prenom_destinataire}</p>
+        <p style="text-align:center"><strong>Email du destinataire:</strong> ${dece.email_destinataire}</p>
+        <p style="text-align:center"><strong>Contact du destinataire:</strong> ${dece.contact_destinataire}</p>
+        <p style="text-align:center"><strong>Adresse de livraison:</strong> ${dece.adresse_livraison}</p>
+        <p style="text-align:center"><strong>Ville:</strong> ${dece.ville}</p>
+        <p style="text-align:center"><strong>Commune:</strong> ${dece.commune}</p>
+        <p style="text-align:center"><strong>Quartier:</strong> ${dece.quartier}</p>
+        <p style="text-align:center"><strong>Code postal:</strong> ${dece.code_postal}</p>
+        <p style="text-align:center"><strong>Choisissez un livreur </strong> <a href="{{ route('agent.livraison') }}">maintenant</a> </p>
+    `;
+  }
+
+  function showLivraison1Modal(decesItem) {
+    const livraisonDetailsDiv = document.getElementById('livraisonDetails');
+    livraisonDetailsDiv.innerHTML = `
+        <p style="text-align:center"><strong>Nom et prénoms du destinataire:</strong> ${decesItem.nom_destinataire} ${decesItem.prenom_destinataire}</p>
+        <p style="text-align:center"><strong>Email du destinataire:</strong> ${decesItem.email_destinataire}</p>
+        <p style="text-align:center"><strong>Contact du destinataire:</strong> ${decesItem.contact_destinataire}</p>
+        <p style="text-align:center"><strong>Adresse de livraison:</strong> ${decesItem.adresse_livraison}</p>
+        <p style="text-align:center"><strong>Ville:</strong> ${decesItem.ville}</p>
+        <p style="text-align:center"><strong>Commune:</strong> ${decesItem.commune}</p>
+        <p style="text-align:center"><strong>Quartier:</strong> ${decesItem.quartier}</p>
+        <p style="text-align:center"><strong>Code postal:</strong> ${decesItem.code_postal}</p>
+        <p style="text-align:center"><strong>Choisissez un livreur </strong> <a href="{{ route('agent.livraison') }}">maintenant</a> </p>
+    `;
+  }
 </script>
 
 @endsection

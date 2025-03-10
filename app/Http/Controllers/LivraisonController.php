@@ -328,9 +328,38 @@ public function rechercher(Request $request)
     }
 }
 
-    public function livraisoneffectuer(){
-        return view('vendor.livraison.livraisoneffectuer');
-    }
+public function livraisoneffectuer()
+{
+    $livreurId = Auth::guard('livraison')->user()->id; // Récupérer l'ID du livreur connecté
+
+    // Récupérer les demandes attribuées au livreur connecté pour chaque type de demande
+    $naissanceD = NaissanceD::where('livraison_id', $livreurId)
+                             ->where('choix_option', 'livraison')
+                             ->get();
+    $naissances = Naissance::where('livraison_id', $livreurId)
+                             ->where('choix_option', 'livraison')
+                             ->get();
+
+    $deces = Deces::where('livraison_id', $livreurId)
+                   ->where('choix_option', 'livraison')
+                   ->get();
+
+    $decesDejas = DecesDeja::where('livraison_id', $livreurId)
+                            ->where('choix_option', 'livraison')
+                            ->get();
+
+    $mariages = Mariage::where('livraison_id', $livreurId)
+                        ->where('choix_option', 'livraison')
+                        ->get();
+
+    // Fusionner toutes les collections en une seule
+    $livraisons = $naissances->concat($naissanceD)
+                              ->concat($deces)
+                              ->concat($decesDejas)
+                              ->concat($mariages);
+
+    return view('vendor.livraison.livraisoneffectuer', compact('livraisons'));
+}
 
 
     public function livraisonnoneffectuer(){

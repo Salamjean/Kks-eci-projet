@@ -209,7 +209,15 @@
                         <td>
                             <a href="{{ route('naissances.edit', $naissance->id) }}" class="btn btn-sm" style="size: 0.6rem">Modifier</a>
                         </td>
-                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissance->choix_option }}</div></td>
+                        <td>
+                            @if($naissance->choix_option == 'livraison')
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#livraisonModal" onclick="showLivraison1Modal({{ json_encode($naissance) }})">
+                                    <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissance->choix_option }}</div>
+                                </a>
+                            @else
+                                <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissance->choix_option }}</div>
+                            @endif
+                        </td>                       
                         <td>
                             <button type="button" class="btn btn-sm btn-danger" style="size: 0.6rem" data-bs-toggle="modal" data-bs-target="#annulationModal" data-demande-id="{{ $naissance->id }}">Annuler</button>
                         </td>
@@ -404,7 +412,15 @@
                                     <td>
                                         <a href="{{ route('naissanced.edit', $naissanceD->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
                                     </td>
-                                    <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissanceD->choix_option }}</div></td>
+                                    <td>
+                                        @if($naissanceD->choix_option == 'livraison')
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#livraisonModal" onclick="showLivraisonModal({{ json_encode($naissanceD) }})">
+                                                <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissanceD->choix_option }}</div>
+                                            </a>
+                                        @else
+                                            <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissanceD->choix_option }}</div>
+                                        @endif
+                                    </td>
                                 </tr>
                             @empty
                                 <tr>
@@ -431,6 +447,21 @@
             });
         });
     </script>
+
+    <!-- Modal pour les informations de livraison -->
+<div class="modal fade" id="livraisonModal" tabindex="-1" aria-labelledby="livraisonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #6777ef; color:white; text-align:center">
+                <h5 class="modal-title" style="text-align: center" id="livraisonModalLabel">Informations de livraison</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="livraisonDetails"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
     <!-- Modal pour les informations de l'utilisateur -->
     <div class="modal fade" id="userModal" tabindex="-1" aria-labelledby="userModalLabel" aria-hidden="true">
@@ -466,8 +497,39 @@
         <p style="text-align:center"><strong>Nom:</strong> ${user.name}</p>
         <p style="text-align:center"><strong>Prénom(s):</strong> ${user.prenom}</p>
         <p style="text-align:center"><strong>Email:</strong> ${user.email}</p>
+        <p style="text-align:center"><strong>Contact:</strong> ${user.contact}</p>
         <p style="text-align:center"><strong>Commune:</strong> ${user.commune}</p>
         <p style="text-align:center"><strong>N°CMU:</strong> ${user.CMU}</p>
+    `;
+  }
+
+  function showLivraisonModal(naissanceD) {
+    const livraisonDetailsDiv = document.getElementById('livraisonDetails');
+    livraisonDetailsDiv.innerHTML = `
+        <p style="text-align:center"><strong>Nom et prénoms du destinataire:</strong> ${naissanceD.nom_destinataire} ${naissanceD.prenom_destinataire}</p>
+        <p style="text-align:center"><strong>Email du destinataire:</strong> ${naissanceD.email_destinataire}</p>
+        <p style="text-align:center"><strong>Contact du destinataire:</strong> ${naissanceD.contact_destinataire}</p>
+        <p style="text-align:center"><strong>Adresse de livraison:</strong> ${naissanceD.adresse_livraison}</p>
+        <p style="text-align:center"><strong>Ville:</strong> ${naissanceD.ville}</p>
+        <p style="text-align:center"><strong>Commune:</strong> ${naissanceD.commune}</p>
+        <p style="text-align:center"><strong>Quartier:</strong> ${naissanceD.quartier}</p>
+        <p style="text-align:center"><strong>Code postal:</strong> ${naissanceD.code_postal}</p>
+        <p style="text-align:center"><strong>Choisissez un livreur </strong> <a href="{{ route('agent.livraison') }}">maintenant</a> </p>
+    `;
+  }
+
+  function showLivraison1Modal(naissance) {
+    const livraisonDetailsDiv = document.getElementById('livraisonDetails');
+    livraisonDetailsDiv.innerHTML = `
+        <p style="text-align:center"><strong>Nom et prénoms du destinataire:</strong> ${naissance.nom_destinataire} ${naissance.prenom_destinataire}</p>
+        <p style="text-align:center"><strong>Email du destinataire:</strong> ${naissance.email_destinataire}</p>
+        <p style="text-align:center"><strong>Contact du destinataire:</strong> ${naissance.contact_destinataire}</p>
+        <p style="text-align:center"><strong>Adresse de livraison:</strong> ${naissance.adresse_livraison}</p>
+        <p style="text-align:center"><strong>Ville:</strong> ${naissance.ville}</p>
+        <p style="text-align:center"><strong>Commune:</strong> ${naissance.commune}</p>
+        <p style="text-align:center"><strong>Quartier:</strong> ${naissance.quartier}</p>
+        <p style="text-align:center"><strong>Code postal:</strong> ${naissance.code_postal}</p>
+        <p style="text-align:center"><strong>Choisissez un livreur </strong> <a href="{{ route('agent.livraison') }}">maintenant</a> </p>
     `;
   }
 </script>

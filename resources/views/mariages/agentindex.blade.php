@@ -178,7 +178,15 @@
                                         <td>
                                             <a href="{{ route('mariage.edit', $mariage->id) }}" class="btn btn-sm" style="size: 0.6rem">Mettre à jour l'état</a>
                                         </td>
-                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $mariage->choix_option }}</div></td>
+                                        <td>
+                                            @if($mariage->choix_option == 'livraison')
+                                                <a href="#" data-bs-toggle="modal" data-bs-target="#livraisonModal" onclick="showLivraisonModal({{ json_encode($mariage) }})">
+                                                    <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $mariage->choix_option }}</div>
+                                                </a>
+                                            @else
+                                                <div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $mariage->choix_option }}</div>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
@@ -204,6 +212,20 @@
                 </div>
                 <div class="modal-body text-center">
                     <img id="modalImage" src="{{ asset('assets/images/profiles/default.jpg') }}" alt="Image prévisualisée" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="livraisonModal" tabindex="-1" aria-labelledby="livraisonModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #6777ef; color:white; text-align:center">
+                    <h5 class="modal-title" style="text-align: center" id="livraisonModalLabel">Informations de livraison</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="livraisonDetails"></div>
                 </div>
             </div>
         </div>
@@ -255,9 +277,26 @@
                     <p style="text-align:center"><strong>Nom:</strong> ${user.name}</p>
                     <p style="text-align:center"><strong>Prénom(s):</strong> ${user.prenom}</p>
                     <p style="text-align:center"><strong>Email:</strong> ${user.email}</p>
+                    <p style="text-align:center"><strong>Contact:</strong> ${user.contact}</p>
                     <p style="text-align:center"><strong>Commune:</strong> ${user.commune}</p>
                     <p style="text-align:center"><strong>N°CMU:</strong> ${user.CMU}</p>
                 `;
            }
+
+
+           function showLivraisonModal(mariage) {
+    const livraisonDetailsDiv = document.getElementById('livraisonDetails');
+    livraisonDetailsDiv.innerHTML = `
+        <p style="text-align:center"><strong>Nom et prénoms du destinataire:</strong> ${mariage.nom_destinataire} ${mariage.prenom_destinataire}</p>
+        <p style="text-align:center"><strong>Email du destinataire:</strong> ${mariage.email_destinataire}</p>
+        <p style="text-align:center"><strong>Contact du destinataire:</strong> ${mariage.contact_destinataire}</p>
+        <p style="text-align:center"><strong>Adresse de livraison:</strong> ${mariage.adresse_livraison}</p>
+        <p style="text-align:center"><strong>Ville:</strong> ${mariage.ville}</p>
+        <p style="text-align:center"><strong>Commune:</strong> ${mariage.commune}</p>
+        <p style="text-align:center"><strong>Quartier:</strong> ${mariage.quartier}</p>
+        <p style="text-align:center"><strong>Code postal:</strong> ${mariage.code_postal}</p>
+        <p style="text-align:center"><strong>Choisissez un livreur </strong> <a href="{{ route('agent.livraison') }}">maintenant</a> </p>
+    `;
+  }
     </script>
 @endsection
