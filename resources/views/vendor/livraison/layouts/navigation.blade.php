@@ -1,7 +1,7 @@
 <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" navbar-scroll="true">
   <div class="container-fluid py-1 px-3">
     <nav aria-label="breadcrumb">
-      <h6 class="font-weight-bolder mb-0">Tableau de bord</h6>
+      <h6 class="font-weight-bolder mb-0">LIVREUR DE LA MAIRIE - {{ strtoupper(Auth::guard('livraison')->user()->communeM) }}</h6>
     </nav>
     <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
       <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -12,7 +12,7 @@
         <li class="nav-item d-flex align-items-center">
           <a href="javascript:;" class="nav-link text-body font-weight-bold px-0">
             <i class="fa fa-user me-sm-1"></i>
-            <span class="d-sm-inline d-none">Livreur :{{ Auth::guard('livraison')->user()->name.' '.Auth::guard('livraison')->user()->prenom }}</span>&nbsp; &nbsp;
+            <span class="d-sm-inline d-none ml-10">Livreur :{{ Auth::guard('livraison')->user()->name.' '.Auth::guard('livraison')->user()->prenom }}</span>&nbsp; &nbsp;
             <span class="d-sm-inline d-none"><a href="{{ route('livraison.logout') }}"><button class="text-white p-2" style="border:none;font-weight:bold;border-radius: 30%; margin-left:20px; background-color:#f97316">Déconnexion</button></a></span>
           </a>
         </li>
