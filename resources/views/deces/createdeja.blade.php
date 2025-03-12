@@ -5,6 +5,7 @@
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+<script src="{{ asset('js/cinetpay_deces_deja.js') }}"></script> {{-- Include cinetpay_deces_deja.js --}}
 
 <style>
     body {
@@ -204,7 +205,7 @@
                             <option value="ankoum">Ankoum</option>
                             <option value="anyama">Anyama</Anyama</option>
                             <option value="alepe">Alépé</option>
-                            <option value="ayama">Ayama</option>
+                            <option value="ayama">Ayama</ayama>
                             <option value="bagohouo">Bagohouo</option>
                             <option value="banga">Banga</option>
                             <option value="bamboue">Bamboué</option>
@@ -212,12 +213,12 @@
                             <option value="borotou">Borotou</Borotou</option>
                             <option value="bouna">Bouna</option>
                             <option value="bounkani">Bounkani</option>
-                            <option value="bouafle">Bouaflé</option>
+                            <option value="bouafle">Bouaflé</bouaflé>
                             <option value="bouake">Bouaké</Bouaké</option>
                             <option value="bounoua">Bounoua</option>
                             <option value="dabakala">Dabakala</Dabakala</option>
                             <option value="dabou">Dabou</option>
-                            <option value="daloa">Daloa</option>
+                            <option value="daloa">Daloa</daloa>
                             <option value="dimbokro">Dimbokro</Dimbokro</option>
                             <option value="debine">Débine</Debine</option>
                             <option value="djangokro">Djangokro</option>
@@ -253,10 +254,10 @@
                             <option value="chire">Chiré</Chiré</option>
                             <option value="deboudougou">Déboudougou</Déboudougou</option>
                             <option value="diboke">Diboké</Diboké</option>
-                            <option value="doungou">Doungou</Doungou</option>
-                            <option value="boura">Boura</Boura</option>
-                            <option value="bofora">Bofora</Bofora</option>
-                            <option value="zagoua">Zagoua</Zagoua</option>
+                            <option value="doungou">Doungou</Doungou></option>
+                            <option value="boura">Boura</Boura></option>
+                            <option value="bofora">Bofora</Bofora></option>
+                            <option value="zagoua">Zagoua</Zagoua></option>
                 </select>
                 @error('communeD')
                 <span style="color: red">{{ $message }}</span>
@@ -341,6 +342,7 @@
     </form>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     let formSubmitted = false;
     let submitAfterPopup = false;
@@ -449,67 +451,8 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 const formData = result.value;
-                const totalAmount = parseFloat(formData.montant_timbre) + parseFloat(formData.montant_livraison);
-
-                // Configuration de CinetPay
-                CinetPay.setConfig({
-                    apikey: '521006956621e4e7a6a3d16.70681548', // Remplacez par votre clé API CinetPay
-                    site_id: '935132', // Remplacez par votre site ID
-                    notify_url: 'https://votredomaine.com/notify', // URL de notification
-                    mode: 'PRODUCTION' // Ou 'TEST' pour les tests
-                });
-
-                // Lancement du paiement
-                CinetPay.getCheckout({
-                    transaction_id: Math.floor(Math.random() * 100000000).toString(), // ID de transaction unique
-                    amount: totalAmount,
-                    currency: 'XOF',
-                    channels: 'ALL',
-                    description: 'Paiement pour livraison de document',
-                    customer_name: formData.nom_destinataire,
-                    customer_surname: formData.prenom_destinataire,
-                    customer_email: formData.email_destinataire,
-                    customer_phone_number: formData.contact_destinataire,
-                    customer_address: formData.adresse_livraison,
-                    customer_city: formData.ville,
-                    customer_country: 'CI',
-                    customer_state: 'CI',
-                    customer_zip_code: formData.code_postal,
-                });
-
-                // Gestion de la réponse de CinetPay
-                CinetPay.waitResponse(function(data) {
-                    if (data.status === "ACCEPTED") {
-                        // Ajouter les données de livraison au formulaire
-                        const form = document.getElementById('declarationForm');
-                        for (const key in formData) {
-                            if (formData.hasOwnProperty(key)) {
-                                const hiddenInput = document.createElement('input');
-                                hiddenInput.type = 'hidden';
-                                hiddenInput.name = key;
-                                hiddenInput.value = formData[key];
-                                form.appendChild(hiddenInput);
-                            }
-                        }
-                        // Soumettre le formulaire
-                        formSubmitted = true;
-                        form.submit();
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Erreur',
-                            text: 'Le paiement a échoué. Veuillez réessayer.',
-                        });
-                    }
-                });
-
-                CinetPay.onError(function(data) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erreur',
-                        text: 'Une erreur s\'est produite lors du traitement du paiement.',
-                    });
-                });
+                const form = document.getElementById('declarationForm');
+                initiateCinetPayPaymentDecesDeja(formData, form); // Call the function from cinetpay_deces_deja.js
             } else if (result.dismiss === Swal.DismissReason.cancel) {
                 document.getElementById('option1').checked = true;
                 submitAfterPopup = false;

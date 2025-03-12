@@ -3,6 +3,7 @@
 @section('content')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
+    <script src="{{ asset('js/cinetpay_deces.js') }}"></script> {{-- Include cinetpay_deces.js --}}
     <style>
         body {
             background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}');
@@ -405,65 +406,8 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     const formData = result.value;
-                    const totalAmount = parseFloat(formData.montant_timbre) + parseFloat(formData.montant_livraison);
-
-                    // Configuration de CinetPay
-                    CinetPay.setConfig({
-                        apikey: '521006956621e4e7a6a3d16.70681548', // Remplacez par votre clé API CinetPay
-                        site_id: '935132', // Remplacez par votre site ID
-                        notify_url: 'https://votredomaine.com/notify', // URL de notification
-                        mode: 'PRODUCTION' // Ou 'TEST' pour les tests
-                    });
-
-                    // Lancement du paiement
-                    CinetPay.getCheckout({
-                        transaction_id: Math.floor(Math.random() * 100000000).toString(), // ID de transaction unique
-                        amount: totalAmount,
-                        currency: 'XOF',
-                        channels: 'ALL',
-                        description: 'Paiement pour livraison de document',
-                        customer_name: formData.nom_destinataire,
-                        customer_surname: formData.prenom_destinataire,
-                        customer_email: formData.email_destinataire,
-                        customer_phone_number: formData.contact_destinataire,
-                        customer_address: formData.adresse_livraison,
-                        customer_city: formData.ville,
-                        customer_country: 'CI',
-                        customer_state: 'CI',
-                        customer_zip_code: formData.code_postal,
-                    });
-
-                    // Gestion de la réponse de CinetPay
-                    CinetPay.waitResponse(function(data) {
-                        if (data.status === "ACCEPTED") {
-                            const form = document.getElementById('declarationForm');
-                            for (const key in formData) {
-                                if (formData.hasOwnProperty(key)) {
-                                    const hiddenInput = document.createElement('input');
-                                    hiddenInput.type = 'hidden';
-                                    hiddenInput.name = key;
-                                    hiddenInput.value = formData[key];
-                                    form.appendChild(hiddenInput);
-                                }
-                            }
-                            formSubmitted = true;
-                            form.submit();
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Erreur',
-                                text: 'Le paiement a échoué. Veuillez réessayer.',
-                            });
-                        }
-                    });
-
-                    CinetPay.onError(function(data) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Erreur',
-                            text: 'Une erreur s\'est produite lors du traitement du paiement.',
-                        });
-                    });
+                    const form = document.getElementById('declarationForm');
+                    initiateCinetPayPaymentDeces(formData, form); // Call the function from cinetpay_deces.js
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     document.getElementById('option1').checked = true;
                     submitAfterPopup = false;
