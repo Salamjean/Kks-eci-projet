@@ -132,35 +132,46 @@
         <div class="form-row mb-3">
             <div class="col-md-6">
                 <label for="validationCustom001" class="form-label">Nom de l'agent</label>
-                <input type="text" class="form-control" name="name" id="validationCustom001" placeholder="Entrez le nom de l'agent" required>
-               
+                <input type="text" class="form-control" name="name" id="validationCustom001" placeholder="Entrez le nom de l'agent" >
+                @error('name')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="col-md-6">
                 <label for="validationCustom002" class="form-label">Prénoms de l'agent</label>
-                <input type="text" class="form-control" name="prenom" id="validationCustom002" placeholder="Entrez le prénom de l'agent" required>
-                
+                <input type="text" class="form-control" name="prenom" id="validationCustom002" placeholder="Entrez le prénom de l'agent" >
+                @error('prenom')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
         <div class="form-row mb-3">
             <div class="col-md-6">
                 <label for="validationCustom003" class="form-label">Email</label>
-                <input type="email" class="form-control" name="email" id="validationCustom003" placeholder="Entrez son email" required>
-               
+                <input type="email" class="form-control" name="email" id="validationCustom003" placeholder="Entrez son email" >
+                @error('email')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="col-md-6">
                 <label for="validationCustom004" class="form-label">Contact</label>
-                <input type="text" class="form-control" name="contact" id="validationCustom004" placeholder="Entrez son contact" required>
+                <input type="text" class="form-control" name="contact" id="validationCustom004" placeholder="Entrez son contact" >
+                @error('contact')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
         <div class="form-row mb-3">
             <div class="col-md-12">
                 <label for="validationCustom005" class="form-label">Lieu de résidance</label>
-                <input type="text" class="form-control" name="commune" id="validationCustom005" placeholder="Entrez son lieu de résidence" required>
-               
+                <input type="text" class="form-control" name="commune" id="validationCustom005" placeholder="Entrez son lieu de résidence" >
+                @error('commune')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 

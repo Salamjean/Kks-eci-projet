@@ -216,17 +216,4 @@
     </div>
   </div>
 </li>
-
-<li class="nav-item">
-  <a class="nav-link" href="{{ route('supermariage.index') }}">
-    <i class="fab fa-fw fa-money"></i>
-    <span>Paiements</span>
-  </a>
-</li>
-<li class="nav-item">
-  <a class="nav-link" href="{{ route('paiement-configuration') }}">
-    <i class="fab fa-fw fa-money"></i>
-    <span>Configurations</span>
-  </a>
-</li>
 </ul>

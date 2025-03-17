@@ -98,26 +98,11 @@
     </div>
   </li>
 
-   <!-- Section livraison -->
-   <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLivreur"
-      aria-expanded="true" aria-controls="collapseLivreur">
-      <i class="fa fa-user"></i>
-      <span>Livreur</span>
-    </a>
-    <div id="collapseLivreur" class="collapse" aria-labelledby="headingLivreur" data-parent="#accordionSidebar">
-      <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">Gestion Livreur</h6>
-        <a class="collapse-item" href="{{ route('livraison.index') }}">Liste des Livreurs</a>
-        <a class="collapse-item" href="{{ route('livraison.create') }}">Ajouter un Livreur</a>
-      </div>
-    </div>
-  </li>
   <!-- Section Hôpital -->
   <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseHopital"
       aria-expanded="true" aria-controls="collapseHopital">
-      <i class="fa fa-hospital"></i>
+      <i class="fa fa-home"></i>
       <span>Hôpital</span>
     </a>
     <div id="collapseHopital" class="collapse" aria-labelledby="headingHopital" data-parent="#accordionSidebar">
@@ -133,15 +118,31 @@
  <li class="nav-item">
   <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCaisse"
     aria-expanded="true" aria-controls="collapseCaisse">
-    <i class="fa fa-hospital"></i>
-    <span>Caisse</span>
+    <i class="fa fa-user"></i>
+    <span>Caissier</span>
   </a>
   <div id="collapseCaisse" class="collapse" aria-labelledby="headingCaisse" data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
-      <h6 class="collapse-header">Gestion des caisses</h6>
-      <a class="collapse-item" href="{{ route('caisse.index') }}">Liste des caissiés</a>
-      <a class="collapse-item" href="{{ route('caisse.create') }}">Ajout d'un caissié</a>
+      <h6 class="collapse-header">Gestion de la caisse</h6>
+      <a class="collapse-item" href="{{ route('caisse.index') }}">Liste des caissiers</a>
+      <a class="collapse-item" href="{{ route('caisse.create') }}">Ajout d'un caissier</a>
     </div>
   </div>
 </li>
+
+  <!-- Section livraison -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLivreur"
+      aria-expanded="true" aria-controls="collapseLivreur">
+      <i class="fa fa-user"></i>
+      <span>Livreur</span>
+    </a>
+    <div id="collapseLivreur" class="collapse" aria-labelledby="headingLivreur" data-parent="#accordionSidebar">
+      <div class="bg-white py-2 collapse-inner rounded">
+        <h6 class="collapse-header">Gestion Livreur</h6>
+        <a class="collapse-item" href="{{ route('livraison.index') }}">Liste des Livreurs</a>
+        <a class="collapse-item" href="{{ route('livraison.create') }}">Ajouter un Livreur</a>
+      </div>
+    </div>
+  </li>
 </ul>

@@ -119,13 +119,17 @@
             <div class="col-md-6">
                 <label for="validationCustom001" class="form-label">Nom et prénoms de l'administrateur</label>
                 <input type="text" class="form-control" name="name" id="validationCustom001" placeholder="Entrez le nom de l'administrateur" required>
-               
+                @error('name')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="col-md-6">
                 <label for="validationCustom002" class="form-label">Email de l'hôpital</label>
                 <input type="email" class="form-control" name="email" id="validationCustom002" placeholder="Entrez l'email de l'hôpital" required>
-                
+                @error('email')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
@@ -133,12 +137,17 @@
             <div class="col-md-6">
                 <label for="validationCustom003" class="form-label">Contact de l'hôpital</label>
                 <input type="text" class="form-control" name="contact" id="validationCustom003" placeholder="Entrez le contact de l'hôpital" required>
-               
+                @error('contact')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="col-md-6">
                 <label for="validationCustom004" class="form-label">Commune</label>
                 <input type="text" class="form-control" name="commune" id="validationCustom004" value="{{ Auth::guard('vendor')->user()->name }}" readonly>
+                @error('commune')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
@@ -153,11 +162,16 @@
                     <option value="chu">CHU</option>
                     <option value="fsu">FSU</option>
                 </select>
+                @error('type')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
             <div class="col-md-6">
                 <label for="validationCustom005" class="form-label">Nom de l'hôpital</label>
                 <input type="text" class="form-control" name="nomHop" id="validationCustom005" placeholder="Entrez le nom de l'hôpital" required>
-               
+                @error('nomHop')
+                <span style="color: red">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 

@@ -15,7 +15,7 @@
     }
 </style>
 <div class="dashboard-background">
-    <h1 class="text-center text-black mb-4">Bienvenue sur le tableau de bord</h1>
+    <h1 class="text-center text-white mb-4" style="background-color: green">Bienvenue sur le tableau de bord</h1>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">

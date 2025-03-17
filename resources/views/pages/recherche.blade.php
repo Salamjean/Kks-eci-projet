@@ -4,7 +4,6 @@
 <div class="container">
     <br><br><br><br><br><br><br><br><br>
     <h1 style="text-align: center; margin-bottom:40px">Recherche de l'état de votre demande</h1>
-
     <form method="POST" action="{{ route('recherche.demande') }}">
         @csrf {{-- Ajout du jeton CSRF pour la sécurité --}}
 
@@ -15,19 +14,18 @@
 
         <button type="submit" class="btn btn-primary w-100" >Rechercher</button>
     </form>
-
-    <div id="resultat-recherche" class="mt-4">
+    <div id="resultat-recherche" class="mt-4 text-center">
         @if(isset($etatDemande))
             <h3>Résultat de la recherche:</h3>
             @if($etatDemande)
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-success" style="padding: 40px; font-size:30px" role="alert" >
                     État de votre demande pour la référence "{{ request('reference_naissance') }}":
                     <strong>{{ $etatDemande }}</strong>
                 </div>
             @else
-                <div class="alert alert-warning" role="alert">
-                    Aucune demande trouvée pour la référence "{{ request('reference_naissance') }}".
-                    Veuillez vérifier votre référence.
+                <div class="alert alert-warning" role="alert" style="padding: 30px; font-size:30px">
+                    Aucune demande trouvée pour la référence "{{ request('reference_naissance') }}",
+                    <br><br>Veuillez vérifier votre référence.
                 </div>
             @endif
         @endif

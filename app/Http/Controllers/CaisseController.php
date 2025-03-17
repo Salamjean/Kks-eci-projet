@@ -50,10 +50,23 @@ class CaisseController extends Controller
         $request->validate([
            'name' => 'required|string|max:255',
            'prenom' => 'required|string|max:255',
-           'email' => 'required|email|unique:agents,email',
+           'email' => 'required|email|unique:caisses,email',
            'contact' => 'required|string|min:10',
            'commune' => 'required|string|max:255',
            'profile_picture' => 'nullable|image|max:2048',
+
+        ],[
+            'name.required' => 'Le nom est obligatoire.',
+            'prenom.required' => 'Le prénom est obligatoire.',
+            'email.required' => 'L\'adresse e-mail est obligatoire.',
+            'email.email' => 'L\'adresse e-mail n\'est pas valide.',
+            'email.unique' => 'Cette adresse e-mail est déjà associée à un compte.',
+            'contact.required' => 'Le contact est obligatoire.',
+            'contact.min' => 'Le contact doit avoir au moins 10 chiffres.',
+            'commune.required' => 'La commune est obligatoire.',
+            'profile_picture.image' => 'Le fichier doit être une image.',
+            'profile_picture.mimes' => 'L\'image doit être au format jpeg, png, jpg, gif ou svg.',
+            'profile_picture.max' => 'L\'image ne doit pas dépasser 2048 KB.',
        
        ]);
    
@@ -96,7 +109,7 @@ class CaisseController extends Controller
                ->notify(new SendEmailToCaisseAfterRegistrationNotification($code, $caisse->email));
    
            return redirect()->route('caisse.index')
-               ->with('success', 'Caissié enregistré avec succès.');
+               ->with('success', 'Caissier enregistré avec succès.');
        } catch (\Exception $e) {
            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
        }

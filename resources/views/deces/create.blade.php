@@ -189,7 +189,7 @@
             @csrf
 
             <div class="form-group text-center">
-                <label for="dossierNum" class="text-center">Numéro de Dossier Médical</label>
+                <label for="dossierNum" class="text-center">N° Certificat médical de décès</label>
                 <input type="text" class="text-center" id="dossierNum" name="dossierNum"
                        value="{{ old('dossierNum') }}" placeholder="Ex: CMD1411782251">
                 @error('dossierNum')

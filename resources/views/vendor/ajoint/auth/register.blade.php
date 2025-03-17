@@ -8,14 +8,17 @@
     <title>Inscription d'un Admin</title>
     <style>
         body {
+            background-image: url({{ asset('assets/images/profiles/Bguser.jpg') }});
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-image: url({{ asset('assets/images/profiles/vendorbg.jpg') }});
+            height: 100vh; 
+            margin: 0; 
             background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
+
 
         .form-control {
             display: flex;
@@ -54,7 +57,7 @@
         }
 
         .input:focus {
-            border: 1.5px solid #007bff;
+            border: 1.5px solid #007bff; 
         }
 
         .label {
@@ -72,7 +75,7 @@
             top: -5px;
             left: 5px;
             font-size: 12px;
-            color: #007bff;
+            color: #007bff; 
             background-color: #ffffff;
             padding-left: 5px;
             padding-right: 5px;
@@ -81,7 +84,7 @@
         .submit-btn {
             margin-top: 30px;
             height: 55px;
-            background: #6777ef;
+            background: #6777ef; 
             border: 0;
             outline: none;
             color: #ffffff;
@@ -99,6 +102,31 @@
         .error-message {
             color: red;
             text-align: center;
+        }
+
+        .success-message {
+            background-color: lightgreen;
+            text-align: center;
+        }
+
+        .flex-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            background: #f14336;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #d12c28;
         }
     </style>
 </head>
@@ -224,7 +252,7 @@
             @enderror
         </div>
       </div>
-      <button class="button-submit">Valider</button>
+      <button type="submit" class="submit-btn">Valider</button>
 </form>
 <script>
   document.addEventListener('DOMContentLoaded', function() {

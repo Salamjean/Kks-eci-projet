@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -25,33 +26,33 @@ class ProfileController extends Controller
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
-{
-    // Validation du champ commune
-    $validatedData = $request->validate([
-        'commune' => 'required|string|in:abobo,adjame,attecoube,cocody,koumassi,marcory,plateau,port-bouet,treichville,yopougon',
-    ]);
-
-    // Ajouter la commune aux données validées
-    $validatedData['commune'] = $request->input('commune');
-
-    $validatedData['name'] = $request->input('name');
-    $validatedData['prenom'] = $request->input('prenom');
-
-    // Remplir l'utilisateur avec les données validées
-    $request->user()->fill($validatedData);
-
-    // Réinitialiser la vérification de l'email si l'email est modifié
-    if ($request->user()->isDirty('email')) {
-        $request->user()->email_verified_at = null;
+    {
+        // Gestion de la photo de profil
+        if ($request->hasFile('profile_picture')) {
+            // Supprimer l'ancienne photo si elle existe
+            if ($request->user()->profile_picture) {
+                Storage::delete('public/' . $request->user()->profile_picture);
+            }
+    
+            // Stocker la nouvelle photo
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $validatedData['profile_picture'] = $path;
+        }
+    
+        // Mettre à jour les autres champs
+        $request->user()->fill($validatedData);
+    
+        // Réinitialiser la vérification de l'email si l'email est modifié
+        if ($request->user()->isDirty('email')) {
+            $request->user()->email_verified_at = null;
+        }
+    
+        // Sauvegarder les modifications
+        $request->user()->save();
+    
+        // Rediriger avec un message de succès
+        return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
-
-    // Sauvegarder les modifications de l'utilisateur
-    $request->user()->save();
-
-    // Rediriger avec un message de succès
-    return Redirect::route('profile.edit')->with('status', 'profile-updated');
-}
-
 
     /**
      * Delete the user's account.

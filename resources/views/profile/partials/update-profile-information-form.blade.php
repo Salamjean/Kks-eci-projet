@@ -83,7 +83,7 @@
         Mettez à jour les informations de profil et l'adresse électronique de votre compte.
     </p>
 
-    <form method="post" action="{{ route('profile.update') }}" class="mt-6">
+    <form method="post" action="{{ route('profile.update') }}" class="mt-6" enctype="multipart/form-data">
         @csrf
         @method('patch')
 
@@ -178,6 +178,15 @@
         <div class="form-group">
             <label for="email">Email</label>
             <input id="email" name="email" value="{{ old('email', $user->email) }}" type="email" required />
+        </div>
+        <div class="form-group">
+            <label for="profile_picture">Photo de profil</label>
+            <input id="profile_picture" name="profile_picture" type="file" accept="image/*" />
+            @if ($user->profile_picture)
+                <div class="mt-2">
+                    <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="Photo de profil actuelle" style="width: 100px; height: 100px; border-radius: 50%;">
+                </div>
+            @endif
         </div>
 
         <div>

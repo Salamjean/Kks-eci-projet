@@ -65,6 +65,10 @@
       min-height: 600px;
     }
 
+    .creer{
+      font-size:20px;
+    }
+
     @media (max-width: 768px) {
       .container {
         transform: scale(0.8);
@@ -77,6 +81,15 @@
         padding: 8px 12px;
         font-size: 0.9em;
         width: 200px;
+      }
+
+      .select{
+        width: 90px;
+      }
+
+      .numero{
+        width: 100px;
+        
       }
       h1, p { font-size: 15px; }
       .creer { font-size: 15px; }
@@ -99,13 +112,22 @@
         margin: 0 auto;
         box-shadow: none;
       }
+      .select{
+        width: 50px;
+      
+      }
+
+      .numero{
+        width: 100px;
+        
+      }
       input, select {
         padding: 4px 10px;
         font-size: 10px;
         width: 160px;
       }
       h1, p { font-size: 15px; }
-      .creer { font-size: 12px; }
+      .creer { font-size: 10px; }
       button { padding: 6px 30px; }
       .accueil {
         margin-bottom: 10px !important;
@@ -187,15 +209,14 @@
     <div class="form-container sign-up-container">
       <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
         @csrf
-        <h1 class="creer" style="font-size: 20px">Créez votre compte</h1>
+        <h1 class="creer">Créez votre compte</h1>
         <input type="text" name="name" placeholder="Votre nom" required />
         <input type="text" name="prenom" placeholder="Votre prénom" required />
         <input type="email" name="email" placeholder="Email" required />
         <input type="password" name="password" placeholder="Mot de passe" required />
         <input type="password" name="password_confirmation" placeholder="Confirmer le mot de passe" required />
         <div style="display: flex; gap: 10px;">
-            <select name="indicatif" style="flex: 1;" required>
-            <option value="">indicatif</option>
+            <select name="indicatif" style="flex: 1;" required class="select">
             <option value="+225">Côte d'Ivoire (+225)</option>
             <option value="+33">France (+33)</option>
             <option value="+1">États-Unis (+1)</option>
@@ -421,11 +442,10 @@
             <option value="+260">Zambie (+260)</option>
             <option value="+263">Zimbabwe (+263)</option>
           </select>
-          <input type="text" name="contact" placeholder="Numéro de contact" style="flex: 2;" required />
+          <input type="text" name="contact" placeholder="Numéro de contact" style="flex: 2;" required class="numero"/>
         </div>
-        <select id="commune" name="commune" class="block mt-1 w-full" required>
+        <select id="commune" name="commune"  required>
             <option value="">Sélectionnez votre commune de naisance</option>
-            <option value="">indicatif</option>
             <option value="abobo">Abobo</option>
             <option value="adjame">Adjamé</option>
             <option value="attiecoube">Attécoubé</option>
@@ -518,15 +538,18 @@
     <div class="form-container sign-in-container">
       <form method="POST" action="{{ route('login') }}">
         @csrf
-        <h1>Se connecter</h1>
-        <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" />
         @error('email')
         <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
         @enderror
-        <input type="password" name="password" placeholder="Mot de passe" />
         @error('password')
         <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
-      @enderror
+        @enderror
+        <h1>Se connecter</h1>
+       
+        <input type="email" name="email" placeholder="Email" value="{{ old('email') }}" />
+       
+        <input type="password" name="password" placeholder="Mot de passe" />
+        
         <a href="{{ route('password.request') }}" style="text-align: flex">Mot de passe oublié?</a>
         <button type="submit">Connexion</button>
       </form>

@@ -198,7 +198,7 @@
             @csrf
 
             <div class="form-group text-center">
-                <label for="dossierNum">Numéro de Dossier Médical</label>
+                <label for="dossierNum">N° Certificat médical de naissance</label>
                 <input class="text-center" type="text" id="dossierNum" name="dossierNum"
                        value="{{ old('dossierNum') }}" placeholder="Ex: CMN1411782251" required>
                 @error('dossierNum')

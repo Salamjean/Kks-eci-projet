@@ -225,7 +225,7 @@
             @enderror
         </div>
       </div>
-      <button class="button-submit">Valider</button>
+      <button type="submit" class="submit-btn">Valider</button>
 </form>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
