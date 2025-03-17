@@ -27,6 +27,20 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        $validatedData = $request->validate([
+            'commune' => 'required|string|in:abobo,adjame,attecoube,cocody,koumassi,marcory,plateau,port-bouet,treichville,yopougon',
+            'email' => [
+                'required',
+                'string',
+                'lowercase',
+                'email',
+                'max:255',
+            ],
+            'name' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif', 
+        ]);
+    
         // Gestion de la photo de profil
         if ($request->hasFile('profile_picture')) {
             // Supprimer l'ancienne photo si elle existe
