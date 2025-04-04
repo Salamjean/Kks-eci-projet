@@ -39,7 +39,7 @@
       </li>
       <li class="dropdown-divider"></li>
       <li class="ms-dropdown-list" style="list-style: none;">
-        <a class="media fs-14 p-2" href="#"> <span><i class="flaticon-user mr-2"></i> Profile</span> </a>
+        <a class="media fs-14 p-2" href="{{ route('sous_admin.profil') }}"> <span><i class="flaticon-user mr-2"></i> Profile</span> </a>
       </li>
       <li class="dropdown-divider"></li>
       <li class="dropdown-menu-footer" style="list-style: none;">

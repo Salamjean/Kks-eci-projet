@@ -6066,7 +6066,7 @@ a.ms-g-plus,
   position: relative;
   display: flex;
   align-items: flex-end;
-  background-image: url('../../assets/img/user-profile-bg-1920x400.jpg');
+  background-image: url("{{ asset('assets/images/profiles/user_homme.png') }}");
   background-size: cover;
   background-position: center bottom;
   background-repeat: no-repeat;

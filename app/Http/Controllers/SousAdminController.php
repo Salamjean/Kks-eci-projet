@@ -265,13 +265,13 @@ public function signature()
     return view('sous_admin.signature', compact('sousAdmin'));
 }
 
-public function updateSignature(UpdateSignatureRequest $request) // On va créer cette request
+public function updateSignature(UpdateSignatureRequest $request) 
 {
     $sousAdmin = Auth::guard('sous_admin')->user();
 
     if ($request->hasFile('signature')) {
         // Valider et stocker la nouvelle signature
-        $path = $request->file('signature')->store('signatures', 'public'); // Stocker dans storage/app/public/signatures
+        $path = $request->file('signature')->store('signatures', 'public');
 
         // Supprimer l'ancienne signature si elle existe
         if ($sousAdmin->signature && Storage::disk('public')->exists($sousAdmin->signature)) {
@@ -282,7 +282,51 @@ public function updateSignature(UpdateSignatureRequest $request) // On va créer
     }
 
     $sousAdmin->update();
-
     return redirect()->route('sous_admin.signature')->with('success', 'Signature mise à jour avec succès.');
 }
+
+public function profil(){
+        $sousAdmin = Auth::guard('sous_admin')->user();
+        return view('sous_admin.auth.profil', compact('sousAdmin'));
+    }
+
+    public function updateProfil(Request $request)
+    {
+    // Valider les données du formulaire
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'prenom' =>'required|string|max:255',
+        'email' =>'required|email|max:255',
+        'contact' =>'required|string|max:255',
+        // Ajoutez d'autres champs si nécessaire
+    ]); 
+        try {
+            $sousAdmin = Auth::guard('sous_admin')->user();
+            if (!$sousAdmin) {
+                return redirect()->back()->with('error', 'Utilisateur non trouvé.');
+            }
+            // Gestion de l'image de profil
+            if ($request->hasFile('profile_picture')) {
+                // Supprimer l'ancienne image si elle existe
+                if ($sousAdmin->profile_picture && Storage::exists('public/' . $sousAdmin->profile_picture)) {
+                    Storage::delete('public/' . $sousAdmin->profile_picture);
+                }
+    
+                // Stocker la nouvelle image
+                $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+                $sousAdmin->profile_picture = $imagePath;
+                $sousAdmin->save();
+            }
+            $sousAdmin->name = $request->name;
+            $sousAdmin->prenom = $request->prenom;
+            $sousAdmin->email = $request->email;
+            $sousAdmin->contact = $request->contact;
+            $sousAdmin->update(); 
+    
+            return redirect()->route('sous_admin.profil')->with('success', 'Profil mis à jour avec succès.');
+    
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de la mise à jour du profil.');
+        }
+    }
 }

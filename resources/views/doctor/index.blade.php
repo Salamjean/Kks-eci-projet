@@ -219,7 +219,7 @@
                         <th class="text-center">Contact</th>
                         <th class="text-center">Fonction</th>
                         <th class="text-center">Sexe</th>
-                        <th class="text-center">Action</th>
+                        <th class="text-center" colspan="2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -239,7 +239,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center">Aucun personnel trouvé</td>
+                        <td colspan="9" class="text-center">Aucun personnel trouvé</td>
                     </tr>
                     @endforelse
                 </tbody>

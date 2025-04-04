@@ -35,22 +35,24 @@ class DoctorController extends Controller
             $sousadmin->email = $request->email;
             $sousadmin->description = $request->description;
             $sousadmin->contact = $request->contact;
+            $sousadmin->sexe = $request->sexe;
+            $sousadmin->fonction = $request->fonction;
             $sousadmin->update();
 
             return redirect()->route('doctor.index')->with('success','Vos informations ont été mises à jour avec succès.');
         } catch (Exception $e) {
             // dd($e);
-            throw new Exception('error','Une erreur est survenue lors de la modification du Docteur');
+            throw new Exception('error','Une erreur est survenue lors de la modification du personnel');
         }
     }
 
     public function delete(SousAdmin $sousadmin){
         try {
             $sousadmin->archive();
-            return redirect()->route('doctor.index')->with('success1','Le Docteur a été supprimé avec succès.');
+            return redirect()->route('doctor.index')->with('success1','Le personnel a été supprimé avec succès.');
         } catch (Exception $e) {
             // dd($e);
-            throw new Exception('error','Une erreur est survenue lors de la suppression du Docteur');
+            throw new Exception('error','Une erreur est survenue lors de la suppression du personnel');
         }
     }
 
@@ -186,7 +188,7 @@ class DoctorController extends Controller
                         ->notify(new SendEmailToDoctorAfterRegistrationNotification($code, $sousadmin->email));
     
                     return redirect()->route('doctor.index')
-                        ->with('success', 'Docteur ajouté avec succès.');
+                        ->with('success', 'personnel inscrire avec succès.');
                 } catch (Exception $e) {
                     throw new Exception('Une erreur est survenue lors de l\'envoi de l\'e-mail.');
                 }

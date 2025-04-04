@@ -92,6 +92,7 @@ class StatController extends Controller
 
         // Récupérer les données par mois pour les naissances
         $naissData = NaissHop::where('sous_admin_id', $sousAdminId)
+            ->where('sous_admin_id', $sousAdminId)
             ->whereYear('created_at', $selectedYear)
             ->selectRaw('MONTH(created_at) as month, COUNT(*) as count')
             ->groupBy('month')

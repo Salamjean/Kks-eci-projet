@@ -184,26 +184,61 @@ class NaissHopController extends Controller
     }
         
 
-    public function update(UpdateNaissHopRequest $request,NaissHop $naisshop){
+    public function update(Request $request, NaissHop $naisshop)
+    {
         try {
-            $naisshop->NomM = $request->NomM;
-            $naisshop->PrM = $request->PrM;
-            $naisshop->contM = $request->contM;
-            $naisshop->CNI_mere = $request->CNI_mere;
-            $naisshop->NomP = $request->NomP;
-            $naisshop->PrP = $request->PrP;
-            $naisshop->contP = $request->contP;
-            $naisshop->CNI_Pere = $request->CNI_Pere;
-            $naisshop->DateNaissance = $request->DateNaissance;
-            $naisshop->sexe = $request->sexe;
-            $naisshop->update();
-
-            return redirect()->route('naissHop.index')->with('success','Vos informations ont été mises à jour avec succès.');
+            // Validation des données
+            $validatedData = $request->validate([
+                'NomM' => 'required',
+                'PrM' => 'required',
+                'contM' => 'required',
+                'dateM' => 'required|date',
+                'NomP' => 'required',
+                'PrP' => 'required',
+                'contP' => 'required',
+                'CNI_Pere' => 'required',
+                'lien' => 'required',
+                'codeCMU' => 'required',
+                'nombreEnf' => 'required|integer|min:1',
+                'NomEnf' => 'required',
+                'commune' => 'required',
+            ]);
+    
+            // Gestion du fichier CNI de la mère
+            if ($request->hasFile('CNI_mere')) {
+                // Supprimer l'ancien fichier s'il existe
+                if ($naisshop->CNI_mere && Storage::exists($naisshop->CNI_mere)) {
+                    Storage::delete($naisshop->CNI_mere);
+                }
+    
+                $path = $request->file('CNI_mere')->store('public/images/naissances/cni');
+                $validatedData['CNI_mere'] = str_replace('public/', '', $path);
+            }
+    
+            // Mise à jour des informations principales
+            $naisshop->update($validatedData);
+    
+            // Gestion des enfants
+            $naisshop->enfants()->delete(); // Supprime les anciens enfants
+    
+            // Crée les nouveaux enfants
+            for ($i = 1; $i <= $request->nombreEnf; $i++) {
+                Enfant::create([
+                    'naiss_hop_id' => $naisshop->id,
+                    'date_naissance' => $request->input('DateNaissance_enfant_'.$i),
+                    'sexe' => $request->input('sexe_enfant_'.$i),
+                    'nombreEnf' => $request->nombreEnf
+                ]);
+            }
+    
+            return redirect()->route('naissHop.index')
+                ->with('success', 'Déclaration mise à jour avec succès');
+    
         } catch (Exception $e) {
-            dd($e);
+            return back()->withInput()
+                ->with('error', 'Erreur lors de la mise à jour: '.$e->getMessage());
         }
     }
-
     public function store(Request $request)
     {
         // *** Construction des règles de validation (statiques et dynamiques) ***

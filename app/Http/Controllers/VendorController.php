@@ -258,11 +258,8 @@ public function hoptitalstore(Request $request)
         'nomHop' => 'required|string|max:255',
         'commune' => 'required|string|max:255',
         'type' => 'required|string|max:255',
-        'profile_picture' => 'nullable|image|max:2048',
     
     ],[
-        'profile_picture.image' => 'Le format de l\'image doit être PNG ou JPG.',
-        'profile_picture.max' => 'La taille de l\'image ne doit pas dépasser 2MB.',
         'commune.max' => 'La commune ne doit pas dépasser 255 caractères.',
         'type.max' => 'Le type ne doit pas dépasser 255 caractères.',
         'email.unique' => 'Cette adresse email est déjà utilisée.',
@@ -447,12 +444,14 @@ public function submitDefineAccess(Request $request){
             'code'=>'required|exists:reset_code_password_hops,code',
             'password' => 'required|same:confirme_password',
             'confirme_password' => 'required|same:password',
-            'profile_picture' => 'required|image|mimes:png,jpg'
         ], [
+            'code.required' => 'Le code de réinitialisation est obligatoire.', 
             'code.exists' => 'Le code de réinitialisation est invalide.',
+            'password.required' => 'Le mot de passe est obligatoire.',
             'password.same' => 'Les mots de passe doivent être identiques.',
+            'confirme_password.required' => 'Le mot de passe de confirmation est obligatoire.',
             'confirme_password.same' => 'Les mots de passe doivent être identiques.',
-            'profile_picture.image' => 'Le format de l\'image doit être PNG ou JPG.',
+           
     ]);
     try {
         $doctor = Doctor::where('email', $request->email)->first();

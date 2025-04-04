@@ -325,5 +325,49 @@ public function directeurindex() {
 
     return view('directeur.directeurindex', compact('sousadmins'));
 }
+
+public function profil(){
+    $director = auth('directeur')->user(); // Récupérer le directeur connecté
+    return view('directeur.auth.profil', compact('director'));
+}
     
+public function updateProfil(Request $request)
+    {
+    // Valider les données du formulaire
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'prenom' =>'required|string|max:255',
+        'email' =>'required|email|max:255',
+        'contact' =>'required|string|max:255',
+        // Ajoutez d'autres champs si nécessaire
+    ]); 
+        try {
+            $director = auth('directeur')->user();
+            if (!$director) {
+                return redirect()->back()->with('error', 'Utilisateur non trouvé.');
+            }
+            // Gestion de l'image de profil
+            if ($request->hasFile('profile_picture')) {
+                // Supprimer l'ancienne image si elle existe
+                if ($director->profile_picture && Storage::exists('public/' . $director->profile_picture)) {
+                    Storage::delete('public/' . $director->profile_picture);
+                }
+    
+                // Stocker la nouvelle image
+                $imagePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+                $director->profile_picture = $imagePath;
+                $director->save();
+            }
+            $director->name = $request->name;
+            $director->prenom = $request->prenom;
+            $director->email = $request->email;
+            $director->contact = $request->contact;
+            $director->update(); 
+    
+            return redirect()->route('directeur.profil')->with('success', 'Profil mis à jour avec succès.');
+    
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de la mise à jour du profil.');
+        }
+    }
 }

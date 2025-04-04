@@ -245,7 +245,7 @@
                                     @foreach ($naisshop->enfants as $enfant)
                                         <li>
                                             <strong> Enfant {{ $loop->iteration }} </strong> <br>
-                                            Date Naissance: {{ \Carbon\Carbon::parse($enfant->date_naissance)->format('d/m/Y') }}, <br>
+                                            Date Naissance: {{ \Carbon\Carbon::parse($enfant->date_naissance)->format('d/m/Y') }} <br>
                                             Sexe: {{ $enfant->sexe }}
                                         </li>
                                     @endforeach

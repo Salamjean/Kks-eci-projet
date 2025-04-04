@@ -1,330 +1,184 @@
 @extends('sous_admin.layouts.template')
 
 @section('content')
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Multi-step Form</title>
-  
-  <style>
-    /* Custom font */
-    @import url(https://fonts.googleapis.com/css?family=Montserrat);
-
-    /* Basic reset */
-    * { margin: 0; padding: 0; }
-
-    html {
-      height: 100vh;
-      background-image:url({{ asset('assets/images/profiles/arriereP.jpg') }});
-    }
-
-    body {
-      font-family: montserrat, arial, verdana;
-    }
-
-    /* Form styles */
-    #msform {
-      width: 50%;
-      margin-top: 60px;
-      margin-left:170px;
-      text-align: center;
-      position: relative;
-    }
-
-    #msform fieldset {
-      background: white;
-      border: none;
-      border-radius: 20px;
-      box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.1);
-      padding: 20px 30px;
-      box-sizing: border-box;
-      width: 120%;
-      margin: 0 10%;
-      position: relative;
-      opacity: 0; /* Start with hidden fieldset */
-      animation: slideIn 0.5s forwards; /* Slide in animation */
-    }
-
-    /* Slide in animation */
-      @keyframes slideIn {
-        from {
-          transform: translateX(-100%);
-          opacity: 0;
-        }
-        to {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-
-    #msform fieldset:not(:first-of-type) {
-      display: none;
-    }
-
-    select, #msform input, #msform textarea {
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 3px;
-      margin-bottom: 10px;
-      width: 100%;
-      box-sizing: border-box;
-      font-family: montserrat;
-      color: #2C3E50;
-      font-size: 13px;
-      border-radius: 8px;
-    }
-
-    input[type="file"]::file-selector-button {
-        background-color: #f3d023de;
-        border: none;
-        height: 30px;
-        border-radius: 5px;
-        color: white;
-    }
-
-    input[type="file"] {
-        border: 1px dashed black;
-    }
-
-    #msform .action-button {
-      width: 100px;
-      background: #009efb;
-      font-weight: bold;
-      color: white;
-      border: none;
-      border-radius: 1px;
-      cursor: pointer;
-      padding: 10px;
-      margin: 10px 5px;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    #msform .action-button:hover, #msform .action-button:focus {
-      box-shadow: 0 0 0 2px white, 0 0 0 3px #009efb;
-      border-radius: 10px;
-      transition: all 0.30s;
-    }
-
-    .fs-title {
-      font-size: 15px;
-      text-transform: uppercase;
-      color: #2C3E50;
-      margin-bottom: 10px;
-    }
-
-    .fs-subtitle {
-      font-weight: normal;
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 20px;
-    }
-
-    /* Progress bar */
-    #progressbar {
-      margin-bottom: 30px;
-      overflow: hidden;
-      counter-reset: step;
-      width: 142%;
-      position: relative;
-      right: 02px;
-    }
-
-    #progressbar li {
-      list-style-type: none;
-      color: black;
-      left: 10%;
-      text-transform: uppercase;
-      font-size: 9px;
-      width: 25%;
-      float: left;
-      position: relative;
-    }
-
-    #progressbar li:before {
-      content: counter(step);
-      counter-increment: step;
-      width: 20px;
-      line-height: 20px;
-      display: block;
-      font-size: 10px;
-      color: #333;
-      background: white;
-      border-radius: 3px;
-      margin: 0 auto 5px auto;
-    }
-
-    #progressbar li:after {
-      content: '';
-      width: 100%;
-      height: 2px;
-      background: white;
-      position: absolute;
-      left: -50%;
-      top: 9px;
-      z-index: -1;
-    }
-
-    #progressbar li:first-child:after {
-      content: none;
-    }
-
-    #progressbar li.active:before, #progressbar li.active:after {
-      background: #009efb;
-      color: white;
-    }
-    select.text-center {
-    text-align: center;
-    text-align-last: center; /* Centrer aussi l'élément sélectionné */
-    width: 100%; /* Ajuste la largeur si nécessaire */
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    } 
-    .form-group {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .form-group input {
-        margin-right: 10px; /* Espace entre les champs */
-    }
-
-    .error-message {
-        color: red; /* Couleur des messages d'erreur */
-        margin-left: 10px; /* Espace entre le champ et le message d'erreur */
-    }
-  </style>
+  <title>Modification déclaration de naissance</title>
+  <link rel="stylesheet" href="{{ asset('assets/hopitalCss/style_naisshop.css') }}">
 </head>
 <body>
   <form id="msform" action="{{ route('naissHop.update', $naisshop->id) }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <ul id="progressbar">
-      <li class="active">Informations 
-        <br>sur la mère</li>
-      <li>Informations 
-        <br>sur l'accompagnateur</li>
+      <li class="active">Informations sur la mère</li>
+      <li>Informations sur l'accompagnateur</li>
       <li>Informations du nouveau-né</li>
     </ul>
 
+    <!-- Étape 1: Informations sur la mère -->
     <fieldset>
-      <h2 class="fs-title">Déclaration de naissance</h2>
+      <h2 class="fs-title">Modification déclaration</h2>
       <h3 class="fs-subtitle">Informations sur la mère</h3>
+      
       <div class="form-group">
-           <input type="text" name="NomM" placeholder="Entrez le nom de la mère" value="{{ $naisshop->NomM }}" />
-            @error('NomM')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
-  
-            <input type="text" name="PrM" placeholder="Entrez le prénom de la mère" value="{{ $naisshop->PrM }}" />
-            @error('PrM')
-                <div class="error-message">{{ $message }}</div>
-            @enderror
+        <input type="text" name="NomM" placeholder="Nom de la mère" value="{{ old('NomM', $naisshop->NomM) }}" />
+        @error('NomM')<div class="error-message">{{ $message }}</div>@enderror
+        <input type="text" name="PrM" placeholder="Prénom de la mère" value="{{ old('PrM', $naisshop->PrM) }}" />
+        @error('PrM')<div class="error-message">{{ $message }}</div>@enderror
       </div>
+      
       <div style="display: flex; justify-content: space-around;">
-           <label>Entrez la date de naissance de la mère</label>
-           <label>Joindre copie CNI/passeport/extrait de la mère</label>
+        <label>Date de naissance de la mère</label>
+        <label>CNI/passeport/extrait de la mère</label>
       </div>
+      
       <div class="form-group">
-        <input type="date" name="dateM" value="{{ $naisshop->dateM }}" />
-        @error('dateM')
-            <div class="text-danger text-center">{{ $message }}</div>
-        @enderror
-    
+        <input type="date" name="dateM" value="{{ old('dateM', $naisshop->dateM) }}" />
+        @error('dateM')<div class="text-danger text-center">{{ $message }}</div>@enderror
         
-        <input type="file" name="CNI_mere" value="{{ $naisshop->CNI_mere }}" />
-        @error('CNI_mere')
-            <div class="text-danger text-center">{{ $message }}</div>
-        @enderror
-    </div>
-    <div class="form-group">
-         <input type="text" name="contM" placeholder="Entrez le numéro de téléphone de la mère" value="{{ $naisshop->contM }}" ><br>
-         @error('contM')
-         <div class="text-danger text-center">{{ $message }}</div>
-         @enderror
-         <input type="text" name="codeCMU" placeholder="Entrez le numéro CMU de la mère" value="{{ $naisshop->codeCMU }}" ><br>
-         @error('CMU')
-         <div class="text-danger text-center">{{ $message }}</div>
-         @enderror
-    </div>
-         <input type="button" class="next action-button" value="Suivant" />
+        <input type="file" name="CNI_mere" />
+        @error('CNI_mere')<div class="text-danger text-center">{{ $message }}</div>@enderror
+      </div>
+      
+      <div class="form-group">
+        <input type="text" name="contM" placeholder="Téléphone de la mère" value="{{ old('contM', $naisshop->contM) }}">
+        @error('contM')<div class="text-danger text-center">{{ $message }}</div>@enderror
+        
+        <input type="text" name="codeCMU" placeholder="Numéro CMU de la mère" value="{{ old('codeCMU', $naisshop->codeCMU) }}">
+        @error('codeCMU')<div class="text-danger text-center">{{ $message }}</div>@enderror
+      </div>
+      
+      <input type="button" class="next action-button" value="Suivant" />
     </fieldset>
 
+    <!-- Étape 2: Informations sur l'accompagnateur -->
     <fieldset>
-      <h2 class="fs-title">Déclaration de naissance</h2>
-      <h3 class="fs-subtitle">Informations sur la compagnateur</h3>
+      <h2 class="fs-title">Modification déclaration</h2>
+      <h3 class="fs-subtitle">Informations sur l'accompagnateur</h3>
+      
       <div class="form-group"> 
-      <input type="text" name="NomP" placeholder="Entrez le nom de la compagnateur" value="{{ $naisshop->NomP }}"/>
-      @error('NomP')
-      <div class="text-danger text-center">{{ $message }}</div>
-      @enderror
-          <input type="text" name="PrP" placeholder="Entrez le prénom de la compagnateur" value="{{ $naisshop->PrP }}"/>
-          @error('PrP')
-          <div class="text-danger text-center">{{ $message }}</div>
-      @enderror
+        <input type="text" name="NomP" placeholder="Nom de l'accompagnateur" value="{{ old('NomP', $naisshop->NomP) }}"/>
+        @error('NomP')<div class="text-danger text-center">{{ $message }}</div>@enderror
+        
+        <input type="text" name="PrP" placeholder="Prénom de l'accompagnateur" value="{{ old('PrP', $naisshop->PrP) }}"/>
+        @error('PrP')<div class="text-danger text-center">{{ $message }}</div>@enderror
       </div>
+      
       <div class="form-group">
-          <input type="text" name="contP" placeholder="Entrez le numéro de la compagnateur" value="{{ $naisshop->contP }}"><br>
-          @error('contP')
-          <div class="text-danger text-center">{{ $message }}</div>
-          @enderror
-          <input type="text" name="CNI_Pere" placeholder="Entrez le numéro CNI/CMU/Passsport"value="{{ $naisshop->CNI_Pere }}" />
-          @error('CNI_Pere')
-          <div class="text-danger text-center">{{ $message }}</div>
-          @enderror
+        <input type="text" name="contP" placeholder="Téléphone de l'accompagnateur" value="{{ old('contP', $naisshop->contP) }}">
+        @error('contP')<div class="text-danger text-center">{{ $message }}</div>@enderror
+        
+        <input type="text" name="CNI_Pere" placeholder="CNI/CMU/Passport" value="{{ old('CNI_Pere', $naisshop->CNI_Pere) }}" />
+        @error('CNI_Pere')<div class="text-danger text-center">{{ $message }}</div>@enderror
       </div>
-      <input type="text" name="lien" placeholder="Entrez le lien parental" value="{{ $naisshop->lien }}"/>
-      @error('lien')
-      <div class="text-danger text-center">{{ $message }}</div>
-      @enderror
+      
+      <input type="text" name="lien" placeholder="Lien parental" value="{{ old('lien', $naisshop->lien) }}"/>
+      @error('lien')<div class="text-danger text-center">{{ $message }}</div>@enderror
+      
       <input type="button" class="previous action-button" value="Retour" />
       <input type="button" class="next action-button" value="Suivant" />
     </fieldset>
 
-    <fieldset >
+    <!-- Étape 3: Informations des enfants -->
+    <fieldset>
       <h2 class="fs-title">Informations du nouveau-né</h2>
-      <h3 class="fs-subtitle">Complétez les informations du bébé</h3>
+      <h3 class="fs-subtitle">Complétez les informations</h3>
+      
       <input type="text" class="text-center" style="background-color:#e8e8e8" name="NomEnf" value="{{ Auth::guard('sous_admin')->user()->nomHop }}" readonly/>
       <input type="text" class="text-center" style="background-color:#e8e8e8" name="commune" value="{{ Auth::guard('sous_admin')->user()->commune }}" readonly/>
-      <label style="position: relative; right: 30 px;">Entrez la date de naissance</label>
-      <input type="date" class="text-center" name="DateNaissance" value="{{ $naisshop->DateNaissance }}" />
-      <select class="text-center" name="sexe">
-          <option value="masculin" {{ $naisshop->sexe == 'masculin' ? 'selected' : '' }}>Masculin</option>
-          <option value="feminin" {{ $naisshop->sexe == 'feminin' ? 'selected' : '' }}>Féminin</option>
+      
+      <!-- Liste déroulante pour le nombre d'enfants -->
+      <label for="nombre_enfants">Nombre d'enfant(s) né(s) :</label>
+      <select name="nombreEnf" id="nombreEnf" class="form-control" required>
+        <option value="" disabled selected>Sélectionnez le nombre d'enfants</option>
+        @for($i = 1; $i <= 4; $i++)
+          <option style="text-align:center" value="{{ $i }}" {{ $naisshop->enfants->count() == $i ? 'selected' : '' }}>{{ $i }}</option>
+        @endfor
       </select>
-      <input type="button"  class="previous action-button" value="Retour" />
+      
+      <!-- Conteneur pour les informations des enfants -->
+      <div id="enfants-container">
+        @foreach($naisshop->enfants as $index => $enfant)
+        <div class="enfant-container" data-index="{{ $index + 1 }}">
+          <div class="enfant-title">Enfant {{ $index + 1 }}</div>
+          <input style="text-align:center" type="hidden" name="enfant_ids[]" value="{{ $enfant->id }}">
+          
+          <label>Date de naissance</label>
+          <input style="text-align:center" type="date" class="form-control" name="DateNaissance_enfant_{{ $index + 1 }}" 
+                 value="{{ $enfant->date_naissance }}" required>
+          
+          <label>Sexe</label>
+          <select name="sexe_enfant_{{ $index + 1 }}" class="form-control" required>
+            <option style="text-align:center" value="masculin" {{ $enfant->sexe == 'masculin' ? 'selected' : '' }}>Masculin</option>
+            <option style="text-align:center" value="feminin" {{ $enfant->sexe == 'feminin' ? 'selected' : '' }}>Féminin</option>
+          </select>
+        </div>
+        @endforeach
+      </div>
+      
+      <input type="button" class="previous action-button" value="Retour" />
       <input type="submit" class="next action-button" value="Valider" />
     </fieldset>
   </form>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
       // Navigation entre les étapes
-      $(".next").click(function () {
+      $(".next").click(function() {
         var current = $(this).parent();
         var next = $(this).parent().next();
         if (next.length) {
-          current.fadeOut(500, function () {
+          current.fadeOut(500, function() {
             next.fadeIn(500);
           });
           $("#progressbar li").eq($("fieldset").index(next)).addClass("active");
         }
       });
 
-      $(".previous").click(function () {
+      $(".previous").click(function() {
         var current = $(this).parent();
         var previous = $(this).parent().prev();
         if (previous.length) {
-          current.fadeOut(500, function () {
+          current.fadeOut(500, function() {
             previous.fadeIn(500);
           });
           $("#progressbar li").eq($("fieldset").index(current)).removeClass("active");
+        }
+      });
+
+      // Gestion dynamique du nombre d'enfants
+      $('#nombreEnf').on('change', function() {
+        const nombreEnfants = parseInt($(this).val());
+        const container = $('#enfants-container');
+        const currentCount = container.children().length;
+        
+        if (nombreEnfants > currentCount) {
+          // Ajouter des champs enfants
+          for (let i = currentCount + 1; i <= nombreEnfants; i++) {
+            container.append(`
+              <div class="enfant-container" data-index="${i}">
+                <div class="enfant-title">Enfant ${i}</div>
+                <input type="hidden" name="enfant_ids[]" value="">
+                
+                <label>Date de naissance</label>
+                <input type="date" class="form-control" name="DateNaissance_enfant_${i}" required>
+                
+                <label>Sexe</label>
+                <select name="sexe_enfant_${i}" class="form-control" required>
+                  <option value="masculin">Masculin</option>
+                  <option value="feminin">Féminin</option>
+                </select>
+              </div>
+            `);
+          }
+        } else if (nombreEnfants < currentCount) {
+          // Supprimer des champs enfants
+          container.children().slice(nombreEnfants).remove();
         }
       });
     });

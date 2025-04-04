@@ -198,7 +198,7 @@
             @enderror
         </div>
       </div>
-      <button type="submit" class="submit-btn" style="width: 100%; padding:10px 0; color:white; background-color: #3eafe1;font-size:20px; font-weight:bold">Valider</button>
+      <button type="submit" class="button-submit" >Valider</button>
     </form>
     
     

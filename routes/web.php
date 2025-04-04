@@ -402,6 +402,8 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     Route::get('/docteur/signature',[SousAdminController::class, 'signature'])->name('signature');
     Route::post('/docteur/signature/update',[SousAdminController::class, 'updateSignature'])->name('signature.update'); 
     Route::get('/logout',[SousAdminController::class, 'souslogout'])->name('logout');
+    Route::get('/profil', [SousAdminController::class, 'profil'])->name('profil');
+    Route::put('sous/profil/update', [SousAdminController::class, 'updateProfil'])->name('profilupdate');
     });
 
     // routes du directeur
@@ -417,6 +419,9 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/index-naissance-directeur',[NaissHopController::class, 'directeurindex'])->name('naissanceindex');
         Route::get('/index-deces-directeur',[DecesHopController::class, 'directeurindex'])->name('decesindex');
         Route::get('/logout',[DirectorController::class, 'logout'])->name('logout');
+
+        Route::get('/profil', [DirectorController::class, 'profil'])->name('profil');
+        Route::put('/profil/update', [DirectorController::class, 'updateProfil'])->name('profilupdate');
         });
     
 

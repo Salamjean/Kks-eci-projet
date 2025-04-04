@@ -79,6 +79,38 @@
                                 @enderror
                             </div>
                         </div>
+                       <!-- Fonction et Sexe -->
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fonctionSelect">Fonction</label>
+                                <div class="input-group">
+                                    <select class="form-control" name="fonction" id="fonctionSelect" required>
+                                        <option value="" disabled {{ !isset($sousadmin->fonction) ? 'selected' : '' }}>Sélectionnez une fonction</option>
+                                        <option value="Médecin" {{ (isset($sousadmin->fonction) && $sousadmin->fonction == 'Médecin') ? 'selected' : '' }}>Médecin(e)</option>
+                                        <option value="Sage-femme" {{ (isset($sousadmin->fonction) && $sousadmin->fonction == 'Sage-femme') ? 'selected' : '' }}>Sage-femme</option>
+                                        <option value="Infirmier" {{ (isset($sousadmin->fonction) && $sousadmin->fonction == 'Infirmier') ? 'selected' : '' }}>Infirmier(e)</option>
+                                    </select>
+                                    <div class="valid-feedback">Correct</div>
+                                </div>
+                                @error('fonction')
+                                    <div class="text-danger text-center">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="sexeSelect">Sexe</label>
+                                <div class="input-group">
+                                    <select class="form-control" name="sexe" id="sexeSelect" required>
+                                        <option value="" disabled {{ !isset($sousadmin->sexe) ? 'selected' : '' }}>Sélectionnez le sexe</option>
+                                        <option value="Homme" {{ (isset($sousadmin->sexe) && $sousadmin->sexe == 'Homme') ? 'selected' : '' }}>Homme</option>
+                                        <option value="Femme" {{ (isset($sousadmin->sexe) && $sousadmin->sexe == 'Femme') ? 'selected' : '' }}>Femme</option>
+                                    </select>
+                                    <div class="valid-feedback">Correct</div>
+                                </div>
+                                @error('sexe')
+                                    <div class="text-danger text-center">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
                         <!-- Description -->
                         <div class="form-row">

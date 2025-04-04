@@ -5,7 +5,7 @@
       <a href="{{ route('doctor.dashboard') }}" class="text-center ms-logo-img-link"> <img class="ms-user-img ms-img-round" style=" width: 70px; /* Taille du cercle */
         height: 70px; /* Taille du cercle */
         border-radius: 55%; /* Cela rend l'image ronde */
-        object-fit: cover;" src="{{ asset('storage/' . (Auth::guard('doctor')->user()->profile_picture ?? 'default-profile.png')) }}" alt="Profile Picture"></a>
+        object-fit: cover;" src="{{ Auth::guard('doctor')->user()->profile_picture ? asset('storage/' . Auth::guard('doctor')->user()->profile_picture) : asset('assets/images/profiles/sante.jpg') }}" alt="Profile Picture"></a>
       <h5 class="text-center text-white mt-2">{{ Auth::guard('doctor')->user()->name ?? 'Alain'  }}</h5>
       
     </div>

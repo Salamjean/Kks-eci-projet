@@ -218,8 +218,32 @@
                     <td>{{ $naisshop->commune }}</td>
                 </tr>
                 <tr>
+                    <th>Nombre d'enfant</th>
+                    <td class="text-center">
+                        @if ($naisshop->enfants->isNotEmpty())
+                            {{ $naisshop->enfants->first()->nombreEnf }}  {{-- Get nombreEnf from the *first* child --}}
+                        @else
+                            Aucun enfant enregistré
+                        @endif
+                    </td>
+                </tr>
+                <tr>
                     <th>Date de Naissance</th>
-                    <td>{{ $naisshop->DateNaissance }}</td>
+                    <td class="text-center">
+                        @if ($naisshop->enfants->isNotEmpty())
+                            <ul class="text-center">
+                                @foreach ($naisshop->enfants as $enfant)
+                                    <li>
+                                        <strong> Enfant {{ $loop->iteration }} </strong> <br>
+                                        Date Naissance: {{ \Carbon\Carbon::parse($enfant->date_naissance)->format('d/m/Y') }} <br>
+                                        Sexe: {{ $enfant->sexe }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        @else
+                            Aucun enfant enregistré
+                        @endif
+                    </td>
                 </tr>
             </table>
         </div>
