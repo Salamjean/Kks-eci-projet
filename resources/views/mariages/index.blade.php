@@ -44,9 +44,8 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-gray-800">Listes des demandes d'extraits de Mariage</h1>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="./">Home</a></li>
+            <li class="breadcrumb-item"><a href="./">Accueil</a></li>
             <li class="breadcrumb-item">Tables</li>
-            <li class="breadcrumb-item active" aria-current="page">DataTables</li>
         </ol>
     </div>
 
@@ -55,7 +54,7 @@
         <div class="col-lg-12">
             <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Demande De Copie Simples</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Demande d'acte de mariage</h6>
                 </div>
                 <div class="table-responsive p-3">
                     <!-- Champ de recherche -->

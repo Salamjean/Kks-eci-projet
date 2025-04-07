@@ -41,7 +41,7 @@
           <span><i class="fas fa-user"></i>Déclaration Naissance</span>
         </a>
         <ul id="patient" class="collapse" aria-labelledby="patient" data-parent="#side-nav-accordion">
-          <li> <a href="{{ route('naissHop.create') }}">Ajouter Déclaration</a> </li>
+          <li> <a href="{{ route('naissHop.create') }}">Faire Déclaration</a> </li>
           <li> <a href="{{ route('naissHop.index') }}">Liste Déclaration</a> </li>
         </ul>
       </li>
@@ -52,7 +52,7 @@
           <span><i class="fas fa-school"></i>Déclaration Décès</span>
         </a>
         <ul id="department" class="collapse" aria-labelledby="department" data-parent="#side-nav-accordion">
-          <li> <a href="{{ route('decesHop.create') }}">Ajouter Déclaration</a> </li>
+          <li> <a href="{{ route('decesHop.create') }}">Faire Déclaration</a> </li>
           <li> <a href="{{ route('decesHop.index') }}">Liste Déclaration</a> </li>
         </ul>
       </li>

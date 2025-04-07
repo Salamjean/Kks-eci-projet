@@ -50,7 +50,7 @@
         }
         .signature {
             position: absolute;
-            bottom: 300px;
+            bottom: 100px;
             right: 25px;
             font-size: 15px;
             font-weight: bold;
@@ -123,7 +123,7 @@
             <p>{{ $sousadmin->name }} {{ $sousadmin->prenom }}</p>
             <p>
                 <img src="{{ $sousadmin->signature ? public_path('storage/' . $sousadmin->signature) : 'signature' }}" 
-                     style="margin-left:150px; max-width: 200px; max-height: 100px;" 
+                     style="margin-left:150px; max-width: 250px; max-height: 100px;" 
                      alt="Signature"/>
             </p>
         </div>

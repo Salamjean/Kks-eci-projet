@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
     <link rel="stylesheet" href="Style.css">
-    <title>Inscription d'un cnps-agent</title>
+    <title>INSCRIRE-AGENT-LOGIN</title>
     <style>
         body {
             display: flex;
@@ -213,19 +214,7 @@
         <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
     @enderror
     </div>
-   
-
-        <div class="flex-column">
-            <label>Photo de Profil</label>
-        
-        <div class="inputForm">
-            <input type="file" name="profile_picture" accept="image/*" class="input" />
-            @error('profile_picture')
-            <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
-            @enderror
-        </div>
-      </div>
-      <button class="button-submit" style="padding: 10px; margin-top: 30px; height: 55px; background: orange;border: 0;padding: 10px;outline: none;color: #ffffff;font-size: 18px;
+      <button class="button-submit" style="padding: 10px; margin-top: 30px; height: 55px; background: orange;border: 0;padding: 10px;outline: none;color: black;font-size: 18px;
       font-weight: 700;border-radius: 11px;cursor: pointer; transition: all 0.3s cubic-bezier(0.15, 0.83, 0.66, 1);">Valider</button>
 </form>
 <script>

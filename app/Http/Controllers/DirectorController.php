@@ -190,7 +190,7 @@ public function submitDefineAccess(Request $request){
             'code'=>'required|exists:reset_code_password_directors,code',
             'password' => 'required|same:confirme_password',
             'confirme_password' => 'required|same:password',
-            'profile_picture' => 'required'
+            
         ], [
             'code.exists' => 'Le code de réinitialisation est invalide.',
             'code.required' => 'Le code de réinitialisation est obligatoire verifié votre mail.',
@@ -198,7 +198,7 @@ public function submitDefineAccess(Request $request){
             'password.same' => 'Les mots de passe doivent être identiques.',
             'confirme_password.same' => 'Les mots de passe doivent être identiques.',
             'confirme_password.required' => 'Le mot de passe de confirmation est obligatoire.',
-            'profile_picture.required' => 'Votre photo de profil est obligatoire',
+           
     ]);
     try {
         $director = Director::where('email', $request->email)->first();
@@ -251,7 +251,6 @@ public function handleRegister(Request $request)
         'name' => 'required',
         'email' => 'required|email|unique:directors,email',
         'password' => 'required|min:8',
-        'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validation de l'image
     ], [
         'name.required' => 'Le nom est obligatoire.',
         'email.required' => 'L\'adresse e-mail est obligatoire.',
@@ -261,7 +260,6 @@ public function handleRegister(Request $request)
         'password.min' => 'Le mot de passe doit avoir au moins 8 caractères.',
         'profile_picture.image' => 'La photo de profil doit être une image.',
         'profile_picture.mimes' => 'Les formats d\'image autorisés sont jpeg, png, jpg, gif, svg.',
-        'profile_picture.max' => 'L\'image ne doit pas dépasser 2 Mo.',
     ]);
     
     try {

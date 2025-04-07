@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
-    <title>Connexion d'un Cgrae</title>
+    <title>CGRAE-AGENT-LOGIN</title>
     <style>
         body {
             background-image: url({{ asset('assets/images/profiles/Bguser.jpg') }});

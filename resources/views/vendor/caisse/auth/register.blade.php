@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="Style.css">
     <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
-    <title>Inscription d'un Admin</title>
+    <title>Caissier-inscription</title>
     <style>
         body {
             display: flex;
@@ -213,18 +213,6 @@
         <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
     @enderror
     </div>
-   
-
-        <div class="flex-column">
-            <label>Photo de Profil</label>
-        
-        <div class="inputForm">
-            <input type="file" name="profile_picture" accept="image/*" class="input" />
-            @error('profile_picture')
-            <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
-            @enderror
-        </div>
-      </div>
       <button type="submit" class="submit-btn">Valider</button>
 </form>
 <script>

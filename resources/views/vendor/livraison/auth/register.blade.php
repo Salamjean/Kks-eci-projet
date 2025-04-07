@@ -212,19 +212,7 @@
         <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
     @enderror
     </div>
-   
-
-        <div class="flex-column">
-            <label>Photo de Profil</label>
-        
-        <div class="inputForm">
-            <input type="file" name="profile_picture" accept="image/*" class="input" />
-            @error('profile_picture')
-            <div class="text-danger" style="color: red; text-align:center">{{ $message }}</div>
-            @enderror
-        </div>
-      </div>
-      <button class="button-submit">Valider</button>
+      <button class="submit-btn">Valider</button>
 </form>
 <script>
   document.addEventListener('DOMContentLoaded', function() {

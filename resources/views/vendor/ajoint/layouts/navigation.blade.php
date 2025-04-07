@@ -58,21 +58,7 @@
           </div>
       </div>
   </div>
-  
 
-    <!-- Messages -->
-    <li class="nav-item dropdown no-arrow mx-1">
-      <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" 
-         aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-envelope fa-fw"></i>
-        <span class="badge badge-warning badge-counter">2</span>
-      </a>
-      <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" 
-           aria-labelledby="messagesDropdown">
-        <h6 class="dropdown-header">Messages</h6>
-        <a class="dropdown-item text-center small text-gray-500" href="#">Voir tous les messages</a>
-      </div>
-    </li>
 
     <!-- Profil Utilisateur -->
     <li class="nav-item dropdown no-arrow">
@@ -81,14 +67,27 @@
         <!-- Image selon la ville -->
         @php
           $user = Auth::guard('ajoint')->user();
+          $cities = [
+              'yopougon' => 'yopougon.png',
+              'plateau' => 'plateau.jpeg',
+              'marcory' => 'marcory.png',
+              'cocody' => 'cocody.png',
+              'abobo' => 'abobo.png',
+              'koumassi' => 'koumassi.png',
+              'port-bouet' => 'portbouet.png',
+              'treichville' => 'treichville.png',
+              'attecoube' => 'attecoube.png',
+              'adjame' => 'adjame.jpg',
+              'songon' => 'songon.png',
+          ];
+          $image = isset($cities[$user->communeM]) ? $cities[$user->communeM] : 'default.png';
         @endphp
-        <img class="img-profile rounded-circle" src="{{ asset('storage/' . (Auth::guard('agent')->user()->profile_picture ?? 'default-profile.png')) }}" >
-        <span class="ml-2 d-none d-lg-inline text-white small">Ajoint au maire {{ $user->name }} {{ $user->prenom }}</span>
+        <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/' . $image) }}" 
+             alt="Logo {{ $user->communeM }}">
+        <span class="ml-2 d-none d-lg-inline text-white small">Agent :  {{ $user->name.' '.$user->prenom }}</span>
+      </a>
       </a>
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-        <a class="dropdown-item" href="#">
-          <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profil
-        </a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="{{ route('ajoint.logout') }}">
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i> Déconnexion

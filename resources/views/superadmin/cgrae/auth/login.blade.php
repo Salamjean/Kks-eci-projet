@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
     <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
-    <title>Connexion d'un Admin</title>
+    <title>CGRAE - LOGIN</title>
     <style>
         body {
             background-image: url({{ asset('assets/images/profiles/Bguser.jpg') }});
@@ -87,7 +87,7 @@
             background: green; 
             border: 0;
             outline: none;
-            color: black;
+            color: white;
             font-size: 18px;
             font-weight: 700;
             border-radius: 11px;
@@ -133,7 +133,7 @@
 <body>
 
 <form class="form-control" method="POST" action="{{ route('cgraes.handleLogin') }}">
-    <p class="title">Connexion d'une cgrae</p>
+    <p class="title">CONNEXION-CGRAE</p>
     
     @csrf
     @method('post')

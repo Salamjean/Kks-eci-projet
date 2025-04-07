@@ -14,9 +14,24 @@
         <!-- Image selon la ville -->
         @php
           $user = Auth::guard('caisse')->user();
+          $cities = [
+              'yopougon' => 'yopougon.png',
+              'plateau' => 'plateau.jpeg',
+              'marcory' => 'marcory.png',
+              'cocody' => 'cocody.png',
+              'abobo' => 'abobo.png',
+              'koumassi' => 'koumassi.png',
+              'port-bouet' => 'portbouet.png',
+              'treichville' => 'treichville.png',
+              'attecoube' => 'attecoube.png',
+              'adjame' => 'adjame.jpg',
+              'songon' => 'songon.png',
+          ];
+          $image = isset($cities[$user->communeM]) ? $cities[$user->communeM] : 'default.png';
         @endphp
-        <img class="img-profile rounded-circle" src="{{ asset('storage/' . (Auth::guard('caisse')->user()->profile_picture ?? 'default-profile.png')) }}" >
-        <span class="ml-2 d-none d-lg-inline text-white small">{{ $user->name }} {{ $user->prenom }}</span>
+        <img class="img-profile rounded-circle" src="{{ asset('assets/images/profiles/' . $image) }}" 
+             alt="Logo {{ $user->communeM }}">
+        <span class="ml-2 d-none d-lg-inline text-white small">Caissier(e) :  {{ $user->name.' '.$user->prenom }}</span>
       </a>
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
         <a class="dropdown-item" href="#">

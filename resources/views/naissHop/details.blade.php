@@ -186,15 +186,18 @@
                 <tr>
                     <th>Identité de la Mère (CNI)</th>
                     <td>
-                        @if ($naisshop->CNI_mere)
-                            <img src="{{ asset('storage/' . $naisshop->CNI_mere) }}" 
-                                 alt="CNI Mère" 
-                                 width="100" 
-                                 height="100" 
-                                 class="rounded">
-                        @else
-                            Aucun fichier disponible
-                        @endif
+                        @if (pathinfo($naisshop->CNI_mere, PATHINFO_EXTENSION) === 'pdf')
+                                        <a href="{{ asset('storage/' . $naisshop->CNI_mere) }}" target="_blank">
+                                            <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
+                                        </a>
+                                    @else
+                                        <img src="{{ asset('storage/' . $naisshop->CNI_mere) }}" 
+                                             alt="Pièce du parent" 
+                                             width="100" 
+                                             height="auto" 
+                                             onclick="showImage(this)" 
+                                             onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                    @endif
                     </td>
                 </tr>
                 <tr>

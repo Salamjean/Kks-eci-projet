@@ -197,7 +197,7 @@
             @enderror
         </div>
       </div>
-      <button type="submit" class="submit-btn">Valider</button>
+      <button type="submit" class="button-submit">Valider</button>
     </form>
     
     

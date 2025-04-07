@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
     <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
-    <title>Connexion d'un caisse</title>
+    <title>Connexion d'un caissier</title>
     <style>
         body {
             background-image: url({{ asset('assets/images/profiles/Bguser.jpg') }});

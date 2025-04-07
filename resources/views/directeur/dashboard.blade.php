@@ -44,7 +44,7 @@
                             <p class="ms-card-change">{{ $deceshop }}</p>
                         </div>
                     </div>
-                    <i class="fa fa-skull ms-icon-mr"></i>
+                    <i class="fa fa-church ms-icon-mr"></i>
                 </div>
             </a>
         </div>

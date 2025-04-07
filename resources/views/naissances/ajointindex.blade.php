@@ -221,30 +221,74 @@
                             <tr style="font-size: 12px">
                                 <th>Demandeur</th>
                                 <th>Type de demande</th>
-                                <th>Pièce Du Parent</th>
-                                <th>Certificat De Déclaration</th>
+                                <th>Nom sur l'extrait</th>
+                                <th>Numéro de régistre</th>
+                                <th>Date de régistre</th>
+                                <th>Pièce d'identité du demandeur</th>
                                 <th>Etat Actuel</th>
                                 <th>Agent</th>
                             </tr>
                         </thead>
+                        
                         <tbody>
                             @forelse ($naissancesD as $naissanceD)
-                                <tr style="font-size: 12px">
-                                    <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
-                                    <td>{{ $naissanceD->type }}</td>
-                                    <td>{{ $naissanceD->name }}</td>
-                                    <td>{{ $naissanceD->number }}</td>
-                                    <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
-                                        {{ $naissanceD->etat }}
-                                    </td>
-                                    <td>{{ $naissanceD->agent ? $naissanceD->agent->name . ' ' . $naissanceD->agent->prenom : 'Non attribué' }}</td>
-                                </tr>
+                            <tr style="font-size: 12px">
+                                <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
+                                <td>{{ $naissanceD->type }}</td>
+                                <td>{{ $naissanceD->name }}</td>
+                                <td>{{ $naissanceD->number }}</td>
+                                <td>{{ $naissanceD->DateR }}</td>
+                                <td>
+                                    @if($naissanceD->CNI)
+                                       @php
+                                           $CNIPath = asset('storage/' . $naissanceD->CNI);
+                                           $isCNIPdf = strtolower(pathinfo($CNIPath, PATHINFO_EXTENSION)) === 'pdf';
+                                       @endphp
+                                       @if ($isCNIPdf)
+                                           <a href="{{ $CNIPath }}" target="_blank">
+                                               <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                           </a>
+                                       @else
+                                           <img src="{{ $CNIPath }}"
+                                                alt="Certificat de déclaration" 
+                                                width="100" 
+                                                height=auto
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#imageModal" 
+                                                onclick="showImage(this)" 
+                                                onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                       @endif
+                                   @else
+                                       <p>Non disponible</p>
+                                   @endif
+                               </td>
+                                <td class="{{ $naissanceD->etat == 'en attente' ? 'bg-warning' : ($naissanceD->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
+                                    {{ $naissanceD->etat }}
+                                </td>
+                                <td>{{ $naissanceD->agent ? $naissanceD->agent->name . ' ' . $naissanceD->agent->prenom : 'Non attribué' }}</td>
+                            </tr>
                             @empty
-                                <tr>
-                                    <td colspan="6" class="text-center">Aucune demande effectuée</td>
-                                </tr>
+                            <tr>
+                                <td colspan="8" class="text-center">Aucune demande effectuée</td>
+                            </tr>
                             @endforelse
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="imageModalLabel">Aperçu de l'image</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <img id="modalImage" src="{{ asset('assets/images/profiles/bébé.jpg') }}" alt="Image prévisualisée" class="img-fluid">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </tbody>
+                    </table>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
     <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
-    <title>Connexion-ministere</title>
+    <title>MINISTERE-LOGIN</title>
     <style>
         body {
             background-image: url({{ asset('assets/images/profiles/Bguser.jpg') }});
@@ -133,7 +133,7 @@
 <body>
 
 <form class="form-control" method="POST" action="{{ route('ministere.handleLogin') }}">
-    <p class="title">Connexion du ministère de la santé</p>
+    <p class="title">CONNEXION-MINISTERE-SANTE</p>
     
     @csrf
     @method('post')

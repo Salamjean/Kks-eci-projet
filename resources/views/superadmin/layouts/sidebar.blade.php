@@ -102,14 +102,14 @@
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCAGRAE"
       aria-expanded="true" aria-controls="collapseCAGRAE">
       <i class="fa fa-school"></i>
-      <span>CAGRAE</span>
+      <span>CGRAE</span>
     </a>
     <div id="collapseCAGRAE" class="collapse" aria-labelledby="headingCAGRAE" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">Gestion de la CAGRAE</h6>
-        <a class="collapse-item" href="{{ route('cgrae.create') }}">Ajout CAGRAE</a>
-        <a class="collapse-item" href="{{ route('cgrae.index') }}">CAGRAE enregistrée</a>
-        <a class="collapse-item" href="{{ route('cgrae.indexarchive') }}">CAGRAE archivés</a>
+        <h6 class="collapse-header">Gestion de la CGRAE</h6>
+        <a class="collapse-item" href="{{ route('cgrae.create') }}">Ajout CGRAE</a>
+        <a class="collapse-item" href="{{ route('cgrae.index') }}">CGRAE enregistrée</a>
+        <a class="collapse-item" href="{{ route('cgrae.indexarchive') }}">CGRAE archivés</a>
       </div>
     </div>
   </li>

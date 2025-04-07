@@ -233,9 +233,14 @@
                         <td>{{ $deceshop->Remarques }}</td>
                     <tr>
                     <tr>
+                        <th>Lieu de décès</th>
+                        <td>{{ $deceshop->choix }} l'hôpital</td>
+                    <tr>
+                    <tr>
                         <th>Commune de Décès</th>
                         <td>{{ $deceshop->commune }}</td>
                     <tr>
+                    
                     <tr>
                         <th>Hôpital</th>
                         <td>{{ $deceshop->nomHop }}</td>

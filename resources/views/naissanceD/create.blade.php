@@ -21,7 +21,7 @@
 
     .conteneurInfo {
         background: rgba(255, 255, 255, 0.8);
-        padding: 20px;
+        padding: 15px;
         border-radius: 15px;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         max-width: 800px;
@@ -205,7 +205,73 @@
         <div class="form-row">
             <div class="form-group half-width">
                 <label for="commune">Commune</label>
-                <input type="text" id="commune" name="commune" class="form-control" value="{{ old('commune', $userCommune) }}" >
+                <select id="commune" name="commune" class="form-control">
+                    <option value="">Sélectionnez une commune</option>
+                    <option value="abobo" {{ old('commune', $userCommune) == 'Abobo' ? 'selected' : '' }}>Abobo</option>
+                    <option value="adjamé" {{ old('commune', $userCommune) == 'Adjamé' ? 'selected' : '' }}>Adjamé</option>
+                    <option value="attécoubé" {{ old('commune', $userCommune) == 'Attécoubé' ? 'selected' : '' }}>Attécoubé</option>
+                    <option value="cocody" {{ old('commune', $userCommune) == 'Cocody' ? 'selected' : '' }}>Cocody</option>
+                    <option value="koumassi" {{ old('commune', $userCommune) == 'Koumassi' ? 'selected' : '' }}>Koumassi</option>
+                    <option value="marcory" {{ old('commune', $userCommune) == 'Marcory' ? 'selected' : '' }}>Marcory</option>
+                    <option value="plateau" {{ old('commune', $userCommune) == 'Plateau' ? 'selected' : '' }}>Plateau</option>
+                    <option value="port-Bouët" {{ old('commune', $userCommune) == 'Port-Bouët' ? 'selected' : '' }}>Port-Bouët</option>
+                    <option value="Treichville" {{ old('commune', $userCommune) == 'Treichville' ? 'selected' : '' }}>Treichville</option>
+                    <option value="yopougon" {{ old('commune', $userCommune) == 'Yopougon' ? 'selected' : '' }}>Yopougon</option>
+                    <option value="anyama" {{ old('commune', $userCommune) == 'Anyama' ? 'selected' : '' }}>Anyama</option>
+                    <option value="bingerville" {{ old('commune', $userCommune) == 'Bingerville' ? 'selected' : '' }}>Bingerville</option>
+                    <option value="songon" {{ old('commune', $userCommune) == 'Songon' ? 'selected' : '' }}>Songon</option>
+                    <!-- Autres communes -->
+                    <option value="Abengourou" {{ old('commune') == 'Abengourou' ? 'selected' : '' }}>Abengourou</option>
+                    <option value="Aboisso" {{ old('commune') == 'Aboisso' ? 'selected' : '' }}>Aboisso</option>
+                    <option value="Adiaké" {{ old('commune') == 'Adiaké' ? 'selected' : '' }}>Adiaké</option>
+                    <option value="Adzopé" {{ old('commune') == 'Adzopé' ? 'selected' : '' }}>Adzopé</option>
+                    <option value="Agboville" {{ old('commune') == 'Agboville' ? 'selected' : '' }}>Agboville</option>
+                    <option value="Agnibilékrou" {{ old('commune') == 'Agnibilékrou' ? 'selected' : '' }}>Agnibilékrou</option>
+                    <option value="Akoupé" {{ old('commune') == 'Akoupé' ? 'selected' : '' }}>Akoupé</option>
+                    <option value="Alépé" {{ old('commune') == 'Alépé' ? 'selected' : '' }}>Alépé</option>
+                    <option value="Bondoukou" {{ old('commune') == 'Bondoukou' ? 'selected' : '' }}>Bondoukou</option>
+                    <option value="Bouaflé" {{ old('commune') == 'Bouaflé' ? 'selected' : '' }}>Bouaflé</option>
+                    <option value="Bouaké" {{ old('commune') == 'Bouaké' ? 'selected' : '' }}>Bouaké</option>
+                    <option value="Bouna" {{ old('commune') == 'Bouna' ? 'selected' : '' }}>Bouna</option>
+                    <option value="Boundiali" {{ old('commune') == 'Boundiali' ? 'selected' : '' }}>Boundiali</option>
+                    <option value="Dabakala" {{ old('commune') == 'Dabakala' ? 'selected' : '' }}>Dabakala</option>
+                    <option value="Dabou" {{ old('commune') == 'Dabou' ? 'selected' : '' }}>Dabou</option>
+                    <option value="Daloa" {{ old('commune') == 'Daloa' ? 'selected' : '' }}>Daloa</option>
+                    <option value="Danané" {{ old('commune') == 'Danané' ? 'selected' : '' }}>Danané</option>
+                    <option value="Daoukro" {{ old('commune') == 'Daoukro' ? 'selected' : '' }}>Daoukro</option>
+                    <option value="Dimbokro" {{ old('commune') == 'Dimbokro' ? 'selected' : '' }}>Dimbokro</option>
+                    <option value="Divo" {{ old('commune') == 'Divo' ? 'selected' : '' }}>Divo</option>
+                    <option value="Duékoué" {{ old('commune') == 'Duékoué' ? 'selected' : '' }}>Duékoué</option>
+                    <option value="Ferkessédougou" {{ old('commune') == 'Ferkessédougou' ? 'selected' : '' }}>Ferkessédougou</option>
+                    <option value="Gagnoa" {{ old('commune') == 'Gagnoa' ? 'selected' : '' }}>Gagnoa</option>
+                    <option value="Grand-Bassam" {{ old('commune') == 'Grand-Bassam' ? 'selected' : '' }}>Grand-Bassam</option>
+                    <option value="Grand-Lahou" {{ old('commune') == 'Grand-Lahou' ? 'selected' : '' }}>Grand-Lahou</option>
+                    <option value="Guiglo" {{ old('commune') == 'Guiglo' ? 'selected' : '' }}>Guiglo</option>
+                    <option value="Issia" {{ old('commune') == 'Issia' ? 'selected' : '' }}>Issia</option>
+                    <option value="Jacqueville" {{ old('commune') == 'Jacqueville' ? 'selected' : '' }}>Jacqueville</option>
+                    <option value="Katiola" {{ old('commune') == 'Katiola' ? 'selected' : '' }}>Katiola</option>
+                    <option value="Korhogo" {{ old('commune') == 'Korhogo' ? 'selected' : '' }}>Korhogo</option>
+                    <option value="Lakota" {{ old('commune') == 'Lakota' ? 'selected' : '' }}>Lakota</option>
+                    <option value="Man" {{ old('commune') == 'Man' ? 'selected' : '' }}>Man</option>
+                    <option value="Mankono" {{ old('commune') == 'Mankono' ? 'selected' : '' }}>Mankono</option>
+                    <option value="M'bahiakro" {{ old('commune') == 'M\'bahiakro' ? 'selected' : '' }}>M'bahiakro</option>
+                    <option value="Odienné" {{ old('commune') == 'Odienné' ? 'selected' : '' }}>Odienné</option>
+                    <option value="Oumé" {{ old('commune') == 'Oumé' ? 'selected' : '' }}>Oumé</option>
+                    <option value="Sakassou" {{ old('commune') == 'Sakassou' ? 'selected' : '' }}>Sakassou</option>
+                    <option value="San-Pédro" {{ old('commune') == 'San-Pédro' ? 'selected' : '' }}>San-Pédro</option>
+                    <option value="Sassandra" {{ old('commune') == 'Sassandra' ? 'selected' : '' }}>Sassandra</option>
+                    <option value="Séguéla" {{ old('commune') == 'Séguéla' ? 'selected' : '' }}>Séguéla</option>
+                    <option value="Sinfra" {{ old('commune') == 'Sinfra' ? 'selected' : '' }}>Sinfra</option>
+                    <option value="Soubré" {{ old('commune') == 'Soubré' ? 'selected' : '' }}>Soubré</option>
+                    <option value="Tabou" {{ old('commune') == 'Tabou' ? 'selected' : '' }}>Tabou</option>
+                    <option value="Tanda" {{ old('commune') == 'Tanda' ? 'selected' : '' }}>Tanda</option>
+                    <option value="Tiassalé" {{ old('commune') == 'Tiassalé' ? 'selected' : '' }}>Tiassalé</option>
+                    <option value="Touba" {{ old('commune') == 'Touba' ? 'selected' : '' }}>Touba</option>
+                    <option value="Toumodi" {{ old('commune') == 'Toumodi' ? 'selected' : '' }}>Toumodi</option>
+                    <option value="Vavoua" {{ old('commune') == 'Vavoua' ? 'selected' : '' }}>Vavoua</option>
+                    <option value="Yamoussoukro" {{ old('commune') == 'Yamoussoukro' ? 'selected' : '' }}>Yamoussoukro</option>
+                    <option value="Zuénoula" {{ old('commune') == 'Zuénoula' ? 'selected' : '' }}>Zuénoula</option>
+                </select>
                 @error('commune')
                     <span style="color: red">{{ $message }}</span>
                 @enderror
@@ -254,18 +320,27 @@
         const pourSelect = document.getElementById('pour');
         const nameInput = document.getElementById('name');
         const prenomInput = document.getElementById('prenom');
-        const communeInput = document.getElementById('commune');
+        const communeSelect = document.getElementById('commune');
         const CMUInput = document.getElementById('CMU');
 
         if (pourSelect.value === 'Moi') {
             nameInput.value = '{{ $userName }}';
             prenomInput.value = '{{ $userPrenom }}';
-            communeInput.value = '{{ $userCommune }}';
+            // Sélectionner l'option correspondant à la commune de l'utilisateur
+            const userCommune = '{{ $userCommune }}';
+            if (userCommune) {
+                for (let i = 0; i < communeSelect.options.length; i++) {
+                    if (communeSelect.options[i].value === userCommune) {
+                        communeSelect.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
             CMUInput.value = '{{ $userCMU }}';
         } else {
             nameInput.value = '';
             prenomInput.value = '';
-            communeInput.value = '';
+            communeSelect.selectedIndex = 0; // Réinitialiser à "Sélectionnez une commune"
             CMUInput.value = '';
         }
     }

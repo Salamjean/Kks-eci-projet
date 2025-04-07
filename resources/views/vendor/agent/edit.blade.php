@@ -164,7 +164,7 @@
             </div>
         </div>
 
-        <button class="btn btn-primary" type="submit">Créer le compte</button>
+        <button class="btn btn-primary" type="submit">Mêttre à jour</button>
     </form>
   </div>
 </div>

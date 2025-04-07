@@ -252,7 +252,6 @@ class CaisseController extends Controller
                 'code'=>'required|exists:reset_code_password_caisses,code',
                 'password' => 'required|same:confirme_password',
                 'confirme_password' => 'required|same:password',
-                'profile_picture' => 'required'
             ], [
                 'code.exists' => 'Le code de réinitialisation est invalide.',
                 'code.required' => 'Le code de réinitialisation est obligatoire verifié votre mail.',
@@ -260,7 +259,6 @@ class CaisseController extends Controller
                 'password.same' => 'Les mots de passe doivent être identiques.',
                 'confirme_password.same' => 'Les mots de passe doivent être identiques.',
                 'confirme_password.required' => 'Le mot de passe de confirmation est obligatoire.',
-                'profile_picture.required' => 'Votre photo de profil est obligatoire',
         ]);
         try {
             $caisse = Caisse::where('email', $request->email)->first();

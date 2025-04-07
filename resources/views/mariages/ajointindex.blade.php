@@ -49,39 +49,73 @@
                 
                     <table class="table align-items-center table-flush" id="dataTable">
                         <thead class="bg-navbar text-white">
-                            <tr style="font-size: 12px">
+                            <tr style="font-size: 12px" class="text-center">
                                 <th class="text-center">Nom du demandeur</th>
-                                <th class="text-center">Nom du conjoint(e)</th>
+                                <th class="text-center">Nom de l'Époux</th>
+                                <th class="text-center">Prénom de l'Époux</th>
+                                <th class="text-center">Date de Naissance</th>
+                                <th class="text-center">Lieu de Naissance</th>
                                 <th class="text-center">Pièce d'Identité</th>
                                 <th class="text-center">Extrait de Mariage</th>
                                 <th>Etat Actuel</th>
-                                <th>Action</th>
+                                <th>Agent</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($mariagesAvecFichiersSeulement as $mariage)
-                            <tr style="font-size: 12px">
+                            @forelse ($mariages as $mariage)
+                            <tr class="text-center" style="font-size: 12px">
                                 <td>{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
-                                <td class="text-center">{{ $mariage->nomEpoux }}</td>
+                                <td>{{ $mariage->nomEpoux ?? 'Copie Simple' }}</td>
+                                <td>{{ $mariage->prenomEpoux ?? 'Copie Simple' }}</td>
+                                <td>{{ $mariage->dateNaissanceEpoux ?? 'Copie Simple' }}</td>
+                                <td>{{ $mariage->lieuNaissanceEpoux ?? 'Copie Simple' }}</td>
                                 <td class="text-center">
-                                    <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 
-                                         alt="Pièce d'identité" 
-                                         width="100" 
-                                         height="100" 
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                     @if($mariage->pieceIdentite)
+                                        @php
+                                            $pieceIdentitePath = asset('storage/' . $mariage->pieceIdentite);
+                                            $isPieceIdentitePdf = strtolower(pathinfo($pieceIdentitePath, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
+                                        @if ($isPieceIdentitePdf)
+                                             <a href="{{ $pieceIdentitePath }}" target="_blank">
+                                                <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                             </a>
+                                         @else
+                                            <img src="{{ $pieceIdentitePath }}" 
+                                                 alt="Pièce d'identité" 
+                                                 width="50" 
+                                                 height="50" 
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                        @endif
+                                    @else
+                                        <p>Non disponible</p>
+                                    @endif
                                 </td>
                                 <td class="text-center">
-                                    <img src="{{ asset('storage/' . $mariage->extraitMariage) }}" 
-                                         alt="Extrait de mariage" 
-                                         width="100" 
-                                         height="100" 
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                     @if($mariage->extraitMariage)
+                                        @php
+                                            $extraitMariagePath = asset('storage/' . $mariage->extraitMariage);
+                                            $isExtraitMariagePdf = strtolower(pathinfo($extraitMariagePath, PATHINFO_EXTENSION)) === 'pdf';
+                                        @endphp
+                                         @if ($isExtraitMariagePdf)
+                                              <a href="{{ $extraitMariagePath }}" target="_blank">
+                                                <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="30" height="30">
+                                              </a>
+                                         @else
+                                            <img src="{{ $extraitMariagePath }}" 
+                                                 alt="Extrait de mariage" 
+                                                 width="50" 
+                                                 height="50" 
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#imageModal" 
+                                                 onclick="showImage(this)" 
+                                                 onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
+                                        @endif
+                                    @else
+                                        <p>Non disponible</p>
+                                    @endif
                                 </td>
                                 <td class="{{ $mariage->etat == 'en attente' ? 'bg-warning' : ($mariage->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm" style="margin-top: 8px">
                                     {{ $mariage->etat }}
@@ -90,7 +124,7 @@
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center">Aucune déclaration trouvée</td>
+                                <td colspan="9" class="text-center">Aucune demande effectuée</td>
                             </tr>
                             @endforelse
                         </tbody>
@@ -115,68 +149,7 @@
         </div>
     </div>
 
-    <!-- Mariages complets (tous les champs remplis) -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card mb-4">
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary">Demande De Copie Intégrale</h6>
-                </div>
-                <div class="table-responsive p-3">
-                    <table class="table align-items-center table-flush" id="dataTable">
-                        <thead class="bg-navbar text-white">
-                            <tr  style="font-size: 12px">
-                                <th class="text-center">Nom de l'Époux</th>
-                                <th class="text-center">Prénom de l'Époux</th>
-                                <th class="text-center">Date de Naissance</th>
-                                <th class="text-center">Lieu de Naissance</th>
-                                <th class="text-center">Pièce d'Identité</th>
-                                <th class="text-center">Extrait de Mariage</th>
-                                <th>Etat Actuel</th>
-                                <th>Action</th>
-                                
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($mariagesComplets as $mariage)
-                            <tr class="text-center" style="font-size: 12px">
-                                <td>{{ $mariage->nomEpoux }}</td>
-                                <td>{{ $mariage->prenomEpoux }}</td>
-                                <td>{{ $mariage->dateNaissanceEpoux }}</td>
-                                <td>{{ $mariage->lieuNaissanceEpoux }}</td>
-                                <td class="text-center">
-                                    <img src="{{ asset('storage/' . $mariage->pieceIdentite) }}" 
-                                         alt="Pièce d'identité" 
-                                         width="100" 
-                                         height="100" 
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
-                                </td>
-                                <td class="text-center">
-                                    <img src="{{ asset('storage/' . $mariage->extraitMariage) }}" 
-                                         alt="Extrait de mariage" 
-                                         width="100" 
-                                         height="100" 
-                                         data-bs-toggle="modal" 
-                                         data-bs-target="#imageModal" 
-                                         onclick="showImage(this)" 
-                                         onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/default.jpg') }}'">
-                                </td>
-                                <td class="{{ $mariage->etat == 'en attente' ? 'bg-warning' : ($mariage->etat == 'réçu' ? 'bg-success' : 'bg-danger') }} text-white btn btn-sm " style="margin-top: 8px">
-                                    {{ $mariage->etat }}
-                                </td>
-                                <td>{{ $mariage->agent ? $mariage->agent->name . ' ' . $mariage->agent->prenom : 'Non attribué' }}</td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="8" class="text-center">Aucune déclaration trouvée</td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
+   
             </div>
         </div>
     </div>

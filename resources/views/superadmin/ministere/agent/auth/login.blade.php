@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
-    <title>Connexion d'un Cgrae</title>
+    <title>MINISTERE-AGENT-LOGIN</title>
     <style>
         body {
             background-image: url({{ asset('assets/images/profiles/Bguser.jpg') }});
@@ -27,7 +27,7 @@
             gap: 15px;
             background-color: rgba(255, 255, 255, 0.9);
             padding: 30px;
-            width: 450px;
+            width: 500px;
             border-radius: 20px;
             box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
         }
@@ -132,7 +132,7 @@
 <body>
 
 <form class="form-control" method="POST" action="{{ route('ministereagent.handleLogin') }}">
-    <p class="title">Connexion Agent du ministere</p>
+    <p class="title">CONNEXION-MINISTERE-AGENT</p>
     
     @csrf
     @method('post')

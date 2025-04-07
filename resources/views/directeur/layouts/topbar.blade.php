@@ -18,7 +18,13 @@
 
       <li class="ms-nav-item ms-nav-user dropdown">
           <a href="#" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
-              <img class="ms-user-img ms-img-round float-right" style="width: 50px; height: 40px; border-radius: 50%; object-fit: cover;" src="{{ asset('storage/' . (Auth::guard('directeur')->user()->profile_picture ?? 'default-profile.png')) }}" alt="Profile Picture">
+              <img class="ms-user-img ms-img-round float-right" style="width: 50px; height: 40px; border-radius: 50%; object-fit: cover;" src="
+              @if(Auth::guard('directeur')->user()->profile_picture)
+            {{ asset('storage/' . Auth::guard('directeur')->user()->profile_picture) }}
+        @else
+            {{ asset('assets/images/profiles/useriii.jpeg') }}
+        @endif
+              ">
           </a>
           <ul class="dropdown-menu dropdown-menu-right user-dropdown" aria-labelledby="userDropdown">
               <li class="dropdown-menu-header">

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
-    <title>Connexion d'un Admin</title>
+    <title>CNPS-AGENCE-LOGIN</title>
     <style>
         body {
             background-image: url({{ asset('assets/images/profiles/Bguser.jpg') }});
@@ -86,7 +86,7 @@
             background: orange; 
             border: 0;
             outline: none;
-            color: #ffffff;
+            color: black;
             font-size: 18px;
             font-weight: 700;
             border-radius: 11px;
@@ -132,7 +132,7 @@
 <body>
 
 <form class="form-control" method="POST" action="{{ route('cnpsagences.handleLogin') }}">
-    <p class="title">Connexion Agence-CNPS</p>
+    <p class="title">CONNEXION-AGENCE-CNPS</p>
     
     @csrf
     @method('post')
