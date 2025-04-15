@@ -94,31 +94,30 @@ public function superindex()
 
 public function agentindex()
 {
-    // Récupérer l'admin connecté
     $admin = Auth::guard('agent')->user();
     $naisshop = NaissHop::first();
-    // Récupérer les alertes
+
     $alerts = Alert::where('is_read', false)
         ->whereIn('type', ['naissance', 'mariage', 'deces', 'decesHop', 'naissHop'])  
         ->latest()
         ->get();
 
-    // Filtrer les naissances selon la commune de l'admin connecté
-    // et l'agent connecté pour les demandes traitées par cet agent
     $naissances = Naissance::where('commune', $admin->communeM)
-        ->where('agent_id', $admin->id) // Filtrage par agent
-        ->with('user') // Récupérer l'utilisateur
+        ->where('agent_id', $admin->id)
+        ->where('etat', '!=', 'terminé') // <-- uniquement celles qui ne sont pas terminées
         ->whereNull('archived_at')
-        ->paginate(10); // Pagination
+        ->with('user')
+        ->paginate(10);
 
     $naissancesD = NaissanceD::where('commune', $admin->communeM)
-        ->where('agent_id', $admin->id) // Filtrage par agent
-        ->with('user') // Récupérer l'utilisateur
-        ->paginate(10); // Pagination
+        ->where('agent_id', $admin->id)
+        ->where('etat', '!=', 'terminé') // <-- pareil ici
+        ->with('user')
+        ->paginate(10);
 
-    // Retourner la vue avec les données
-    return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD','naisshop'));
+    return view('naissances.agentindex', compact('naissances', 'alerts', 'naissancesD', 'naisshop'));
 }
+
 public function ajointindex()
 {
     // Récupérer l'admin connecté

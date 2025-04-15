@@ -96,11 +96,13 @@ class DecesController extends Controller
         // Requête pour Deces
         $decesQuery = Deces::where('commune', $admin->communeM)
             ->where('agent_id', $admin->id)
+            ->where('etat', '!=', 'terminé') // <-- uniquement celles qui ne sont pas terminées
             ->with('user'); // Filtrage par agent et récupération des relations
 
         // Requête pour Decesdeja
         $decesdejaQuery = Decesdeja::where('commune', $admin->communeM)
             ->where('agent_id', $admin->id)
+            ->where('etat', '!=', 'terminé') // <-- uniquement celles qui ne sont pas terminées
             ->with('user'); // Filtrage par agent et récupération des relations
 
         // Appliquer les filtres de recherche pour Deces

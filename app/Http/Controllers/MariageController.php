@@ -98,6 +98,7 @@ public function agentindex(Request $request)
 
     // Initialiser la requête pour Mariage et filtrer par commune de l'admin
     $query = Mariage::where('commune', $admin->communeM)
+    ->where('etat', '!=', 'terminé') // <-- uniquement celles qui ne sont pas terminées
         ->where('agent_id', $admin->id)
         ->with('user'); // Ajout de la récupération de la relation 'user'
 

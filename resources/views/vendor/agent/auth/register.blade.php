@@ -6,7 +6,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="Style.css">
     <link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
-    <title>Inscription d'agent</title>
+    <title>INSCRPTION - AGENT - MAIRIE</title>
     <style>
         body {
             display: flex;
