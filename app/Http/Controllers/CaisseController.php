@@ -25,12 +25,18 @@ use Illuminate\Support\Facades\Storage;
 class CaisseController extends Controller
 {
     public function caissecreate(){
-        $alerts = Alert::all();
+       $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
         return view('vendor.caisse.create', compact('alerts'));
      }
      public function caisseindex(){
         $admin = Auth::guard('vendor')->user();
-        $alerts = Alert::all();
+       $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
         $caisses = Caisse::whereNull('archived_at')
             ->where('communeM', $admin->name)
             ->paginate(10);
@@ -38,7 +44,10 @@ class CaisseController extends Controller
      }
 
      public function superindex(){
-        $alerts = Alert::all();
+       $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
         $caisses = Caisse::all();
         return view('vendor.caisse.superindex', compact('caisses','alerts'));
      }
@@ -115,7 +124,10 @@ class CaisseController extends Controller
        }
     }
     public function caisseedit(Caisse $caisse){
-        $alerts = Alert::all();
+       $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
         return view('vendor.caisse.edit', compact('caisse','alerts'));
      }
 
@@ -151,7 +163,10 @@ class CaisseController extends Controller
     $admin = Auth::guard('caisse')->user();
 
     // Récupérer les alertes
-    $alerts = Alert::all();
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
 
     // Récupérer les caisses de la commune de l'utilisateur
     $caisses = Caisse::where('communeM', $admin->communeM)->paginate(10);

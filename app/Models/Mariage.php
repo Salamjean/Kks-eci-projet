@@ -43,4 +43,9 @@ class Mariage extends Model
             return 1;
         }
     }
+    public function scopeTerminated($query) {
+        return $query->where('etat', 'terminé');
+    }
 }
+
+

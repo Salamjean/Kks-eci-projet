@@ -28,6 +28,7 @@ use App\Http\Controllers\NaissanceController;
 use App\Http\Controllers\NaissanceDeclaController;
 use App\Http\Controllers\NaissHopController;
 use App\Http\Controllers\PaiementController;
+use App\Http\Controllers\AdminHistoriqueController;
 use App\Http\Controllers\PaiemntConfigController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
@@ -328,6 +329,12 @@ Route::middleware('auth:web')->group(function () {
     Route::get('/{doctor}/edit', [VendorController::class, 'hoptitaledit'])->name('doctor.hoptitaledit');
     Route::put('/{doctor}/update', [VendorController::class, 'hoptitalupdate'])->name('doctor.hoptitalupdate');
     Route::delete('doctor/{doctor}/delete', [VendorController::class, 'hopitaldelete'])->name('doctor.hoptitaldelete');
+
+    Route::prefix('vendor')->group(function(){
+        Route::get('/task/end/naissance',[AdminHistoriqueController::class, 'taskend'])->name('vendor.taskend');
+        Route::get('/task/end/deces',[AdminHistoriqueController::class, 'taskenddeces'])->name('vendor.taskenddeces');
+        Route::get('/task/end/mariages',[AdminHistoriqueController::class, 'taskendmariages'])->name('vendor.taskendmariages');
+    });
     
             // Gestion des agents
     Route::prefix('agents')->group(function () {
@@ -338,6 +345,7 @@ Route::middleware('auth:web')->group(function () {
         Route::put('/{agent}/update', [AgentController::class, 'agentupdate'])->name('agent.update');
         Route::delete('/{agent}/archive', [AgentController::class, 'archive'])->name('agent.archive');
         Route::delete('/{agent}/delete', [AgentController::class, 'agentdelete'])->name('agent.delete');
+        
         });
 
         //Gestion des ajoints
@@ -357,7 +365,7 @@ Route::middleware('auth:web')->group(function () {
             Route::post('/store', [LivraisonController::class, 'store'])->name('livraison.store');
             Route::get('/{livraison}/edit', [LivraisonController::class, 'edit'])->name('livraison.edit');
             Route::put('/{livraison}/update', [LivraisonController::class, 'update'])->name('livraison.update');
-            Route::put('/{livraison}/delete', [LivraisonController::class, 'delete'])->name('livraison.delete');
+            Route::delete('/{livraison}/delete', [LivraisonController::class, 'delete'])->name('livraison.delete');
             });
 
         // Gestion des caisses
@@ -549,6 +557,9 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     Route::middleware('auth:agent')->prefix('agent')->group(function(){
         Route::get('/dashboard', [AgentController::class, 'agentdashboard'])->name('agent.dashboard');
         Route::get('/livraison', [AgentController::class, 'livraison'])->name('agent.livraison');
+        Route::get('/task/end/naissance',[AgentController::class, 'taskend'])->name('agent.taskend');
+        Route::get('/task/end/deces',[AgentController::class, 'taskenddeces'])->name('agent.taskenddeces');
+        Route::get('/task/end/mariages',[AgentController::class, 'taskendmariages'])->name('agent.taskendmariages');
         Route::get('/vue', [AgentController::class, 'agentvue'])->name('agent.vue');
         Route::post('/{naissance}/annuler', [AgentController::class, 'annulerDemande'])->name('annuler.demande');
         Route::get('/logout', [AgentController::class, 'logout'])->name('agent.logout');

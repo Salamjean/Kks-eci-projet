@@ -26,7 +26,11 @@ use Illuminate\Support\Facades\Storage;
 class AjointController extends Controller
 {
     public function ajointcreate(){
-        $alerts = Alert::all();
+         // Récupérer les alertes
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
         return view('vendor.ajoint.create', compact('alerts'));
      }
 
@@ -92,7 +96,11 @@ class AjointController extends Controller
 
     public function ajointindex(){
         $admin = Auth::guard('vendor')->user();
-        $alerts = Alert::all();
+        // Récupérer les alertes
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
         $ajoints = Ajoint::whereNull('archived_at')
             ->where('communeM', $admin->name)
             ->paginate(10);
@@ -100,13 +108,21 @@ class AjointController extends Controller
      }
 
      public function superindex(){
-        $alerts = Alert::all();
+        // Récupérer les alertes
+            $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+            ->latest()
+            ->get();
         $ajoints = Ajoint::all();
         return view('vendor.ajoint.superindex', compact('ajoints','alerts'));
      }
 
      public function ajointedit(Ajoint $ajoint){
-        $alerts = Alert::all();
+        // Récupérer les alertes
+            $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+            ->latest()
+            ->get();
         return view('vendor.ajoint.edit', compact('ajoint','alerts'));
      }
 

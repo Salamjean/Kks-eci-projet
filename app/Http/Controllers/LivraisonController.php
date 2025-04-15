@@ -23,7 +23,10 @@ use Illuminate\Support\Facades\Storage;
 class LivraisonController extends Controller
 {
     public function create(){
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
         return view('vendor.livraison.create', compact('alerts'));
      }
 
@@ -89,7 +92,10 @@ class LivraisonController extends Controller
 
     public function index(){
         $admin = Auth::guard('vendor')->user();
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
         $livraisons = Livraison::whereNull('archived_at')
             ->where('communeM', $admin->name)
             ->paginate(10);
@@ -97,7 +103,10 @@ class LivraisonController extends Controller
      }
 
      public function edit(Livraison $livraison){
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
         return view('vendor.livraison.edit', compact('livraison','alerts'));
      }
 

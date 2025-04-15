@@ -29,7 +29,11 @@ class AgentController extends Controller
     
 
  public function agentcreate(){
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     return view('vendor.agent.create', compact('alerts'));
  }
 
@@ -149,7 +153,11 @@ public function handleLogin(Request $request)
    
     $admin = Auth::guard('vendor')->user();
 
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     $agents = Agent::whereNull('archived_at')
         ->where('communeM', $admin->name)
         ->paginate(10);
@@ -158,7 +166,11 @@ public function handleLogin(Request $request)
     return view('vendor.agent.index', compact('agents', 'alerts'));
 }
  public function agentedit(Agent $agent){
-    $alerts = Alert::all();
+    // Récupérer les alertes
+    $alerts = Alert::where('is_read', false)
+    ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+    ->latest()
+    ->get();
     return view('vendor.agent.edit', compact('agent','alerts'));
  }
 
@@ -421,7 +433,86 @@ public function annulerDemande(Request $request, $naissance)
 
     public function livraison(){
         $livraisons = Livraison::all();
-        $alerts = Alert::all();
+        $alerts = Alert::where('is_read', false)
+        ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+        ->latest()
+        ->get();
         return view('vendor.agent.livraison', compact('livraisons','alerts'));
+    }
+
+    public function taskend() {
+        // Récupérer l'admin connecté
+        $admin = Auth::guard('agent')->user();
+        // Récupération des alertes non lues
+        $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+            ->latest()
+            ->get();
+    
+        // Récupération des mariages terminés
+        $taskendnaissanceDs = NaissanceD::where('etat', 'terminé')
+            ->where('agent_id', $admin->id) // Filtrage par agent
+            ->latest()
+            ->paginate(10);
+    
+        // Récupération des naissances terminées
+        $taskendnaissances = Naissance::where('etat', 'terminé')
+            ->where('agent_id', $admin->id) // Filtrage par agent
+            ->latest()
+            ->paginate(10);
+        $naisshop = NaissHop::first();
+    
+        return view('vendor.agent.taskends', compact(
+            'alerts',
+            'taskendnaissanceDs',
+            'taskendnaissances',
+            'naisshop'
+        ));
+    }
+
+    public function taskenddeces(){
+        // Récupérer l'admin connecté
+        $admin = Auth::guard('agent')->user();
+        // Récupération des alertes non lues
+        $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+            ->latest()
+            ->get();
+         // Récupération des mariages terminés
+         $taskenddeces = Deces::where('etat', 'terminé')
+         ->where('agent_id', $admin->id) // Filtrage par agent
+         ->latest()
+         ->paginate(10);
+ 
+        // Récupération des naissances terminées
+        $taskenddecedejas = DecesDeja::where('etat', 'terminé')
+         ->where('agent_id', $admin->id) // Filtrage par agent
+         ->latest()
+         ->paginate(10);
+        return view('vendor.agent.taskenddeces',compact(
+            'alerts',
+            'taskenddeces',
+            'taskenddecedejas'
+        ));
+    }
+
+    public function taskendmariages(){
+        // Récupérer l'admin connecté
+        $admin = Auth::guard('agent')->user();
+        // Récupération des alertes non lues
+        $alerts = Alert::where('is_read', false)
+            ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+            ->latest()
+            ->get();
+         // Récupération des mariages terminés
+         $taskendmariages = Mariage::where('etat', 'terminé')
+         ->where('agent_id', $admin->id) // Filtrage par agent
+         ->latest()
+         ->paginate(10);
+
+        return view('vendor.agent.taskendmariages',compact(
+            'alerts',
+            'taskendmariages',
+        ));
     }
 }

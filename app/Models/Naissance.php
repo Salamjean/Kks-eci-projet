@@ -62,4 +62,8 @@ public function archive()
     $this->update(['archived_at' => now()]);
 }
 
+public function scopeTerminated($query) {
+    return $query->where('etat', 'terminé');
+}
+
 }

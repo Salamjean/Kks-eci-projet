@@ -105,7 +105,11 @@ class VendorController extends Controller
 //Naissance edit 
     public function edit($id)
 {
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     $naissance = Naissance::findOrFail($id);
 
     // Les états possibles à afficher dans le formulaire
@@ -132,7 +136,11 @@ class VendorController extends Controller
 //NaissanceD edit 
     public function edit1($id)
 {
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     $naissanced = NaissanceD::findOrFail($id);
 
     // Les états possibles à afficher dans le formulaire
@@ -159,7 +167,11 @@ class VendorController extends Controller
 //Deces edit 
     public function edit2($id)
 {
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     $deces = Deces::findOrFail($id);
 
     // Les états possibles à afficher dans le formulaire
@@ -186,7 +198,11 @@ class VendorController extends Controller
 //Deces edit 
 public function edit4($id)
 {
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     $decesdeja = Decesdeja::findOrFail($id);
 
     // Les états possibles à afficher dans le formulaire
@@ -214,7 +230,11 @@ public function edit4($id)
 //Mariage edit 
     public function edit3($id)
 {
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     $mariage = Mariage::findOrFail($id);
 
     // Les états possibles à afficher dans le formulaire
@@ -239,7 +259,11 @@ public function edit4($id)
 }
 
 public function hoptitalcreate(){
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     return view('vendor.hoptital.create', compact('alerts'));
 }
 
@@ -325,14 +349,22 @@ public function hoptitalstore(Request $request)
 }
 
 public function hoptitalindex(){
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     $admin = Auth::guard('vendor')->user();
     $doctors = Doctor::where('commune', $admin->name)->paginate(10);
     return view('vendor.hoptital.index', compact('doctors', 'alerts'));
 }
 
 public function hoptitaledit(Doctor $doctor){
-    $alerts = Alert::all();
+     // Récupérer les alertes
+   $alerts = Alert::where('is_read', false)
+   ->whereIn('type', ['naissance', 'mariage', 'deces','decesHop','naissHop'])  
+   ->latest()
+   ->get();
     return view('vendor.hoptital.edit', compact('doctor','alerts'));
  }
 

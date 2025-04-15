@@ -159,7 +159,10 @@ button {
                             style="display: flex; justify-content:center; align-items:center">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="delete"><a href="{{ route('livraison.delete', $livraison->id) }}" class="delete"><i class="fas fa-trash"></i></button>
+                            <button type="button" class="delete" 
+                            onclick="confirmDelete('{{ route('livraison.delete', $livraison->id) }}')">
+                            <i class="fas fa-trash"></i>
+                    </button>
                         </form>
                     </td>
                     </tr>
@@ -210,5 +213,56 @@ button {
           </div>
         </div>
       </div>
-
+      <script>
+        function confirmDelete(deleteUrl) {
+            Swal.fire({
+                title: 'Confirmer la suppression',
+                text: "Êtes-vous sûr de vouloir supprimer ce livreur ? Cette action est irréversible.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Oui, supprimer',
+                cancelButtonText: 'Annuler',
+                background: '#fff',
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Création dynamique du formulaire
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = deleteUrl;
+                    
+                    // Ajout du token CSRF
+                    const csrfToken = document.createElement('input');
+                    csrfToken.type = 'hidden';
+                    csrfToken.name = '_token';
+                    csrfToken.value = '{{ csrf_token() }}';
+                    form.appendChild(csrfToken);
+                    
+                    // Ajout de la méthode DELETE
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+                    form.appendChild(methodInput);
+                    
+                    // Soumission du formulaire
+                    document.body.appendChild(form);
+                    form.submit();
+                    
+                    // Affichage d'un loader pendant la suppression
+                    Swal.fire({
+                        title: 'Suppression en cours',
+                        html: 'Veuillez patienter...',
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                        allowOutsideClick: false
+                    });
+                }
+            });
+        }
+        </script>
 @endsection
