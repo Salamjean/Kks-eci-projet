@@ -36,6 +36,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use SebastianBergmann\CodeCoverage\Report\Xml\Totals;
@@ -246,7 +247,7 @@ public function addSolde(Request $request)
         // Validation des données
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:vendors,email',
+            'email' => 'required|email|unique:super_admins,email',
             'password' => 'required|min:8',
         ], [
             'name.required' => 'Le nom est obligatoire.',
@@ -305,7 +306,7 @@ public function addSolde(Request $request)
         return view('superadmin.mairie.create', compact('alerts','vendor'));
     }
 
-    public function store(Request $request)
+public function store(Request $request)
 {
     // Validation des données
     $request->validate([
@@ -328,7 +329,7 @@ public function addSolde(Request $request)
             return redirect()->back()->withErrors(['error' => 'Impossible de récupérer les informations du vendor.']);
         }
 
-        // Création du docteur
+        // Création du vendor
         $vendor = new Vendor();
         $vendor->name = $request->name;
         $vendor->email = $request->email;
@@ -350,6 +351,11 @@ public function addSolde(Request $request)
         return redirect()->route('super_admin.index')
             ->with('success', 'Mairie enregistré avec succès.');
     } catch (\Exception $e) {
+        Log::error('Erreur lors de l\'enregistrement du vendor: ' . $e->getMessage(), [
+            'request' => $request->all(),
+            'exception' => $e,
+        ]);
+
         return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()]);
     }
 }

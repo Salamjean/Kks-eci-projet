@@ -42,7 +42,7 @@ class SendEmailToMairieAfterRegistrationNotification extends Notification
     {
         return (new MailMessage)
             ->subject('E-CI : Mairie enregistrée') // Sujet mis à jour
-            ->from('no-reply@example.com', 'E-CI')
+            ->from('contact@edemarchee-ci.com', 'E-CI')
             ->view('emails.mairie_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

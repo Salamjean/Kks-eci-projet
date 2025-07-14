@@ -42,7 +42,7 @@ class SendEmailToDoctorAfterRegistrationNotification extends Notification
     {
         return (new MailMessage)
             ->subject('E-CI : Compte du personnel crée avec succès') // Sujet mis à jour
-            ->from('no-reply@example.com', 'E-CI')
+            ->from('contact@edemarchee-ci.com', 'E-CI')
             ->view('emails.doctor_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

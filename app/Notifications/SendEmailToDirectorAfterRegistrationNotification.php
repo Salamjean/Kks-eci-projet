@@ -42,7 +42,7 @@ class SendEmailToDirectorAfterRegistrationNotification extends Notification
     {
         return (new MailMessage)
             ->subject('E-CI : Directeur enregistré dans l\'hôpital') // Sujet mis à jour
-            ->from('no-reply@example.com', 'E-CI')
+            ->from('contact@edemarchee-ci.com', 'E-CI')
             ->view('emails.director_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

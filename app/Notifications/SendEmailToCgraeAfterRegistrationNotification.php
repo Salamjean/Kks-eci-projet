@@ -42,7 +42,7 @@ class SendEmailToCgraeAfterRegistrationNotification extends Notification
     {
         return (new MailMessage)
             ->subject('E-CI : CGRAE a été enregistrée')
-            ->from('no-reply@example.com', 'E-CI')
+            ->from('contact@edemarchee-ci.com', 'E-CI')
             ->view('emails.cgrae_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

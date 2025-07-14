@@ -42,7 +42,7 @@ class SendEmailToAgentAfterRegistrationNotification extends Notification
     {
         return (new MailMessage)
             ->subject('E-CI : Agent enregistré auprès de votre mairie') // Sujet mis à jour
-            ->from('no-reply@example.com', 'E-CI')
+            ->from('contact@edemarchee-ci.com', 'E-CI')
             ->view('emails.agent_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

@@ -42,7 +42,7 @@ class SendEmailToCnpsAgentAfterRegistrationNotification extends Notification
     {
         return (new MailMessage)
             ->subject('E-CI : Agent CNPS vous êtes enregistré auprès de votre agence') // Sujet mis à jour
-            ->from('no-reply@example.com', 'E-CI')
+            ->from('contact@edemarchee-ci.com', 'E-CI')
             ->view('emails.cnps_agent_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

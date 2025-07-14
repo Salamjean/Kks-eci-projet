@@ -42,7 +42,7 @@ class SendEmailToMinistereAgentAfterRegistrationNotification extends Notificatio
     {
         return (new MailMessage)
             ->subject('E-CI : Agent du Ministère de la Santé enregistré') // Sujet mis à jour
-            ->from('no-reply@example.com', 'E-CI')
+            ->from('contact@edemarchee-ci.com', 'E-CI')
             ->view('emails.ministere_agent_registration', [
                 'code' => $this->code,
                 'email' => $this->email,

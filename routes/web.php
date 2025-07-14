@@ -54,9 +54,6 @@ Route::match(['get', 'post'], '/E-ci-recherche/demande', [GeneralController::cla
 Route::get('/doctor/dashboard', function () {
     return view('doctor.dashboard');
 });
-Route::get('/admin/login', function () {
-    return view('admin.auth.login');
-});
 
 //Routes utilisateur 
 Route::prefix('utilisateur')->group(function () {
@@ -129,8 +126,6 @@ Route::middleware('auth:web')->group(function () {
     //les routes du super admin
     Route::prefix('super-admin')->group(function () {
         // Routes pour l'authentification
-    Route::get('/kks/technologies/register', [SuperAdminController::class, 'register'])->name('super_admin.register');
-    Route::post('/register', [SuperAdminController::class, 'handleRegister'])->name('super_admin.handleRegister');
     Route::get('/login', [SuperAdminController::class, 'login'])->name('super_admin.login');
     Route::post('/login', [SuperAdminController::class, 'handleLogin'])->name('super_admin.handleLogin');
     });
