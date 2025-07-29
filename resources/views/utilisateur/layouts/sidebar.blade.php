@@ -73,7 +73,7 @@
   
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav" style="margin-top: 65px">
-        <li class="nav-item" >
+        <li class="nav-item">
             <a class="nav-link" href="{{ route('dashboard') }}">
                 <i class="mdi mdi-grid-large menu-icon"></i>
                 <span class="menu-title">Tableau de bord</span>
@@ -89,8 +89,8 @@
             <div class="collapse" id="ui-basic">
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('naissance.create') }}">Naissance avec certificat</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('naissanced.create') }}">Acte de Naissance</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('utilisateur.index') }}">Liste de vos demandes</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('naissanced.create') }}">Extrait de Naissance</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('utilisateur.index') }}">Listes Extraits de naissances</a></li>
                 </ul>
             </div>
         </li>
@@ -105,7 +105,7 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"><a class="nav-link" href="{{ route('deces.create') }}">Décès avec certificat</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('deces.createdeja') }}">Extrait de décès</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('decesutilisateur.index') }}">Listes Extrait de décès</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('decesutilisateur.index') }}">Listes Extraits de décès</a></li>
                 </ul>
             </div>
         </li>
@@ -118,8 +118,8 @@
             </a>
             <div class="collapse" id="charts">
                 <ul class="nav flex-column sub-menu">
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('mariage.create') }}">Acte de mariage</a></li>
-                    <li class="nav-item"> <a class="nav-link" href="{{ route('mariage.userindex') }}">Listes des actes de mariage</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('mariage.create') }}">Extrait de mariage</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('mariage.userindex') }}">Listes des Extraits de mariage</a></li>
                 </ul>
             </div>
         </li>

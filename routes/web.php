@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AgenceCgraeController;
 use App\Http\Controllers\AgenceCnpsController;
 use App\Http\Controllers\AgentController;
@@ -17,7 +16,6 @@ use App\Http\Controllers\DecesHopController;
 use App\Http\Controllers\DirectorController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\Doctors\DoctorDashboard;
-use App\Http\Controllers\Doctors\SousDoctorsDashboard;
 use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\LivraisonController;
 use App\Http\Controllers\Vendor\VendorDashboard;
@@ -30,7 +28,6 @@ use App\Http\Controllers\NaissHopController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\AdminHistoriqueController;
 use App\Http\Controllers\PaiemntConfigController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SousAdminController;
 use App\Http\Controllers\StatController;
@@ -38,11 +35,6 @@ use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\UtilisateurController;
 use App\Http\Controllers\VendorController;
 use Illuminate\Support\Facades\Route;
-use App\Models\Naissance;
-use App\Models\Vendor;
-use App\Models\Alert;
-use App\Models\Doctor;
-use App\Models\Ministere;
 
 Route::get('/', [GeneralController::class, 'general'])->name('general');
 Route::get('/E-ci-Naissance', [GeneralController::class, 'naissanceavec'])->name('naissanceavec');
@@ -61,9 +53,9 @@ Route::prefix('utilisateur')->group(function () {
     Route::middleware('utilisateur')->get('/dashboard', [DashboardController::class, 'index'])->name('utilisateur.dashboard');
     Route::get('/demandes/livraison/{id}', [CompteDemandeController::class, 'initPaiment'])->name('demandes.livraison');
     //Route::post('/compte_demandes', [CompteDemandeController::class, 'updateLivraison'])->name('naissances.livraison');
-    Route::get('/index', [NaissanceController::class, 'userindex'])->name('utilisateur.index');
+    Route::get('/indexchild', [NaissanceController::class, 'userindex'])->name('utilisateur.index');
     Route::post('/update/prenom/{id}', [NaissanceController::class, 'updateprenom'])->name('modifier.prenom');;
-    Route::get('/deces-index', [DecesController::class, 'userindex'])->name('decesutilisateur.index');
+    Route::get('/deces-indexdid', [DecesController::class, 'userindex'])->name('decesutilisateur.index');
     Route::get('/mariage-index', [MariageController::class, 'userindex'])->name('mariage.userindex');
     Route::get('/logout', [UtilisateurController::class, 'logout'])->name('utilisateur.logout');
 
@@ -302,7 +294,7 @@ Route::middleware('auth:web')->group(function () {
     Route::get('cgrae/download/{id}', [CgraeAgentController::class, 'download'])->name('cgraeagent.download');
 
     //Les routes de l'administrator (Mairie)
-    Route::prefix('vendors')->group(function () {
+    Route::prefix('mairie')->group(function () {
         // Routes pour l'authentification
     Route::get('/register', [VendorController::class, 'register'])->name('vendor.register');
     Route::post('/register', [VendorController::class, 'handleRegister'])->name('vendor.handleRegister');
@@ -325,7 +317,7 @@ Route::middleware('auth:web')->group(function () {
     Route::put('/{doctor}/update', [VendorController::class, 'hoptitalupdate'])->name('doctor.hoptitalupdate');
     Route::delete('doctor/{doctor}/delete', [VendorController::class, 'hopitaldelete'])->name('doctor.hoptitaldelete');
 
-    Route::prefix('vendor')->group(function(){
+    Route::prefix('mairie')->group(function(){
         Route::get('/task/end/naissance',[AdminHistoriqueController::class, 'taskend'])->name('vendor.taskend');
         Route::get('/task/end/deces',[AdminHistoriqueController::class, 'taskenddeces'])->name('vendor.taskenddeces');
         Route::get('/task/end/mariages',[AdminHistoriqueController::class, 'taskendmariages'])->name('vendor.taskendmariages');
@@ -396,11 +388,11 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
  Route::post('/mariage/{id}/update-etat', [VendorController::class, 'updateEtat3'])->name('mariage.updateEtat');
 
     // Routes pour le sous-admin (Sous docteurs)
-    Route::prefix('sous-admin')->name('sous_admin.')->group(function () {
+    Route::prefix('personal')->name('sous_admin.')->group(function () {
         Route::get('/login', [SousAdminController::class, 'souslogin'])->name('login');
         Route::post('/login', [SousAdminController::class, 'soushandleLogin'])->name('handlelogin');
     });
-    Route::middleware('auth:sous_admin')->prefix('sous-admin')->name('sous_admin.')->group(function(){
+    Route::middleware('auth:sous_admin')->prefix('personal')->name('sous_admin.')->group(function(){
     Route::get('/dashboard', [SousAdminController::class, 'dashboard'])->name('dashboard');
     Route::get('/docteur/signature',[SousAdminController::class, 'signature'])->name('signature');
     Route::post('/docteur/signature/update',[SousAdminController::class, 'updateSignature'])->name('signature.update'); 
@@ -428,7 +420,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         });
     
 
-    Route::middleware('sous_admin')->prefix('SousDoctor')->group(function(){
+    Route::middleware('sous_admin')->prefix('personal')->group(function(){
     
     });
 
@@ -469,7 +461,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
 
     //creer un docteurs
 
-    Route::middleware('auth:doctor')->prefix('SousDoctor')->group(function () {
+    Route::middleware('auth:doctor')->prefix('personal')->group(function () {
         //les routes du sous-admins(docteurs)
     Route::get('/index',[DoctorController::class, 'index'])->name('doctor.index');
     Route::get('/create',[DoctorController::class, 'create'])->name('doctor.create');
@@ -489,11 +481,11 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
 
 //les routes de extraits naissances
     Route::prefix('naissances')->group(function() {
-        Route::get('/', [NaissanceController::class, 'index'])->name('naissance.index');        
+        Route::get('/endchild', [NaissanceController::class, 'index'])->name('naissance.index');        
         Route::get('/agent', [NaissanceController::class, 'agentindex'])->name('naissance.agentindex');        
         Route::get('/ajoint', [NaissanceController::class, 'ajointindex'])->name('naissance.ajointindex');        
         Route::post('/create', [NaissanceController::class, 'store'])->name('naissance.store');
-        Route::get('/create', [NaissanceController::class, 'create'])->name('naissance.create');
+        Route::get('/createchild', [NaissanceController::class, 'create'])->name('naissance.create');
         Route::get('/edit/{naissance}', [NaissanceController::class, 'edit'])->name('naissance.edit');
         Route::get('/naissance/{id}', [NaissanceController::class, 'show'])->name('naissance.show');
         Route::get('/naissance/delete/{naissance}', [NaissanceController::class, 'delete'])->name('naissance.delete');
@@ -656,10 +648,10 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
       
 
     //les routes de declarations naissances
-    Route::prefix('naissances/declarations')->group(function() {
+    Route::prefix('naissances/children')->group(function() {
         Route::get('/', [NaissanceDeclaController::class, 'index'])->name('naissanced.index');        
         Route::post('/create', [NaissanceDeclaController::class, 'store'])->name('naissanced.store');
-        Route::get('/create', [NaissanceDeclaController::class, 'create'])->name('naissanced.create');
+        Route::get('/createchild', [NaissanceDeclaController::class, 'create'])->name('naissanced.create');
         Route::get('/naissanced/{id}', [NaissanceDeclaController::class, 'show'])->name('naissanced.show');
         Route::get('/naissanced/delete/{naissanceD}', [NaissanceDeclaController::class, 'delete'])->name('naissanced.delete');
 
@@ -670,7 +662,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/agent', [DecesController::class, 'agentindex'])->name('deces.agentindex');        
         Route::get('/ajoint', [DecesController::class, 'ajointindex'])->name('deces.ajointindex');        
         Route::post('/create', [DecesController::class, 'store'])->name('deces.store');
-        Route::get('/create', [DecesController::class, 'create'])->name('deces.create');
+        Route::get('/createdid', [DecesController::class, 'create'])->name('deces.create');
         Route::get('/deces/{id}', [DecesController::class, 'show'])->name('deces.show');
         Route::get('/create/deja',[DecesController::class,'createdeja'])->name('deces.createdeja');
         Route::post('/create/deja-store',[DecesController::class,'storedeja'])->name('deces.storedeja');
@@ -694,4 +686,3 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     
 
     require __DIR__.'/auth.php';
-    require __DIR__.'/admin-auth.php';

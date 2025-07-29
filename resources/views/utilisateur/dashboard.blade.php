@@ -1,296 +1,288 @@
 @extends('utilisateur.layouts.template')
 
 @section('content')
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<link rel="icon" href="{{ asset('assets/images/profiles/E-ci-logo.png') }}">
-
-
 <style>
-    .form-background {
-        background-image: url("{{ asset('assets/images/profiles/arriereP.jpg') }}"); /* Chemin de l'image */
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        padding: 20px;
-        border-radius: 8px;
-        width: 100%;
-    }
-
-    .statistics-card {
-        margin-bottom: 15px; /* Add some spacing between the cards */
-        text-align: center;   /* Center the text inside each card */
-    }
-
-    .statistics-card p {
-        font-size: 0.8em;
-        margin-bottom: 5px;
-    }
-
-    .statistics-card h3 {
-        font-size: 1.2em;
+    /* Styles personnalisés */
+    .dashboard-card {
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s ease;
+        margin-bottom: 20px;
     }
     
-    .card-rounded {
-        border-radius: 10px;
+    .dashboard-card:hover {
+        transform: translateY(-5px);
     }
-
-    /* Media query for tablets and smaller screens */
-    @media (max-width: 991.98px) {
-      .form-background{
-        padding: 5px;
-      }
-        .statistics-card {
-          padding: 10px
-          margin-bottom: 10px; /* Reduce spacing on smaller screens */
-        }
-
-        .statistics-card p {
-            font-size: 0.7em;  /* Adjust font size for better fit */
-        }
-
-        .statistics-card h3 {
-            font-size: 1em; /* Smaller font for total count */
-        }
-        /* Réduire la hauteur du conteneur du graphique sur les écrans moyens */
-        .col-lg-8 .card-rounded {
-            height: 400px; /* Hauteur réduite pour les écrans moyens */
-        }
-
-        /* Styles pour les plus petits écrans (mobile) */
-        @media (max-width: 575.98px) {
-            .col-lg-8 .card-rounded {
-                height: 300px; /* Hauteur encore plus réduite sur les mobiles */
-            }
-        }
+    
+    .chart-container {
+        position: relative;
+        height: 500px;
+        width: 100%;
     }
-
-    /* Media query for very small screens (mobile) */
-    @media (max-width: 575.98px) {
-        .statistics-card {
-            padding: 5px
-            margin-bottom: 5px;
+    
+    .stats-image {
+        height: 150%;
+        object-fit: cover;
+        border-radius: 10px 10px 0 0;
+    }
+    
+    .stat-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .chart-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: #2c3e50;
+    }
+    
+    .chart-subtitle {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        margin-bottom: 1.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .chart-container {
+            height: 250px;
         }
-
-        .statistics-card p {
-            font-size: 0.6em; /* Even smaller font size on mobile */
-        }
-
-        .statistics-card h3 {
-            font-size: 0.8em; /* Very small font for total count */
+        
+        .stat-card {
+            margin-bottom: 15px;
         }
     }
 </style>
 
-<div class="main-panel form-background">
-    <div class="content-wrapper">
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="home-tab">
-                    <div class="d-sm-flex align-items-center justify-content-between border-bottom">
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active ps-0" id="home-tab" data-bs-toggle="tab" href="#overview" role="tab" aria-controls="overview" aria-selected="true">Vos statistiques de demande</a>
-                            </li>
-                        </ul>
+<div class="content-wrapper">
+    <!-- Section de bienvenue -->
+    <div class="row">
+        <div class="col-md-12 grid-margin">
+            <div class="row">
+                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                    <h3 class="font-weight-bold">
+                        Bienvenue, Mlle/Mme/M. 
+                        <span class="text-black fw-bold">{{ Auth::user()->name }} {{ Auth::user()->prenom }}</span>
+                    </h3>
+                    <h6 class="font-weight-normal mb-0">
+                        Vous pouvez maintenant effectuer <span class="text-primary">une demande!</span>
+                    </h6>
+                </div>
+                <div class="col-12 col-xl-4">
+                    <div class="d-flex justify-content-end">
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                <i class="mdi mdi-home"></i> Mairie de {{ strtoupper(Auth::user()->commune) }}
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <div class="tab-content tab-content-basic">
-                    <div class="tab-pane fade show active" id="overview" role="tabpanel" aria-labelledby="overview"> 
-                        <div class="row">
-                            <!-- Section des statistiques de demande -->
-                            <div class="col-lg-12 d-flex flex-wrap justify-content-around">
-                                <!-- Extrait de naissance et décès -->
-                                <div class="statistics-card">
-                                    <p class="statistics-title">Extrait de naissance</p>
-                                    <h3 class="rate-percentage">{{ $naissancesCount + $naissanceDCount }}</h3>
-                                </div>
-                                <div class="statistics-card">
-                                    <p class="statistics-title">Extrait de décès</p>
-                                    <h3 class="rate-percentage">{{ $decesCount + $decesdejaCount }}</h3>
-                                </div>
-                                <!-- Extrait de mariage -->
-                                <div class="statistics-card">
-                                    <p class="statistics-title">Extrait de mariage</p>
-                                    <h3 class="rate-percentage">{{ $mariageCount }}</h3>
-                                </div>
-                                <!-- Total des demandes -->
-                                <div class="statistics-card">
-                                    <p class="statistics-title">Total de demandes</p>
-                                    <h3 class="rate-percentage">{{ $naissancesCount + $naissanceDCount + $decesCount + $mariageCount + $decesdejaCount }}</h3>
-                                </div>
-                            </div>
-                            <br>
+            </div>
+        </div>
+    </div>
 
-                            <!-- Première colonne pour Market Overview -->
-                            <div class="col-lg-8 d-flex flex-column">
-                                <div class="row flex-grow">
-                                    <div class="col-12 grid-margin stretch-card">
-                                        <div class="card card-rounded" style="height: 470px;">
-                                            <div class="card-body" style="height: 100%;">
-                                                <div class="d-sm-flex justify-content-between align-items-start">
-                                                    <div>
-                                                        <h4 class="card-title card-title-dash">Vos demandes</h4>
-                                                        <p class="card-subtitle card-subtitle-dash">Visualisation des demandes récentes</p>
-                                                    </div>
-                                                </div>
-                                                <div class="chartjs-bar-wrapper mt-3" style="height: calc(100% - 80px);">
-                                                    <canvas id="marketingOverview" style="height: 100%; width: 100%;"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <script>
-                                // Récupérer les données du contrôleur
-                                const labels = ['Naissances', 'Décès', 'Mariages'];
-                                const data = {
-                                    labels: labels,
-                                    datasets: [{
-                                        label: 'Nombre de Demandes',
-                                        data: [
-                                            {{ intval($naissancesCount + $naissanceDCount) }}, 
-                                            {{ intval($decesCount + $decesdejaCount) }}, 
-                                            {{ intval($mariageCount) }}
-                                        ],
-                                        backgroundColor: [
-                                            'rgba(75, 192, 192, 0.2)',
-                                            'rgba(153, 102, 255, 0.2)',
-                                            'rgba(255, 99, 132, 0.2)',
-                                            'rgba(255, 206, 86, 0.2)',
-                                        ],
-                                        borderColor: [
-                                            'rgba(75, 192, 192, 1)',
-                                            'rgba(153, 102, 255, 1)',
-                                            'rgba(255, 99, 132, 1)',
-                                            'rgba(255, 206, 86, 1)',
-                                        ],
-                                        borderWidth: 1
-                                    }]
-                                };
-                            
-                                const config = {
-                                    type: 'bar',
-                                    data: data,
-                                    options: {
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true,
-                                                ticks: {
-                                                    // Forcer les valeurs à être des entiers
-                                                    callback: function(value) {
-                                                        return Number.isInteger(value) ? value : '';
-                                                    },
-                                                    stepSize: 1 // Espacement des ticks
-                                                }
-                                            }
-                                        }
-                                    }
-                                };
-                            
-                                const myChart = new Chart(
-                                    document.getElementById('marketingOverview'),
-                                    config
-                                );
-                            </script>
-                            
-                            
-                            
-                            <!-- Deuxième colonne pour Demande Récentes -->
-                            <div class="col-lg-4 d-flex flex-column">
-                                <div class="row flex-grow">
-                                    <div class="col-12 grid-margin stretch-card">
-                                        <div class="card card-rounded" style="height: 470px;"> <!-- Réduit la hauteur de la carte -->
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="d-flex justify-content-between align-items-center">
-                                                            <h4 class="card-title card-title-dash">Demande Récentes</h4>
-                                                                                                            
-                                                                                                                                                                                                                         </div>
-                                                        <div class="list-wrapper">
-                                                            <ul class="todo-list todo-list-rounded" style="height: 390px; overflow-y: auto;"> <!-- Réduit la hauteur de la liste et active le scroll -->
-                                                                @foreach($demandesRecente as $demande)
-                                                                    <li class="d-block">
-                                                                        <div class="form-check w-100">
-                                                                            <label class="form-check-label">
-                                                                                <input class="checkbox" type="checkbox"> 
-                                                                                Demande d'extrait {{ $demande->type }} effectuée le {{ $demande->created_at->format('d M Y') }} <br> est   
-                                                                                <span class="badge {{ $demande->etat == 'en attente' ? 'badge-opacity-warning' : ($demande->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}">
-                                                                                    {{ $demande->etat }}
-                                                                                </span>
-                                                                          
-                                                                            </label>
-                                                                        </div>
-                                                                    </li>
-                                                                @endforeach
-                                                            </ul>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div> 
-                        </div> <!-- Fin de la row -->
-                    </div> <!-- Fin du tab-content-basic -->
-                </div> <!-- Fin du tab-content -->
-            </div> <!-- Fin de col-sm-12 -->
-        </div> <!-- Fin de row -->
-    </div> <!-- Fin de content-wrapper -->
-</div> <!-- Fin de main-panel -->
+    <!-- Statistiques en haut -->
+    <div class="row">
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card dashboard-card" style="height:100%">
+                <img src="{{ asset('assets/images/profiles/bande.jpg') }}" class="stats-image"  alt="Demandes">
+            </div>
+        </div>
+        <div class="col-md-6 ">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card card-tale dashboard-card" style="background-color: #1a76d1">
+                        <div class="card-body text-center">
+                            <p class="mb-3">Extrait de naissance</p>
+                            <h2 class="mb-2">{{ $naissancesCount + $naissanceDCount }}</h2>
+                            <p class="text-white">demandes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4 stretch-card">
+                    <div class="card dashboard-card " style="background-color:" >
+                        <div class="card-body text-center">
+                            <p class="mb-3">Extrait de décès</p>
+                            <h2 class="mb-2">{{ $decesCount + $decesdejaCount }}</h2>
+                            <p class="text-black">demandes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4 stretch-card">
+                    <div class="card card-light-danger dashboard-card " style="background-color:#008000">
+                        <div class="card-body text-center">
+                            <p class="mb-3">Extrait de mariage</p>
+                            <h2 class="mb-2">{{ $mariageCount }}</h2>
+                            <p class="text-white">demandes</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 ">
+                    <div class="card dashboard-card" style="background-color: #ffa500">
+                        <div class="card-body text-center">
+                            <p class="mb-3 text-white">Total de demandes</p>
+                            <h2 class="mb-2 text-white">{{ $naissancesCount + $naissanceDCount + $decesCount + $mariageCount + $decesdejaCount }}</h2>
+                            <p class="text-white">demandes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Graphiques en dessous -->
+    <div class="row">
+        <!-- Graphique en barres -->
+        <div class="col-lg-8 grid-margin stretch-card">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <h4 class="chart-title">Répartition des demandes</h4>
+                    <p class="chart-subtitle">Nombre de demandes par type</p>
+                    <div class="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Graphique circulaire -->
+        <div class="col-lg-4 grid-margin stretch-card">
+            <div class="card dashboard-card">
+                <div class="card-body">
+                    <h4 class="chart-title">Pourcentage des demandes</h4>
+                    <p class="chart-subtitle">Répartition en pourcentages</p>
+                    <div class="chart-container">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<!-- SweetAlert2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-      function showImage(imageElement) {
-      const modalImage = document.getElementById('modalImage');
-      modalImage.src = imageElement.src;
-      const imageModal = new bootstrap.Modal(document.getElementById('imageModal'));
-      imageModal.show();
-  }
-  function confirmDelete(url) {
-      Swal.fire({
-          title: 'Êtes-vous sûr ?',
-          text: "Vous ne pourrez pas revenir en arrière !",
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Oui, supprimer !',
-          cancelButtonText: 'Annuler'
-      }).then((result) => {
-          if (result.isConfirmed) {
-              window.location.href = url; // Rediriger vers l'URL de suppression
-          }
-      });
-  }
-  // Afficher un pop-up de succès après la suppression
-  @if(session('success'))
-      Swal.fire({
-          title: 'Succès !',
-          text: "{{ session('success') }}",
-          icon: 'success',
-          confirmButtonColor: '#3085d6',
-          confirmButtonText: 'OK'
-      });
-  @endif
-  // Afficher un pop-up d'erreur en cas d'échec de la suppression
-  @if(session('error'))
-      Swal.fire({
-          title: 'Erreur !',
-          text: "{{ session('error') }}",
-          icon: 'error',
-          confirmButtonColor: '#3085d6',
-          confirmButtonText: 'OK'
-      });
-  @endif
+    // Données communes
+    const labels = ['Naissances', 'Décès', 'Mariages'];
+    const dataValues = [
+        {{ intval($naissancesCount + $naissanceDCount) }},
+        {{ intval($decesCount + $decesdejaCount) }},
+        {{ intval($mariageCount) }}
+    ];
+    const backgroundColors = [
+        'rgba(75, 192, 192, 0.7)',
+        'rgba(153, 102, 255, 0.7)',
+        'rgba(255, 99, 132, 0.7)'
+    ];
+    const borderColors = [
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 99, 132, 1)'
+    ];
+
+    // Graphique en barres
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    const barChart = new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Nombre de demandes',
+                data: dataValues,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 2,
+                borderRadius: 6,
+                hoverBackgroundColor: [
+                    'rgba(75, 192, 192, 0.9)',
+                    'rgba(153, 102, 255, 0.9)',
+                    'rgba(255, 99, 132, 0.9)'
+                ],
+                hoverBorderWidth: 3
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    callbacks: {
+                        label: function(context) {
+                            return `${context.dataset.label}: ${context.raw}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        callback: function(value) {
+                            if (Number.isInteger(value)) {
+                                return value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Graphique circulaire
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    const pieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: dataValues,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 1,
+                hoverOffset: 10
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    labels: {
+                        boxWidth: 12,
+                        padding: 20,
+                        font: {
+                            size: 12
+                        }
+                    }
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const value = context.raw;
+                            const percentage = Math.round((value / total) * 100);
+                            return `${context.label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
 </script>
 
 @endsection
