@@ -481,11 +481,11 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
 
 //les routes de extraits naissances
     Route::prefix('naissances')->group(function() {
-        Route::get('/endchild', [NaissanceController::class, 'index'])->name('naissance.index');        
+        Route::get('/', [NaissanceController::class, 'index'])->name('naissance.index');        
         Route::get('/agent', [NaissanceController::class, 'agentindex'])->name('naissance.agentindex');        
         Route::get('/ajoint', [NaissanceController::class, 'ajointindex'])->name('naissance.ajointindex');        
         Route::post('/create', [NaissanceController::class, 'store'])->name('naissance.store');
-        Route::get('/createchild', [NaissanceController::class, 'create'])->name('naissance.create');
+        Route::get('/create', [NaissanceController::class, 'create'])->name('naissance.create');
         Route::get('/edit/{naissance}', [NaissanceController::class, 'edit'])->name('naissance.edit');
         Route::get('/naissance/{id}', [NaissanceController::class, 'show'])->name('naissance.show');
         Route::get('/naissance/delete/{naissance}', [NaissanceController::class, 'delete'])->name('naissance.delete');
@@ -651,7 +651,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
     Route::prefix('naissances/children')->group(function() {
         Route::get('/', [NaissanceDeclaController::class, 'index'])->name('naissanced.index');        
         Route::post('/create', [NaissanceDeclaController::class, 'store'])->name('naissanced.store');
-        Route::get('/createchild', [NaissanceDeclaController::class, 'create'])->name('naissanced.create');
+        Route::get('/create', [NaissanceDeclaController::class, 'create'])->name('naissanced.create');
         Route::get('/naissanced/{id}', [NaissanceDeclaController::class, 'show'])->name('naissanced.show');
         Route::get('/naissanced/delete/{naissanceD}', [NaissanceDeclaController::class, 'delete'])->name('naissanced.delete');
 
