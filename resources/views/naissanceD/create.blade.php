@@ -62,7 +62,6 @@
     }
 
     button {
-        width: 100%;
         padding: 0.8rem;
         font-size: 0.9rem;
         font-weight: bold;
@@ -71,7 +70,6 @@
         border-radius: 8px;
         color: #ffffff;
         cursor: pointer;
-        margin-top: 1.5rem;
     }
 
     button:hover {
@@ -141,7 +139,7 @@
 @endif
 
 <div class="conteneurInfo">
-    <h2 class="titre text-center">Demande d'Extrait de Naissance</h2>
+    <h2 class="titre text-center">Demande d'extrait de naissance</h2>
     <form id="naissanceForm" method="POST" enctype="multipart/form-data">
         @csrf
 
@@ -309,7 +307,7 @@
         </div>
 
         <!-- Boutons -->
-        <button type="submit" id="btnValider">Valider</button>
+        <button type="submit" id="btnValider" style="width: 100%">Valider</button>
     </form>
 </div>
 

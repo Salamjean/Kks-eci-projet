@@ -67,7 +67,7 @@
                     </div>
                     <div>
                         <a href="{{ route('naissance.create') }}">
-                            <button class="btn btn-primary btn-lg text-white mb-0 me-0" type="button">Faire une nouvelle demande</button>
+                            <button class="btn btn-lg text-white mb-0 me-0" type="button" style="background-color:#008000 ">Faire une nouvelle demande</button>
                         </a>
                     </div>
                 </div>
@@ -89,80 +89,80 @@
                     <!-- Onglet 1 : Complètes -->
                     <div class="tab-pane fade show active" id="complete" role="tabpanel" aria-labelledby="complete-tab">
                         <div class="table-responsive mt-4">
-                            <table class="table select-table">
+                           <table class="table select-table" style="border-collapse: collapse;">
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center">
-                                        <th>Demandeur |</th>
-                                        <th>Demandeur |</th>
-                                        <th>Hôpital |</th>
-                                        <th>Nom et Prénoms de la mère |</th>
-                                        <th>Nom et Prénoms (choisir) du né |</th>
-                                        <th>Nom et Prénoms du père |</th>
-                                        <th>Date de Naissance de l'enfant |</th>
-                                        <th>CNI du père |</th>
-                                        <th>Certificat Médical de Naissance |</th>
-                                        <th>Etat Actuel |</th>
-                                        <th>Agent |</th>
-                                        <th>Supprimer |</th>
-                                        <th>Rétrait |</th>
+                                        <th style="border: 1px solid black;">Demandeur</th>
+                                        <th style="border: 1px solid black;">Demandeur</th>
+                                        <th style="border: 1px solid black;">Hôpital</th>
+                                        <th style="border: 1px solid black;">Nom et Prénoms de la mère</th>
+                                        <th style="border: 1px solid black;">Nom et Prénoms (choisir) du né</th>
+                                        <th style="border: 1px solid black;">Nom et Prénoms du père</th>
+                                        <th style="border: 1px solid black;">Date de Naissance de l'enfant</th>
+                                        <th style="border: 1px solid black;">CNI du père</th>
+                                        <th style="border: 1px solid black;">Certificat Médical de Naissance</th>
+                                        <th style="border: 1px solid black;">Etat Actuel</th>
+                                        <th style="border: 1px solid black;">Agent</th>
+                                        <th style="border: 1px solid black;">Supprimer</th>
+                                        <th style="border: 1px solid black;">Rétrait</th>
                                         @if($naissances->contains(function ($naissance) { return $naissance->archived_at; }))
-                                            <th>Modifier</th>
+                                            <th style="border: 1px solid black;">Modifier</th>
                                         @endif
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($naissances as $naissance)
                                     <tr class="text-center">
-                                        <td>{{ $naissance->user ? $naissance->user->name : 'Demandeur inconnu' }}</td>
-                                        <td>{{ $naissance->reference }}</td>
-                                        <td>{{ $naissance->nomHopital }}</td>
-                                        <td>{{ $naissance->nomDefunt }}</td>
-                                        <td>{{ $naissance->nom . ' ' . $naissance->prenom }}</td>
-                                        <td>{{ $naissance->nompere . ' ' . $naissance->prenompere }}</td>
-                                        <td>{{ $naissance->lieuNaiss }}</td>
-                                        <td>
+                                        <td style="border: 1px solid black;">{{ $naissance->user ? $naissance->user->name : 'Demandeur inconnu' }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissance->reference }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissance->nomHopital }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissance->nomDefunt }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissance->nom . ' ' . $naissance->prenom }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissance->nompere . ' ' . $naissance->prenompere }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissance->lieuNaiss }}</td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($naissance->identiteDeclarant, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $naissance->identiteDeclarant) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
                                                 </a>
                                             @else
                                                 <img src="{{ asset('storage/' . $naissance->identiteDeclarant) }}" 
-                                                     alt="Pièce du parent" 
-                                                     width="100" 
-                                                     height="auto" 
-                                                     onclick="showImage(this)" 
-                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                                    alt="Pièce du parent" 
+                                                    width="100" 
+                                                    height="auto" 
+                                                    onclick="showImage(this)" 
+                                                    onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($naissance->cdnaiss, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $naissance->cdnaiss) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
                                                 </a>
                                             @else
                                                 <img src="{{ asset('storage/' . $naissance->cdnaiss) }}" 
-                                                     alt="Pièce du parent" 
-                                                     width="100" 
-                                                     height="auto" 
-                                                     onclick="showImage(this)" 
-                                                     onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
+                                                    alt="Pièce du parent" 
+                                                    width="100" 
+                                                    height="auto" 
+                                                    onclick="showImage(this)" 
+                                                    onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span class="badge {{ $naissance->etat == 'en attente' ? 'badge-opacity-warning' : ($naissance->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461">
                                                 {{ $naissance->etat }}
                                             </span>
                                         </td>
-                                        <td>{{ $naissance->agent ? $naissance->agent->name . ' ' . $naissance->agent->prenom : 'Non attribué' }}</td>
-                                        <td>
+                                        <td style="border: 1px solid black;">{{ $naissance->agent ? $naissance->agent->name . ' ' . $naissance->agent->prenom : 'Non attribué' }}</td>
+                                        <td style="border: 1px solid black;">
                                             @if ($naissance->etat !== 'réçu' && $naissance->etat !== 'terminé')
                                                 <button onclick="confirmDelete('{{ route('naissance.delete', $naissance->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
                                                 <button  class="btn btn-danger btn-sm disabled-btn text-center" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
                                             @endif
                                         </td>
-                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissance->choix_option }}</div></td>
-                                        <td>
+                                        <td style="border: 1px solid black;"><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissance->choix_option }}</div></td>
+                                        <td style="border: 1px solid black;">
                                             @if($naissance->archived_at)
                                                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modifierModal{{ $naissance->id }}">
                                                     Modifier
@@ -183,7 +183,7 @@
                                                     <div class="modal-body">
                                                         <form id="modifierForm{{ $naissance->id }}">
                                                             @csrf
-                                                            @method('POST') <!-- Ajoutez cette ligne pour simuler une méthode PUT -->
+                                                            @method('POST')
                                                             <div class="form-group">
                                                                 <label for="newPrenom{{ $naissance->id }}">Nouveau prénom</label>
                                                                 <input type="text" class="form-control" id="newPrenom{{ $naissance->id }}" name="newPrenom" required>
@@ -201,40 +201,39 @@
                                         <script>
                                             function submitForm(naissanceId) {
                                                 var newPrenom = $('#newPrenom' + naissanceId).val();
-                                                console.log('ID:', naissanceId, 'Nouveau prénom:', newPrenom); // Debug
+                                                console.log('ID:', naissanceId, 'Nouveau prénom:', newPrenom);
 
-                                                // Utilisation de la route nommée pour générer l'URL
                                                 var url = '{{ route("modifier.prenom", ["id" => ":id"]) }}';
-                                                url = url.replace(':id', naissanceId); // Remplacez :id par l'ID dynamique
+                                                url = url.replace(':id', naissanceId);
 
                                                 $.ajax({
-                                                    url: url, // Utilisation de l'URL générée dynamiquement
-                                                    type: 'POST', // Utilisez PUT ici si nécessaire
+                                                    url: url,
+                                                    type: 'POST',
                                                     data: {
                                                         _token: $('input[name="_token"]').val(),
                                                         newPrenom: newPrenom
                                                     },
                                                     success: function(response) {
-                                                        console.log('Réponse du serveur:', response); // Debug
+                                                        console.log('Réponse du serveur:', response);
                                                         if (response.success) {
                                                             alert('Prénom modifié avec succès !');
                                                             $('#modifierModal' + naissanceId).modal('hide');
-                                                            location.reload(); // Recharger la page pour voir les changements
+                                                            location.reload();
                                                         } else {
                                                             alert('Erreur : ' + response.message);
                                                         }
                                                     },
                                                     error: function(xhr, status, error) {
-                                                        console.error('Erreur AJAX:', xhr.responseText); // Debug
+                                                        console.error('Erreur AJAX:', xhr.responseText);
                                                         alert('Erreur lors de la communication avec le serveur. Détails : ' + xhr.responseText);
                                                     }
                                                 });
                                             }
                                         </script>
-                                 
+                                    </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="11" class="text-center">Aucune demande effectuée</td>
+                                        <td colspan="13" class="text-center" style="border: 1px solid black;">Aucune demande effectuée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -245,34 +244,34 @@
                     <!-- Onglet 2 : Partielles -->
                     <div class="tab-pane fade" id="partial" role="tabpanel" aria-labelledby="partial-tab">
                         <div class="table-responsive mt-4">
-                            <table class="table select-table">
+                            <table class="table select-table" style="border-collapse: collapse;">
                                 <thead class="bg-navbar text-white">
                                     <tr class="text-center" style="font-size: 12px">
-                                        <th>Demandeur |</th>
-                                        <th>|Réference |</th>
-                                        <th>|Type de copie |</th>
-                                        <th>|Nom sur l'extrait |</th>
-                                        <th>|Numéro de régistre |</th>
-                                        <th>|Date de régistre |</th>
-                                        <th>|Numéro CMU |</th>
-                                        <th>|Pièce d'identité du demandeur |</th>
-                                        <th>|Etat Actuel |</th>
-                                        <th>|Agent |</th>
-                                        <th>|Supprimer |</th>
-                                        <th>|Rétrait</th>
+                                        <th style="border: 1px solid black;">Demandeur</th>
+                                        <th style="border: 1px solid black;">Réference </th>
+                                        <th style="border: 1px solid black;">Type de copie </th>
+                                        <th style="border: 1px solid black;">Nom sur l'extrait </th>
+                                        <th style="border: 1px solid black;">Numéro de régistre</th>
+                                        <th style="border: 1px solid black;">Date de régistre</th>
+                                        <th style="border: 1px solid black;">Numéro CMU</th>
+                                        <th style="border: 1px solid black;">Pièce d'identité du demandeur</th>
+                                        <th style="border: 1px solid black;">Etat Actuel</th>
+                                        <th style="border: 1px solid black;">Agent</th>
+                                        <th style="border: 1px solid black;">Supprimer</th>
+                                        <th style="border: 1px solid black;">Rétrait</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($naissancesD as $naissanceD)
                                     <tr class="text-center">
-                                        <td>{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
-                                        <td>{{ $naissanceD->reference }}</td>
-                                        <td>{{ $naissanceD->type }}</td>
-                                        <td>{{ $naissanceD->name.' '.$naissanceD->prenom.' '.'('.($naissanceD->pour).')'}}</td>
-                                        <td>{{ $naissanceD->number }}</td>
-                                        <td>{{ $naissanceD->DateR }}</td>
-                                        <td>{{ $naissanceD->CMU }}</td>
-                                        <td>
+                                        <td style="border: 1px solid black;">{{ $naissanceD->user ? $naissanceD->user->name : 'Demandeur inconnu' }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissanceD->reference }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissanceD->type }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissanceD->name.' '.$naissanceD->prenom.' '.'('.($naissanceD->pour).')'}}</td>
+                                        <td style="border: 1px solid black;">{{ $naissanceD->number }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissanceD->DateR }}</td>
+                                        <td style="border: 1px solid black;">{{ $naissanceD->CMU }}</td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($naissanceD->CNI, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $naissanceD->CNI) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -287,24 +286,24 @@
                                             @endif
                                         </td>
                                       
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span class="badge {{ $naissanceD->etat == 'en attente' ? 'badge-opacity-warning' : ($naissanceD->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461" >
                                                 {{ $naissanceD->etat }}
                                             </span>
                                         </td>
-                                        <td>{{ $naissanceD->agent ? $naissanceD->agent->name . ' ' . $naissanceD->agent->prenom : 'Non attribué' }}</td>
-                                        <td>
+                                        <td style="border: 1px solid black;">{{ $naissanceD->agent ? $naissanceD->agent->name . ' ' . $naissanceD->agent->prenom : 'Non attribué' }}</td>
+                                        <td style="border: 1px solid black;">
                                             @if ($naissanceD->etat !== 'réçu' && $naissanceD->etat !== 'terminé')
                                                  <button onclick="confirmDelete('{{ route('naissanced.delete', $naissanceD->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
                                                  <button  class="btn btn-danger btn-sm disabled-btn text-center" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
                                              @endif
                                         </td>
-                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissanceD->choix_option }}</div></td>
+                                        <td style="border: 1px solid black;"><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $naissanceD->choix_option }}</div></td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="10" class="text-center">Aucune demande effectuée</td>
+                                        <td colspan="12" class="text-center">Aucune demande effectuée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>

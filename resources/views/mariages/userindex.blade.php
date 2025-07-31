@@ -155,32 +155,32 @@
                 <!-- Tableau unique avec responsive -->
                 <div class="table-responsive">
                     <table class="table select-table">
-                        <thead class="bg-navbar text-white">
+                        <thead class="bg-navbar text-white" style="border-collapse: collapse;">
                             <tr style="font-size: 12px">
-                                <th class="text-center">Nom du demandeur|</th>
-                                <th class="text-center">|Réference|</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">|Nom du conjoint(e)|</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">|Prénoms du conjoint(e)|</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">|Date de Naissance du conjoint(e)|</th>
-                                <th class="text-center d-none-tablet d-none-small-pc">|Lieu de Naissance du conjoint(e)|</th>
-                                <th class="text-center">|Pièce d'Identité du conjoint(e)|</th>
-                                <th class="text-center">|Extrait de Mariage|</th>
-                                <th class="text-center">|Etat Actuel|</th>
-                                <th class="text-center">|Agent|</th>
-                                <th class="text-center">|Supprimer|</th>
-                                <th class="text-center">|Rétrait</th>
+                                <th class="text-center" style="border: 1px solid black;">Nom du demandeur</th>
+                                <th class="text-center" style="border: 1px solid black;">Réference</th>
+                                <th class="text-center d-none-tablet d-none-small-pc" style="border: 1px solid black;">Nom du conjoint(e)</th>
+                                <th class="text-center d-none-tablet d-none-small-pc" style="border: 1px solid black;">Prénoms du conjoint(e)</th>
+                                <th class="text-center d-none-tablet d-none-small-pc" style="border: 1px solid black;">Date de Naissance du conjoint(e)</th>
+                                <th class="text-center d-none-tablet d-none-small-pc" style="border: 1px solid black;">Lieu de Naissance du conjoint(e)</th>
+                                <th class="text-center" style="border: 1px solid black;">Pièce d'Identité du conjoint(e)</th>
+                                <th class="text-center" style="border: 1px solid black;">Extrait de Mariage</th>
+                                <th class="text-center" style="border: 1px solid black;">Etat Actuel</th>
+                                <th class="text-center" style="border: 1px solid black;">Agent</th>
+                                <th class="text-center" style="border: 1px solid black;">Supprimer</th>
+                                <th class="text-center" style="border: 1px solid black;">Rétrait</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse ($allMariages as $mariage)
                             <tr class="text-center" style="font-size: 12px">
-                                <td data-label="Demandeur">{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
-                                <td data-label="Reference">{{ $mariage->reference}}</td>
-                                <td data-label="Nom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->nomEpoux ? : 'copie-simple' }}</td>
-                                <td data-label="Prénom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->prenomEpoux ? : 'copie-simple' }}</td>
-                                <td data-label="Date de Naissance" class="d-none-tablet d-none-small-pc">{{ $mariage->dateNaissanceEpoux ? : 'copie-simple' }}</td>
-                                <td data-label="Lieu de Naissance" class="d-none-tablet d-none-small-pc">{{ $mariage->lieuNaissanceEpoux ? : 'copie-simple' }}</td>
-                                <td>
+                                <td style="border: 1px solid black;" data-label="Demandeur">{{ $mariage->user ? $mariage->user->name : 'Demandeur inconnu' }}</td>
+                                <td style="border: 1px solid black;" data-label="Reference">{{ $mariage->reference}}</td>
+                                <td style="border: 1px solid black;" data-label="Nom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->nomEpoux ? : 'copie-simple' }}</td>
+                                <td style="border: 1px solid black;" data-label="Prénom de l'Époux" class="d-none-tablet d-none-small-pc">{{ $mariage->prenomEpoux ? : 'copie-simple' }}</td>
+                                <td style="border: 1px solid black;" data-label="Date de Naissance" class="d-none-tablet d-none-small-pc">{{ $mariage->dateNaissanceEpoux ? : 'copie-simple' }}</td>
+                                <td style="border: 1px solid black;" data-label="Lieu de Naissance" class="d-none-tablet d-none-small-pc">{{ $mariage->lieuNaissanceEpoux ? : 'copie-simple' }}</td>
+                                <td style="border: 1px solid black;">
                                     @if (pathinfo($mariage->pieceIdentite, PATHINFO_EXTENSION) === 'pdf')
                                         <a href="{{ asset('storage/' . $mariage->pieceIdentite) }}" target="_blank">
                                             <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -194,7 +194,7 @@
                                              onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                     @endif
                                 </td>
-                                <td>
+                                <td style="border: 1px solid black;"> 
                                     @if (pathinfo($mariage->extraitMariage, PATHINFO_EXTENSION) === 'pdf')
                                         <a href="{{ asset('storage/' . $mariage->extraitMariage) }}" target="_blank">
                                             <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -208,13 +208,13 @@
                                              onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                     @endif
                                 </td>
-                                <td data-label="Etat Actuel">
-                                    <span class="badge {{ $mariage->etat == 'en attente' ? 'badge-opacity-warning' : ($mariage->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}">
-                                        {{ $mariage->etat }}
-                                    </span>
+                                <td style="border: 1px solid black;">
+                                            <span class="badge {{ $mariage->etat == 'en attente' ? 'badge-opacity-warning' : ($mariage->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461" >
+                                                {{ $mariage->etat }}
+                                            </span>
                                 </td>
-                                <td data-label="Agent">{{ $mariage->agent ? $mariage->agent->name . ' ' . $mariage->agent->prenom : 'Non attribué' }}</td>
-                                <td data-label="Supprimer">
+                                <td style="border: 1px solid black;" data-label="Agent">{{ $mariage->agent ? $mariage->agent->name . ' ' . $mariage->agent->prenom : 'Non attribué' }}</td>
+                                <td style="border: 1px solid black;" data-label="Supprimer">
                                     @if ($mariage->etat !== 'réçu' && $mariage->etat !== 'terminé')
                                     <button onclick="confirmDelete('{{ route('mariage.delete', $mariage->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                     @else
@@ -224,11 +224,11 @@
                                     @endif
 
                                 </td>
-                                <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $mariage->choix_option }}</div></td>
+                                <td style="border: 1px solid black;"><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $mariage->choix_option }}</div></td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="10" class="text-center">Aucune déclaration trouvée</td>
+                                <td colspan="12" style="border: 1px solid black;" class="text-center">Aucune déclaration trouvée</td>
                             </tr>
                             @endforelse
                         </tbody>

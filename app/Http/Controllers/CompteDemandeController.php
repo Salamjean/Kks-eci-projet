@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\CompteDemande;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CompteDemandeController extends Controller
 {
     public function create(){
-        \Log::info('Create method called');
+        Log::info('Create method called');
         return view('compte_demande.create');
     }
     public function store(Request $request)
 {
-    \Log::info('Store method called', $request->all());
+    Log::info('Store method called', $request->all());
     $request->validate([
         'montant_timbre' => 'required|string',
         'montant_livraison' => 'required|string',

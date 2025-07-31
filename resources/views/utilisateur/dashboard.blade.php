@@ -74,7 +74,7 @@
                 <div class="col-12 col-xl-4">
                     <div class="d-flex justify-content-end">
                         <div class="dropdown">
-                            <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                            <button class="btn btn-sm btn-light bg-white " type="button">
                                 <i class="mdi mdi-home"></i> Mairie de {{ strtoupper(Auth::user()->commune) }}
                             </button>
                         </div>
@@ -88,10 +88,10 @@
     <div class="row">
         <div class="col-md-6 grid-margin stretch-card">
             <div class="card dashboard-card" style="height:100%">
-                <img src="{{ asset('assets/images/profiles/bande.jpg') }}" class="stats-image"  alt="Demandes">
+                <img src="{{ asset('assets/images/profiles/bande.jpg') }}" class="stats-image" alt="Demandes">
             </div>
         </div>
-        <div class="col-md-6 ">
+        <div class="col-md-6">
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <div class="card card-tale dashboard-card" style="background-color: #1a76d1">
@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 mb-4 stretch-card">
-                    <div class="card dashboard-card " style="background-color:" >
+                    <div class="card dashboard-card">
                         <div class="card-body text-center">
                             <p class="mb-3">Extrait de décès</p>
                             <h2 class="mb-2">{{ $decesCount + $decesdejaCount }}</h2>
@@ -112,7 +112,7 @@
                     </div>
                 </div>
                 <div class="col-md-6 mb-4 stretch-card">
-                    <div class="card card-light-danger dashboard-card " style="background-color:#008000">
+                    <div class="card card-light-danger dashboard-card" style="background-color:#008000">
                         <div class="card-body text-center">
                             <p class="mb-3">Extrait de mariage</p>
                             <h2 class="mb-2">{{ $mariageCount }}</h2>
@@ -120,7 +120,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 ">
+                <div class="col-md-6">
                     <div class="card dashboard-card" style="background-color: #ffa500">
                         <div class="card-body text-center">
                             <p class="mb-3 text-white">Total de demandes</p>
@@ -135,14 +135,30 @@
 
     <!-- Graphiques en dessous -->
     <div class="row">
-        <!-- Graphique en barres -->
-        <div class="col-lg-8 grid-margin stretch-card">
-            <div class="card dashboard-card">
-                <div class="card-body">
-                    <h4 class="chart-title">Répartition des demandes</h4>
-                    <p class="chart-subtitle">Nombre de demandes par type</p>
-                    <div class="chart-container">
-                        <canvas id="barChart"></canvas>
+        <!-- Liste des demandes récentes -->
+       <div class="col-lg-8 grid-margin stretch-card">
+            <div class="card card-rounded" style="height: 500px"> <!-- Supprimer la hauteur fixe ici -->
+                <div class="card-body d-flex flex-column p-0"> <!-- Ajout flex-column et padding 0 -->
+                    <div class="p-3 border-bottom"> <!-- Ajout de padding pour le titre -->
+                        <h4 class="card-title card-title-dash m-0">Demandes Récentes</h4>
+                    </div>
+                    <div class="list-wrapper flex-grow-1" style="overflow-y: auto;"> <!-- Flex-grow pour occuper l'espace -->
+                        <ul class="todo-list todo-list-rounded">
+                            @foreach($demandesRecente as $demande)
+                                <li class="d-block p-3 border-bottom"> <!-- Ajout de padding et bordure -->
+                                    <div class="form-check w-100 m-0">
+                                        <label class="form-check-label d-block">
+                                            <input class="checkbox" type="checkbox"> 
+                                            Demande d'extrait {{ $demande->type }} effectuée le {{ $demande->created_at->format('d M Y') }}<br>
+                                            Statut : <span style="color:#ff91a9">{{ $demande->etat }}</span>
+                                            <span class="badge {{ $demande->etat == 'en attente' ? 'badge-opacity-warning' : ($demande->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}">
+                                                {{ $demande->etat }}
+                                            </span>
+                                        </label>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -165,7 +181,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Données communes
+    // Données pour le graphique
     const labels = ['Naissances', 'Décès', 'Mariages'];
     const dataValues = [
         {{ intval($naissancesCount + $naissanceDCount) }},
@@ -182,65 +198,6 @@
         'rgba(153, 102, 255, 1)',
         'rgba(255, 99, 132, 1)'
     ];
-
-    // Graphique en barres
-    const barCtx = document.getElementById('barChart').getContext('2d');
-    const barChart = new Chart(barCtx, {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Nombre de demandes',
-                data: dataValues,
-                backgroundColor: backgroundColors,
-                borderColor: borderColors,
-                borderWidth: 2,
-                borderRadius: 6,
-                hoverBackgroundColor: [
-                    'rgba(75, 192, 192, 0.9)',
-                    'rgba(153, 102, 255, 0.9)',
-                    'rgba(255, 99, 132, 0.9)'
-                ],
-                hoverBorderWidth: 3
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        font: {
-                            size: 12
-                        }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.dataset.label}: ${context.raw}`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        stepSize: 1,
-                        callback: function(value) {
-                            if (Number.isInteger(value)) {
-                                return value;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    });
 
     // Graphique circulaire
     const pieCtx = document.getElementById('pieChart').getContext('2d');

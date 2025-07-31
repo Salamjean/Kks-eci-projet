@@ -4,8 +4,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ asset('js/cinetpayN.js') }}"></script> 
     <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
-    <script src="{{ asset('js/cinetpayN.js') }}"></script> {{-- Include cinetpay_naissance.js --}}
+
 
     <style>
         body {
@@ -13,6 +14,7 @@
             background-size: cover;
             background-position: center;
             min-height: 100vh;
+            
         }
 
         .conteneurInfo {
@@ -69,7 +71,6 @@
         }
 
         button {
-            width: 100%;
             padding: 1rem;
             font-size: 1rem;
             font-weight: bold;
@@ -78,7 +79,6 @@
             border-radius: 8px;
             color: #ffffff;
             cursor: pointer;
-            margin-top: 2rem;
         }
 
         button:hover {
@@ -165,6 +165,7 @@
                 margin-top: 100px;
             }
         }
+        
     </style>
 
     @if (Session::get('success'))
@@ -192,9 +193,8 @@
     @endif
 
     <div class="conteneurInfo">
-        <h1 class="titre">Demande d'acte de Naissance</h1>
-        <form id="naissanceForm" method="POST" action="{{ route('naissance.store') }}"
-              enctype="multipart/form-data">
+        <h1 class="titre">Demande d'extrait de naissance</h1>
+        <form id="naissanceForm" method="POST" action="{{ route('naissance.store') }}"enctype="multipart/form-data">
             @csrf
 
             <div class="form-group text-center">
@@ -218,7 +218,7 @@
                         <input type="text" id="nomDefunt" name="nomDefunt" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="dateNaiss">Nom et Prénom du Père</label>
+                        <label for="dateNaiss">Nom et Prénom de l'accompagnateur</label>
                         <input type="text" id="dateNaiss" name="dateNaiss" readonly>
                     </div>
                 </div>
@@ -308,8 +308,8 @@
             </div>
 
             <!-- Boutons -->
-            <button type="button" id="btnSuivant" onclick="validerFormulaire()">Suivant</button>
-            <button type="submit" id="btnValider" class="hidden">Valider</button>
+            <button type="button" id="btnSuivant" onclick="validerFormulaire()" style="width: 100%">Suivant</button>
+            <button type="submit" id="btnValider" class="hidden" style="width: 100%">Valider</button>
         </form>
     </div>
 

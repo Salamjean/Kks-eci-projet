@@ -83,33 +83,33 @@
                     <div class="tab-pane fade show active" id="completes" role="tabpanel" aria-labelledby="completes-tab">
                         <div class="table-responsive mt-4">
                             <table class="table select-table">
-                                <thead class="bg-navbar text-white">
+                                <thead class="bg-navbar text-white" style="border-collapse: collapse;">
                                     <tr class="text-center" style="font-size: 12px">
-                                        <th>|Demandeur|</th>
-                                        <th>|Réference|</th>
-                                        <th>|Hôpital|</th>
-                                        <th>|Nom du défunt|</th>
-                                        <th>|Date de Naissance|</th>
-                                        <th>|Date de Décès|</th>
-                                        <th>|Pièce du Défunt|</th>
-                                        <th>|Certificat de Déclaration|</th>
-                                        <th>|De par la Loi|</th>
-                                        <th>|Etat Actuel|</th>
-                                        <th>|Agent|</th>
-                                        <th>|Supprimer|</th>
-                                        <th>|Rétrait|</th>
+                                        <th style="border: 1px solid black;">Demandeur</th>
+                                        <th style="border: 1px solid black;">Réference</th>
+                                        <th style="border: 1px solid black;">Hôpital</th>
+                                        <th style="border: 1px solid black;">Nom du défunt</th>
+                                        <th style="border: 1px solid black;">Date de Naissance</th>
+                                        <th style="border: 1px solid black;">Date de Décès</th>
+                                        <th style="border: 1px solid black;">Pièce du Défunt</th>
+                                        <th style="border: 1px solid black;">Certificat de Déclaration</th>
+                                        <th style="border: 1px solid black;">De par la Loi</th>
+                                        <th style="border: 1px solid black;">Etat Actuel</th>
+                                        <th style="border: 1px solid black;">Agent</th>
+                                        <th style="border: 1px solid black;">Supprimer</th>
+                                        <th style="border: 1px solid black;">Rétrait</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($deces as $deceD)
                                     <tr class="text-center" style="font-size: 12px">
-                                        <td>{{ $deceD->user ? $deceD->user->name : 'Demandeur inconnu' }}</td>
-                                        <td>{{ $deceD->reference }}</td>
-                                        <td>{{ $deceD->nomHopital }}</td>
-                                        <td>{{ $deceD->nomDefunt }}</td>
-                                        <td>{{ $deceD->dateNaiss }}</td>
-                                        <td>{{ $deceD->dateDces }}</td>
-                                        <td>
+                                        <td style="border: 1px solid black;">{{ $deceD->user ? $deceD->user->name : 'Demandeur inconnu' }}</td>
+                                        <td style="border: 1px solid black;">{{ $deceD->reference }}</td>
+                                        <td style="border: 1px solid black;">{{ $deceD->nomHopital }}</td>
+                                        <td style="border: 1px solid black;">{{ $deceD->nomDefunt }}</td>
+                                        <td style="border: 1px solid black;">{{ $deceD->dateNaiss }}</td>
+                                        <td style="border: 1px solid black;">{{ $deceD->dateDces }}</td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($deceD->identiteDeclarant, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $deceD->identiteDeclarant) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -124,7 +124,7 @@
                                             @endif
                                         </td>
                                         
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($deceD->acteMariage, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $deceD->acteMariage) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -140,7 +140,7 @@
                                         </td>
                                         
                                                                                 
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($deceD->deParLaLoi, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $deceD->deParLaLoi) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -154,22 +154,22 @@
                                                      onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span class="badge {{ $deceD->etat == 'en attente' ? 'badge-opacity-warning' : ($deceD->etat == 'réçu' ?'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461" >{{ $deceD->etat }}</span>
                                         </td>
-                                        <td>{{ $deceD->agent ? $deceD->agent->name . ' ' . $deceD->agent->prenom : 'Non attribué' }}</td>
-                                        <td>
+                                        <td style="border: 1px solid black;">{{ $deceD->agent ? $deceD->agent->name . ' ' . $deceD->agent->prenom : 'Non attribué' }}</td>
+                                        <td style="border: 1px solid black;">
                                             @if ($deceD->etat !== 'réçu' && $deceD->etat !== 'terminé')
                                                 <button onclick="confirmDelete('{{ route('deces.delete', $deceD->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
                                                 <button  class="btn btn-danger btn-sm disabled-btn text-center" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
                                             @endif
                                         </td>
-                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $deceD->choix_option }}</div></td>
+                                        <td style="border: 1px solid black;"><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $deceD->choix_option }}</div></td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="11" class="text-center">Aucune demande effectuée</td>
+                                        <td colspan="13" class="text-center" style="border: 1px solid black;">Aucune demande effectuée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>
@@ -181,35 +181,35 @@
                     <div class="tab-pane fade" id="partielles" role="tabpanel" aria-labelledby="partielles-tab">
                         <div class="table-responsive mt-5">
                             <table class="table select-table">
-                                <thead class="bg-navbar text-white">
+                                <thead class="bg-navbar text-white" style="border-collapse: collapse;">
                                     <tr class="text-center" style="font-size: 12px">
-                                        <th>Demandeur |</th>
-                                        <th>Réference|</th>
-                                        <th>Nom et prénoms du défunt |</th>
-                                        <th>Numéro du registre |</th>
-                                        <th>Date du registre |</th>
-                                        <th>Numéro du CMU |</th>
-                                        <th>Certificat Médical de Décès |</th>
-                                        <th>CNI-défunt |</th>
-                                        <th>CNI-déclarant |</th>
-                                        <th>Document de Mariage |</th>
-                                        <th>Requisition de Police |</th>
-                                        <th>État Actuel |</th>
-                                        <th>Agent |</th>
-                                        <th>Supprimer |</th>
-                                        <th>Rétrait</th>
+                                        <th style="border: 1px solid black;">Demandeur</th>
+                                        <th style="border: 1px solid black;">Réference</th>
+                                        <th style="border: 1px solid black;">Nom et prénoms du défunt</th>
+                                        <th style="border: 1px solid black;">Numéro du registre</th>
+                                        <th style="border: 1px solid black;">Date du registre</th>
+                                        <th style="border: 1px solid black;">Numéro du CMU</th>
+                                        <th style="border: 1px solid black;">Certificat Médical de Décès</th>
+                                        <th style="border: 1px solid black;">CNI-défunt</th>
+                                        <th style="border: 1px solid black;">CNI-déclarant</th>
+                                        <th style="border: 1px solid black;">Document de Mariage</th>
+                                        <th style="border: 1px solid black;">Requisition de Police</th>
+                                        <th style="border: 1px solid black;">État Actuel</th>
+                                        <th style="border: 1px solid black;">Agent</th>
+                                        <th style="border: 1px solid black;">Supprimer</th>
+                                        <th style="border: 1px solid black;">Rétrait</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($decesdeja as $dece)
                                     <tr class="text-center" style="font-size: 12px">
-                                        <td>{{ $dece->user ? $dece->user->name : 'Demandeur inconnu' }}</td>
-                                        <td>{{ $dece->reference }}</td>
-                                        <td>{{ $dece->name }}</td>
-                                        <td>{{ $dece->numberR }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($dece->dateR)->format('d/m/Y') }}</td>
-                                        <td>{{ $dece->CMU }}</td>
-                                        <td>
+                                        <td style="border: 1px solid black;">{{ $dece->user ? $dece->user->name : 'Demandeur inconnu' }}</td>
+                                        <td style="border: 1px solid black;">{{ $dece->reference }}</td>
+                                        <td style="border: 1px solid black;">{{ $dece->name }}</td>
+                                        <td style="border: 1px solid black;">{{ $dece->numberR }}</td>
+                                        <td style="border: 1px solid black;">{{ \Carbon\Carbon::parse($dece->dateR)->format('d/m/Y') }}</td>
+                                        <td style="border: 1px solid black;">{{ $dece->CMU }}</td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($dece->pActe, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $dece->pActe) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -223,7 +223,7 @@
                                                      onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($dece->CNIdfnt, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $dece->CNIdfnt) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -236,7 +236,7 @@
                                                      onclick="showImage(this)">
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($dece->CNIdcl, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $dece->CNIdcl) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -250,7 +250,7 @@
                                                      onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($dece->documentMariage, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $dece->documentMariage) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -264,7 +264,7 @@
                                                      onerror="this.onerror=null; this.src='{{ asset('assets/images/profiles/bébé.jpg') }}'">
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             @if (pathinfo($dece->RequisPolice, PATHINFO_EXTENSION) === 'pdf')
                                                 <a href="{{ asset('storage/' . $dece->RequisPolice) }}" target="_blank">
                                                     <img src="{{ asset('assets/images/profiles/pdf.jpg') }}" alt="PDF" width="100" height="auto">
@@ -277,24 +277,24 @@
                                                      onclick="showImage(this)">
                                             @endif
                                         </td>
-                                        <td>
+                                        <td style="border: 1px solid black;">
                                             <span class="badge {{ $dece->etat == 'en attente' ? 'badge-opacity-warning' : ($dece->etat == 'réçu' ? 'badge-opacity-success' : 'badge-opacity-danger') }}" style="color:#d19461">
                                                 {{ ucfirst($dece->etat) }}
                                             </span>
                                         </td>
-                                        <td>{{ $dece->agent ? $dece->agent->name . ' ' . $dece->agent->prenom : 'Non attribué' }}</td>
-                                        <td>
+                                        <td style="border: 1px solid black;">{{ $dece->agent ? $dece->agent->name . ' ' . $dece->agent->prenom : 'Non attribué' }}</td>
+                                        <td style="border: 1px solid black;">
                                             @if ($dece->etat !== 'réçu' && $dece->etat !== 'terminé')
                                             <button onclick="confirmDelete('{{ route('deces.deletedeja', $dece->id) }}')" class="btn btn-sm text-center"><i class="fas fa-trash"></i></button>
                                             @else
                                                 <button  class="btn btn-danger btn-sm disabled-btn text-center" onclick="showDisabledMessage()"><i class="fas fa-trash"></i></button>
                                             @endif
                                         </td>
-                                        <td ><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $dece->choix_option }}</div></td>
+                                        <td style="border: 1px solid black;"><div class="bg-danger text-white" style="padding: 10px; font-weight:bold">{{ $dece->choix_option }}</div></td>
                                     </tr>
                                     @empty
                                     <tr>
-                                        <td colspan="13" class="text-center">Aucune déclaration trouvée</td>
+                                        <td colspan="15" class="text-center">Aucune déclaration trouvée</td>
                                     </tr>
                                     @endforelse
                                 </tbody>

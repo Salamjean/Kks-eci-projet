@@ -51,7 +51,6 @@
         }
 
         button {
-            width: 100%;
             padding: 1rem;
             font-size: 1rem;
             font-weight: bold;
@@ -60,7 +59,6 @@
             border-radius: 8px;
             color: #ffffff;
             cursor: pointer;
-            margin-top: 2rem;
         }
 
         button:hover {
@@ -145,7 +143,7 @@
     @endif
 
     <div class="conteneurInfo">
-        <h2>Demande d'acte de Mariage</h2>
+        <h2>Demande d'extrait de mariage</h2>
         <form id="demandeForm" method="POST" enctype="multipart/form-data" action="{{ route('mariage.store') }}">
             @csrf
 
@@ -236,7 +234,7 @@
                 </div>
             </div>
 
-            <button type="submit">Soumettre</button>
+            <button type="submit" style="width: 100%">Soumettre</button>
         </form>
     </div>
 

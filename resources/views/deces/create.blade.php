@@ -67,7 +67,6 @@
         }
 
         button {
-            width: 100%;
             padding: 1rem;
             font-size: 1rem;
             font-weight: bold;
@@ -76,7 +75,6 @@
             border-radius: 8px;
             color: #ffffff;
             cursor: pointer;
-            margin-top: 2rem;
         }
 
         button:hover {
@@ -183,7 +181,7 @@
     @endif
 
     <div class="conteneurInfo">
-        <h1 class="titre">Demande d'acte de Décès</h1>
+        <h1 class="titre">Demande d'extrait de décès</h1>
         <form method="POST" action="{{ route('deces.store') }}" enctype="multipart/form-data"
               id="declarationForm">
             @csrf
@@ -267,8 +265,8 @@
                 </div>
             </div>
 
-            <button type="button" id="btnSuivant" onclick="validerFormulaire()">Suivant</button>
-            <button type="submit" id="btnValider" class="hidden">Valider</button>
+            <button type="button" id="btnSuivant" onclick="validerFormulaire()" style="width: 100%">Suivant</button>
+            <button type="submit" id="btnValider" class="hidden" style="width: 100%">Valider</button>
         </form>
     </div>
 
