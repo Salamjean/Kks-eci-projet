@@ -11,6 +11,7 @@ use App\Models\Mariage;
 use App\Models\Naissance;
 use App\Models\NaissanceD;
 use App\Models\NaissHop;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,7 @@ class VendorDashboard extends Controller
     
     public function index(Request $request)
 {
+     Carbon::setLocale('fr');
     // Récupérer l'admin connecté
     $admin = Auth::guard('vendor')->user();
 

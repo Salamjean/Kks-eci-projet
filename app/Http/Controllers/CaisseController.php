@@ -15,6 +15,7 @@ use App\Models\ResetCodePasswordAgent;
 use App\Models\ResetCodePasswordCaisse;
 use App\Models\Vendor;
 use App\Notifications\SendEmailToCaisseAfterRegistrationNotification;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -201,11 +202,105 @@ class CaisseController extends Controller
     $demandesDeces = $demandesDeces1->concat($demandesDecesdeja);
     $demandesMariage = Mariage::where('commune', $admin->communeM)->latest()->take(5)->get();
 
+    // Récupérer les statistiques par période pour le graphique
+    $now = Carbon::now();
+    
+    // Données pour les 7 derniers jours (combinez Naissance + NaissanceD et Deces + Decesdeja)
+    $weeklyData = [
+        'naissances' => $this->combineStats(
+            $this->getWeeklyStats(Naissance::class, $admin->communeM),
+            $this->getWeeklyStats(NaissanceD::class, $admin->communeM)
+        ),
+        'deces' => $this->combineStats(
+            $this->getWeeklyStats(Deces::class, $admin->communeM),
+            $this->getWeeklyStats(Decesdeja::class, $admin->communeM)
+        ),
+        'mariages' => $this->getWeeklyStats(Mariage::class, $admin->communeM)
+    ];
+
+    // Données pour les 30 derniers jours
+    $monthlyData = [
+        'naissances' => $this->combineStats(
+            $this->getMonthlyStats(Naissance::class, $admin->communeM),
+            $this->getMonthlyStats(NaissanceD::class, $admin->communeM)
+        ),
+        'deces' => $this->combineStats(
+            $this->getMonthlyStats(Deces::class, $admin->communeM),
+            $this->getMonthlyStats(Decesdeja::class, $admin->communeM)
+        ),
+        'mariages' => $this->getMonthlyStats(Mariage::class, $admin->communeM)
+    ];
+
+    // Données pour les 12 derniers mois
+    $yearlyData = [
+        'naissances' => $this->combineStats(
+            $this->getYearlyStats(Naissance::class, $admin->communeM),
+            $this->getYearlyStats(NaissanceD::class, $admin->communeM)
+        ),
+        'deces' => $this->combineStats(
+            $this->getYearlyStats(Deces::class, $admin->communeM),
+            $this->getYearlyStats(Decesdeja::class, $admin->communeM)
+        ),
+        'mariages' => $this->getYearlyStats(Mariage::class, $admin->communeM)
+    ];
+
     return view('vendor.caisse.dashboard', compact(
         'alerts', 'total', 'soldeActuel', 'soldeDebite', 'soldeRestant',
         'decesnombre', 'decesdejanombre', 'naissancenombre', 'naissanceDnombre', 'mariagenombre',
-        'demandesNaissance', 'demandesDeces', 'demandesMariage', 'soldeCommune'
+        'demandesNaissance', 'demandesDeces', 'demandesMariage', 'soldeCommune',
+        'weeklyData', 'monthlyData', 'yearlyData'
     ));
+}
+
+private function combineStats(array $stats1, array $stats2)
+{
+    $combined = [];
+    foreach ($stats1 as $key => $value) {
+        $combined[$key] = $value + ($stats2[$key] ?? 0);
+    }
+    return $combined;
+}
+
+// Méthodes helper pour récupérer les statistiques
+private function getWeeklyStats($model, $commune)
+{
+    $data = [];
+    for ($i = 6; $i >= 0; $i--) {
+        $date = Carbon::now()->subDays($i);
+        $count = $model::where('commune', $commune)
+            ->whereDate('created_at', $date->toDateString())
+            ->count();
+        $data[] = $count;
+    }
+    return $data;
+}
+
+private function getMonthlyStats($model, $commune)
+{
+    $data = [];
+    for ($i = 29; $i >= 0; $i--) {
+        $date = Carbon::now()->subDays($i);
+        $count = $model::where('commune', $commune)
+            ->whereDate('created_at', $date->toDateString())
+            ->count();
+        $data[] = $count;
+    }
+    return $data;
+}
+
+private function getYearlyStats($model, $commune)
+{
+    $data = [];
+    for ($i = 11; $i >= 0; $i--) {
+        $start = Carbon::now()->subMonths($i)->startOfMonth();
+        $end = Carbon::now()->subMonths($i)->endOfMonth();
+        
+        $count = $model::where('commune', $commune)
+            ->whereBetween('created_at', [$start, $end])
+            ->count();
+        $data[] = $count;
+    }
+    return $data;
 }
 
      public function logout(){

@@ -250,7 +250,8 @@ public function agentindex(Request $request)
 
         $mariage->save();
         $phoneNumber = $user->indicatif . $user->contact;
-        $message = "Bonjour {$user->name}, votre demande d'extrait de mariage a bien été transmise à la mairie de {$user->commune}. Référence: {$mariage->reference}.";
+        $message = "Bonjour {$user->name}, votre demande d'extrait de mariage a bien été transmise à la mairie de {$user->commune}. Référence: {$mariage->reference}.
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
         $infobipService->sendSms($phoneNumber, $message);
 
         Alert::create([

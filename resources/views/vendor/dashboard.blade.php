@@ -2,243 +2,416 @@
 
 @section('content')
 
-<div class="container-fluid" id="container-wrapper">
-  <div class="d-sm-flex align-items-center justify-content-between mb-1">
-    <div class="font-semibold text-xl text-gray-800 text-center" style="display: flex; text-align:center; font-weight:bold; font-size:20px;">
-      Bienvenue sur la page de la mairie de {{ Auth::guard('vendor')->user()->name }}
-    </div>
-    <br>
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{{ route('vendor.dashboard') }}">Accueil</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-    </ol>
-  </div>
-
-  <div class="row mb-0">
-    <!-- Total Demande Extrait Naissance -->
-    <div class="col-xl-3 col-md-6 mb-2">
-      <div class="card h-100">
-        <div class="card-body text-center">
-          <div class="text-xs font-weight-bold text-uppercase mb-4">Total Demande Extrait Naissance</div>
-          <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $Naiss }}</div>
-          <i class="fas fa-user fa-2x text-primary"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Total Demande Extrait Décès -->
-    <div class="col-xl-3 col-md-6 mb-2">
-      <div class="card h-100">
-        <div class="card-body text-center">
-          <div class="text-xs font-weight-bold text-uppercase mb-4">Total Demande Extrait Décès</div>
-          <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $decesdash + $decesdejadash }}</div>
-          <i class="fas fa-school fa-2x text-success"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Total Demande Acte Mariage -->
-    <div class="col-xl-3 col-md-6 mb-2">
-      <div class="card h-100">
-        <div class="card-body text-center">
-          <div class="text-xs font-weight-bold text-uppercase mb-4">Total Demande Acte Mariage</div>
-          <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $mariagedash }}</div>
-          <i class="fas fa-ring fa-2x text-warning"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Total Demandes -->
-    <div class="col-xl-3 col-md-6 mb-2">
-      <div class="card h-100">
-        <div class="card-body text-center">
-          <div class="text-xs font-weight-bold text-uppercase mb-4">Total Demandes</div>
-          <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $totalData }}</div>
-          <i class="fas fa-list fa-2x text-danger"></i>
-        </div>
-      </div>
+<div class="container-fluid">
+  <!-- En-tête -->
+  <div class="dashboard-header">
+    <div class="welcome-message">
+      <h1>Tableau de Bord - Mairie de {{ Auth::guard('vendor')->user()->name }}</h1>
     </div>
   </div>
 
-  <div class="row mb-3">
-    <!-- Total déclaration de Naisshop -->
-    <div class="col-xl-4 col-md-6 mb-4">
-      <div class="card h-100">
-        <div class="card-body text-center">
-          <div class="text-xs font-weight-bold text-uppercase mb-4">Total Declarations Naissance</div>
-          <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $naisshopsdash }}</div>
-          <i class="fas fa-baby fa-2x text-info"></i>
+  <!-- Cartes de Résumé -->
+  <div class="summary-cards">
+    <div class="row">
+      <!-- Demandes -->
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card summary-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="card-title">Total Demandes</h6>
+                <h2 class="card-value">{{ $totalData }}</h2>
+              </div>
+              <div class="icon-circle bg-primary">
+                <i class="fas fa-file-alt text-white"></i>
+              </div>
+            </div>
+            <div class="progress mt-3">
+              <div class="progress-bar bg-primary" style="width: 100%"></div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Total déclaration de Deceshop -->
-    <div class="col-xl-4 col-md-6 mb-4">
-      <div class="card h-100">
-        <div class="card-body text-center">
-          <div class="text-xs font-weight-bold text-uppercase mb-4">Total Declarations Deces</div>
-          <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $deceshopsdash }}</div>
-          <i class="fas fa-school fa-2x text-warning"></i>
+      <!-- Naissances -->
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card summary-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="card-title">Extraits Naissance</h6>
+                <h2 class="card-value">{{ $Naiss }}</h2>
+              </div>
+              <div class="icon-circle bg-success">
+                <i class="fas fa-baby text-white"></i>
+              </div>
+            </div>
+            <div class="progress mt-3">
+              <div class="progress-bar bg-success" style="width: {{ $NaissP }}%"></div>
+            </div>
+            <small class="text-muted">{{ $NaissP }}% des demandes</small>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Total Declarations -->
-    <div class="col-xl-4 col-md-6 mb-4">
-      <div class="card h-100">
-        <div class="card-body text-center">
-          <div class="text-xs font-weight-bold text-uppercase mb-4">Total Declarations</div>
-          <div class="h2 mb-0 font-weight-bold text-gray-800">{{ $NaissHopTotal }}</div>
-          <i class="fas fa-list fa-2x text-danger"></i>
+      <!-- Décès -->
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card summary-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="card-title">Extraits Décès</h6>
+                <h2 class="card-value">{{ $decesdash + $decesdejadash }}</h2>
+              </div>
+              <div class="icon-circle bg-warning">
+                <i class="fas fa-cross text-white"></i>
+              </div>
+            </div>
+            <div class="progress mt-3">
+              <div class="progress-bar bg-warning" style="width: {{ $DecesP }}%"></div>
+            </div>
+            <small class="text-muted">{{ $DecesP }}% des demandes</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mariages -->
+      <div class="col-md-6 col-lg-3 mb-4">
+        <div class="card summary-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="card-title">Actes Mariage</h6>
+                <h2 class="card-value">{{ $mariagedash }}</h2>
+              </div>
+              <div class="icon-circle bg-danger">
+                <i class="fas fa-ring text-white"></i>
+              </div>
+            </div>
+            <div class="progress mt-3">
+              <div class="progress-bar bg-danger" style="width: {{ $mariagePercentage }}%"></div>
+            </div>
+            <small class="text-muted">{{ $mariagePercentage }}% des demandes</small>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="row mb-3">
+  <!-- Deuxième ligne de cartes -->
+  <div class="summary-cards">
+    <div class="row">
+      <!-- Déclarations -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card summary-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="card-title">Total Déclarations</h6>
+                <h2 class="card-value">{{ $NaissHopTotal }}</h2>
+              </div>
+              <div class="icon-circle bg-info">
+                <i class="fas fa-clipboard-list text-white"></i>
+              </div>
+            </div>
+            <div class="progress mt-3">
+              <div class="progress-bar bg-info" style="width: 100%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Déclarations Naissance -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card summary-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="card-title">Déclarations Naissance</h6>
+                <h2 class="card-value">{{ $naisshopsdash }}</h2>
+              </div>
+              <div class="icon-circle bg-purple">
+                <i class="fas fa-baby-carriage text-white"></i>
+              </div>
+            </div>
+            <div class="progress mt-3">
+              <div class="progress-bar bg-purple" style="width: {{ $naisshopPercentage }}%"></div>
+            </div>
+            <small class="text-muted">{{ $naisshopPercentage }}% des déclarations</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Déclarations Décès -->
+      <div class="col-md-6 col-lg-4 mb-4">
+        <div class="card summary-card">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h6 class="card-title">Déclarations Décès</h6>
+                <h2 class="card-value">{{ $deceshopsdash }}</h2>
+              </div>
+              <div class="icon-circle bg-orange">
+                <i class="fas fa-book-dead text-white"></i>
+              </div>
+            </div>
+            <div class="progress mt-3">
+              <div class="progress-bar bg-orange" style="width: {{ $deceshopPercentage }}%"></div>
+            </div>
+            <small class="text-muted">{{ $deceshopPercentage }}% des déclarations</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphiques -->
+  <div class="row">
     <!-- Taux des Demandes -->
-    <div class="col-xl-12 col-lg-5">
-      <div class="card mb-2">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Taux des Demandes</h6>
-          <form method="GET" action="{{ route('vendor.dashboard') }}" class="form-inline">
-            <div class="form-group mr-2">
-              <select name="month" class="form-control">
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Répartition des Demandes</h5>
+          <div class="filter-section">
+            <form method="GET" action="{{ route('vendor.dashboard') }}" class="form-inline">
+              <select name="month" class="form-control form-control-sm mr-2">
                 @for ($m = 1; $m <= 12; $m++)
                   <option value="{{ $m }}" {{ $m == $selectedMonth ? 'selected' : '' }}>
                     {{ date('F', mktime(0, 0, 0, $m, 1)) }}
                   </option>
                 @endfor
               </select>
-            </div>
-            <div class="form-group mr-2">
-              <select name="year" class="form-control">
+              <select name="year" class="form-control form-control-sm mr-2">
                 @for ($y = date('Y'); $y >= date('Y') - 5; $y--)
                   <option value="{{ $y }}" {{ $y == $selectedYear ? 'selected' : '' }}>
                     {{ $y }}
                   </option>
                 @endfor
               </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Filtrer</button>
-          </form>
+              <button type="submit" class="btn btn-sm btn-primary">Appliquer</button>
+            </form>
+          </div>
         </div>
         <div class="card-body">
-          <div class="mb-2">
-            <div class="small text-gray-500">Naissances
-              <div class="small float-right"><b>{{ $naissances->count() + $naissancesD->count() }} sur {{ $totalData }} éléments</b></div>
+          <canvas id="demandesChart" height="130"></canvas>
+          <div class="chart-legend mt-3">
+            <div class="legend-item">
+              <span class="legend-color bg-success"></span>
+              <span>Naissances ({{ $naissances->count() + $naissancesD->count() }})</span>
             </div>
-            <div class="progress" style="height: 12px;">
-              <div class="progress-bar bg-warning" role="progressbar" style="width: {{ $NaissP }}%;" aria-valuenow="{{ $Naiss }}" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="legend-item">
+              <span class="legend-color bg-warning"></span>
+              <span>Décès ({{ $deces->count() + $decesdeja->count() }})</span>
             </div>
-          </div>
-          <div class="mb-3">
-            <div class="small text-gray-500">Décès
-              <div class="small float-right"><b>{{ $deces->count() + $decesdeja->count() }} sur {{ $totalData }} éléments</b></div>
-            </div>
-            <div class="progress" style="height: 12px;">
-              <div class="progress-bar bg-success" role="progressbar" style="width: {{ $DecesP }}%;" aria-valuenow="{{ $Dece }}" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <div class="small text-gray-500">Mariages
-              <div class="small float-right"><b>{{ $mariages->count() }} sur {{ $totalData }} éléments</b></div>
-            </div>
-            <div class="progress" style="height: 12px;">
-              <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $mariagePercentage }}%;" aria-valuenow="{{ $mariagePercentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="legend-item">
+              <span class="legend-color bg-danger"></span>
+              <span>Mariages ({{ $mariages->count() }})</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="row mb-3">
     <!-- Taux des Déclarations -->
-    <div class="col-xl-12 col-lg-5">
-      <div class="card mb-2">
-        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-          <h6 class="m-0 font-weight-bold text-primary">Taux des Déclarations</h6>
-          <form method="GET" action="{{ route('vendor.dashboard') }}" class="form-inline">
-            <div class="form-group mr-2">
-              <select name="month_hops" class="form-control">
+    <div class="col-lg-6 mb-4">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="card-title">Répartition des Déclarations</h5>
+          <div class="filter-section">
+            <form method="GET" action="{{ route('vendor.dashboard') }}" class="form-inline">
+              <select name="month_hops" class="form-control form-control-sm mr-2">
                 @for ($m = 1; $m <= 12; $m++)
                   <option value="{{ $m }}" {{ $m == $selectedMonthHops ? 'selected' : '' }}>
                     {{ date('F', mktime(0, 0, 0, $m, 1)) }}
                   </option>
                 @endfor
               </select>
-            </div>
-            <div class="form-group mr-2">
-              <select name="year_hops" class="form-control">
+              <select name="year_hops" class="form-control form-control-sm mr-2">
                 @for ($y = date('Y'); $y >= date('Y') - 5; $y--)
                   <option value="{{ $y }}" {{ $y == $selectedYearHops ? 'selected' : '' }}>
                     {{ $y }}
                   </option>
                 @endfor
               </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Filtrer</button>
-          </form>
+              <button type="submit" class="btn btn-sm btn-primary">Appliquer</button>
+            </form>
+          </div>
         </div>
         <div class="card-body">
-          <div class="mb-2">
-            <div class="small text-gray-500">Naissances
-              <div class="small float-right"><b>{{ $naisshopsdash }} sur {{ $totalDataHops }} éléments</b></div>
+          <canvas id="declarationsChart" height="130"></canvas>
+          <div class="chart-legend mt-3">
+            <div class="legend-item">
+              <span class="legend-color bg-purple"></span>
+              <span>Naissances ({{ $naisshopsdash }})</span>
             </div>
-            <div class="progress" style="height: 12px;">
-              <div class="progress-bar bg-info" role="progressbar" style="width: {{ $naisshopPercentage }}%;" aria-valuenow="{{ $naisshopPercentage }}" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <div class="small text-gray-500">Décès
-              <div class="small float-right"><b>{{ $deceshopsdash }} sur {{ $totalDataHops }} éléments</b></div>
-            </div>
-            <div class="progress" style="height: 12px;">
-              <div class="progress-bar bg-danger" role="progressbar" style="width: {{ $deceshopPercentage }}%;" aria-valuenow="{{ $deceshopPercentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="legend-item">
+              <span class="legend-color bg-orange"></span>
+              <span>Décès ({{ $deceshopsdash }})</span>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 
+
+<!-- Styles personnalisés -->
+<style>
+  .dashboard-header {
+    padding: 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .welcome-message h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+  
+  .summary-card {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+  
+  .summary-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-title {
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .card-value {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 5px 0;
+  }
+  
+  .icon-circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+  
+  .bg-purple {
+    background-color: #6f42c1;
+  }
+  
+  .bg-orange {
+    background-color: #fd7e14;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .filter-section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+  }
+  
+  .legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+    margin-right: 5px;
+  }
+  
+  .progress {
+    height: 6px;
+    border-radius: 3px;
+  }
+</style>
+
+<!-- Scripts pour les graphiques -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Fonction pour mettre à jour l'état du message
-    function updateStatusMessage(status) {
-      const statusElement = document.getElementById('status-message');
-      if (statusElement) {
-        statusElement.textContent = status;
+    // Graphique des demandes
+    const demandesCtx = document.getElementById('demandesChart').getContext('2d');
+    const demandesChart = new Chart(demandesCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Naissances', 'Décès', 'Mariages'],
+        datasets: [{
+          data: [
+            {{ $naissances->count() + $naissancesD->count() }},
+            {{ $deces->count() + $decesdeja->count() }},
+            {{ $mariages->count() }}
+          ],
+          backgroundColor: [
+            '#28a745',
+            '#ffc107',
+            '#dc3545'
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        cutout: '70%',
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
       }
-    }
-
-    // Appel AJAX pour vérifier et mettre à jour le statut
-    function fetchDemandeStatus(demandeId) {
-      fetch(`/demande-status/${demandeId}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.status) {
-            updateStatusMessage(data.status);
+    });
+    
+    // Graphique des déclarations
+    const declarationsCtx = document.getElementById('declarationsChart').getContext('2d');
+    const declarationsChart = new Chart(declarationsCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Naissances', 'Décès'],
+        datasets: [{
+          data: [
+            {{ $naisshopsdash }},
+            {{ $deceshopsdash }}
+          ],
+          backgroundColor: [
+            '#6f42c1',
+            '#fd7e14'
+          ],
+          borderWidth: 0
+        }]
+      },
+      options: {
+        cutout: '70%',
+        plugins: {
+          legend: {
+            display: false
           }
-        })
-        .catch(error => console.error('Erreur:', error));
-    }
-
-    // Supposons que vous ayez un moyen de récupérer l'ID de la demande
-    const demandeId = 123; // Id de la demande actuelle
-    fetchDemandeStatus(demandeId);
-
-    // Exécution lorsque l'admin ouvre la demande (simulé ici)
-    document.getElementById('open-demande-btn').addEventListener('click', function() {
-      fetch(`/update-demande-status/${demandeId}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.status) {
-            updateStatusMessage(data.status); // Mettre à jour le message
-          }
-        });
+        }
+      }
     });
   });
 </script>

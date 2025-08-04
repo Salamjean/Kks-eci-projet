@@ -26,7 +26,7 @@
       box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
       padding: 10px 40px;
       width: 100%;
-      max-width: 600px;
+      max-width: 400px;
       transition: transform 0.2s;
   }
 
