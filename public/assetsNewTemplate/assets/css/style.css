@@ -24052,7 +24052,6 @@ table.dataTable tbody td.select-checkbox:after {
   display: flex;
   -webkit-align-items: center;
   align-items: center;
-  white-space: nowrap;
   padding: 0.8125rem 1.937rem 0.8125rem 1rem;
   color: #6C7383;
   border-radius: 8px;
@@ -24075,9 +24074,11 @@ table.dataTable tbody td.select-checkbox:after {
 .rtl .sidebar .nav .nav-item .nav-link i.menu-icon {
   margin-left: 2rem;
   margin-right: 0;
+  
 }
 .sidebar .nav .nav-item .nav-link i.menu-icon:before {
   vertical-align: middle;
+  
 }
 .sidebar .nav .nav-item .nav-link i.menu-arrow {
   -webkit-font-smoothing: antialiased;
@@ -24108,6 +24109,7 @@ table.dataTable tbody td.select-checkbox:after {
   display: inline-block;
   font-size: 0.875rem;
   line-height: 1;
+  list-style: none;
   vertical-align: middle;
 }
 .sidebar .nav .nav-item .nav-link .badge {

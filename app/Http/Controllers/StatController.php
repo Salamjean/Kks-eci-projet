@@ -127,7 +127,7 @@ class StatController extends Controller
 
     public function superindex(Request $request)
     {
-        $sousadmin = Auth::guard('doctor')->user();
+        $sousadmin = Auth::guard('doctor')->user();http://127.0.0.1:8000/hopital/dashboard#
         $communeAdmin = $sousadmin->nomHop;
         $sousAdminId = $sousadmin->id;
 

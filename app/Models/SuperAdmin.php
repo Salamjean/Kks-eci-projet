@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 class SuperAdmin extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+     protected $guard = 'super_admin';
     protected $fillable = [
         'name',
         'email',
