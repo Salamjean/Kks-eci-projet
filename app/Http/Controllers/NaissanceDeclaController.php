@@ -108,8 +108,7 @@ class NaissanceDeclaController extends Controller
 
     // Envoi du SMS
     $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence : {$naissanced->reference}.
-
-    Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
     $smsResult = $infobipService->sendSms($phoneNumber, $message);
 
     // Log du résultat de l'envoi du SMS

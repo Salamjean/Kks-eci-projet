@@ -251,7 +251,8 @@ class DecesController extends Controller
 
         $deces->save();
         $phoneNumber = $user->indicatif . $user->contact;
-        $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$deces->reference}.";
+        $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$deces->reference}
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
         $infobipService->sendSms($phoneNumber, $message);
         Alert::create([
             'type' => 'deces',
@@ -375,7 +376,8 @@ class DecesController extends Controller
 
         $decesdeja->save();
         $phoneNumber = $user->indicatif . $user->contact;
-        $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$decesdeja->reference}.";
+        $message = "Bonjour {$user->name}, votre demande d'extrait de décès a bien été transmise à la mairie de {$user->commune}. Référence: {$decesdeja->reference}.
+Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
         $infobipService->sendSms($phoneNumber, $message);
 
         return redirect()->route('decesutilisateur.index')->with('success', 'Demande envoyée avec succès.');
