@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Connexion</title>
+  <title>Réinitialisation du mot de passe</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
@@ -32,7 +32,7 @@
       padding: 20px;
     }
 
-    .login-container {
+    .reset-container {
       width: 100%;
       max-width: 450px;
       background: white;
@@ -71,7 +71,7 @@
       transform: scale(1.1);
     }
 
-    .login-header {
+    .reset-header {
       background-color: #ffa500;
       color: white;
       padding: 50px;
@@ -79,18 +79,18 @@
       position: relative;
     }
 
-    .login-header h1 {
+    .reset-header h1 {
       font-size: 28px;
       font-weight: 600;
       margin-bottom: 10px;
     }
 
-    .login-header p {
+    .reset-header p {
       font-size: 14px;
       opacity: 0.9;
     }
 
-    .login-body {
+    .reset-body {
       padding: 30px;
     }
 
@@ -132,50 +132,7 @@
       font-size: 18px;
     }
 
-    .password-toggle {
-      position: absolute;
-      right: 15px;
-      top: 40px;
-      color: #777;
-      font-size: 18px;
-      cursor: pointer;
-      transition: color 0.3s;
-    }
-
-    .password-toggle:hover {
-      color: #059652;
-    }
-
-    .options {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-      font-size: 14px;
-    }
-
-    .remember-me {
-      display: flex;
-      align-items: center;
-    }
-
-    .remember-me input {
-      margin-right: 8px;
-    }
-
-    .forgot-password a {
-      color: #059652;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.3s;
-    }
-
-    .forgot-password a:hover {
-      color: #037a3f;
-      text-decoration: underline;
-    }
-
-    .login-btn {
+    .reset-btn {
       width: 100%;
       padding: 14px;
       background-color: #008000;
@@ -189,12 +146,12 @@
       box-shadow: 0 4px 15px rgba(5, 150, 82, 0.3);
     }
 
-    .login-btn:hover {
+    .reset-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(5, 150, 82, 0.4);
     }
 
-    .login-btn:active {
+    .reset-btn:active {
       transform: translateY(0);
     }
 
@@ -219,15 +176,15 @@
     }
 
     @media (max-width: 480px) {
-      .login-container {
+      .reset-container {
         border-radius: 12px;
       }
       
-      .login-header {
+      .reset-header {
         padding: 25px;
       }
       
-      .login-body {
+      .reset-body {
         padding: 25px;
       }
       
@@ -235,7 +192,7 @@
         padding: 12px 40px 12px 40px;
       }
       
-      .input-icon, .password-toggle {
+      .input-icon {
         font-size: 16px;
         top: 37px;
       }
@@ -243,19 +200,25 @@
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <!-- Bouton de retour à l'accueil -->
+  <div class="reset-container">
     <button class="home-btn" onclick="window.location.href='{{ route('general') }}'">
       <i class="fas fa-home"></i>
     </button>
     
-    <div class="login-header">
+    <div class="reset-header">
       <img src="{{asset('assets4/img/E-ci.jpg')}}" style="height: 50%; width:25%; border-radius:30%" alt="">
-      <p>Connectez-vous pour accéder à votre compte</p>
+      <h1>Mot de passe oublié</h1>
+      <p>Entrez votre email pour recevoir un lien de réinitialisation</p>
     </div>
     
-    <div class="login-body">
-      <form method="POST" action="{{ route('login') }}">
+    <div class="reset-body">
+      @if (session('status'))
+        <div class="alert alert-success" role="alert">
+          {{ session('status') }}
+        </div>
+      @endif
+
+      <form method="POST" action="{{ route('password.email') }}">
         @csrf
         
         <div class="input-group">
@@ -267,97 +230,50 @@
           </div>
         </div>
         
-        <div class="input-group">
-          <label for="password">Mot de passe</label>
-          <i class="fas fa-lock input-icon"></i>
-          <input type="password" id="password" name="password" placeholder="••••••••" required>
-          <i class="fas fa-eye password-toggle" id="togglePassword"></i>
-          <div class="error-message" id="password-error">
-            @error('password') {{ $message }} @enderror
-          </div>
-        </div>
-        
-        <div class="options">
-          <div class="remember-me">
-            <input type="checkbox" id="remember" name="remember">
-            <label for="remember">Se souvenir de moi</label>
-          </div>
-          {{-- <div class="forgot-password">
-            <a href="{{ route('password.request') }}">Mot de passe oublié ?</a>
-          </div> --}}
-        </div>
-        
-        <button type="submit" class="login-btn">Se connecter</button>
+        <button type="submit" class="reset-btn">Envoyer le lien de réinitialisation</button>
       </form>
       
       <div class="footer">
-        Vous n'avez pas de compte ? <a href="{{ route('register') }}">S'inscrire</a>
+        <a href="{{ route('login') }}">Retour à la connexion</a>
       </div>
     </div>
   </div>
 
   <script>
-    // Afficher les messages d'erreur s'ils existent
     document.addEventListener('DOMContentLoaded', function() {
       const emailError = document.getElementById('email-error');
-      const passwordError = document.getElementById('password-error');
       
       if(emailError.textContent.trim() !== '') {
         emailError.style.display = 'block';
       }
       
-      if(passwordError.textContent.trim() !== '') {
-        passwordError.style.display = 'block';
-      }
-      
       // Animation des champs avec erreur
-      const inputs = document.querySelectorAll('input');
-      inputs.forEach(input => {
-        input.addEventListener('input', function() {
-          if(this.id === 'email' && emailError.style.display === 'block') {
-            emailError.style.display = 'none';
-          }
-          if(this.id === 'password' && passwordError.style.display === 'block') {
-            passwordError.style.display = 'none';
-          }
-        });
+      const emailInput = document.getElementById('email');
+      emailInput.addEventListener('input', function() {
+        if(emailError.style.display === 'block') {
+          emailError.style.display = 'none';
+        }
       });
+});
+      // SweetAlert notifications
+      @if (Session::has('status'))
+          Swal.fire({
+              icon: 'success',
+              title: 'Succès',
+              text: '{{ Session::get('status') }}',
+              confirmButtonText: 'OK',
+          });
+      @endif
 
-      // Fonctionnalité d'affichage/masquage du mot de passe
-      const togglePassword = document.getElementById('togglePassword');
-      const password = document.getElementById('password');
-      
-      togglePassword.addEventListener('click', function() {
-        // Change le type d'input
-        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-        password.setAttribute('type', type);
-        
-        // Change l'icône
-        this.classList.toggle('fa-eye');
-        this.classList.toggle('fa-eye-slash');
-      });
-    });
-
-
-    // SweetAlert notifications
-            @if (Session::has('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Succès',
-                    text: '{{ Session::get('success') }}',
-                    confirmButtonText: 'OK',
-                });
-            @endif
-
-            @if (Session::has('error'))
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erreur',
-                    text: '{{ Session::get('error') }}',
-                    confirmButtonText: 'OK',
-                    
-                });
-            @endif
+      @if ($errors->any())
+          Swal.fire({
+              icon: 'error',
+              title: 'Erreur',
+              text: '{{ $errors->first() }}',
+              confirmButtonText: 'OK',
+          });
+      @endif
+    
   </script>
 </body>
 </html>

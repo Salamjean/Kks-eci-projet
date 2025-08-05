@@ -1,86 +1,222 @@
 @extends('pages.layouts.template')
 
 @section('content')
-  <div class="main-wrapper">
-    <section class="error-page section content" style="
-      background-image: url('{{ asset('assets4/img/decessur.jpg') }}');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      position: relative;
-      color: black;
-      min-height: 100vh; /* Occupe toute la hauteur de la fenêtre */
-      display: flex; /* Active le mode flexbox */
-      flex-direction: column; /* Organise les éléments en colonne */
-      justify-content: center; /* Centre le contenu verticalement */
-      ">
-      <div style="
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(255, 255, 255, 0.7);">
-      </div>
-      <div class="container" style="position: relative; z-index: 1;">
-        <div class="row">
-          <div class="col-lg-10 offset-lg-1 col-12">
-            <div class="error-inner">
-              <br><br><br>
-              <h1 class="responsive-title">Extrait avec certificat<span>Vous devez disposer d'un certificat médical de décès</span></h1>
-              <p style="color:black; font-size:22px">Pour faire une demande d'extrait de décès, un certificat médical de décès est nécessaire.
-                Un certificat qui est délivré par l'hôpital, Merci de vous assurer que vous disposez de ce
-                document avant de décider de faire votre demande.</p>
-              <p style="color:black; font-size:22px">Pour une demande d'extrait de décès avec le certificat médical de décès, <br><br>
-                il faut :
-              <li style="font-size:22px">Joindre la pièce d'identité du défunt</li>
-              <li style="font-size:22px">Joindre le certificat médical de décès</li>
-              <li style="font-size:22px">Joindre le de par la loi (facultatif)</li>
-              <li style="font-size:22px">Timbre (500 F CFA /Copie)</li>
-              </p>
-              <div class="get-quote">
-                <a href="{{ route('dashboard') }}" class="btn"
-                  style="background-color: green; padding:25px; width:300px">Faites votre
-                  demande</a>
-              </div>
-            </div>
-          </div>
+<div class="main-wrapper">
+  <section class="document-request-section" style="
+    background-image: url('{{ asset('assets4/img/decessur.jpg') }}');
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 60px 0;
+    position: relative;">
+    
+    <!-- Overlay avec opacité très forte (0.95) -->
+    <div class="overlay" style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(3px);">
+    </div>
+    
+    <div class="container" style="position: relative; z-index: 1;">
+      <div class="request-card bg-white rounded-lg shadow p-4 p-md-5" style="
+        border-left: 5px solid #28a745;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        ">
+        
+        <!-- En-tête -->
+        <div class="request-header text-center mb-5">
+          <h1 class="request-title mb-3" style="font-size: 2.8rem; font-weight: 700; color: #333; line-height: 1.2;">
+            Extrait avec certificat
+          </h1>
+          <p class="request-subtitle" style="font-size: 1.3rem; color: #555;">
+            Vous devez disposer d'un certificat médical de décès
+          </p>
         </div>
+        
+        <!-- Description -->
+        <div class="request-description mb-5">
+          <p style="font-size: 1.15rem; line-height: 1.7; color: #333;">
+            Pour faire une demande d'extrait de décès, un certificat médical de décès est nécessaire.
+            Ce document officiel est délivré par l'hôpital ou le médecin ayant constaté le décès.
+            Veuillez vous assurer que vous disposez de ce document avant d'effectuer votre demande.
+          </p>
+        </div>
+        
+        <div class="alert alert-info mb-5" style="
+          background-color: #f8f9fa;
+          border-left: 4px solid #17a2b8;
+          padding: 15px;
+          border-radius: 4px;
+          font-size: 1.1rem;
+          ">
+          <i class="fas fa-info-circle mr-2"></i>
+          <strong>Important :</strong> Le certificat médical de décès est obligatoire pour cette démarche.
+        </div>
+        
+        <!-- Procédure -->
+        <div class="request-procedure mb-5">
+          <h3 class="procedure-title mb-4" style="color: #28a745; font-weight: 600;">
+            <i class="fas fa-list-check mr-2"></i>Documents requis
+          </h3>
+          
+          <p class="mb-4" style="font-size: 1.15rem; color: #333;">
+            Pour une demande d'extrait de décès, vous devez fournir :
+          </p>
+          
+          <ul class="requirements-list pl-0" style="list-style: none;">
+            <li class="mb-3 d-flex align-items-start">
+              <span class="badge badge-success mr-3 p-2" style="
+                min-width: 32px; 
+                height: 32px; 
+                border-radius: 50%; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                background-color: #28a745;
+                color: white;
+                ">
+                <i class="fas fa-check"></i>
+              </span>
+              <span style="flex: 1; font-weight: 500; font-size: 1.1rem;">Pièce d'identité du défunt</span>
+            </li>
+            <li class="mb-3 d-flex align-items-start">
+              <span class="badge badge-success mr-3 p-2" style="
+                min-width: 32px; 
+                height: 32px; 
+                border-radius: 50%; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                background-color: #28a745;
+                color: white;
+                ">
+                <i class="fas fa-check"></i>
+              </span>
+              <span style="flex: 1; font-weight: 500; font-size: 1.1rem;">Certificat médical de décès original</span>
+            </li>
+            <li class="mb-3 d-flex align-items-start">
+              <span class="badge badge-success mr-3 p-2" style="
+                min-width: 32px; 
+                height: 32px; 
+                border-radius: 50%; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                background-color: #28a745;
+                color: white;
+                ">
+                <i class="fas fa-check"></i>
+              </span>
+              <span style="flex: 1; font-weight: 500; font-size: 1.1rem;">Acte de décès (facultatif)</span>
+            </li>
+            <li class="d-flex align-items-start">
+              <span class="badge badge-success mr-3 p-2" style="
+                min-width: 32px; 
+                height: 32px; 
+                border-radius: 50%; 
+                display: flex; 
+                align-items: center; 
+                justify-content: center;
+                background-color: #28a745;
+                color: white;
+                ">
+                <i class="fas fa-check"></i>
+              </span>
+              <span style="flex: 1; font-weight: 500; font-size: 1.1rem;">Timbre fiscal (500 FCFA par copie)</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- CTA -->
+        <div class="request-cta text-center mt-5">
+          <a href="{{ route('dashboard') }}" class="btn btn-lg py-3 px-5 text-white" style="font-size: 1.1rem; font-weight: 600; ">
+            <i class="fas fa-paper-plane mr-2"></i>Démarrer la demande
+          </a>
+        </div>
+        
       </div>
-    </section>
-  </div>
-  <style>
-    /* Styles par défaut (grand écran) */
-    .responsive-title {
-      font-size: 100px !important;
-      color: black;
-      text-align: center;
+    </div>
+  </section>
+</div>
+
+<style>
+  /* Styles de base */
+  .request-card {
+    transition: all 0.3s ease;
+    background-color: white;
+  }
+  
+  .request-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+  }
+  
+  .requirements-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+  }
+  
+  .requirements-list li:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .requirements-list li:last-child {
+    border-bottom: none;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .request-title {
+      font-size: 2.2rem !important;
     }
-    /* Media query pour les écrans de taille tablette (ex: 768px et moins) */
-    @media (max-width: 998px) {
-      .responsive-title {
-        font-size: 50px !important;
-        margin-top: 50px !important;
-      }
-      .responsive-title span{
-        margin-top: 10px !important;
-      }
-      p, li{
-        font-size: 16px!important;
-      }
+    
+    .request-subtitle {
+      font-size: 1.1rem !important;
     }
-    /* Media query pour les écrans de taille mobile (ex: 480px et moins) */
-    @media (max-width: 480px) {
-      .responsive-title {
-        font-size: 40px !important;
-        margin-top: 50px !important;
-      }
-      .responsive-title span{
-        margin-top: 10px !important;
-      }
-      p, li{
-        font-size: 16px!important;
-      }
+    
+    .request-card {
+      padding: 2.5rem !important;
     }
-  </style>
+    
+    p, li span {
+      font-size: 1rem !important;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .request-title {
+      font-size: 1.8rem !important;
+    }
+    
+    .request-card {
+      padding: 2rem !important;
+    }
+    
+    .btn-lg {
+      width: 100% !important;
+      padding: 15px !important;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .request-title {
+      font-size: 1.6rem !important;
+    }
+    
+    .alert {
+      font-size: 0.95rem !important;
+    }
+    
+    .requirements-list li {
+      padding: 10px 0;
+    }
+  }
+</style>
 @endsection
