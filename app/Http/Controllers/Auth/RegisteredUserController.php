@@ -42,7 +42,7 @@ class RegisteredUserController extends Controller
             'commune' => 'required',
             'indicatif' => 'required',
             'contact' => 'required',
-            'CMU' => 'required',
+            'CMU' => 'nullable',
             'password' => [
                 'required',
                 'min:8',
@@ -66,7 +66,6 @@ class RegisteredUserController extends Controller
             'indicatif.required' => 'indicatif du pays est obligatoire.',
             'contact.required' => 'contact est obligatoire.',
             'password.regex' => 'Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, un chiffre et un caractère spécial.', // Message d'erreur personnalisé pour regex
-            'CMU.required' => 'Le numéro CMU est obligatoire.',
             'profile_picture.image' => 'Le fichier doit être une image.',
             'profile_picture.mimes' => 'L\'image doit être au format jpeg, png, jpg, gif ou svg.',
             'profile_picture.max' => 'L\'image ne doit pas dépasser 2048 KB.',

@@ -295,7 +295,7 @@
             <div class="input-group">
               <label for="name">Nom</label>
               <i class="fas fa-user input-icon"></i>
-              <input type="text" id="name" name="name" placeholder="Votre nom" required>
+              <input type="text" id="name" name="name" placeholder="Votre nom" >
               <div class="error-message" id="name-error">
                 @error('name') {{ $message }} @enderror
               </div>
@@ -304,7 +304,7 @@
             <div class="input-group">
               <label for="prenom">Prénom</label>
               <i class="fas fa-user input-icon"></i>
-              <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" required>
+              <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" >
               <div class="error-message" id="prenom-error">
                 @error('prenom') {{ $message }} @enderror
               </div>
@@ -313,7 +313,7 @@
             <div class="input-group">
               <label for="email">Adresse email</label>
               <i class="fas fa-envelope input-icon"></i>
-              <input type="email" id="email" name="email" placeholder="votre@email.com" required>
+              <input type="email" id="email" name="email" placeholder="votre@email.com" >
               <div class="error-message" id="email-error">
                 @error('email') {{ $message }} @enderror
               </div>
@@ -322,7 +322,7 @@
             <div class="input-group">
               <label for="password">Mot de passe</label>
               <i class="fas fa-lock input-icon"></i>
-              <input type="password" id="password" name="password" placeholder="••••••••" required>
+              <input type="password" id="password" name="password" placeholder="••••••••" >
               <i class="fas fa-eye password-toggle" id="togglePassword"></i>
               <div class="error-message" id="password-error">
                 @error('password') {{ $message }} @enderror
@@ -337,7 +337,7 @@
             <div class="input-group">
               <label>Numéro de téléphone</label>
               <div class="phone-group">
-                <select name="indicatif" required>
+                <select name="indicatif" >
                   <option value="+225">Côte d'Ivoire (+225)</option>
                   <option value="+93">Afghanistan (+93)</option>
                   <option value="+355">Albanie (+355)</option>
@@ -574,7 +574,7 @@
                   <option value="+260">Zambie (+260)</option>
                   <option value="+263">Zimbabwe (+263)</option>
                 </select>
-                <input type="text" name="contact" placeholder="Numéro" required>
+                <input type="text" name="contact" placeholder="Numéro" >
               </div>
               <div class="error-message" id="contact-error">
                 @error('contact') {{ $message }} @enderror
@@ -584,7 +584,7 @@
             <div class="input-group">
               <label for="commune">Commune de naissance</label>
               <i class="fas fa-city input-icon"></i>
-              <select id="commune" name="commune" required>
+              <select id="commune" name="commune" >
                 <option value="">Sélectionnez votre commune</option>
                 <option value="abobo">Abobo</option>
                 <option value="adjame">Adjamé</option>
@@ -662,7 +662,7 @@
             <div class="input-group">
               <label for="CMU">Numéro CMU</label>
               <i class="fas fa-id-card input-icon"></i>
-              <input type="text" id="CMU" name="CMU" placeholder="Votre numéro CMU" required>
+              <input type="text" id="CMU" name="CMU" placeholder="Votre numéro CMU" >
               <div class="error-message" id="cmu-error">
                 @error('CMU') {{ $message }} @enderror
               </div>
@@ -671,7 +671,7 @@
             <div class="input-group">
               <label for="password_confirmation">Confirmer le mot de passe</label>
               <i class="fas fa-lock input-icon"></i>
-              <input type="password" id="password_confirmation" name="password_confirmation" placeholder="••••••••" required>
+              <input type="password" id="password_confirmation" name="password_confirmation" placeholder="••••••••" >
               <i class="fas fa-eye password-toggle" id="togglePasswordConfirmation"></i>
             </div>
           </div>
