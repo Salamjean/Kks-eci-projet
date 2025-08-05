@@ -1,7 +1,7 @@
 @extends('pages.layouts.template')
 
 @section('content')
-<div class="main-wrapper">
+<div class="main-wrapper" style="margin-top:60px">
   <section class="document-request-section" style="
     background-image: url('{{ asset('assets4/img/decessur.jpg') }}');
     background-size: cover;
