@@ -295,7 +295,7 @@
             <div class="input-group">
               <label for="name">Nom</label>
               <i class="fas fa-user input-icon"></i>
-              <input type="text" id="name" name="name" placeholder="Votre nom" >
+              <input type="text" id="name" name="name" placeholder="Votre nom" value="{{old('name')}}">
               <div class="error-message" id="name-error">
                 @error('name') {{ $message }} @enderror
               </div>
@@ -304,7 +304,7 @@
             <div class="input-group">
               <label for="prenom">Prénom</label>
               <i class="fas fa-user input-icon"></i>
-              <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" >
+              <input type="text" id="prenom" name="prenom" placeholder="Votre prénom" value="{{old('prenom')}}" >
               <div class="error-message" id="prenom-error">
                 @error('prenom') {{ $message }} @enderror
               </div>
@@ -313,7 +313,7 @@
             <div class="input-group">
               <label for="email">Adresse email</label>
               <i class="fas fa-envelope input-icon"></i>
-              <input type="email" id="email" name="email" placeholder="votre@email.com" >
+              <input type="email" id="email" name="email" placeholder="votre@email.com" value="{{old('email')}}">
               <div class="error-message" id="email-error">
                 @error('email') {{ $message }} @enderror
               </div>
@@ -322,7 +322,7 @@
             <div class="input-group">
               <label for="password">Mot de passe</label>
               <i class="fas fa-lock input-icon"></i>
-              <input type="password" id="password" name="password" placeholder="••••••••" >
+              <input type="password" id="password" name="password" placeholder="••••••••" value="{{old('password')}}">
               <i class="fas fa-eye password-toggle" id="togglePassword"></i>
               <div class="error-message" id="password-error">
                 @error('password') {{ $message }} @enderror
@@ -574,7 +574,7 @@
                   <option value="+260">Zambie (+260)</option>
                   <option value="+263">Zimbabwe (+263)</option>
                 </select>
-                <input type="text" name="contact" placeholder="Numéro" >
+                <input type="text" name="contact" placeholder="Numéro" value="{{old('contact')}}">
               </div>
               <div class="error-message" id="contact-error">
                 @error('contact') {{ $message }} @enderror
@@ -584,7 +584,7 @@
             <div class="input-group">
               <label for="commune">Commune de naissance</label>
               <i class="fas fa-city input-icon"></i>
-              <select id="commune" name="commune" >
+              <select id="commune" name="commune" value="{{old('commune')}}">
                 <option value="">Sélectionnez votre commune</option>
                 <option value="abobo">Abobo</option>
                 <option value="adjame">Adjamé</option>
@@ -662,7 +662,7 @@
             <div class="input-group">
               <label for="CMU">Numéro CMU</label>
               <i class="fas fa-id-card input-icon"></i>
-              <input type="text" id="CMU" name="CMU" placeholder="Votre numéro CMU" >
+              <input type="text" id="CMU" name="CMU" placeholder="Votre numéro CMU" value="{{old('CMU')}}" >
               <div class="error-message" id="cmu-error">
                 @error('CMU') {{ $message }} @enderror
               </div>
@@ -671,7 +671,7 @@
             <div class="input-group">
               <label for="password_confirmation">Confirmer le mot de passe</label>
               <i class="fas fa-lock input-icon"></i>
-              <input type="password" id="password_confirmation" name="password_confirmation" placeholder="••••••••" >
+              <input type="password" id="password_confirmation" name="password_confirmation" placeholder="••••••••" value="{{old('password_confirmation')}}" >
               <i class="fas fa-eye password-toggle" id="togglePasswordConfirmation"></i>
             </div>
           </div>
