@@ -277,9 +277,6 @@
     }
 </style>
 
-
-<div class="row flex-grow form-background">
-    
 @if($naissances->contains(function ($naissance) { return $naissance->archived_at; }))
     @foreach($naissances as $naissance)
         @if($naissance->archived_at)
@@ -292,7 +289,9 @@
         @endif
     @endforeach
 @endif
+<div class="row flex-grow form-background">
     <div class="col-12 grid-margin stretch-card">
+        
         <div class="card card-rounded">
             <div class="card-body">
                 <div class="d-sm-flex justify-content-between align-items-start">
