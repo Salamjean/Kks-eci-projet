@@ -42,7 +42,6 @@ class RegisteredUserController extends Controller
             'commune' => 'required',
             'indicatif' => 'required',
             'contact' => 'required',
-            'CMU' => 'nullable',
             'password' => [
                 'required',
                 'min:8',

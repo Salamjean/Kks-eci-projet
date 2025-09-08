@@ -3,29 +3,29 @@
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start" >
         <a class="navbar-brand brand-logo me-5" href="{{ route('dashboard') }}"> 
           @if (Auth::user()->commune === 'yopougon')
-          <img src="{{ asset('assets/images/profiles/yopougon.png') }}" alt="Logo Yopougon" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/yopougon.png') }}" alt="Logo Yopougon" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'marcory')
-          <img src="{{ asset('assets/images/profiles/marcory.png') }}" alt="Logo Marcory" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/marcory.png') }}" alt="Logo Marcory" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'cocody')
-          <img src="{{ asset('assets/images/profiles/cocody.png') }}" alt="Logo Cocody" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/cocody.png') }}" alt="Logo Cocody" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'abobo')
-          <img src="{{ asset('assets/images/profiles/abobo.png') }}" alt="Logo Abobo" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/abobo.png') }}" alt="Logo Abobo" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'koumassi')
-          <img src="{{ asset('assets/images/profiles/koumassi.png') }}" alt="Logo Koumassi" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/koumassi.png') }}" alt="Logo Koumassi" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'port-bouet')
-          <img src="{{ asset('assets/images/profiles/portbouet.png') }}" alt="Logo Port-Bouët" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/portbouet.png') }}" alt="Logo Port-Bouët" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'treichville')
-          <img src="{{ asset('assets/images/profiles/treichville.png') }}" alt="Logo Treichville" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/treichville.png') }}" alt="Logo Treichville" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'attecoube')
-          <img src="{{ asset('assets/images/profiles/attecoube.png') }}" alt="Logo Attécoubé" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/attecoube.png') }}" alt="Logo Attécoubé" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'adjame')
-          <img src="{{ asset('assets/images/profiles/adjame.jpg') }}" alt="Logo Adjamé" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/adjame.jpg') }}" alt="Logo Adjamé" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'songon')
-          <img src="{{ asset('assets/images/profiles/songon.png') }}" alt="Logo Songon" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/songon.png') }}" alt="Logo Songon" style="height: 70px; width: auto;" />
           @elseif (Auth::user()->commune === 'plateau')
-          <img src="{{ asset('assets/images/profiles/plateau.jpeg') }}" alt="Logo Songon" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/profiles/plateau.jpeg') }}" alt="Logo Songon" style="height: 70px; width: auto;" />
           @else
-          <img src="{{ asset('assets/images/logo.svg') }}" alt="Logo par défaut" style="height: 100px; width: auto;" />
+          <img src="{{ asset('assets/images/logo.svg') }}" alt="Logo par défaut" style="height: 70px; width: auto;" />
           @endif
         </a>
         <a class="navbar-brand brand-logo-mini" href="{{ route('dashboard') }}">

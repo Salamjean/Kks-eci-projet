@@ -4,71 +4,84 @@
 <style>
     /* Styles généraux */
     .slider .single-slider {
-        min-height: 100vh; /* S'assure d'occuper au moins toute la hauteur de l'écran */
+        min-height: 100vh;
         background-size: cover;
         background-position: center;
         display: flex;
-        flex-direction: column; /* Organiser le contenu en colonne */
-        justify-content: center; /* Centrer verticalement */
-        align-items: center; /* Centrer horizontalement */
-        padding: 20px; /* Espacement général */
-        text-align: center; /* Centrer le texte */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
     }
 
     .slider .text {
-        width: 100%; /* Occuper toute la largeur */
-        max-width: 800px; /* Limiter la largeur du texte */
-        margin: 0 auto; /* Centrer horizontalement */
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
     }
 
     .slider h1 {
-        font-size: 2.5em; /* Taille de police plus grande */
+        font-size: 2em;
         margin-bottom: 0.5em;
+        line-height: 1.2;
     }
 
     .slider p {
-        font-size: 1.3em; /* Taille de police plus grande */
+        font-size: 1.1em;
         margin-bottom: 1em;
+        line-height: 1.4;
     }
 
     .slider .button {
         display: flex;
-        flex-direction: column; /* Afficher les boutons en colonne sur les petits écrans */
-        align-items: center; /* Centrer les boutons */
-        width: 100%; /* Occuper toute la largeur */
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        gap: 10px;
     }
 
     .slider .btn {
-        padding: 15px 30px;
-        margin: 5px;
-        font-size: 1.1em; /* Taille de police plus grande */
+        padding: 12px 25px;
+        margin: 5px 0;
+        font-size: 1em;
         text-decoration: none;
         border-radius: 5px;
         color: white;
-        width: 80%; /* Limiter la largeur des boutons */
-        max-width: 300px; /* Limiter la largeur maximale des boutons */
+        width: 100%;
+        max-width: 280px;
+        text-align: center;
+        transition: all 0.3s ease;
     }
 
     .slider .btn.primary {
         background-color: #007bff;
     }
 
+    .slider .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+
     .schedule {
-        padding: 30px;
+        padding: 20px 0;
     }
 
     .schedule .single-schedule {
         margin-bottom: 20px;
         border-radius: 5px;
+        overflow: hidden;
     }
 
     .schedule .inner {
-        padding: 15px;
+        padding: 20px;
         text-align: center;
+        height: 100%;
     }
 
     .schedule .icon i {
         font-size: 2em;
+        margin-bottom: 15px;
     }
 
     .schedule h4 {
@@ -77,75 +90,149 @@
     }
 
     .schedule .single-content span {
-        font-size: 0.9em; /* Taille de police plus petite pour le span */
+        font-size: 0.9em;
+        display: block;
+        margin-bottom: 10px;
     }
 
     .schedule .single-content p {
-        font-size: 1em; /* Taille de police plus petite pour le paragraphe */
+        font-size: 0.95em;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+
+    .schedule .single-content a {
+        color: #fff;
+        text-decoration: underline;
+        font-weight: bold;
+    }
+
+    /* Media queries pour les petits téléphones */
+    @media (max-width: 375px) {
+        .slider h1 {
+            font-size: 1.7em;
+        }
+        
+        .slider p {
+            font-size: 1em;
+        }
+        
+        .slider .btn {
+            padding: 10px 20px;
+            font-size: 0.9em;
+        }
+    }
+
+    /* Media queries pour tablettes en mode portrait */
+    @media (min-width: 576px) {
+        .slider .button {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .slider .btn {
+            width: auto;
+            margin: 0 10px;
+        }
     }
 
     /* Media queries pour tablettes */
     @media (min-width: 768px) {
         .slider .text {
-            text-align: left; /* Aligner le texte à gauche sur les tablettes */
+            text-align: left;
         }
 
+        .slider h1 {
+            font-size: 2.5em;
+        }
+
+        .slider p {
+            font-size: 1.2em;
+        }
+
+        .slider .button {
+            flex-direction: row;
+            justify-content: flex-start;
+        }
+
+        .slider .btn {
+            width: auto;
+            max-width: none;
+            margin: 0 10px 0 0;
+        }
+        
+        .schedule-inner .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .schedule .col-lg-4 {
+            flex: 0 0 calc(50% - 30px);
+            max-width: calc(50% - 30px);
+            margin: 15px;
+        }
+    }
+
+    /* Media queries pour écrans moyens */
+    @media (min-width: 992px) {
         .slider h1 {
             font-size: 3em;
         }
 
         .slider p {
-            font-size: 1.4em;
+            font-size: 1.3em;
         }
-
-        .slider .button {
-            flex-direction: row; /* Afficher les boutons horizontalement */
-            justify-content: center; /* Centrer les boutons horizontalement */
+        
+        .schedule .col-lg-4 {
+            flex: 0 0 calc(33.33% - 30px);
+            max-width: calc(33.33% - 30px);
         }
-
-        .slider .btn {
-            width: auto; /* Supprimer la largeur fixe des boutons */
-            max-width: none; /* Supprimer la largeur maximale des boutons */
-            margin: 5px 10px; /* Ajuster les marges des boutons */
-        }
-
-        .schedule {
-            padding: 40px;
-        }
-
+        
         .schedule .single-content span {
-            font-size: 1em; /* Taille de police légèrement plus grande pour le span */
+            font-size: 1em;
         }
 
         .schedule .single-content p {
-            font-size: 1.1em; /* Taille de police légèrement plus grande pour le paragraphe */
+            font-size: 1em;
         }
     }
 
-    /* Media queries pour écrans plus larges (ordinateurs) */
-    @media (min-width: 992px) {
-        .slider h1 span {
-            font-size: 60px;
+    /* Media queries pour grands écrans */
+    @media (min-width: 1200px) {
+        .slider .text {
+            max-width: 900px;
         }
-
+        
+        .slider h1 {
+            font-size: 3.5em;
+        }
+        
         .slider p {
             font-size: 1.4em;
         }
-
-        .schedule-inner .col-lg-4 {
-            width: 33.33%; /* Rétablir la largeur des colonnes */
-        }
-
+        
         .schedule {
-            padding: 40px;
+            padding: 60px 0;
         }
-
-        .schedule .single-content span {
-            font-size: 1.1em; /* Taille de police encore plus grande pour le span */
+        
+        .schedule .inner {
+            padding: 30px;
         }
+    }
 
-        .schedule .single-content p {
-            font-size: 1.2em; /* Taille de police encore plus grande pour le paragraphe */
+    /* Media queries pour très grands écrans */
+    @media (min-width: 1400px) {
+        .container {
+            max-width: 1320px;
+        }
+    }
+
+    /* Ajustements pour l'accessibilité */
+    @media (prefers-reduced-motion: reduce) {
+        .slider .btn {
+            transition: none;
         }
     }
 </style>
@@ -222,9 +309,9 @@
                             <div class="single-content">
                                 <span>Vous pouvez faire votre demande à :</span>
                                 <h4>SOCOCE</h4>
-                                <p>Vous pouvez désormais faire une demande d’acte à SOCOCE rapidement et facilement sur les bornes administratives tactiles.
+                                <p>Vous pouvez désormais faire une demande d'acte à SOCOCE rapidement et facilement sur les bornes administratives tactiles.
                                 </p>
-                                <a href="#"> N’attendez plus !</i></a>
+                                <a href="#"> N'attendez plus !</a>
                             </div>
                         </div>
                     </div>
@@ -239,9 +326,9 @@
                             <div class="single-content">
                                 <span>Vous pouvez faire votre demande à :</span>
                                 <h4>CAP NORD</h4>
-                                <p>Vous pouvez désormais faire une demande d’acte à CAP NORD rapidement et facilement sur les bornes administratives tactiles.
+                                <p>Vous pouvez désormais faire une demande d'acte à CAP NORD rapidement et facilement sur les bornes administratives tactiles.
                                 </p>
-                                <a href="#"> N’attendez plus !</i></a>
+                                <a href="#"> N'attendez plus !</a>
                             </div>
                         </div>
                     </div>
@@ -256,9 +343,9 @@
                             <div class="single-content">
                                 <span>Vous pouvez faire votre demande à :</span>
                                 <h4>CAP SUD</h4>
-                                <p>Vous pouvez désormais faire une demande d’acte à CAP SUD rapidement et facilement sur les bornes administratives tactiles.
+                                <p>Vous pouvez désormais faire une demande d'acte à CAP SUD rapidement et facilement sur les bornes administratives tactiles.
                                 </p>
-                                <a href="#"> N’attendez plus !</i></a>
+                                <a href="#"> N'attendez plus !</a>
                             </div>
                         </div>
                     </div>

@@ -1,5 +1,4 @@
 @extends('utilisateur.layouts.template')
-
 @section('content')
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -7,86 +6,107 @@
     <script src="{{ asset('js/cinetpayN.js') }}"></script> 
     <script src="https://cdn.cinetpay.com/seamless/main.js"></script>
 
-
     <style>
+        :root {
+            --primary: #1a5c58;
+            --secondary: #3e8e41;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --transition: all 0.3s ease;
+        }
+
         body {
             background-image: url('{{ asset('assets/images/profiles/arriereP.jpg') }}');
             background-size: cover;
             background-position: center;
             min-height: 100vh;
-            
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .conteneurInfo {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            max-width: 800px;
-            margin: auto;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            margin: 40px auto;
             animation: fadeIn 0.6s ease-in-out;
             box-sizing: border-box;
+            width: 80%;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
             text-align: center;
-            color: #1a5c58;
-            margin-bottom: 1rem;
-            font-size: 30px;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 32px;
+            font-weight: 700;
         }
 
         h4 {
             font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 1rem;
         }
 
         label {
-            font-weight: bold;
-            color: #1a5c58;
+            font-weight: 600;
+            color: var(--primary);
             display: block;
             margin-bottom: 0.5rem;
         }
 
-        .form-control,
-        select,
-        input[type="text"],
-        input[type="file"],
-        input[type="date"] {
+        .form-control, select, input[type="text"], input[type="file"], input[type="date"] {
             width: 100%;
-            padding: 0.8rem;
+            padding: 0.8rem 1rem;
             border: 1px solid #ddd;
             border-radius: 10px;
             background: #f9f9f9;
             outline: none;
             box-sizing: border-box;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .form-control:focus, select:focus, input[type="text"]:focus, input[type="date"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 92, 88, 0.2);
         }
 
         button {
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             font-size: 1rem;
-            font-weight: bold;
-            background-color: #3e8e41;
+            font-weight: 600;
+            background-color: var(--primary);
             border: none;
-            border-radius: 8px;
-            color: #ffffff;
+            border-radius: 10px;
+            color: white;
             cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         button:hover {
-            background-color: #144d4b;
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .form-row {
@@ -114,6 +134,7 @@
 
         .radio-group label {
             margin-left: 5px;
+            font-weight: normal;
         }
 
         .radio-group input[type="radio"] {
@@ -121,19 +142,92 @@
             transform: scale(1.2);
         }
 
+        /* Styles pour les étapes */
+        .steps-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .steps-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e0e0e0;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            position: relative;
+            z-index: 2;
+            transition: var(--transition);
+        }
+
+        .step.active {
+            background: var(--primary);
+            transform: scale(1.1);
+        }
+
+        .step.completed {
+            background: var(--success);
+        }
+
+        .step-label {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-top: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .step-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .step-content.active {
+            display: block;
+        }
+
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .error-message {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
         /* Media queries for responsive design */
         @media (max-width: 768px) {
             .conteneurInfo {
-                padding: 15px;
+                padding: 20px;
+                margin: 20px;
             }
 
             h1 {
-                font-size: 24px;
-                margin-top: 30px;
-            }
-
-            .titre{
-                margin-top: 70px;
+                font-size: 26px;
             }
 
             .form-group.half-width {
@@ -145,27 +239,57 @@
                 flex-direction: column;
             }
 
-            .form-group {
-                width: 100%;
-                margin-right: 0;
-                min-width: auto;
+            .step-label {
+                font-size: 0.7rem;
             }
         }
 
         @media (max-width: 480px) {
             .conteneurInfo {
-                padding: 10px;
+                padding: 15px;
+                margin: 15px;
             }
 
             h1 {
-                font-size: 20px;
-                margin-top: 30px;
+                font-size: 22px;
             }
-            .titre{
-                margin-top: 100px;
+            
+            .steps-container {
+                margin-bottom: 1.5rem;
+            }
+            
+            .step {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+            
+            .navigation-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .navigation-buttons button {
+                width: 100%;
             }
         }
-        
+
+        /* Styles pour le popup de livraison */
+        .swal-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 767px) {
+            .swal-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .swal2-input {
+            margin: 5px 0;
+        }
     </style>
 
     @if (Session::get('success'))
@@ -194,109 +318,170 @@
 
     <div class="conteneurInfo">
         <h1 class="titre">Demande d'extrait de naissance</h1>
-        <form id="naissanceForm" method="POST" action="{{ route('naissance.store') }}"enctype="multipart/form-data">
+        
+        <!-- Indicateur d'étapes -->
+        <div class="steps-container">
+            <div class="step active" id="step1-indicator">
+                1
+                <span class="step-label">Certificat</span>
+            </div>
+            <div class="step" id="step2-indicator">
+                2
+                <span class="step-label">Enfant</span>
+            </div>
+            <div class="step" id="step3-indicator">
+                3
+                <span class="step-label">Parents</span>
+            </div>
+            <div class="step" id="step4-indicator">
+                4
+                <span class="step-label">Documents</span>
+            </div>
+            <div class="step" id="step5-indicator">
+                5
+                <span class="step-label">Livraison</span>
+            </div>
+        </div>
+
+        <form id="naissanceForm" method="POST" action="{{ route('naissance.store') }}" enctype="multipart/form-data">
             @csrf
 
-            <div class="form-group text-center">
-                <label for="dossierNum">N° Certificat médical de naissance</label>
-                <input class="text-center" type="text" id="dossierNum" name="dossierNum"
-                       value="{{ old('dossierNum') }}" placeholder="Ex: CMN1411782251" required>
-                @error('dossierNum')
-                <span style="color: red">{{ $message }}</span>
-                @enderror
+            <!-- Étape 1: Certificat médical -->
+            <div class="step-content active" id="step1">
+                <div class="form-group text-center">
+                    <label for="dossierNum">N° Certificat médical de naissance</label>
+                    <input class="text-center" type="text" id="dossierNum" name="dossierNum"
+                           value="{{ old('dossierNum') }}" placeholder="Ex: CMN1411782251" required>
+                    @error('dossierNum')
+                    <span class="error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="navigation-buttons">
+                    <div></div> <!-- Empty div for spacing -->
+                    <button type="button" onclick="validerCertificat()">Suivant</button>
+                </div>
             </div>
 
-            <div id="infoDefunt" class="hidden">
-                <div class="form-group text-center">
-                    <label for="nomHopital">Nom de l'Hôpital</label>
-                    <input class="text-center" type="text" id="nomHopital" name="nomHopital" readonly>
+            <!-- Étape 2: Informations sur l'enfant -->
+            <div class="step-content" id="step2">
+                <div id="infoDefunt">
+                    <div class="form-group text-center">
+                        <label for="nomHopital">Nom de l'Hôpital</label>
+                        <input class="text-center" type="text" id="nomHopital" name="nomHopital" readonly>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nomDefunt">Nom et Prénom de la Mère</label>
+                            <input type="text" id="nomDefunt" name="nomDefunt" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="dateNaiss">Nom et Prénom de l'accompagnateur</label>
+                            <input type="text" id="dateNaiss" name="dateNaiss" readonly>
+                        </div>
+                    </div>
+
+                    <h4 class="text-center">Les informations concernant l'enfant</h4>
+                    <div class="form-row">
+                        <div class="form-group half-width">
+                            <label for="lieuNaiss">Date de Naissance de l'Enfant</label>
+                            <input type="date" id="lieuNaiss" name="lieuNaiss" required>
+                            @error('lieuNaiss')
+                            <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group half-width">
+                            <label for="nom">Nom du nouveau né</label>
+                            <input type="text" id="nom" name="nom" placeholder="Entrez le nom du nouveau né" required>
+                            @error('nom')
+                            <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="prenom">Prénoms du nouveau né</label>
+                            <input type="text" id="prenom" name="prenom" placeholder="Entrez les prénoms du nouveau né" required>
+                            @error('prenom')
+                            <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="nomDefunt">Nom et Prénom de la Mère</label>
-                        <input type="text" id="nomDefunt" name="nomDefunt" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label for="dateNaiss">Nom et Prénom de l'accompagnateur</label>
-                        <input type="text" id="dateNaiss" name="dateNaiss" readonly>
-                    </div>
+                <div class="navigation-buttons">
+                    <button type="button" onclick="changeStep(1)">Précédent</button>
+                    <button type="button" onclick="changeStep(3)">Suivant</button>
                 </div>
+            </div>
 
-                <h4 class="text-center">Les informations concernant l'enfant</h4>
-                <div class="form-row">
-                    <div class="form-group half-width">
-                        <label for="lieuNaiss">Date de Naissance de l'Enfant</label>
-                        <input type="date" id="lieuNaiss" name="lieuNaiss" required>
-                        @error('lieuNaiss')
-                        <span style="color: red">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group half-width">
-                        <label for="nom">Nom du nouveau né</label>
-                        <input type="text" id="nom" name="nom" placeholder="Entrez le nom du nouveau né">
-                        @error('nom')
-                        <span style="color: red">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="prenom">Prénoms du nouveau né</label>
-                        <input type="text" id="prenom" name="prenom" placeholder="Entrez les prénoms du nouveau né">
-                        @error('prenom')
-                        <span style="color: red">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-
+            <!-- Étape 3: Informations sur les parents -->
+            <div class="step-content" id="step3">
                 <h4 class="text-center">Les informations concernant le père</h4>
                 <div class="form-row">
                     <div class="form-group half-width">
                         <label for="nompere">Nom du père</label>
-                        <input type="text" id="nompere" name="nompere" placeholder="Entrez le nom du père">
+                        <input type="text" id="nompere" name="nompere" placeholder="Entrez le nom du père" required>
                         @error('nompere')
-                        <span style="color: red">{{ $message }}</span>
+                        <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group half-width">
                         <label for="prenompere">Prénoms du père</label>
                         <input type="text" id="prenompere" name="prenompere"
-                               placeholder="Entrez les prénoms du père">
-                        @error('identiteDeclarant')
-                        <span style="color: red">{{ $message }}</span>
+                               placeholder="Entrez les prénoms du père" required>
+                        @error('prenompere')
+                        <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group half-width">
                         <label for="datepere">Date de naissance du père</label>
-                        <input type="date" id="datepere" name="datepere">
+                        <input type="date" id="datepere" name="datepere" required>
                         @error('datepere')
-                        <span style="color: red">{{ $message }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group half-width">
-                        <label for="identiteDeclarant">Pièce d'Identité du Père</label>
-                        <input type="file" id="identiteDeclarant" name="identiteDeclarant"
-                               accept=".pdf, .jpg, .jpeg, .png, .gif">
-                        @error('identiteDeclarant')
-                        <span style="color: red">{{ $message }}</span>
+                        <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
 
-                <div class="form-group text-center">
-                    <label for="cdnaiss">Certificat de Déclaration de Naissance</label>
-                    <input type="file" id="cdnaiss" name="cdnaiss" accept=".pdf, .jpg, .jpeg, .png, .gif">
-                    @error('cdnaiss')
-                    <span style="color: red">{{ $message }}</span>
+                <div class="navigation-buttons">
+                    <button type="button" onclick="changeStep(2)">Précédent</button>
+                    <button type="button" onclick="changeStep(4)">Suivant</button>
+                </div>
+            </div>
+
+            <!-- Étape 4: Documents -->
+            <div class="step-content" id="step4">
+                <div class="form-group">
+                    <label for="identiteDeclarant">Pièce d'Identité du Père</label>
+                    <input type="file" id="identiteDeclarant" name="identiteDeclarant"
+                           accept=".pdf,.jpg,.jpeg,.png" required>
+                    <small class="text-muted">Formats acceptés: PNG, JPG, JPEG, PDF (max 1Mo)</small>
+                    @error('identiteDeclarant')
+                    <span class="error-message">{{ $message }}</span>
                     @enderror
                 </div>
 
-                <!-- Options Radio -->
+                <div class="form-group">
+                    <label for="cdnaiss">Certificat de Déclaration de Naissance</label>
+                    <input type="file" id="cdnaiss" name="cdnaiss" accept=".pdf,.jpg,.jpeg,.png" required>
+                    <small class="text-muted">Formats acceptés: PNG, JPG, JPEG, PDF (max 1Mo)</small>
+                    @error('cdnaiss')
+                    <span class="error-message">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div class="navigation-buttons">
+                    <button type="button" onclick="changeStep(3)">Précédent</button>
+                    <button type="button" onclick="changeStep(5)">Suivant</button>
+                </div>
+            </div>
+
+            <!-- Étape 5: Options de livraison -->
+            <div class="step-content" id="step5">
                 <div class="form-group text-center" id="optionsSection">
-                    <p style="font-weight: bold; color: #1a5c58;">Choisissez le mode de rétrait :</p>
+                    <p style="font-weight: bold; color: #1a5c58;">Choisissez le mode de retrait :</p>
                     <div class="form-row d-flex justify-content-center align-items-center gap-4">
                         <div class="radio-group">
-                            <input type="radio" id="option1" name="choix_option" value="retrait_sur_place" checked
-                                   required>
+                            <input type="radio" id="option1" name="choix_option" value="retrait_sur_place" checked required>
                             <label for="option1" class="mt-2">Retrait sur place</label>
                         </div>
                         <div class="radio-group">
@@ -305,54 +490,176 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Boutons -->
-            <button type="button" id="btnSuivant" onclick="validerFormulaire()" style="width: 100%">Suivant</button>
-            <button type="submit" id="btnValider" class="hidden" style="width: 100%">Valider</button>
+                <div class="navigation-buttons">
+                    <button type="button" onclick="changeStep(4)">Précédent</button>
+                    <button type="button" id="btnValider" onclick="validateAndSubmit()">Valider la demande</button>
+                </div>
+            </div>
         </form>
     </div>
 
     <script>
+        let currentStep = 1;
+        let expectedDateNaissances;
+        let isCertificatValid = false;
+
         $(document).ready(function () {
-            // Cacher la section des options par défaut
-            $("#optionsSection").hide();
-            $("#btnValider").prop('disabled', true); // Désactiver le bouton "Valider" au chargement de la page
-
-            // Fonction pour vérifier si tous les champs obligatoires sont remplis
-            function checkFields() {
-                const isFilled = $("#naissanceForm input[required]").toArray().every(input => input.value.trim() !== "");
-                if (isFilled) {
-                    $("#optionsSection").fadeIn();  // Afficher avec effet
-                } else {
-                    $("#optionsSection").hide();   // Cacher si des champs sont vides
-                }
-            }
-
-            // Écoutez les changements dans les champs du formulaire
-            $("#naissanceForm input").on("input change", checkFields);
-
-            // Appel de la fonction initiale pour vérifier l'état des champs
-            checkFields();
-
-            // Gestion de la soumission du formulaire
-            $("#naissanceForm").submit(function (event) {
-                event.preventDefault();  // Empêcher la soumission standard du formulaire
-
-                if ($('input[name="choix_option"]:checked').val() === 'livraison') {
-                    showLivraisonPopup();
-                } else {
-                    // Form submission will be handled if date is valid
-                    if (!$("#btnValider").prop('disabled')) { // Only submit if button is enabled (date is valid)
-                        this.submit();
-                    }
-                }
+            // Validation en temps réel pour les fichiers
+            $('#identiteDeclarant, #cdnaiss').on('change', function() {
+                validateFile(this);
             });
         });
 
-        let expectedDateNaissances; // Variable pour stocker les dates de naissance attendues (tableau)
+        function validateFile(input) {
+            const file = input.files[0];
+            const errorElement = $(input).next('.error-message');
+            
+            if (!file) return;
+            
+            // Vérification de la taille (1Mo max)
+            if (file.size > 1000000) {
+                errorElement.text('Le fichier ne doit pas dépasser 1 Mo.');
+                $(input).val('');
+            } else {
+                errorElement.text('');
+            }
+            
+            // Vérification du type de fichier
+            const validExtensions = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+            if (!validExtensions.includes(file.type)) {
+                errorElement.text('Le format de fichier n\'est pas valide. Formats acceptés: JPG, JPEG, PNG, PDF.');
+                $(input).val('');
+            }
+        }
 
-        function validerFormulaire() {
+        function changeStep(step) {
+            // Valider l'étape actuelle avant de passer à la suivante
+            if (step > currentStep && !validateStep(currentStep)) {
+                return;
+            }
+
+            // Masquer l'étape actuelle
+            $(`#step${currentStep}`).removeClass('active');
+            $(`#step${currentStep}-indicator`).removeClass('active');
+
+            // Afficher la nouvelle étape
+            $(`#step${step}`).addClass('active');
+            $(`#step${step}-indicator`).addClass('active');
+
+            // Marquer les étapes précédentes comme complétées
+            for (let i = 1; i < step; i++) {
+                $(`#step${i}-indicator`).addClass('completed');
+            }
+
+            currentStep = step;
+        }
+
+        function validateStep(step) {
+            let isValid = true;
+            let errorMessage = '';
+            
+            switch(step) {
+                case 1:
+                    if (!$("#dossierNum").val().trim()) {
+                        errorMessage = 'Veuillez entrer un numéro de certificat médical de naissance.';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 2:
+                    if (!$("#lieuNaiss").val()) {
+                        errorMessage = 'Veuillez entrer la date de naissance de l\'enfant.';
+                        isValid = false;
+                    } else if (!$("#nom").val().trim()) {
+                        errorMessage = 'Veuillez entrer le nom de l\'enfant.';
+                        isValid = false;
+                    } else if (!$("#prenom").val().trim()) {
+                        errorMessage = 'Veuillez entrer le(s) prénom(s) de l\'enfant.';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 3:
+                    if (!$("#nompere").val().trim()) {
+                        errorMessage = 'Veuillez entrer le nom du père.';
+                        isValid = false;
+                    } else if (!$("#prenompere").val().trim()) {
+                        errorMessage = 'Veuillez entrer le(s) prénom(s) du père.';
+                        isValid = false;
+                    } else if (!$("#datepere").val()) {
+                        errorMessage = 'Veuillez entrer la date de naissance du père.';
+                        isValid = false;
+                    }
+                    break;
+                    
+                case 4:
+                    if (!$("#identiteDeclarant").val()) {
+                        errorMessage = 'Veuillez sélectionner la pièce d\'identité du père.';
+                        isValid = false;
+                    } else if (!$("#cdnaiss").val()) {
+                        errorMessage = 'Veuillez sélectionner le certificat de déclaration de naissance.';
+                        isValid = false;
+                    }
+                    break;
+            }
+            
+            if (!isValid && errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Champ(s) manquant(s)',
+                    text: errorMessage,
+                });
+            }
+            
+            return isValid;
+        }
+
+        function validateAndSubmit() {
+            // Valider toutes les étapes avant soumission
+            for (let i = 1; i <= 5; i++) {
+                if (!validateStep(i)) {
+                    changeStep(i); // Revenir à l'étape avec erreur
+                    return;
+                }
+            }
+
+            // Vérifier la date de naissance si le certificat a été validé
+            if (isCertificatValid && expectedDateNaissances) {
+                const userDateNaiss = $("#lieuNaiss").val();
+                const userDate = new Date(userDateNaiss);
+                let dateMatchFound = false;
+
+                for (let i = 0; i < expectedDateNaissances.length; i++) {
+                    const expectedDate = new Date(expectedDateNaissances[i]);
+                    if (userDate.getTime() === expectedDate.getTime()) {
+                        dateMatchFound = true;
+                        break;
+                    }
+                }
+
+                if (!dateMatchFound) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erreur de validation',
+                        text: 'La date de naissance de l\'enfant ne correspond à aucune des dates associées au numéro de dossier médical. Veuillez saisir une date correcte.',
+                        showConfirmButton: true
+                    });
+                    changeStep(2);
+                    return;
+                }
+            }
+
+            // Vérifier le mode de retrait choisi
+            if ($('input[name="choix_option"]:checked').val() === 'livraison') {
+                showLivraisonPopup();
+            } else {
+                // Soumettre le formulaire directement pour retrait sur place
+                document.getElementById('naissanceForm').submit();
+            }
+        }
+
+        function validerCertificat() {
             const dossierNum = $("#dossierNum").val();
             if (!dossierNum.trim()) {
                 Swal.fire({
@@ -375,23 +682,16 @@
                         $("#nomHopital").val(response.nomHopital);
                         $("#nomDefunt").val(response.nomMere);
                         $("#dateNaiss").val(response.nomPere);
-                        expectedDateNaissances = response.dateNaiss; // Stocker le tableau de dates de naissance attendues
+                        expectedDateNaissances = response.dateNaiss;
 
-                        $("#infoDefunt").removeClass("hidden");
-                        $("#btnSuivant").addClass("hidden");
-                        $("#btnValider").removeClass("hidden");
-                        $("#btnValider").prop('disabled', false); // Activer le bouton "Valider" quand CMN est validé et infos affichées
-                        checkFields(); // Vérifiez les champs après la réponse
+                        isCertificatValid = true;
+                        changeStep(2);
                     } else {
                         Swal.fire({
                             icon: 'error',
                             title: 'Erreur',
                             text: 'Ce numéro <' + dossierNum + '> n\'existe pas.',
                         });
-                        $("#btnValider").prop('disabled', true); // Désactiver "Valider" si CMN invalide
-                        $("#infoDefunt").addClass("hidden"); // Cacher la section d'info si CMN invalide
-                        $("#btnSuivant").removeClass("hidden"); // Afficher "Suivant" si CMN invalide
-                        $("#btnValider").addClass("hidden"); // Cacher "Valider" si CMN invalide
                     }
                 },
                 error: function () {
@@ -400,150 +700,89 @@
                         title: 'Erreur',
                         text: 'Problème de connexion au serveur.',
                     });
-                    $("#btnValider").prop('disabled', true); // Désactiver "Valider" en cas d'erreur serveur
                 }
             });
         }
 
-        // Override the form submission to add date validation
-        $("#naissanceForm").on('submit', function(e){
-            const userDateNaiss = $("#lieuNaiss").val();
-            const dateNaissanceInput = $("#lieuNaiss"); // Récupérer l'élément input de date
-
-            if (!userDateNaiss) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Erreur',
-                    text: 'Veuillez entrer la date de naissance de l\'enfant.',
-                    showConfirmButton: true
-                });
-                e.preventDefault();
-                return;
-            }
-
-            if (expectedDateNaissances && expectedDateNaissances.length > 0) {
-                const userDate = new Date(userDateNaiss);
-                let dateMatchFound = false;
-
-                for (let i = 0; i < expectedDateNaissances.length; i++) {
-                    const expectedDate = new Date(expectedDateNaissances[i]);
-                    if (userDate.getTime() === expectedDate.getTime()) {
-                        dateMatchFound = true;
-                        break;
-                    }
-                }
-
-                if (!dateMatchFound) {
-                    e.preventDefault();
-                    dateNaissanceInput.val('');
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erreur',
-                        text: 'La date de naissance de l\'enfant ne correspond à aucune des dates associées au numéro de dossier médical. Veuillez saisir une date correcte.',
-                        timer: 30000,
-                        showConfirmButton: true
-                    }).then(() => { // Add .then() to handle what happens after the popup is closed
-                        // No further actions are needed here as preventDefault already stopped submission
-                        // and the function will naturally exit after the popup is closed.
-                    });
-                    return; // Explicitly return to stop further execution in this submit handler
-                } else {
-                    $("#btnValider").prop('disabled', false);
-                }
-            } else {
-                console.log("expectedDateNaissances is NULL, undefined or empty. Skipping date check.");
-            }
-            // If date is valid, the form will submit normally as preventDefault was not called.
-        });
-
-        showPaymentPopup
         function showLivraisonPopup() {
-    Swal.fire({
-        title: 'Informations de Livraison',
-        width: '700px',
-        html: `
-            <div class="swal-grid">
-                <div>
-                    <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
-                    <input id="swal-montant_timbre" class="swal2-input text-center" value="50" readonly>
-                    <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
-                </div>
-                <div>
-                    <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
-                    <input id="swal-montant_livraison" class="swal2-input text-center" value="50" readonly>
-                    <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
-                </div>
-                <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire"></div>
-                <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire"></div>
-                <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire"></div>
-                <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire"></div>
-                <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison"></div>
-                <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
-                <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville"></div>
-                <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune"></div>
-                <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier"></div>
-            </div>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Payer',
-        cancelButtonText: 'Annuler',
-        focusConfirm: false,
-        preConfirm: () => {
-            const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
-            const prenom_destinataire = document.getElementById('swal-prenom_destinataire').value;
-            const email_destinataire = document.getElementById('swal-email_destinataire').value;
-            const contact_destinataire = document.getElementById('swal-contact_destinataire').value;
-            const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
-            const code_postal = document.getElementById('swal-code_postal').value;
-            const ville = document.getElementById('swal-ville').value;
-            const commune_livraison = document.getElementById('swal-commune_livraison').value;
-            const quartier = document.getElementById('swal-quartier').value;
-            const montant_timbre = document.getElementById('swal-montant_timbre').value;
-            const montant_livraison = document.getElementById('swal-montant_livraison').value;
+            Swal.fire({
+                title: 'Informations de Livraison',
+                width: '700px',
+                html: `
+                    <div class="swal-grid">
+                        <div>
+                            <label for="swal-montant_timbre" style="font-weight: bold">Timbre</label>
+                            <input id="swal-montant_timbre" class="swal2-input text-center" value="50" readonly>
+                            <label for="swal-montant_timbre" style="font-size:13px; color:red">Pour la phase pilote les frais de timbre sont fournir par Kks-technologies</label>
+                        </div>
+                        <div>
+                            <label for="swal-montant_livraison" style="font-weight: bold">Frais Livraison</label>
+                            <input id="swal-montant_livraison" class="swal2-input text-center" value="50" readonly>
+                            <label for="swal-montant_livraison" style="font-size:13px; color:red">Pour la phase pilote les frais des livraisons sont fixés à 1500 Fcfa</label>
+                        </div>
+                        <div><input id="swal-nom_destinataire" class="swal2-input text-center" placeholder="Nom du destinataire" required></div>
+                        <div><input id="swal-prenom_destinataire" class="swal2-input text-center" placeholder="Prénom du destinataire" required></div>
+                        <div><input id="swal-email_destinataire" class="swal2-input text-center" placeholder="Email du destinataire" type="email" required></div>
+                        <div><input id="swal-contact_destinataire" class="swal2-input text-center" placeholder="Contact du destinataire" required></div>
+                        <div><input id="swal-adresse_livraison" class="swal2-input text-center" placeholder="Adresse de livraison" required></div>
+                        <div><input id="swal-code_postal" class="swal2-input text-center" placeholder="Code postal"></div>
+                        <div><input id="swal-ville" class="swal2-input text-center" placeholder="Ville" required></div>
+                        <div><input id="swal-commune_livraison" class="swal2-input text-center" placeholder="Commune" required></div>
+                        <div><input id="swal-quartier" class="swal2-input text-center" placeholder="Quartier" required></div>
+                    </div>`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Payer',
+                cancelButtonText: 'Annuler',
+                focusConfirm: false,
+                preConfirm: () => {
+                    const nom_destinataire = document.getElementById('swal-nom_destinataire').value;
+                    const prenom_destinataire = document.getElementById('swal-prenom_destinataire').value;
+                    const email_destinataire = document.getElementById('swal-email_destinataire').value;
+                    const contact_destinataire = document.getElementById('swal-contact_destinataire').value;
+                    const adresse_livraison = document.getElementById('swal-adresse_livraison').value;
+                    const code_postal = document.getElementById('swal-code_postal').value;
+                    const ville = document.getElementById('swal-ville').value;
+                    const commune_livraison = document.getElementById('swal-commune_livraison').value;
+                    const quartier = document.getElementById('swal-quartier').value;
+                    const montant_timbre = document.getElementById('swal-montant_timbre').value;
+                    const montant_livraison = document.getElementById('swal-montant_livraison').value;
 
-            if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !code_postal || !ville || !commune_livraison || !quartier || !montant_timbre || !montant_livraison) {
-                Swal.showValidationMessage("Veuillez remplir tous les champs pour la livraison.");
-                return false;
-            }
-            return {
-                nom_destinataire: nom_destinataire,
-                prenom_destinataire: prenom_destinataire,
-                email_destinataire: email_destinataire,
-                contact_destinataire: contact_destinataire,
-                adresse_livraison: adresse_livraison,
-                code_postal: code_postal,
-                ville: ville,
-                commune_livraison: commune_livraison,
-                quartier: quartier,
-                montant_timbre: montant_timbre,
-                montant_livraison: montant_livraison,
-            };
+                    if (!nom_destinataire || !prenom_destinataire || !email_destinataire || !contact_destinataire || !adresse_livraison || !ville || !commune_livraison || !quartier || !montant_timbre || !montant_livraison) {
+                        Swal.showValidationMessage("Veuillez remplir tous les champs obligatoires pour la livraison.");
+                        return false;
+                    }
+                    
+                    // Validation de l'email
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(email_destinataire)) {
+                        Swal.showValidationMessage("Veuillez entrer une adresse email valide.");
+                        return false;
+                    }
+                    
+                    return {
+                        nom_destinataire: nom_destinataire,
+                        prenom_destinataire: prenom_destinataire,
+                        email_destinataire: email_destinataire,
+                        contact_destinataire: contact_destinataire,
+                        adresse_livraison: adresse_livraison,
+                        code_postal: code_postal,
+                        ville: ville,
+                        commune_livraison: commune_livraison,
+                        quartier: quartier,
+                        montant_timbre: montant_timbre,
+                        montant_livraison: montant_livraison,
+                    };
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const formData = result.value;
+                    initiateCinetPayPaymentNaissance(formData, document.getElementById('naissanceForm'));
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    // Si l'utilisateur clique sur annuler, sélectionner l'option 1
+                    document.getElementById('option1').checked = true;
+                }
+            });
         }
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const formData = result.value;
-            const form = document.getElementById('naissanceForm');
-            initiateCinetPayPaymentNaissance(formData, form); // Call the function from cinetpay_naissance.js
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            // Si l'utilisateur clique sur annuler, sélectionner l'option 1
-            document.getElementById('option1').checked = true;
-        }
-    });
-}
     </script>
-<style>
-/* Styles par défaut (écrans larges) */
-.swal-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur les écrans larges */
-    gap: 10px;
-}
-
-/* Media query pour les écrans de taille moyenne et petits (tablettes et mobiles) */
-@media (max-width: 767px) {
-    .swal-grid {
-        grid-template-columns: 1fr; /* Une seule colonne sur les petits écrans */
-    }
-}
-</style>
 @endsection

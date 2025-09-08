@@ -41,11 +41,11 @@
       </div>
       <div class="div">
         <div class="input-group">
-          <label for="choixa" class="text-center mb-3" style="font-size: 15px; font-weight:bold">Décès subvenu à l'hôpital</label>
+          <label for="choixa" class="text-center mb-3" style="font-size: 15px; font-weight:bold">Décès survenu à l'hôpital</label>
           <input type="radio" id="choixa" name="choix" value="à" checked style="transform: scale(1.5);"/>
         </div>
         <div class="input-group">
-          <label for="choixhors" class="text-center mb-3"  style="font-size: 15px; font-weight:bold">Décès subvenu hors l'hôpital</label>
+          <label for="choixhors" class="text-center mb-3"  style="font-size: 15px; font-weight:bold">Décès survenu hors l'hôpital</label>
           <input type="radio" id="choixhors" name="choix" id="dateDeces" value="hors" style="transform: scale(1.5);"  />
         </div>
       </div>

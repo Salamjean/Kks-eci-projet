@@ -307,10 +307,10 @@ public function ajointindex()
         }
 
         $naissance->save();
-        $phoneNumber = $user->indicatif . $user->contact;
-        $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence: {$naissance->reference}.
-Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
-        $infobipService->sendSms($phoneNumber, $message);
+//         $phoneNumber = $user->indicatif . $user->contact;
+//         $message = "Bonjour {$user->name}, votre demande d'extrait de naissance a bien été transmise à la mairie de {$user->commune}. Référence: {$naissance->reference}.
+// Vous pouvez suivre l'état de votre demande en cliquant sur ce lien : https://edemarchee-ci.com/E-ci-recherche/demande";
+//         $infobipService->sendSms($phoneNumber, $message);
 
         Alert::create([
             'type' => 'naissance',
@@ -372,19 +372,46 @@ public function showEtat($id)
 public function updateprenom(Request $request, $id)
 {
     Log::info('Méthode updateprenom appelée avec ID:', ['id' => $id]);
+
+    $validatedData = $request->validate([
+        'nom' => 'required|string|max:255',
+        'newPrenom' => 'required|string|max:255',
+        'nompere' => 'required|string|max:255',
+        'prenompere' => 'required|string|max:255',
+        'identiteDeclarant' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:2048',
+    ]);
     $naissance = Naissance::find($id);
 
+     // Gérer le fichier de pièce d'identité du père
+            if ($request->hasFile('identiteDeclarant')) {
+                // Supprimer l'ancien fichier s'il existe
+                if ($naissance->identiteDeclarant && Storage::exists($naissance->identiteDeclarant)) {
+                    Storage::delete($naissance->identiteDeclarant);
+                }
+                
+                // Stocker le nouveau fichier
+                $file = $request->file('identiteDeclarant');
+                $fileName = time() . '_' . $file->getClientOriginalName();
+                $filePath = $file->storeAs('pieces_identite', $fileName, 'public');
+                
+                $naissance->identiteDeclarant = $filePath;
+            }
+
     if ($naissance) {
+        $naissance->nom = $request->nom;
         $naissance->prenom = $request->newPrenom;
+        $naissance->nompere = $request->nompere;
+        $naissance->prenompere = $request->prenompere;
         $naissance->archived_at = null; // Désarchiver
+        $naissance->agent_id = null; // Désarchiver
         $naissance->motif_annulation = null; // Désarchiver
         $naissance->autre_motif_text = null; // Désarchiver
         $naissance->etat = 'en attente'; // Changer l'état
         $naissance->save();
 
-        return response()->json(['success' => true]);
+        return redirect()->back()->with('success','Modification effectuer avec succès');
     }
 
-    return response()->json(['success' => false]);
+    return redirect()->back()->with('error','Erreur lors de la modification');
 }
 }

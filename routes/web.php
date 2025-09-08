@@ -54,7 +54,7 @@ Route::prefix('utilisateur')->group(function () {
     Route::get('/demandes/livraison/{id}', [CompteDemandeController::class, 'initPaiment'])->name('demandes.livraison');
     //Route::post('/compte_demandes', [CompteDemandeController::class, 'updateLivraison'])->name('naissances.livraison');
     Route::get('/indexchild', [NaissanceController::class, 'userindex'])->name('utilisateur.index');
-    Route::post('/update/prenom/{id}', [NaissanceController::class, 'updateprenom'])->name('modifier.prenom');;
+    Route::post('/update/prenom/{id}', [NaissanceController::class, 'updateprenom'])->name('modifier.prenom');
     Route::get('/deces-indexdid', [DecesController::class, 'userindex'])->name('decesutilisateur.index');
     Route::get('/mariage-index', [MariageController::class, 'userindex'])->name('mariage.userindex');
     Route::get('/logout', [UtilisateurController::class, 'logout'])->name('utilisateur.logout');
@@ -485,7 +485,7 @@ Route::post('/decesdeja/{id}/update-etat', [VendorController::class, 'updateEtat
         Route::get('/agent', [NaissanceController::class, 'agentindex'])->name('naissance.agentindex');        
         Route::get('/ajoint', [NaissanceController::class, 'ajointindex'])->name('naissance.ajointindex');        
         Route::post('/create', [NaissanceController::class, 'store'])->name('naissance.store');
-        Route::get('/create', [NaissanceController::class, 'create'])->name('naissance.create');
+        Route::get('/createbirth', [NaissanceController::class, 'create'])->name('naissance.create');
         Route::get('/edit/{naissance}', [NaissanceController::class, 'edit'])->name('naissance.edit');
         Route::get('/naissance/{id}', [NaissanceController::class, 'show'])->name('naissance.show');
         Route::get('/naissance/delete/{naissance}', [NaissanceController::class, 'delete'])->name('naissance.delete');

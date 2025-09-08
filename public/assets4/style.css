@@ -306,6 +306,8 @@ body{
 }
 .get-quote .btn{
 	color:#fff;
+	padding: 10px;
+	background-color: green;
 }
 .header .logo {
 	float: left;

@@ -83,7 +83,7 @@
         <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                 <i class="menu-icon mdi mdi-floor-plan"></i>
-                <span class="menu-title">Faire une demade</span>
+                <span class="menu-title">Faites une demade</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="ui-basic">
@@ -98,7 +98,7 @@
         <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false" aria-controls="form-elements">
                 <i class="menu-icon mdi mdi-card-text-outline"></i>
-                <span class="menu-title">Faire une demade</span>
+                <span class="menu-title">Faites une demade</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="form-elements">
@@ -113,7 +113,7 @@
         <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
                 <i class="menu-icon mdi mdi-chart-line"></i>
-                <span class="menu-title">Faire une demade</span>
+                <span class="menu-title">Faites une demade</span>
                 <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="charts">
